@@ -14,6 +14,42 @@ import nodeitems_utils
 from bpy.props import *
 
 
+class GetNodeInfo():
+    def __init__(self, node_tree):
+        self.nt = node_tree
+
+    def get_renderlist_nodes(self):
+        node_list = [node for node in self.nt.nodes if node.bl_idname == "RSNodeSocketRenderList"]
+        return node_list
+
+    def get_active_node(self):
+        return self.nt.nodes.active
+
+    @staticmethod
+    def get_task_nodes(renderlist_node):
+        task_list = {}
+        for i, input in renderlist_node.inputs:
+            if input.is_linked:
+                task_list[i] = {"node": input.links[0].from_node}
+
+        return task_list
+
+    @staticmethod
+    def get_camera_settings_node(task_node):
+        if task_node.inputs[0].is_linked:
+            return task_node.inputs[0].links[0].from_node
+
+    @staticmethod
+    def get_render_settings_node(task_node):
+        if task_node.inputs[1].is_linked:
+            return task_node.inputs[1].links[0].from_node
+
+    @staticmethod
+    def get_output_settings_node(task_node):
+        if task_node.inputs[2].is_linked:
+            return task_node.inputs[2].links[0].from_node
+
+
 class RenderStackNodeTree(bpy.types.NodeTree):
     '''RenderStackNodeTree Node Tree'''
     bl_idname = 'RenderStackNodeTree'
@@ -31,6 +67,13 @@ class RenderStackNode(bpy.types.Node):
 
     def free(self):
         print("Node removed", self)
+
+    def get_items_dict(self):
+        return self.items()
+
+    def get_active_node(self):
+        node_tree = bpy.context.space_data.edit_tree
+        return node_tree.nodes.active
 
 
 class RSNodeSocketCamera(bpy.types.NodeSocket):
@@ -119,6 +162,9 @@ class RSNodeCamInputNode(RenderStackNode):
     def draw_buttons(self, context, layout):
         layout.prop(self, 'camera', text="")
 
+    def process(self, context):
+        pass
+
 
 class RSNodeCameraSettingsNode(RenderStackNode):
     '''A simple input node'''
@@ -164,9 +210,9 @@ class RSNodeOutputSettingsNode(RenderStackNode):
     bl_label = 'Output Settings'
 
     def init(self, context):
-        self.inputs.new('NodeSocketInt','Frame Start')
-        self.inputs.new('NodeSocketInt','Frame End')
-        self.inputs.new('NodeSocketInt','Frame Step')
+        self.inputs.new('NodeSocketInt', 'Frame Start')
+        self.inputs.new('NodeSocketInt', 'Frame End')
+        self.inputs.new('NodeSocketInt', 'Frame Step')
         self.outputs.new('RSNodeSocketOutputSettings', "Output Settings")
 
         self.inputs["Frame Step"].default_value = 1
@@ -189,6 +235,18 @@ class RSNodeTaskNode(RenderStackNode):
 
     def draw_buttons(self, context, layout):
         layout.prop(self, 'name')
+
+
+class RenderListNode_OT_GetInfo(bpy.types.Operator):
+    bl_idname = "renderlistnode.get_info"
+    bl_label = "Get Info"
+
+    def execute(self, context):
+        info = GetNodeInfo(bpy.context.space_data.edit_tree)
+        list_node = info.get_active_node()
+        task_nodes = list_node.get_task_nodes(list_node)
+
+        return {"FINISHED"}
 
 
 class RenderListNode_OT_EditInput(bpy.types.Operator):
@@ -258,16 +316,16 @@ node_categories = [
 ]
 
 classes = [
+    # node tree
     RenderStackNodeTree,
-
-    RSNodeIntValueNode,
+    # node socket
     RSNodeSocketCamera,
-
     RSNodeSocketCameraSettings,
     RSNodeSocketRenderSettings,
     RSNodeSocketOutputSettings,
     RSNodeSocketRenderList,
-
+    # nodes
+    RSNodeIntValueNode,
     RSNodeCyclesRenderSettingsNode,
     RSNodeOutputSettingsNode,
 
@@ -275,7 +333,7 @@ classes = [
     RSNodeCameraSettingsNode,
     RSNodeTaskNode,
     RSNodeRenderListNode,
-    RenderListNode_OT_EditInput
+    RenderListNode_OT_EditInput, RenderListNode_OT_GetInfo
 ]
 
 
