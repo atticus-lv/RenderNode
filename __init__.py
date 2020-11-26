@@ -9,45 +9,11 @@ bl_info = {
     "category"   : "Render",
 }
 
+import json
+
 import bpy
 import nodeitems_utils
 from bpy.props import *
-
-
-class GetNodeInfo():
-    def __init__(self, node_tree):
-        self.nt = node_tree
-
-    def get_renderlist_nodes(self):
-        node_list = [node for node in self.nt.nodes if node.bl_idname == "RSNodeSocketRenderList"]
-        return node_list
-
-    def get_active_node(self):
-        return self.nt.nodes.active
-
-    @staticmethod
-    def get_task_nodes(renderlist_node):
-        task_list = {}
-        for i, input in renderlist_node.inputs:
-            if input.is_linked:
-                task_list[i] = {"node": input.links[0].from_node}
-
-        return task_list
-
-    @staticmethod
-    def get_camera_settings_node(task_node):
-        if task_node.inputs[0].is_linked:
-            return task_node.inputs[0].links[0].from_node
-
-    @staticmethod
-    def get_render_settings_node(task_node):
-        if task_node.inputs[1].is_linked:
-            return task_node.inputs[1].links[0].from_node
-
-    @staticmethod
-    def get_output_settings_node(task_node):
-        if task_node.inputs[2].is_linked:
-            return task_node.inputs[2].links[0].from_node
 
 
 class RenderStackNodeTree(bpy.types.NodeTree):
@@ -136,13 +102,17 @@ class RSNodeIntValueNode(RenderStackNode):
     bl_idname = 'RSNodeIntValueNode'
     bl_label = 'Int'
 
-    value: IntProperty(name="Value", default=0)
-
     def init(self, context):
         self.outputs.new('NodeSocketInt', "Value")
 
     def draw_buttons(self, context, layout):
-        layout.prop(self, 'value')
+        pass
+
+    def process(self):
+        pass
+        # for input in self.inputs:
+        #     self.outputs["Value"][input.name] = input.default_value if not input.is_linked else \
+        #         input.links[0].from_socket[input.name]
 
 
 def poll_camera(self, object):
@@ -162,8 +132,8 @@ class RSNodeCamInputNode(RenderStackNode):
     def draw_buttons(self, context, layout):
         layout.prop(self, 'camera', text="")
 
-    def process(self, context):
-        pass
+    def process(self, ):
+        self.outputs["Camera"]["Camera"] = self.camera.name
 
 
 class RSNodeCameraSettingsNode(RenderStackNode):
@@ -177,7 +147,7 @@ class RSNodeCameraSettingsNode(RenderStackNode):
         self.inputs.new('NodeSocketInt', "Res Y")
         self.inputs.new('NodeSocketInt', "Res Scale")
 
-        self.outputs.new('RSNodeSocketCameraSettings', "Cam Settings")
+        self.outputs.new('RSNodeSocketCameraSettings', "Camera Settings")
 
         self.inputs["Res X"].default_value = 1920
         self.inputs["Res Y"].default_value = 1080
@@ -185,6 +155,15 @@ class RSNodeCameraSettingsNode(RenderStackNode):
 
     def draw_buttons(self, context, layout):
         pass
+
+    def process(self):
+        dict = {}
+        for input in self.inputs:
+            try:
+                dict[input.name] = input.links[0].from_socket[input.name] if input.is_linked else input.default_value
+            except Exception as e:
+                print(f"Camera Settings {e}")
+        self.outputs["Camera Settings"]["Camera Settings"] = dict
 
 
 class RSNodeCyclesRenderSettingsNode(RenderStackNode):
@@ -203,6 +182,18 @@ class RSNodeCyclesRenderSettingsNode(RenderStackNode):
     def draw_buttons(self, context, layout):
         pass
 
+    def process(self):
+        dict = {}
+        for input in self.inputs:
+            try:
+                if input.is_linked:
+                    dict[input.name] = input.links[0].from_socket[input.name]
+                else:
+                    dict[input.name] = None
+            except Exception as e:
+                print(f"Render Settings {e}")
+        self.outputs["Render Settings"]["Render Settings"] = dict
+
 
 class RSNodeOutputSettingsNode(RenderStackNode):
     '''A simple input node'''
@@ -220,6 +211,18 @@ class RSNodeOutputSettingsNode(RenderStackNode):
     def draw_buttons(self, context, layout):
         pass
 
+    def process(self):
+        dict = {}
+        for input in self.inputs:
+            try:
+                if input.is_linked:
+                    dict[input.name] = input.links[0].from_socket[input.name]
+                else:
+                    dict[input.name] = None
+            except Exception as e:
+                print(f"Output Settings {e}")
+        self.outputs["Output Settings"]["Output Settings"] = dict
+
 
 class RSNodeTaskNode(RenderStackNode):
     '''A simple Task node'''
@@ -231,22 +234,66 @@ class RSNodeTaskNode(RenderStackNode):
         self.inputs.new('RSNodeSocketRenderSettings', "Render Settings", )
         self.inputs.new('RSNodeSocketOutputSettings', "Output Settings")
 
-        self.outputs.new('RSNodeSocketRenderList', "Render List")
+        self.outputs.new('RSNodeSocketRenderList', "Task")
 
     def draw_buttons(self, context, layout):
         layout.prop(self, 'name')
+
+    def process(self):
+        dict = {}
+        for input in self.inputs:
+            try:
+                if input.is_linked:
+                    dict[input.name] = input.links[0].from_socket[input.name]
+                else:
+                    dict[input.name] = None
+            except Exception as e:
+                print(f"Task {e}")
+        self.outputs["Task"]["Task"] = dict
 
 
 class RenderListNode_OT_GetInfo(bpy.types.Operator):
     bl_idname = "renderlistnode.get_info"
     bl_label = "Get Info"
 
+    def update(self, node):
+        def process(node, input=None):
+            if hasattr(node, "process"):
+                node.process()
+                print(f"Processing'{node.name}-{input.name if input else 'self'}'")
+
+        def update_nodes(node):
+            process(node)
+            for input in node.inputs:
+                if input.is_linked:
+                    sub_node = input.links[0].from_node
+                    print(f"Entering '{sub_node.name}'")
+                    update_nodes(sub_node)
+                else:
+                    process(node, input=input)
+
+        print("<-update start->")
+        update_nodes(node)
+        print("<-update finished->")
+
     def execute(self, context):
-        info = GetNodeInfo(bpy.context.space_data.edit_tree)
-        list_node = info.get_active_node()
-        task_nodes = list_node.get_task_nodes(list_node)
+        node_tree = bpy.context.space_data.edit_tree
+        active_node = node_tree.nodes.active
+        self.update(active_node)
 
         return {"FINISHED"}
+
+
+class RSNodeRenderInfoNode(RenderStackNode):
+    bl_idname = 'RSNodeRenderInfoNode'
+    bl_label = 'Info'
+
+    def init(self, context):
+        self.inputs.new('NodeSocketInt', "Task")
+
+    def draw_buttons(self, context, layout):
+        layout.operator("renderlistnode.get_info")
+        pass
 
 
 class RenderListNode_OT_EditInput(bpy.types.Operator):
@@ -259,7 +306,7 @@ class RenderListNode_OT_EditInput(bpy.types.Operator):
         node_tree = bpy.context.space_data.edit_tree
         active_node = node_tree.nodes.active
         if not self.remove:
-            active_node.inputs.new('RSNodeSocketRenderList', f"Task {len(active_node.inputs) + 1}")
+            active_node.inputs.new('RSNodeSocketRenderList', "Task")
 
         return {"FINISHED"}
 
@@ -269,10 +316,8 @@ class RSNodeRenderListNode(RenderStackNode):
     bl_idname = 'RSNodeRenderListNode'
     bl_label = 'Render List'
 
-    name: StringProperty(name="Name", default="Task")
-
     def init(self, context):
-        self.inputs.new('RSNodeSocketRenderList', "Task 1")
+        self.inputs.new('RSNodeSocketRenderList', "Task")
 
     def draw_buttons(self, context, layout):
         pass
@@ -313,6 +358,11 @@ node_categories = [
 
     ]),
 
+    RenderStackNodeCategory("VIEWER", "Viewer", items=[
+        nodeitems_utils.NodeItem("RSNodeRenderInfoNode"),
+
+    ]),
+
 ]
 
 classes = [
@@ -328,6 +378,7 @@ classes = [
     RSNodeIntValueNode,
     RSNodeCyclesRenderSettingsNode,
     RSNodeOutputSettingsNode,
+    RSNodeRenderInfoNode,
 
     RSNodeCamInputNode,
     RSNodeCameraSettingsNode,
