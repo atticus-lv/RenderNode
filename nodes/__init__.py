@@ -38,4 +38,3 @@ def automatic_collection():
     return nodes_dict
 
 a = automatic_collection()
-print(a)
