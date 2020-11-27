@@ -5,7 +5,7 @@ from itertools import groupby
 class NODE_TREE():
     def __init__(self, node_tree):
         self.nt = node_tree
-        self.node_list = self.get_node_list(self.nt.nodes.active)
+        self.node_list = self.get_node_list(node_tree.nodes.active)
         self.dict = self.separate_nodes(self.node_list)
 
     def get_task_info(self, task_name):
