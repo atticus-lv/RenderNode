@@ -3,7 +3,7 @@ import bpy
 from bpy.props import *
 
 from RenderStackNode.node_tree import RenderStackNode
-from RenderStackNode.core.get_tree_info import get_node_list, separate_nodes
+from RenderStackNode.core.get_tree_info import NODE_TREE
 
 
 class RenderListNode_OT_GetInfo(bpy.types.Operator):
@@ -14,15 +14,9 @@ class RenderListNode_OT_GetInfo(bpy.types.Operator):
     fill_text: BoolProperty(default=False)
     flatten_data: BoolProperty(default=False)
 
-    def get_data(self):
-        nt = bpy.context.space_data.edit_tree
-        nodes = get_node_list(nt.nodes.active)
-        print(nodes)
-        dict = separate_nodes(nodes)
-        return dict
-
     def execute(self, context):
-        print(self.get_data())
+        nt = NODE_TREE(bpy.context.space_data.edit_tree)
+        print(nt.dict)
 
         return {"FINISHED"}
 
