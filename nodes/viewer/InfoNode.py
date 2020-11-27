@@ -8,7 +8,7 @@ class RenderListNode_OT_GetInfo(bpy.types.Operator):
     bl_idname = "renderlistnode.get_info"
     bl_label = "Get Info"
 
-    data:StringProperty()
+    data: StringProperty()
     fill_text: BoolProperty(default=False)
     flatten_data: BoolProperty(default=False)
 
@@ -16,12 +16,21 @@ class RenderListNode_OT_GetInfo(bpy.types.Operator):
         def process(node, input=None):
             if hasattr(node, "process"):
                 node.process()
+                node.reroute_update()
                 print(f"Processing'{node.name}-{input.name if input else 'self'}'")
+
+        def reroute(sub_node):
+            if sub_node.bl_idname == "NodeReroute":
+                sub_node = sub_node.inputs[0].links[0].from_node
+                reroute(sub_node)
+            else:
+                return sub_node
 
         def update_nodes(node):
             for input in node.inputs:
                 if input.is_linked:
                     sub_node = input.links[0].from_node
+                    reroute(sub_node)
                     update_nodes(sub_node)
                 else:
                     process(node, input=input)
@@ -56,6 +65,7 @@ class RenderListNode_OT_GetInfo(bpy.types.Operator):
 
         return {"FINISHED"}
 
+
 class RSNodeInfoNode(RenderStackNode):
     bl_idname = 'RSNodeRenderInfoNode'
     bl_label = 'Info'
@@ -73,6 +83,7 @@ class RSNodeInfoNode(RenderStackNode):
 def register():
     bpy.utils.register_class(RenderListNode_OT_GetInfo)
     bpy.utils.register_class(RSNodeInfoNode)
+
 
 def unregister():
     bpy.utils.unregister_class(RenderListNode_OT_GetInfo)

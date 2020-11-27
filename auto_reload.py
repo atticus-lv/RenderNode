@@ -3,12 +3,13 @@ import importlib
 import sys
 
 from RenderStackNode.node_tree import RenderStackNode
-from . import nodes
-
-a = nodes.a
+from RenderStackNode import nodes
+from RenderStackNode import node_tree
 
 __dict__ = {}
+__dict__["node_tree"] = "RenderStackNode.node_tree"
 
+a = nodes.a
 for k, v in a.items():
     for module_name in v:
         __dict__[module_name] = f"RenderStackNode.nodes.{k}.{module_name}"
@@ -31,14 +32,8 @@ def register():
             except Exception as e:
                 print(f"{name} register failed: {e}")
 
-    from RenderStackNode import node_tree
-    node_tree.register()
-
 
 def unregister():
-    from RenderStackNode import node_tree
-    node_tree.unregister()
-
     for name in __dict__.values():
         if name in sys.modules and hasattr(sys.modules[name], 'unregister'):
             try:
