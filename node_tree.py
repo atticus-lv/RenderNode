@@ -23,19 +23,6 @@ class RenderStackNode(bpy.types.Node):
     def free(self):
         print("Node removed", self)
 
-    def reroute_update(self):
-        def reroute(node):
-            next_node = node.outputs[0].links[0].from_node
-            if next_node.bl_idname != "NodeReroute":
-                return (node)
-            else:
-                reroute(node)
-
-
-        next_node = self.outputs[0].links[0].from_node
-        reroute(next_node)
-        next_node.outputs[0][self.outputs[0].name] = self.outputs[0][self.outputs[0].name].to_dict()
-
 
 class RenderStackNodeCategory(nodeitems_utils.NodeCategory):
     @classmethod
@@ -145,15 +132,10 @@ classes = [
 
 
 def register():
-    try:
-        nodeitems_utils.unregister_node_categories("CUSTOM_NODES")
-    except:
-        pass
-    finally:
-        for cls in classes:
-            bpy.utils.register_class(cls)
+    for cls in classes:
+        bpy.utils.register_class(cls)
 
-        nodeitems_utils.register_node_categories("RENDERSTACK_NODES", node_categories)
+    nodeitems_utils.register_node_categories("RENDERSTACK_NODES", node_categories)
 
 
 def unregister():

@@ -22,20 +22,7 @@ class RSNodeCameraSettingsNode(RenderStackNode):
     def draw_buttons(self, context, layout):
         pass
 
-    def process(self):
-        dict = {}
-        for input in self.inputs:
-            try:
-                if input.is_linked:
-                    dict[input.name] = input.links[0].from_socket[input.name]
-                else:
-                    try:
-                        dict[input.name] = input.default_value
-                    except:
-                        pass
-            except Exception as e:
-                print(f"Camera Settings {e}")
-        self.outputs["Camera Settings"]["Camera Settings"] = dict
+
 
 
 def register():

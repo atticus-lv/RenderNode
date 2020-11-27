@@ -19,7 +19,9 @@ for k, v in a.items():
 for full_name in __dict__.values():
     if full_name in sys.modules:
         importlib.reload(sys.modules[full_name])
+        print(f"reload {full_name}")
     else:
+        print(f"init load {full_name}")
         globals()[full_name] = importlib.import_module(full_name)
         setattr(globals()[full_name], 'modules', __dict__)
 

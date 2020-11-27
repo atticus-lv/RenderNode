@@ -1,7 +1,9 @@
 import json
 import bpy
 from bpy.props import *
+
 from RenderStackNode.node_tree import RenderStackNode
+from RenderStackNode.core.get_tree_info import get_node_list, separate_nodes
 
 
 class RenderListNode_OT_GetInfo(bpy.types.Operator):
@@ -12,56 +14,15 @@ class RenderListNode_OT_GetInfo(bpy.types.Operator):
     fill_text: BoolProperty(default=False)
     flatten_data: BoolProperty(default=False)
 
-    def update(self, node):
-        def process(node, input=None):
-            if hasattr(node, "process"):
-                node.process()
-                node.reroute_update()
-                print(f"Processing'{node.name}-{input.name if input else 'self'}'")
-
-        def reroute(sub_node):
-            if sub_node.bl_idname == "NodeReroute":
-                sub_node = sub_node.inputs[0].links[0].from_node
-                reroute(sub_node)
-            else:
-                return sub_node
-
-        def update_nodes(node):
-            for input in node.inputs:
-                if input.is_linked:
-                    sub_node = input.links[0].from_node
-                    reroute(sub_node)
-                    update_nodes(sub_node)
-                else:
-                    process(node, input=input)
-            process(node)
-
-        update_nodes(node)
-        print("< - update nodes finished - >")
-
     def get_data(self):
-        node_tree = bpy.context.space_data.edit_tree
-        active_node = node_tree.nodes.active
-        self.update(active_node)
-        input_node = active_node.inputs[0].links[0].from_node
-        data = input_node.outputs[0][input_node.outputs[0].name].to_dict()
-        return data
-
-    def transfer_data(self):
-        self.data = json.dumps(self.get_data())
+        nt = bpy.context.space_data.edit_tree
+        nodes = get_node_list(nt.nodes.active)
+        print(nodes)
+        dict = separate_nodes(nodes)
+        return dict
 
     def execute(self, context):
-
-        if self.fill_text:
-            try:
-                file = bpy.data.texts['Info Node']
-                file.clear()
-            except:
-                file = bpy.data.texts.new('Info Node')
-
-            json_data = json.dumps(self.get_data(), indent=4,
-                                   ensure_ascii=False, sort_keys=False, separators=(',', ':'))
-            file.write(json_data)
+        print(self.get_data())
 
         return {"FINISHED"}
 

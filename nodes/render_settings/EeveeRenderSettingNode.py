@@ -17,21 +17,7 @@ class RSNodeEeveeRenderSettingsNode(RenderStackNode):
     def draw_buttons(self, context, layout):
         pass
 
-    def process(self):
-        dict = {}
-        dict["Engine"] = 'BLENDER_EEVEE'
-        for input in self.inputs:
-            try:
-                if input.is_linked:
-                    dict[input.name] = input.links[0].from_socket[input.name]
-                else:
-                    try:
-                        dict[input.name] = input.default_value
-                    except:
-                        pass
-            except Exception as e:
-                print(f"Render Settings {e}")
-        self.outputs["Render Settings"]["Render Settings"] = dict
+
 
 def register():
     bpy.utils.register_class(RSNodeEeveeRenderSettingsNode)

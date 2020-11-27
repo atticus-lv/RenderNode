@@ -37,20 +37,6 @@ class RSNodeRenderListNode(RenderStackNode):
         layout.operator("renderlistnode.edit_input").remove = False
         layout.operator("renderlistnode.edit_input", text="Remove Unused").remove = True
 
-    def process(self):
-        dict = {}
-        for i, input in enumerate(self.inputs):
-            try:
-                if input.is_linked:
-                    dict[f"{i}"] = input.links[0].from_socket[input.name]
-                else:
-                    try:
-                        dict[f"{i}"] = input.default_value
-                    except:
-                        pass
-            except Exception as e:
-                print(f"Info {e}")
-        self.outputs["Info"]["Info"] = dict
 
 def register():
     bpy.utils.register_class(RenderListNode_OT_EditInput)

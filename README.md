@@ -8,36 +8,24 @@ Preliminary idea (finish getting info from nodes)
 
 
 
-**Info Node Data**
+**Info Node Name**
 
-> use it to overwrite settings
+> use it to get value to overwrite settings
 
 ```json
 {
-    "0":{
-        "name":"Task",
-        "Camera Settings":{
-            "Res X":1920,
-            "Res Y":1080,
-            "Res Scale":100
-        },
-        "Render Settings":{
-            "Engine":"CYCLES",
-            "Samples":128
-        }
-    },
-    "1":{
-        "name":"Task.001",
-        "Camera Settings":{
-            "Res X":1200,
-            "Res Y":1600,
-            "Res Scale":50
-        },
-        "Render Settings":{
-            "Engine":"CYCLES",
-            "Samples":64
-        }
-    }
+  "Task": [
+    "Camera",
+    "Camera Settings",
+    "Cycles Settings",
+    "Output Settings"
+  ],
+  "Task.001": [
+    "Camera.001",
+    "Camera Settings.001",
+    "Eevee Settings",
+    "Output Settings"
+  ]
 }
 ```
 
