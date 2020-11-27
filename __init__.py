@@ -1,7 +1,7 @@
 bl_info = {
     "name"       : "RenderStack Node",
     "author"     : "Atticus",
-    "version"    : (0, 1),
+    "version"    : (0, 3),
     "blender"    : (2, 90, 0),
     "location"   : "Node Editor",
     "description": "Node based render queue workflow",
@@ -10,18 +10,16 @@ bl_info = {
 }
 
 import bpy
+from . import auto_reload
 
 
 def register():
-    from . import auto_reload
     auto_reload.register()
 
 
+def unregister():
+    auto_reload.unregister()
+
+
 if __name__ == '__main__':
-    # try:
-    #     nodeitems_utils.unregister_node_categories("CUSTOM_NODES")
-    # except:
-    #     pass
-    # finally:
-    #     register()
     register()

@@ -73,3 +73,7 @@ class RSNodeInfoNode(RenderStackNode):
 def register():
     bpy.utils.register_class(RenderListNode_OT_GetInfo)
     bpy.utils.register_class(RSNodeInfoNode)
+
+def unregister():
+    bpy.utils.unregister_class(RenderListNode_OT_GetInfo)
+    bpy.utils.unregister_class(RSNodeInfoNode)

@@ -31,3 +31,6 @@ class RSNodeCamInputNode(RenderStackNode):
 
 def register():
     bpy.utils.register_class(RSNodeCamInputNode)
+
+def unregister():
+    bpy.utils.unregister_class(RSNodeCamInputNode)

@@ -40,3 +40,6 @@ class RSNodeCameraSettingsNode(RenderStackNode):
 
 def register():
     bpy.utils.register_class(RSNodeCameraSettingsNode)
+
+def unregister():
+    bpy.utils.unregister_class(RSNodeCameraSettingsNode)

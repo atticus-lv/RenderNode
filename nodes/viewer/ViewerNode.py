@@ -37,3 +37,7 @@ class RSNodeSocketViewerNode(RenderStackNode):
 def register():
     bpy.utils.register_class(RSN_OT_UpdateParms)
     bpy.utils.register_class(RSNodeSocketViewerNode)
+
+def unregister():
+    bpy.utils.unregister_class(RSN_OT_UpdateParms)
+    bpy.utils.unregister_class(RSNodeSocketViewerNode)

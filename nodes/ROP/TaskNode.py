@@ -38,3 +38,6 @@ class RSNodeTaskNode(RenderStackNode):
 
 def register():
     bpy.utils.register_class(RSNodeTaskNode)
+
+def unregister():
+    bpy.utils.unregister_class(RSNodeTaskNode)

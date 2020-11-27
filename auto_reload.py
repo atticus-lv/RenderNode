@@ -2,8 +2,6 @@ import os
 import importlib
 import sys
 
-# import node_tree
-
 from RenderStackNode.node_tree import RenderStackNode
 from . import nodes
 
@@ -15,7 +13,7 @@ for k, v in a.items():
     for module_name in v:
         __dict__[module_name] = f"RenderStackNode.nodes.{k}.{module_name}"
 
-print(__dict__)
+# print(__dict__)
 
 for full_name in __dict__.values():
     if full_name in sys.modules:
@@ -38,6 +36,9 @@ def register():
 
 
 def unregister():
+    from RenderStackNode import node_tree
+    node_tree.unregister()
+
     for name in __dict__.values():
         if name in sys.modules and hasattr(sys.modules[name], 'unregister'):
             try:

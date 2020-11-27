@@ -35,3 +35,6 @@ class RSNodeEeveeRenderSettingsNode(RenderStackNode):
 
 def register():
     bpy.utils.register_class(RSNodeEeveeRenderSettingsNode)
+
+def unregister():
+    bpy.utils.unregister_class(RSNodeEeveeRenderSettingsNode)

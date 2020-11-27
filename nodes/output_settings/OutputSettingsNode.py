@@ -35,3 +35,6 @@ class RSNodeOutputSettingsNode(RenderStackNode):
 
 def register():
     bpy.utils.register_class(RSNodeOutputSettingsNode)
+
+def unregister():
+    bpy.utils.unregister_class(RSNodeOutputSettingsNode)

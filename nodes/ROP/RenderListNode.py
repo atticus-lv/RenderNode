@@ -55,3 +55,7 @@ class RSNodeRenderListNode(RenderStackNode):
 def register():
     bpy.utils.register_class(RenderListNode_OT_EditInput)
     bpy.utils.register_class(RSNodeRenderListNode)
+
+def unregister():
+    bpy.utils.unregister_class(RenderListNode_OT_EditInput)
+    bpy.utils.unregister_class(RSNodeRenderListNode)
