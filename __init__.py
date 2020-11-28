@@ -11,7 +11,6 @@ bl_info = {
 
 import importlib
 import sys
-
 from .nodes import *
 
 __dict__ = {}

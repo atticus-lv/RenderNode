@@ -1,8 +1,6 @@
-import json
 import bpy
 from bpy.props import *
 
-from RenderStackNode.node_tree import RenderStackNode
 from RenderStackNode.core.get_tree_info import NODE_TREE
 
 
@@ -10,6 +8,8 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
     """Switch Scene Camera"""
     bl_idname = "rsn.update_parms"
     bl_label = "Update Parms"
+
+    index: IntProperty(default=0, min=0)
 
     cam_name: StringProperty(name="Camera name")
 
@@ -20,9 +20,26 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
     res_y = None
     res_scale = None
 
+    frame_start = None
+    frame_end = None
+    frame_step = None
+
+    def reroute(self, node):
+        def is_task_node(node):
+            if node.bl_idname == "RSNodeTaskNode":
+                return node
+            else:
+                sub_node = node.inputs[0].links[0].from_node
+                is_task_node(sub_node)
+
+        node = is_task_node(node)
+        return node
+
     def get_data(self):
         nt = NODE_TREE(bpy.context.space_data.edit_tree)
-        for name in nt.dict[nt.nt.nodes.active.inputs[0].links[0].from_node.name]:
+        node = nt.nt.nodes.active
+        self.reroute(node)
+        for name in nt.dict[node.inputs[self.index].links[0].from_node.name]:
             node = nt.nt.nodes[name]
 
             if node.bl_idname == "RSNodeCamInputNode":
@@ -40,6 +57,19 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             elif node.bl_idname == "RSNodeEeveeRenderSettingsNode":
                 self.engine = "BLENDER_EEVEE"
                 self.samples = node.inputs["Samples"].default_value
+
+            elif node.bl_idname == "FrameRangeInputNode":
+                if node.frame_end < node.frame_start:
+                    node.frame_end = node.frame_start
+                self.frame_start = node.frame_start
+                self.frame_end = node.frame_end
+                self.frame_step = node.frame_step
+
+    def update_frame_range(self):
+        if self.frame_start:
+            bpy.context.scene.frame_start = self.frame_start
+            bpy.context.scene.frame_end = self.frame_end
+            bpy.context.scene.frame_step = self.frame_step
 
     def update_render_engine(self):
         if self.engine:
@@ -73,9 +103,8 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                                 area.spaces[0].region_3d.view_perspective = 'CAMERA'
                         break
                     break
-        except(Exception) as e:
-            # self.report({"ERROR"}, f"No Camera {self.cam_name}")
-            self.report({"WARNING"}, f"{e}")
+        except(Exception):
+            pass
         finally:
             self.cam_name = ""
 
@@ -84,29 +113,14 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         self.update_camera()
         self.update_res()
         self.update_render_engine()
+        self.update_frame_range()
 
         return {'FINISHED'}
 
 
-class RSNodeSocketViewerNode(RenderStackNode):
-    bl_idname = 'RSNodeRenderViewerNode'
-    bl_label = 'Viewer'
-
-    def init(self, context):
-        self.inputs.new('RSNodeSocketRenderList', "Task")
-
-    def draw_buttons(self, context, layout):
-        pass
-
-    def draw_buttons_ext(self, context, layout):
-        layout.operator("rsn.update_parms")
-
-
 def register():
     bpy.utils.register_class(RSN_OT_UpdateParms)
-    bpy.utils.register_class(RSNodeSocketViewerNode)
 
 
 def unregister():
     bpy.utils.unregister_class(RSN_OT_UpdateParms)
-    bpy.utils.unregister_class(RSNodeSocketViewerNode)

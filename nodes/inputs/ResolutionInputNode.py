@@ -14,9 +14,9 @@ class ResolutionInputNode(RenderStackNode):
         self.outputs.new('RSNodeSocketOutputSettings', "Output Settings")
 
     def draw_buttons(self, context, layout):
-        layout.prop(self, 'res_x')
-        layout.prop(self, 'res_y')
-        layout.prop(self, 'res_scale')
+        layout.prop(self, 'res_x',text = "X")
+        layout.prop(self, 'res_y',text = "Y")
+        layout.prop(self, 'res_scale',text = "%")
 
 def register():
     bpy.utils.register_class(ResolutionInputNode)

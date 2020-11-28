@@ -3,9 +3,7 @@ from bpy.props import *
 from RenderStackNode.node_tree import RenderStackNode
 
 
-def correct_frame(self):
-    if self.frame_end < self.frame_start:
-        self.frame_end = self.frame_start
+
 
 
 class FrameRangeInputNode(RenderStackNode):

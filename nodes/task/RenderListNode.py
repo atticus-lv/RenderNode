@@ -37,14 +37,20 @@ class RSNodeRenderListNode(RenderStackNode):
         pass
 
     def draw_buttons_ext(self, context, layout):
-        add = layout.operator("rsnode.edit_input", text="Add Task")
+        layout.scale_y = 1.25
+        row = layout.row(align = True)
+        add = row.operator("rsnode.edit_input", text="Task",icon = 'ADD')
         add.remove = False
         add.socket_type = "RSNodeSocketRenderList"
         add.socket_name  = "Task"
 
-        remove = layout.operator("rsnode.edit_input", text="Remove Unused")
+        remove = row.operator("rsnode.edit_input", text="Unused",icon ='REMOVE')
         remove.remove = True
 
+        col = layout.box().column(align = False)
+        for i, input in enumerate(self.inputs):
+            if input.is_linked:
+                col.operator("rsn.update_parms",text = f'View Task {i+1}').index = i
 
 def register():
     bpy.utils.register_class(RSNode_OT_EditInput)

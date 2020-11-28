@@ -96,6 +96,8 @@ node_categories = [
         nodeitems_utils.NodeItem("RSNodeCamInputNode"),
         nodeitems_utils.NodeItem("ResolutionInputNode"),
         nodeitems_utils.NodeItem("FrameRangeInputNode"),
+        nodeitems_utils.NodeItem("ImageFormatInputNode"),
+        nodeitems_utils.NodeItem("FilePathInputNode"),
     ]),
 
     RenderStackNodeCategory("SETTINGS", "Settings", items=[
@@ -111,7 +113,6 @@ node_categories = [
     ]),
     RenderStackNodeCategory("VIEWER", "Viewer", items=[
         nodeitems_utils.NodeItem("RSNodeRenderInfoNode"),
-        nodeitems_utils.NodeItem("RSNodeRenderViewerNode"),
 
     ]),
 
