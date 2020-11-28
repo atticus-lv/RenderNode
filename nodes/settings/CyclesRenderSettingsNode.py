@@ -9,7 +9,7 @@ class RSNodeCyclesRenderSettingsNode(RenderStackNode):
 
     def init(self, context):
         self.inputs.new('NodeSocketInt', "Samples")
-        self.outputs.new('RSNodeSocketRenderSettings', "Render Settings")
+        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
         self.inputs["Samples"].default_value = 128
 

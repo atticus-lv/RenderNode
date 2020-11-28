@@ -11,10 +11,8 @@ class RSNodeTaskNode(RenderStackNode):
     task_name:StringProperty(name = "Task Name",default="Task")
 
     def init(self, context):
-        self.inputs.new('RSNodeSocketCameraSettings', "Camera Settings")
-        self.inputs.new('RSNodeSocketRenderSettings', "Render Settings")
-        self.inputs.new('RSNodeSocketOutputSettings', "Output Settings")
-
+        self.inputs.new('RSNodeSocketCamera', "Camera")
+        self.inputs.new('RSNodeSocketTaskSettings', "Settings")
         self.outputs.new('RSNodeSocketRenderList', "Task")
 
     def draw_buttons(self, context, layout):
@@ -24,6 +22,14 @@ class RSNodeTaskNode(RenderStackNode):
     def draw_label(self):
         return self.task_name
 
+    def draw_buttons_ext(self, context, layout):
+        add = layout.operator("rsnode.edit_input", text="Add Settings")
+        add.remove = False
+        add.socket_type = "RSNodeSocketTaskSettings"
+        add.socket_name = "Settings"
+
+        remove = layout.operator("rsnode.edit_input", text="Remove Unused")
+        remove.remove = True
 
 
 def register():

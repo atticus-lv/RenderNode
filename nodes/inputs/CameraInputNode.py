@@ -20,13 +20,6 @@ class RSNodeCamInputNode(RenderStackNode):
     def draw_buttons(self, context, layout):
         layout.prop(self, 'camera', text="")
 
-    def process(self):
-        dict = {}
-        if self.camera:
-            dict["name"] = self.camera.name
-        else:
-            dict["name"] = None
-        self.outputs["Camera"]["Camera"] = dict
 
 
 def register():

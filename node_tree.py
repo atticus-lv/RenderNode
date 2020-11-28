@@ -43,18 +43,18 @@ class RSNodeSocketCamera(bpy.types.NodeSocket):
         layout.label(text=text)
 
     def draw_color(self, context, node):
-        return (0.2, 0.2, 1.0, 1.0)
+        return (0, 0.8, 1.0, 1.0)
 
 
-class RSNodeSocketCameraSettings(bpy.types.NodeSocket):
-    bl_idname = 'RSNodeSocketCameraSettings'
-    bl_label = 'RSNodeSocketCameraSettings'
+class RSNodeSocketTaskSettings(bpy.types.NodeSocket):
+    bl_idname = 'RSNodeSocketTaskSettings'
+    bl_label = 'RSNodeSocketTaskSettings'
 
     def draw(self, context, layout, node, text):
         layout.label(text=text)
 
     def draw_color(self, context, node):
-        return (0.5, 0.5, 1.0, 1.0)
+        return (0.5, 0.5, 0.5, 1.0)
 
 
 class RSNodeSocketRenderSettings(bpy.types.NodeSocket):
@@ -65,7 +65,7 @@ class RSNodeSocketRenderSettings(bpy.types.NodeSocket):
         layout.label(text=text)
 
     def draw_color(self, context, node):
-        return (1, 0.2, 1.0, 1.0)
+        return (0, 1, 0, 1.0)
 
 
 class RSNodeSocketOutputSettings(bpy.types.NodeSocket):
@@ -76,7 +76,7 @@ class RSNodeSocketOutputSettings(bpy.types.NodeSocket):
         layout.label(text=text)
 
     def draw_color(self, context, node):
-        return (1.0, 1.0, 1.0, 1.0)
+        return (0, 0, 1, 1.0)
 
 
 class RSNodeSocketRenderList(bpy.types.NodeSocket):
@@ -92,22 +92,20 @@ class RSNodeSocketRenderList(bpy.types.NodeSocket):
 
 node_categories = [
 
-    RenderStackNodeCategory("CAMERASETTINGS", "Camera Settings", items=[
+    RenderStackNodeCategory("INPUTS", "Input", items=[
         nodeitems_utils.NodeItem("RSNodeCamInputNode"),
-        nodeitems_utils.NodeItem("RSNodeCameraSettingsNode"),
+        nodeitems_utils.NodeItem("ResolutionInputNode"),
+        nodeitems_utils.NodeItem("FrameRangeInputNode"),
     ]),
 
-    RenderStackNodeCategory("RENDERSETTINGS", "Render Settings", items=[
+    RenderStackNodeCategory("SETTINGS", "Settings", items=[
+        nodeitems_utils.NodeItem("RSNodeCameraSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeCyclesRenderSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeEeveeRenderSettingsNode"),
-
-    ]),
-
-    RenderStackNodeCategory("OUTPUTSETTINGS", "Output Settings", items=[
         nodeitems_utils.NodeItem("RSNodeOutputSettingsNode"),
     ]),
 
-    RenderStackNodeCategory("ROP", "Render Output", items=[
+    RenderStackNodeCategory("TASK", "Task", items=[
         nodeitems_utils.NodeItem("RSNodeTaskNode"),
         nodeitems_utils.NodeItem("RSNodeRenderListNode"),
 
@@ -124,10 +122,10 @@ classes = [
     RenderStackNodeTree,
     RenderStackNode,
     RSNodeSocketCamera,
-    RSNodeSocketCameraSettings,
     RSNodeSocketRenderSettings,
     RSNodeSocketOutputSettings,
-    RSNodeSocketRenderList
+    RSNodeSocketTaskSettings,
+    RSNodeSocketRenderList,
 ]
 
 

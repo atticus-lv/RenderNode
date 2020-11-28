@@ -28,10 +28,10 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             if node.bl_idname == "RSNodeCamInputNode":
                 self.cam_name = node.camera.name
 
-            elif node.bl_idname == "RSNodeCameraSettingsNode":
-                self.res_x = node.inputs["Res X"].default_value
-                self.res_y = node.inputs["Res Y"].default_value
-                self.res_scale = node.inputs["Res Scale"].default_value
+            elif node.bl_idname == "ResolutionInputNode":
+                self.res_x = node.res_x
+                self.res_y = node.res_y
+                self.res_scale = node.res_scale
 
             elif node.bl_idname == "RSNodeCyclesRenderSettingsNode":
                 self.engine = "CYCLES"
