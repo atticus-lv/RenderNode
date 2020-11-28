@@ -99,7 +99,6 @@ node_categories = [
     ]),
 
     RenderStackNodeCategory("SETTINGS", "Settings", items=[
-        nodeitems_utils.NodeItem("RSNodeCameraSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeCyclesRenderSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeEeveeRenderSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeOutputSettingsNode"),
