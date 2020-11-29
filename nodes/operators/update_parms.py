@@ -30,6 +30,13 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         task_name = self.reroute(nt.nt.nodes.active.inputs[self.index].links[0].from_node)
         self.task_data = nt.get_task_data(task_name)
 
+    def update_image_format(self):
+        if 'color_mode' in self.task_data:
+            bpy.context.scene.render.image_settings.color_mode = self.task_data['color_mode']
+            bpy.context.scene.render.image_settings.color_depth = self.task_data['color_depth']
+            bpy.context.scene.render.image_settings.file_format = self.task_data['file_format']
+            bpy.context.scene.render.film_transparent = task_data['transparent']
+
     def update_frame_range(self):
         if "frame_start" in self.task_data:
             bpy.context.scene.frame_start = self.task_data['frame_start']
@@ -63,7 +70,6 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                                 area.spaces[0].region_3d.view_perspective = 'CAMERA'
                                 break
                         break
-
 
     def execute(self, context):
         self.get_data()

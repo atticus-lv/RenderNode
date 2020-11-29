@@ -66,6 +66,10 @@ class NODE_TREE():
                 task_data['engine'] = "BLENDER_EEVEE"
                 task_data['samples'] = node.inputs["Samples"].default_value
 
+            elif node.bl_idname == "RSNodeWorkBenchRenderSettingsNode":
+                task_data['engine']= 'BLENDER_WORKBENCH'
+
+
             elif node.bl_idname == "FrameRangeInputNode":
                 if node.frame_end < node.frame_start:
                     node.frame_end = node.frame_start

@@ -94,16 +94,21 @@ node_categories = [
 
     RenderStackNodeCategory("INPUTS", "Input", items=[
         nodeitems_utils.NodeItem("RSNodeCamInputNode"),
+    ]),
+
+    RenderStackNodeCategory("RENDER_SETTINGS", "Render Settings", items=[
+        nodeitems_utils.NodeItem("RSNodeWorkBenchRenderSettingsNode"),
+        nodeitems_utils.NodeItem("RSNodeEeveeRenderSettingsNode"),
+        nodeitems_utils.NodeItem("RSNodeCyclesRenderSettingsNode"),
+
+    ]),
+
+    RenderStackNodeCategory("OUTPUT_SETTINGS", "Output Settings", items=[
+        nodeitems_utils.NodeItem("RSNodeOutputSettingsMergeNode"),
         nodeitems_utils.NodeItem("ResolutionInputNode"),
         nodeitems_utils.NodeItem("FrameRangeInputNode"),
         nodeitems_utils.NodeItem("ImageFormatInputNode"),
         nodeitems_utils.NodeItem("FilePathInputNode"),
-    ]),
-
-    RenderStackNodeCategory("SETTINGS", "Settings", items=[
-        nodeitems_utils.NodeItem("RSNodeCyclesRenderSettingsNode"),
-        nodeitems_utils.NodeItem("RSNodeEeveeRenderSettingsNode"),
-        nodeitems_utils.NodeItem("RSNodeOutputSettingsNode"),
     ]),
 
     RenderStackNodeCategory("TASK", "Task", items=[

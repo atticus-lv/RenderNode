@@ -22,8 +22,6 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     frame_list = []
     frame_current = 1
 
-    use_preview_render: BoolProperty(name="use preview render", default=False)
-    preview_folder_name: StringProperty(default="Preview")
 
     # 检查当前帧 是否大于任务预设的的帧数
     def frame_check(self):
@@ -198,11 +196,68 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         return {"PASS_THROUGH"}
 
 
+class RSN_OT_RenderButton(bpy.types.Operator):
+    bl_idname = "rsn.render_button"
+    bl_label = "Render"
+
+    use_preview_render: BoolProperty(name="use preview render",
+                                     description="render prewive image to a preview folder",
+                                     default=False)
+
+    preview_folder_name:StringProperty(name = "Preview Folder Name", default = "Preview")
+
+    render_now: BoolProperty(name="Render right now !")
+
+    wait_time: IntProperty(name="Time to begin render",
+                           description="type in how many minutes you want to render later",
+                           default=0)
+
+    @classmethod
+    def poll(self, context):
+        if not context.window_manager.render_stack_modal:
+            return context.scene.camera is not None
+
+    def change_shading(self):
+        for area in bpy.context.screen.areas:
+            if area.type == 'VIEW_3D':
+                for space in area.spaces:
+                    if space.type == 'VIEW_3D' and space.shading.type == "RENDERED":
+                        space.shading.type = 'SOLID'
+
+    def draw(self, context):
+        layout = self.layout
+        layout.use_property_split = True
+
+        # layout.prop(self, "use_preview_render", text="Render Preview")
+        # if self.use_preview_render:
+        #     layout.prop(self,"preview_folder_name", text="Folder Name")
+
+    def execute(self, context):
+        blend_path = context.blend_data.filepath
+
+        if blend_path == "":
+            self.report({"ERROR"}, "先保存你的场景！" if CN_ON() else "Save your file first!")
+            return {"FINISHED"}
+
+        else:
+            if context.scene.render.engine == "octane":
+                self.change_shading()
+            bpy.ops.rsn.render_stack_task()
+
+        return {'FINISHED'}
+
+    def invoke(self, context, event):
+        self.use_preview_render = False
+        return context.window_manager.invoke_props_dialog(self)
+
+
 def register():
     bpy.utils.register_class(RSN_OT_RenderStackTask)
+    bpy.utils.register_class(RSN_OT_RenderButton)
     bpy.types.WindowManager.render_stack_modal = BoolProperty(default=False)
 
 
 def unregister():
     bpy.utils.unregister_class(RSN_OT_RenderStackTask)
+    bpy.utils.unregister_class(RSN_OT_RenderButton)
     del bpy.types.WindowManager.render_stack_modal

@@ -2,14 +2,15 @@ import bpy
 from RenderStackNode.node_tree import RenderStackNode
 
 
-class RSNodeOutputSettingsNode(RenderStackNode):
+class RSNodeOutputSettingsMergeNode(RenderStackNode):
     '''A simple input node'''
-    bl_idname = 'RSNodeOutputSettingsNode'
-    bl_label = 'Output Settings'
+    bl_idname = 'RSNodeOutputSettingsMergeNode'
+    bl_label = 'Output Settings Merge'
 
     def init(self, context):
         self.inputs.new('RSNodeSocketOutputSettings', "Output Settings")
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
+        self.width = 180
 
     def draw_buttons(self, context, layout):
         pass
@@ -25,7 +26,7 @@ class RSNodeOutputSettingsNode(RenderStackNode):
 
 
 def register():
-    bpy.utils.register_class(RSNodeOutputSettingsNode)
+    bpy.utils.register_class(RSNodeOutputSettingsMergeNode)
 
 def unregister():
-    bpy.utils.unregister_class(RSNodeOutputSettingsNode)
+    bpy.utils.unregister_class(RSNodeOutputSettingsMergeNode)

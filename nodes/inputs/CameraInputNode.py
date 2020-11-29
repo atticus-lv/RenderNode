@@ -16,6 +16,7 @@ class RSNodeCamInputNode(RenderStackNode):
 
     def init(self, context):
         self.outputs.new('RSNodeSocketCamera', "Camera")
+        self.width = 150
 
     def draw_buttons(self, context, layout):
         layout.prop(self, 'camera', text="")

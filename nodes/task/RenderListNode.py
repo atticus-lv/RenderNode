@@ -52,7 +52,7 @@ class RSNodeRenderListNode(RenderStackNode):
             if input.is_linked:
                 col.operator("rsn.update_parms",text = f'View Task {i+1}').index = i
 
-        layout.operator("rsn.render_stack_task",text = f'Render')
+        layout.operator("rsn.render_button",text = f'Render')
 
 def register():
     bpy.utils.register_class(RSNode_OT_EditInput)
