@@ -236,7 +236,7 @@ class RSN_OT_RenderButton(bpy.types.Operator):
         blend_path = context.blend_data.filepath
 
         if blend_path == "":
-            self.report({"ERROR"}, "先保存你的场景！" if CN_ON() else "Save your file first!")
+            self.report({"ERROR"},"Save your file first!")
             return {"FINISHED"}
 
         else:
