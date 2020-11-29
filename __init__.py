@@ -16,7 +16,7 @@ from .nodes import *
 __dict__ = {}
 __dict__["node_tree"] = f"{__name__}.node_tree"
 
-a = automatic_collection()
+
 
 for k, v in a.items():
     for module_name in v:

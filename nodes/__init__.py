@@ -37,4 +37,4 @@ def automatic_collection():
     # may not be used, but can be.
     return nodes_dict
 
-
+a = automatic_collection()

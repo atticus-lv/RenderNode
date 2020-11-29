@@ -27,20 +27,22 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
     def reroute(self, node):
         def is_task_node(node):
             if node.bl_idname == "RSNodeTaskNode":
-                return node
-            else:
-                sub_node = node.inputs[0].links[0].from_node
-                is_task_node(sub_node)
+                print(f">> get task node {node.name}")
+                return node.name
 
-        node = is_task_node(node)
-        return node
+            sub_node = node.inputs[0].links[0].from_node
+
+            return is_task_node(sub_node)
+
+        task_node_name = is_task_node(node)
+        return task_node_name
 
     def get_data(self):
         nt = NODE_TREE(bpy.context.space_data.edit_tree)
-        node = nt.nt.nodes.active
-        self.reroute(node)
-        for name in nt.dict[node.inputs[self.index].links[0].from_node.name]:
-            node = nt.nt.nodes[name]
+        task_name = self.reroute(nt.nt.nodes.active.inputs[self.index].links[0].from_node)
+
+        for node_name in nt.dict[task_name]:
+            node = nt.nt.nodes[node_name]
 
             if node.bl_idname == "RSNodeCamInputNode":
                 self.cam_name = node.camera.name
