@@ -3,7 +3,7 @@ import bpy
 from bpy.props import *
 
 from RenderStackNode.node_tree import RenderStackNode
-from RenderStackNode.core.get_tree_info import NODE_TREE
+from RenderStackNode.utility import NODE_TREE
 
 
 class RenderListNode_OT_GetInfo(bpy.types.Operator):

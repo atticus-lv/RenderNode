@@ -9,7 +9,7 @@ class FilePathInputNode(RenderStackNode):
 
     use_blend_file_path: BoolProperty(name="Use blend file path", default=True)
     path: StringProperty(default='/tmp/')
-    format_path: StringProperty(default="$task/$camera")
+    path_format: StringProperty(default="$task/$camera")
 
     def init(self, context):
         self.outputs.new('RSNodeSocketOutputSettings', "Output Settings")

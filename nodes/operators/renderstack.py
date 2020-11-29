@@ -1,10 +1,7 @@
-import bpy
 import os
-import time
 
 from bpy.props import *
-from RenderStackNode.core.get_tree_info import NODE_TREE
-
+from RenderStackNode.utility import *
 
 class RSN_OT_RenderStackTask(bpy.types.Operator):
     """Render Tasks"""
@@ -153,6 +150,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         # 获取列表
 
         nt = NODE_TREE(bpy.context.space_data.edit_tree)
+
         for i, task in enumerate(nt.dict):
             for node_name in nt.dict[task]:
                 self.mark_index.append(i)

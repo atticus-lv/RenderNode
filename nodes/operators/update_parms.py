@@ -1,7 +1,6 @@
-import bpy
 from bpy.props import *
 
-from RenderStackNode.core.get_tree_info import NODE_TREE
+from RenderStackNode.utility import *
 
 
 class RSN_OT_UpdateParms(bpy.types.Operator):
@@ -11,18 +10,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
 
     index: IntProperty(default=0, min=0)
 
-    cam_name: StringProperty(name="Camera name")
-
-    engine = None
-    samples = None
-
-    res_x = None
-    res_y = None
-    res_scale = None
-
-    frame_start = None
-    frame_end = None
-    frame_step = None
+    task_data = None
 
     def reroute(self, node):
         def is_task_node(node):
@@ -40,75 +28,42 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
     def get_data(self):
         nt = NODE_TREE(bpy.context.space_data.edit_tree)
         task_name = self.reroute(nt.nt.nodes.active.inputs[self.index].links[0].from_node)
-
-        for node_name in nt.dict[task_name]:
-            node = nt.nt.nodes[node_name]
-
-            if node.bl_idname == "RSNodeCamInputNode":
-                self.cam_name = node.camera.name
-
-            elif node.bl_idname == "ResolutionInputNode":
-                self.res_x = node.res_x
-                self.res_y = node.res_y
-                self.res_scale = node.res_scale
-
-            elif node.bl_idname == "RSNodeCyclesRenderSettingsNode":
-                self.engine = "CYCLES"
-                self.samples = node.inputs["Samples"].default_value
-
-            elif node.bl_idname == "RSNodeEeveeRenderSettingsNode":
-                self.engine = "BLENDER_EEVEE"
-                self.samples = node.inputs["Samples"].default_value
-
-            elif node.bl_idname == "FrameRangeInputNode":
-                if node.frame_end < node.frame_start:
-                    node.frame_end = node.frame_start
-                self.frame_start = node.frame_start
-                self.frame_end = node.frame_end
-                self.frame_step = node.frame_step
+        self.task_data = nt.get_task_data(task_name)
 
     def update_frame_range(self):
-        if self.frame_start:
-            bpy.context.scene.frame_start = self.frame_start
-            bpy.context.scene.frame_end = self.frame_end
-            bpy.context.scene.frame_step = self.frame_step
+        if "frame_start" in self.task_data:
+            bpy.context.scene.frame_start = self.task_data['frame_start']
+            bpy.context.scene.frame_end = self.task_data['frame_end']
+            bpy.context.scene.frame_step = self.task_data['frame_step']
 
     def update_render_engine(self):
-        if self.engine:
-            bpy.context.scene.render.engine = self.engine
-            if self.samples:
-                if self.engine == "BLENDER_EEVEE":
-                    bpy.context.scene.eevee.taa_render_samples = self.samples
-                elif self.engine == "CYCLES":
-                    bpy.context.scene.cycles.samples = self.samples
+        if 'engine' in self.data:
+            bpy.context.scene.render.engine = self.task_data['engine']
+            if 'samples' in self.data:
+                if self.task_data['engine'] == "BLENDER_EEVEE":
+                    bpy.context.scene.eevee.taa_render_samples = self.task_data['samples']
+                elif self.task_data['engine'] == "CYCLES":
+                    bpy.context.scene.cycles.samples = self.task_data['samples']
 
     def update_res(self):
-        if self.res_x:
-            bpy.context.scene.render.resolution_x = self.res_x
-        if self.res_y:
-            bpy.context.scene.render.resolution_y = self.res_y
-        if self.res_scale:
-            bpy.context.scene.render.resolution_percentage = self.res_scale
-
-        self.res_x = None
-        self.res_y = None
-        self.res_scale = None
+        if 'res_x' in self.task_data:
+            bpy.context.scene.render.resolution_x = self.task_data['res_x']
+            bpy.context.scene.render.resolution_y = self.task_data['res_y']
+            bpy.context.scene.render.resolution_percentage = self.task_data['res_scale']
 
     def update_camera(self):
-        try:
-            if not bpy.context.scene.camera.name == self.cam_name:
+        if 'camera' in self.task_data:
+            cam_name = self.task_data['camera']
+            if cam_name:
                 bpy.context.scene.camera = bpy.data.objects[self.cam_name]
                 for area in bpy.context.screen.areas:
                     if area.type == 'VIEW_3D':
                         for region in area.regions:
                             if region.type == 'WINDOW':
                                 area.spaces[0].region_3d.view_perspective = 'CAMERA'
+                                break
                         break
-                    break
-        except(Exception):
-            pass
-        finally:
-            self.cam_name = ""
+
 
     def execute(self, context):
         self.get_data()

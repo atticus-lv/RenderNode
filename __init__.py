@@ -1,12 +1,12 @@
 bl_info = {
-    "name": "RenderStack Node",
-    "author": "Atticus",
-    "version": (0, 4),
-    "blender": (2, 90, 0),
-    "location": "Node Editor",
+    "name"       : "RenderStack Node",
+    "author"     : "Atticus",
+    "version"    : (0, 4),
+    "blender"    : (2, 90, 0),
+    "location"   : "Node Editor",
     "description": "Node based render queue workflow",
     # "doc_url"    : "",
-    "category": "Render",
+    "category"   : "Render",
 }
 
 import importlib
@@ -15,8 +15,6 @@ from .nodes import *
 
 __dict__ = {}
 __dict__["node_tree"] = f"{__name__}.node_tree"
-
-
 
 for k, v in a.items():
     for module_name in v:
