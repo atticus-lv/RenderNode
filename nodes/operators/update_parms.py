@@ -37,9 +37,9 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             bpy.context.scene.frame_step = self.task_data['frame_step']
 
     def update_render_engine(self):
-        if 'engine' in self.data:
+        if 'engine' in self.task_data:
             bpy.context.scene.render.engine = self.task_data['engine']
-            if 'samples' in self.data:
+            if 'samples' in self.task_data:
                 if self.task_data['engine'] == "BLENDER_EEVEE":
                     bpy.context.scene.eevee.taa_render_samples = self.task_data['samples']
                 elif self.task_data['engine'] == "CYCLES":
@@ -55,7 +55,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         if 'camera' in self.task_data:
             cam_name = self.task_data['camera']
             if cam_name:
-                bpy.context.scene.camera = bpy.data.objects[self.cam_name]
+                bpy.context.scene.camera = bpy.data.objects[cam_name]
                 for area in bpy.context.screen.areas:
                     if area.type == 'VIEW_3D':
                         for region in area.regions:

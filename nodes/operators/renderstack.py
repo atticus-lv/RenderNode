@@ -1,7 +1,9 @@
 import os
+import time
 
 from bpy.props import *
 from RenderStackNode.utility import *
+
 
 class RSN_OT_RenderStackTask(bpy.types.Operator):
     """Render Tasks"""
@@ -15,6 +17,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     # mark
     render_mark = None
     mark_index = []
+    task_data = []
     # item
     frame_list = []
     frame_current = 1
@@ -26,6 +29,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     def frame_check(self):
         if self.frame_current >= self.frame_list[0]["frame_end"]:
             self.mark_index.pop(0)
+            self.task_data.pop(0)
             self.frame_list.pop(0)
             if len(self.frame_list) > 0:  # 如果帧数列表未空，则继续读取下一个
                 self.frame_current = self.frame_list[0]["frame_start"]
@@ -71,52 +75,49 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
             self.report({'ERROR'}, f'File Path: Path Error')
             print(directory_path, e)
 
-    # def get_postfix(self, scn, task):
-    #     task_name = scn.ssm.render_list[task].name
-    #     cam = scn.camera
-    #
-    #     date_now = str(time.strftime("%m-%d", time.localtime()))
-    #     time_now = str(time.strftime("%H_%M", time.localtime()))
-    #
-    #     shot_export_name = scn.ssm.render_list[task].output_settings.format_path
-    #     if self.use_preview_render:
-    #         postfix = f"{self.preview_folder_name}/"
-    #     else:
-    #         postfix = ""
-    #
-    #     for string in shot_export_name.split("/"):
-    #         for r in string.split('$'):
-    #             if r.startswith("date"):
-    #                 postfix += date_now + '_'
-    #             elif r.startswith("time"):
-    #                 postfix += time_now + '_'
-    #             # camera
-    #             elif r.startswith("camera"):
-    #                 postfix += cam.name + '_'
-    #             elif r.startswith("res"):
-    #                 postfix += f"{cam.ssm.cam.res_x}x{cam.ssm.cam.res_y}" + "_"
-    #             elif r.startswith("ev"):
-    #                 postfix += scn.view_settings.exposure + "_"
-    #             # ssm
-    #             elif r.startswith("light_studio"):
-    #                 try:
-    #                     item = scn.light_studio[scn.light_studio_index]
-    #                     postfix += f"{item.name}" + "_"
-    #                 except(Exception):
-    #                     pass
-    #             elif r.startswith("view_layer"):
-    #                 postfix += f"{bpy.context.window.view_layer.name}" + '_'
-    #             elif r.startswith("task"):
-    #                 postfix += task_name + "_"
-    #             else:
-    #                 postfix += r
-    #
-    #         if postfix.endswith("_"): postfix = postfix[:-1]
-    #         postfix += "/"
-    #
-    #     if postfix.endswith("/"): postfix = postfix[:-1]
-    #
-    #     return postfix
+    def get_postfix(self, scn):
+
+        task = self.task_data[0]
+        task_name = task['task_name']
+        cam = scn.camera
+
+        postfix = ""
+        date_now = str(time.strftime("%m-%d", time.localtime()))
+        time_now = str(time.strftime("%H_%M", time.localtime()))
+
+        # if self.use_preview_render:
+        #     postfix = f"{self.preview_folder_name}/"
+        # else:
+        #     postfix = ""
+
+        if 'path_format' in task:
+            shot_export_name = task["path_format"]
+            for string in shot_export_name.split("/"):
+                for r in string.split('$'):
+                    if r.startswith("date"):
+                        postfix += date_now + '_'
+                    elif r.startswith("time"):
+                        postfix += time_now + '_'
+                    # camera
+                    elif r.startswith("camera"):
+                        postfix += cam.name + '_'
+                    elif r.startswith("res"):
+                        postfix += f"{scn.render.resolution_x}x{scn.render.resolution_y}" + "_"
+                    elif r.startswith("ev"):
+                        postfix += scn.view_settings.exposure + "_"
+                    elif r.startswith("view_layer"):
+                        postfix += f"{bpy.context.window.view_layer.name}" + '_'
+                    elif r.startswith("task"):
+                        postfix += task_name + "_"
+                    else:
+                        postfix += r
+
+                if postfix.endswith("_"): postfix = postfix[:-1]
+                postfix += "/"
+
+            if postfix.endswith("/"): postfix = postfix[:-1]
+
+        return postfix
 
     # 激活下一任务
     def switch2task(self, context):
@@ -127,15 +128,15 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
 
         # folder path & file name
         directory = self.make_path(context)
-        # postfix = self.get_postfix(scn, task)
+        postfix = self.get_postfix(scn)
 
         frame_format = f"{self.frame_current}"
         if len(f"{self.frame_current}") < 4:
             for i in range(0, 4 - len(f"{self.frame_current}")):
                 frame_format = "0" + frame_format
 
-        # scn.render.filepath = os.path.join(directory, postfix + f"_{frame_format}" + scn.render.file_extension)
-        scn.render.filepath = os.path.join(directory, f"_{frame_format}" + scn.render.file_extension)
+        scn.render.filepath = os.path.join(directory, postfix + f"_{frame_format}" + scn.render.file_extension)
+        # scn.render.filepath = os.path.join(directory, f"_{frame_format}" + scn.render.file_extension)
 
     # init 初始化执行
     def execute(self, context):
@@ -152,21 +153,22 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         nt = NODE_TREE(bpy.context.space_data.edit_tree)
 
         for i, task in enumerate(nt.dict):
-            for node_name in nt.dict[task]:
-                self.mark_index.append(i)
-                render_list = {}
+            task_data = nt.get_task_data(task_name=task)
+            self.task_data.append(task_data)
+            self.mark_index.append(i)
 
-                node = nt.nt.nodes[node_name]
-                if node.bl_idname == "FrameRangeInputNode":
-                    render_list["frame_start"] = node.frame_start
-                    render_list["frame_end"] = node.frame_end
-                    render_list["frame_step"] = node.frame_step
-                else:
-                    render_list["frame_start"] = 1
-                    render_list["frame_end"] = 1
-                    render_list["frame_step"] = 1
+            render_list = {}
 
-                self.frame_list.append(render_list)
+            if "frame_start" in task_data:
+                render_list["frame_start"] = task_data["frame_start"]
+                render_list["frame_end"] = task_data["frame_end"]
+                render_list["frame_step"] = task_data["frame_step"]
+            else:
+                render_list["frame_start"] = 1
+                render_list["frame_end"] = 1
+                render_list["frame_step"] = 1
+
+            self.frame_list.append(render_list)
 
         if True in (len(self.mark_index) == 0, len(self.frame_list) == 0):
             scn.render.use_lock_interface = False
@@ -197,10 +199,10 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
 
 
 def register():
-    # bpy.utils.register_class(RSN_OT_RenderStackTask)
+    bpy.utils.register_class(RSN_OT_RenderStackTask)
     bpy.types.WindowManager.render_stack_modal = BoolProperty(default=False)
 
 
 def unregister():
-    # bpy.utils.unregister_class(RSN_OT_RenderStackTask)
+    bpy.utils.unregister_class(RSN_OT_RenderStackTask)
     del bpy.types.WindowManager.render_stack_modal

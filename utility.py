@@ -49,7 +49,7 @@ class NODE_TREE():
         task_data = {}
         for node_name in self.dict[task_name]:
             node = self.nt.nodes[node_name]
-
+            task_data['task_name'] = self.nt.nodes[task_name].task_name
             if node.bl_idname == "RSNodeCamInputNode":
                 task_data["camera"] = node.camera.name if node.camera else None
 

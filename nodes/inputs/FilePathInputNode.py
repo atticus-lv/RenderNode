@@ -18,7 +18,7 @@ class FilePathInputNode(RenderStackNode):
         layout.prop(self, 'use_blend_file_path')
         if not self.use_blend_file_path:
             layout.prop(self, 'path')
-        layout.prop(self, 'format_path')
+        layout.prop(self, 'path_format')
 
 
 def register():
