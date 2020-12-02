@@ -31,7 +31,6 @@ class RSNodeRenderListNode(RenderStackNode):
 
     def init(self, context):
         self.inputs.new('RSNodeSocketRenderList', "Task")
-        self.outputs.new('NodeSocketInt', "Info")
 
     def draw_buttons(self, context, layout):
         pass

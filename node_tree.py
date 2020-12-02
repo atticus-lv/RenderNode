@@ -70,7 +70,7 @@ class RSNodeSocketRenderSettings(bpy.types.NodeSocket):
 
 class RSNodeSocketOutputSettings(bpy.types.NodeSocket):
     bl_idname = 'RSNodeSocketOutputSettings'
-    bl_label = 'RSNodeSocketOutputSettings'
+    bl_label = 'RSNod   eSocketOutputSettings'
 
     def draw(self, context, layout, node, text):
         layout.label(text=text)
@@ -104,7 +104,7 @@ node_categories = [
     ]),
 
     RenderStackNodeCategory("OUTPUT_SETTINGS", "Output Settings", items=[
-        nodeitems_utils.NodeItem("RSNodeOutputSettingsMergeNode"),
+        nodeitems_utils.NodeItem("RSNodeSettingsMergeNode"),
         nodeitems_utils.NodeItem("ResolutionInputNode"),
         nodeitems_utils.NodeItem("FrameRangeInputNode"),
         nodeitems_utils.NodeItem("ImageFormatInputNode"),
@@ -116,10 +116,7 @@ node_categories = [
         nodeitems_utils.NodeItem("RSNodeRenderListNode"),
 
     ]),
-    RenderStackNodeCategory("VIEWER", "Viewer", items=[
-        nodeitems_utils.NodeItem("RSNodeRenderInfoNode"),
 
-    ]),
 
 ]
 

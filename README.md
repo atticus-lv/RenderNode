@@ -33,6 +33,24 @@ Provide users with node-based, flexible rendering output methods
 
 
 
+### Install
+
+##### Familiar with **git**
+
+If you are familiar with **git**, just go to your addon folder(For example,you are using windows)
+
+`C:\Users\{YourUserName}\AppData\Roaming\Blender Foundation\Blender\2.92\scripts\addons`
+
+Then right click and **git bash here**, type in:
+
+`$ git clone https://github.com/atticus-lv/RenderStackNode.git`
+
+**For Other User**
+
+Click [here](https://github.com/atticus-lv/RenderStackNode/releases/tag/alpha) to down the latest stable release
+
+
+
 ### Nodes
 
 + Render List 
@@ -66,3 +84,21 @@ Provide users with node-based, flexible rendering output methods
 + Eevee Settings / Cycles Settings / Work Bench Settings
 
     >  change the render engine
+
+
+
+### Plans
+
+v 0.5
+
++ [x]   Basic renderstack with nodes 
++ [x] eevee, cycles basic support 
++ [x]  camera, resulotion, frame range, file format, format file name support
+
+v 1.0
+
++ [ ]  command node for custom render settings overwriting
++ [ ]  render list merge node (or someting else for render all list)
++ [ ]  task marker (won't need to unlink task to no render )
++ [ ]  scene overwriting (maybe)
+

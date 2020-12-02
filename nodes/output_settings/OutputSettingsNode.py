@@ -2,10 +2,10 @@ import bpy
 from RenderStackNode.node_tree import RenderStackNode
 
 
-class RSNodeOutputSettingsMergeNode(RenderStackNode):
+class RSNodeSettingsMergeNode(RenderStackNode):
     '''A simple input node'''
-    bl_idname = 'RSNodeOutputSettingsMergeNode'
-    bl_label = 'Output Settings Merge'
+    bl_idname = 'RSNodeSettingsMergeNode'
+    bl_label = 'Merge Settings'
 
     def init(self, context):
         self.inputs.new('RSNodeSocketOutputSettings', "Output Settings")
@@ -26,7 +26,7 @@ class RSNodeOutputSettingsMergeNode(RenderStackNode):
 
 
 def register():
-    bpy.utils.register_class(RSNodeOutputSettingsMergeNode)
+    bpy.utils.register_class(RSNodeSettingsMergeNode)
 
 def unregister():
-    bpy.utils.unregister_class(RSNodeOutputSettingsMergeNode)
+    bpy.utils.unregister_class(RSNodeSettingsMergeNode)
