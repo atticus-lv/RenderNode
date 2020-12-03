@@ -3,10 +3,10 @@ from bpy.props import *
 from RenderStackNode.node_tree import RenderStackNode
 
 
-class RenderSettingsScriptsNode(RenderStackNode):
+class RSSettingsScriptsNode(RenderStackNode):
     '''A simple input node'''
-    bl_idname = 'RenderSettingsScriptsNode'
-    bl_label = 'Render Scripts'
+    bl_idname = 'RSSettingsScriptsNode'
+    bl_label = 'Scripts'
 
     code:StringProperty(name = 'Code to execute',default='')
 
@@ -21,7 +21,7 @@ class RenderSettingsScriptsNode(RenderStackNode):
 
 
 def register():
-    bpy.utils.register_class(RenderSettingsScriptsNode)
+    bpy.utils.register_class(RSSettingsScriptsNode)
 
 def unregister():
-    bpy.utils.unregister_class(RenderSettingsScriptsNode)
+    bpy.utils.unregister_class(RSSettingsScriptsNode)

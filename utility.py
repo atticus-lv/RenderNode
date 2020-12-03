@@ -67,7 +67,7 @@ class NODE_TREE():
                 task_data['samples'] = node.samples
 
             elif node.bl_idname == "RSNodeWorkBenchRenderSettingsNode":
-                task_data['engine']= 'BLENDER_WORKBENCH'
+                task_data['engine'] = 'BLENDER_WORKBENCH'
 
 
             elif node.bl_idname == "FrameRangeInputNode":
@@ -101,5 +101,17 @@ class NODE_TREE():
                 task_data['use_blend_file_path'] = node.use_blend_file_path
                 task_data['path_format'] = node.path_format
                 task_data['path'] = node.path
+
+            elif node.bl_idname == 'RSSettingsScriptsNode':
+                if 'scripts' in task_data:
+                    task_data['scripts'][node.name] = node.code
+                else:
+                    task_data['scripts'] = {node.name: node.code}
+
+            elif node.bl_idname == 'RSFileScriptsNode':
+                if 'scripts_file' in task_data:
+                    task_data['scripts_file'][node.name] = node.file.name
+                else:
+                    task_data['scripts_file'] = {node.name: node.file.name}
 
         return task_data

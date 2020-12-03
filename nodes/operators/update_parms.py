@@ -1,5 +1,5 @@
+import bpy
 from bpy.props import *
-
 from RenderStackNode.utility import *
 
 
@@ -29,6 +29,15 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         nt = NODE_TREE(bpy.context.space_data.edit_tree)
         task_name = self.reroute(nt.nt.nodes.active.inputs[self.index].links[0].from_node)
         self.task_data = nt.get_task_data(task_name)
+        print(self.task_data)
+
+    def updata_scripts(self):
+        if 'scripts' in self.task_data:
+            for k,value in self.task_data['scripts'].items():
+                try:
+                    exec(value)
+                except Exception as e:
+                    print(f"RSN ERROR: scripts node > {k} < error: {e}")
 
     def update_image_format(self):
         if 'color_mode' in self.task_data:
@@ -77,6 +86,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         self.update_res()
         self.update_render_engine()
         self.update_frame_range()
+        self.updata_scripts()
 
         return {'FINISHED'}
 

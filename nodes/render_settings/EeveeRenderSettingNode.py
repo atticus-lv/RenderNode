@@ -21,10 +21,10 @@ class RSNodeEeveeRenderSettingsNode(RenderStackNode):
         layout.prop(self,"samples",text= 'Samples')
         layout.scale_y = 1.25
         row = layout.row(align=True)
-        add = row.operator("rsnode.edit_input", text="Task", icon='ADD')
+        add = row.operator("rsnode.edit_input", text="Option", icon='ADD')
         add.remove = False
         add.socket_type = "RSNodeSocketRenderSettings"
-        add.socket_name = "Task"
+        add.socket_name = "Option"
 
         remove = row.operator("rsnode.edit_input", text="Unused", icon='REMOVE')
         remove.remove = True

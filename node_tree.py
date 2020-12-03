@@ -103,7 +103,6 @@ node_categories = [
         nodeitems_utils.NodeItem("RSNodeWorkBenchRenderSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeEeveeRenderSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeCyclesRenderSettingsNode"),
-        nodeitems_utils.NodeItem("RenderSettingsScriptsNode"),
 
     ]),
 
@@ -123,6 +122,13 @@ node_categories = [
         nodeitems_utils.NodeItem("RSNodeRenderListNode"),
 
     ]),
+
+    RenderStackNodeCategory("SCRIPTS", "Scripts", items=[
+        nodeitems_utils.NodeItem("RSSettingsScriptsNode"),
+        nodeitems_utils.NodeItem("RSFileScriptsNode"),
+
+    ]),
+
 
 ]
 
