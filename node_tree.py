@@ -92,19 +92,26 @@ class RSNodeSocketRenderList(bpy.types.NodeSocket):
 
 node_categories = [
 
-    RenderStackNodeCategory("INPUTS", "Input", items=[
+    RenderStackNodeCategory("CAMERA", "Camera", items=[
         nodeitems_utils.NodeItem("RSNodeCamInputNode"),
     ]),
 
-    RenderStackNodeCategory("RENDER_SETTINGS", "Render Settings", items=[
+    RenderStackNodeCategory("RENDER_ENGINES", "Render Engines", items=[
+        nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Merge Render Settings", settings={
+            "node_type": repr("RENDER_SETTINGS"),
+        }),
         nodeitems_utils.NodeItem("RSNodeWorkBenchRenderSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeEeveeRenderSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeCyclesRenderSettingsNode"),
+        nodeitems_utils.NodeItem("RenderSettingsScriptsNode"),
 
     ]),
 
     RenderStackNodeCategory("OUTPUT_SETTINGS", "Output Settings", items=[
-        nodeitems_utils.NodeItem("RSNodeSettingsMergeNode"),
+        nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Merge Output Settings", settings={
+            "node_type": repr("OUTPUT_SETTINGS"),
+        }),
+
         nodeitems_utils.NodeItem("ResolutionInputNode"),
         nodeitems_utils.NodeItem("FrameRangeInputNode"),
         nodeitems_utils.NodeItem("ImageFormatInputNode"),
@@ -116,7 +123,6 @@ node_categories = [
         nodeitems_utils.NodeItem("RSNodeRenderListNode"),
 
     ]),
-
 
 ]
 

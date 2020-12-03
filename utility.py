@@ -60,11 +60,11 @@ class NODE_TREE():
 
             elif node.bl_idname == "RSNodeCyclesRenderSettingsNode":
                 task_data['engine'] = "CYCLES"
-                task_data['samples'] = node.inputs["Samples"].default_value
+                task_data['samples'] = node.samples
 
             elif node.bl_idname == "RSNodeEeveeRenderSettingsNode":
                 task_data['engine'] = "BLENDER_EEVEE"
-                task_data['samples'] = node.inputs["Samples"].default_value
+                task_data['samples'] = node.samples
 
             elif node.bl_idname == "RSNodeWorkBenchRenderSettingsNode":
                 task_data['engine']= 'BLENDER_WORKBENCH'
