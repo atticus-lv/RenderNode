@@ -3,15 +3,15 @@ from bpy.props import *
 from RenderStackNode.node_tree import RenderStackNode
 
 
-class RSSettingsScriptsNode(RenderStackNode):
+class RSScriptsNode(RenderStackNode):
     '''A simple input node'''
-    bl_idname = 'RSSettingsScriptsNode'
+    bl_idname = 'RSScriptsNode'
     bl_label = 'Scripts'
 
     code:StringProperty(name = 'Code to execute',default='')
 
     def init(self, context):
-        self.outputs.new('RSNodeSocketRenderSettings', "Script")
+        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
         self.width = 200
 
 
@@ -21,7 +21,7 @@ class RSSettingsScriptsNode(RenderStackNode):
 
 
 def register():
-    bpy.utils.register_class(RSSettingsScriptsNode)
+    bpy.utils.register_class(RSScriptsNode)
 
 def unregister():
-    bpy.utils.unregister_class(RSSettingsScriptsNode)
+    bpy.utils.unregister_class(RSScriptsNode)

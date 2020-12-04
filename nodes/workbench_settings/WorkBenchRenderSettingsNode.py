@@ -8,7 +8,7 @@ class WorkBenchRenderSettingsNode(RenderStackNode):
     bl_label = 'WorkBench Settings'
 
     def init(self, context):
-        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
+        self.outputs.new('RSNodeSocketRenderSettings', "Render Settings")
 
     def draw_buttons(self, context, layout):
         pass

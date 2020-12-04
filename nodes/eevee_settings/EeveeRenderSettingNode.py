@@ -10,7 +10,7 @@ class RSNodeEeveeRenderSettingsNode(RenderStackNode):
     samples: IntProperty(default=64, min=1, name="Eevee Samples")
 
     def init(self, context):
-        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
+        self.outputs.new('RSNodeSocketRenderSettings', "Render Settings")
 
         self.inputs["Samples"].default_value = 128
 

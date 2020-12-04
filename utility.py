@@ -102,7 +102,7 @@ class NODE_TREE():
                 task_data['path_format'] = node.path_format
                 task_data['path'] = node.path
 
-            elif node.bl_idname == 'RSSettingsScriptsNode':
+            elif node.bl_idname == 'RSScriptsNode':
                 if 'scripts' in task_data:
                     task_data['scripts'][node.name] = node.code
                 else:

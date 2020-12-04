@@ -11,7 +11,7 @@ class RSFileScriptsNode(RenderStackNode):
     file:PointerProperty(type=bpy.types.Text,name = "Scripts file")
 
     def init(self, context):
-        self.outputs.new('RSNodeSocketRenderSettings', "Script")
+        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
         self.width = 200
 
 
