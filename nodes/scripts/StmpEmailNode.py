@@ -3,8 +3,9 @@ from email.mime.text import MIMEText
 from email.header import Header
 
 import bpy
+from bpy.props import *
 
-class SSM_OT_SendEmail(Operator):
+class SSM_OT_SendEmail(bpy.types.Operator):
     bl_idname = "ssm.send_email"
     bl_label = "Bug Reports to Author"
 

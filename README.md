@@ -1,4 +1,8 @@
-# Node-based RenderStack [Blender Addon]
+
+
+# 
+
+Node-based RenderStack [Blender Addon]
 
 ### **Design Target**
 
@@ -6,14 +10,16 @@ Provide users with node-based, flexible rendering output methods
 
 ### Features
 
-> version 0.5 alpha
+> version 0.7 alpha
 >
-> 中文介绍请看视频 https://www.bilibili.com/video/BV1wr4y1c7Tt/
+> Chinese intro video 中文介绍请看视频 https://www.bilibili.com/video/BV1wr4y1c7Tt/
 
 + Camera overide
-+ Render Engine overide （Workbench,Eevee,Cycles）
-+ Output Setting overide  (Frame Range,Resulotion,path（format file name support）,image settings)
++ Render Engine overwrite  （Workbench,Eevee,Cycles）
++ Output Setting overwrite   (Frame Range,Resulotion,path（format file name support）,image settings)
++ Allow script for overwrite 
 + View overide settings
++ Render all task
 
 
 
@@ -51,21 +57,55 @@ Click [here](https://github.com/atticus-lv/RenderStackNode/releases/tag/alpha) t
 
 
 
-### Import Nodes
+### Important Nodes
+
+#### Task Node
 
 + Render List 
 
-	> Provide Viewer operator for input tasks, and render all the input task
+	> Render all the input task,also allow to view all the input task info
 	
 	![image-20201204110924773](./img/image-20201204110924773.png)
 	
+	info format (shift click to get details):
+	
+	```json
+	![屏幕截图 2020-12-04 205828](img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202020-12-04%20205828.png)// node name
+	{
+	    "Task.002": [
+	        "Camera.002",
+	        "File Path.001",
+	        "WorkBench Settings"
+	    ],
+	}
+	// nodes details for each task
+	{
+	    "task_name": "Task",
+	    "camera": "Camera",
+	    "use_blend_file_path": true,
+	    "path_format": "$task/$camera",
+	    "path": "C:\\Users\\atticus\\Desktop\\blender\\",
+	    "engine": "BLENDER_WORKBENCH"
+	}
+	```
+	
+	
+	
++ Task List
+
+    > Provide Viewer operator for input tasks
+
+    ![屏幕截图 2020-12-04 205828](img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202020-12-04%20205828.png)
+
 + Task
 
     > output task( Link to the render list node)
     >
     > all the overide settings is link to this node 
 
-    ![image-20201204110938958](E:/Typora/upload/image-20201204110938958.png)
+    ![image-20201204110938958](./img/image-20201204110938958.png)
+
+#### Settings Node
 
 + Camera 
 
@@ -75,7 +115,7 @@ Click [here](https://github.com/atticus-lv/RenderStackNode/releases/tag/alpha) t
 	
 + Scripts
 
-    > Excute the python code that type in when rendering/view this task
+    > Excute the python code when rendering/view this task
 
     ![image-20201204111003118](./img/image-20201204111003118.png)
 
@@ -106,10 +146,13 @@ v 0.6
 + [x]  script node for custom render settings overwriting
 + [x]  layout merge nodes(more organize)
 
+v 0.7
++ [x]  render list merge node (or someting else for render all list)
++ [ ]  stmp email node
+
 v.1.0
 
 + [ ]  viewlayers and passes(output)
-+ [ ]  render list merge node (or someting else for render all list)
-+ [ ]  task marker (won't need to unlink task to no render )
++ [ ]  task marker (won't need to unlink task to no render,maybe)
 + [ ]  scene overwriting (maybe)
 
