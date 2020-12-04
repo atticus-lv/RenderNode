@@ -111,6 +111,7 @@ node_categorys = [
 
     RSNCategory("TASK", "Task", items=[
         nodeitems_utils.NodeItem("RSNodeTaskNode"),
+        nodeitems_utils.NodeItem("RSNodeTaskListNode"),
         nodeitems_utils.NodeItem("RSNodeRenderListNode"),
 
     ]),

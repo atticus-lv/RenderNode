@@ -8,8 +8,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
     bl_idname = "rsn.update_parms"
     bl_label = "Update Parms"
 
-    index: IntProperty(default=0, min=0)
-
+    task_name:StringProperty()
     task_data = None
 
     def reroute(self, node):
@@ -27,7 +26,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
 
     def get_data(self):
         nt = NODE_TREE(bpy.context.space_data.edit_tree)
-        task_name = self.reroute(nt.nt.nodes.active.inputs[self.index].links[0].from_node)
+        task_name = self.task_name
         self.task_data = nt.get_task_data(task_name)
         print(self.task_data)
 

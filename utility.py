@@ -32,7 +32,7 @@ class NODE_TREE():
     def separate_nodes(self, node_list):
         dict = {}
         nt = bpy.context.space_data.edit_tree
-        node_list[:] = [node for node in node_list if nt.nodes[node].bl_idname != 'NodeReroute']
+        node_list[:] = [node for node in node_list if nt.nodes[node].bl_idname not in ['NodeReroute', 'RSNodeTaskListNode']]
         normal_node_list = [list(g) for k, g in
                             groupby(node_list, lambda name: nt.nodes[name].bl_idname == 'RSNodeTaskNode') if not k]
         task_node_list = [node for node in node_list if nt.nodes[node].bl_idname == 'RSNodeTaskNode']

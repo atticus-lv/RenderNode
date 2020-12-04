@@ -1,25 +1,22 @@
+import json
 import bpy
 from bpy.props import *
+from RenderStackNode.utility import NODE_TREE
 from RenderStackNode.node_tree import RenderStackNode
 
+class RSNode_OT_GetInfo(bpy.types.Operator):
+    '''left click: get node name
+shift:get overwrite details '''
+    bl_idname = 'rsn.get_info'
+    bl_label = 'get info'
 
-class RSNode_OT_EditInput(bpy.types.Operator):
-    bl_idname = "rsnode.edit_input"
-    bl_label = "Add Task"
-
-    remove: BoolProperty(name="remove action", default=False)
-    socket_type: StringProperty(default='NodeSocketColor')
-    socket_name: StringProperty(default="Input")
-
-    def execute(self, context):
-        node_tree = bpy.context.space_data.edit_tree
-        active_node = node_tree.nodes.active
-        if not self.remove:
-            active_node.inputs.new(self.socket_type, self.socket_name)
+    def invoke(self, context,event):
+        nt = NODE_TREE(context.space_data.edit_tree)
+        if event.shift:
+            for k in nt.dict.keys():
+                print(json.dumps(nt.get_task_data(k), indent=4, ensure_ascii=False))
         else:
-            for input in active_node.inputs:
-                if not input.is_linked:
-                    active_node.inputs.remove(input)
+            print(json.dumps(nt.dict, indent=4, ensure_ascii=False))
 
         return {"FINISHED"}
 
@@ -30,36 +27,26 @@ class RSNodeRenderListNode(RenderStackNode):
     bl_label = 'Render List'
 
     def init(self, context):
-        self.inputs.new('RSNodeSocketRenderList', "Task")
-        self.inputs.new('RSNodeSocketRenderList', "Task")
-        self.inputs.new('RSNodeSocketRenderList', "Task")
+        self.inputs.new('RSNodeSocketRenderList', "render")
+        self.inputs.new('RSNodeSocketRenderList', "render")
+        self.inputs.new('RSNodeSocketRenderList', "render")
+        self.inputs.new('RSNodeSocketRenderList', "render")
 
     def draw_buttons(self, context, layout):
         pass
 
     def draw_buttons_ext(self, context, layout):
-        layout.scale_y = 1.25
-        row = layout.row(align = True)
-        add = row.operator("rsnode.edit_input", text="Task",icon = 'ADD')
-        add.remove = False
-        add.socket_type = "RSNodeSocketRenderList"
-        add.socket_name  = "Task"
+        layout.operator("rsn.get_info", text=f'Print Info (Console)')
+        box = layout.box()
+        box.scale_y = 1.5
+        box.operator("rsn.render_button",text = f'Render Inputs')
 
-        remove = row.operator("rsnode.edit_input", text="Unused",icon ='REMOVE')
-        remove.remove = True
-
-        col = layout.box().column(align = False)
-        for i, input in enumerate(self.inputs):
-            if input.is_linked:
-                col.operator("rsn.update_parms",text = f'View Task {i+1}').index = i
-
-        layout.operator("rsn.render_button",text = f'Render')
 
 def register():
-    bpy.utils.register_class(RSNode_OT_EditInput)
     bpy.utils.register_class(RSNodeRenderListNode)
+    bpy.utils.register_class(RSNode_OT_GetInfo)
 
 
 def unregister():
-    bpy.utils.unregister_class(RSNode_OT_EditInput)
     bpy.utils.unregister_class(RSNodeRenderListNode)
+    bpy.utils.unregister_class(RSNode_OT_GetInfo)

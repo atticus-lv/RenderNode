@@ -16,7 +16,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     rendering = None
     # mark
     render_mark = None
-    mark_index = []
+    mark_task_names = []
     task_data = []
     # item
     frame_list = []
@@ -26,7 +26,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     # 检查当前帧 是否大于任务预设的的帧数
     def frame_check(self):
         if self.frame_current >= self.frame_list[0]["frame_end"]:
-            self.mark_index.pop(0)
+            self.mark_task_names.pop(0)
             self.task_data.pop(0)
             self.frame_list.pop(0)
             if len(self.frame_list) > 0:  # 如果帧数列表未空，则继续读取下一个
@@ -124,9 +124,9 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     # 激活下一任务
     def switch2task(self, context):
         scn = context.scene
-        task = self.mark_index[0]
+        task = self.mark_task_names[0]
 
-        bpy.ops.rsn.update_parms(index=task)
+        bpy.ops.rsn.update_parms(task_name = task)
 
         # folder path & file name
         directory = self.make_path(context)
@@ -157,7 +157,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         for i, task in enumerate(nt.dict):
             task_data = nt.get_task_data(task_name=task)
             self.task_data.append(task_data)
-            self.mark_index.append(i)
+            self.mark_task_names.append(task)
 
             render_list = {}
 
@@ -172,7 +172,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
 
             self.frame_list.append(render_list)
 
-        if True in (len(self.mark_index) == 0, len(self.frame_list) == 0):
+        if True in (len(self.mark_task_names) == 0, len(self.frame_list) == 0):
             scn.render.use_lock_interface = False
             self.report({"WARNING"}, 'Nothing to render！')
             return {"FINISHED"}
@@ -186,7 +186,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     def modal(self, context, event):
         # 计时器内事件
         if event.type == 'TIMER':
-            if True in (len(self.mark_index) == 0, self.stop is True, len(self.frame_list) == 0):  # 取消或者列表为空 停止
+            if True in (len(self.mark_task_names) == 0, self.stop is True, len(self.frame_list) == 0):  # 取消或者列表为空 停止
                 self.remove_handles()
                 context.window_manager.render_stack_modal = False
                 context.scene.render.filepath = ""
