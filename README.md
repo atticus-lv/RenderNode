@@ -29,7 +29,7 @@ Provide users with node-based, flexible rendering output methods
 
 > *Once you plug a node settings to overide something into the a task,the next task will inherit it if there is not a same type Node plug input. So you may start a new render list to keep your node tree cleaner*
 
-![img1](img/img1.png)
+![image-20201204110858390](./img/image-20201204110858390.png)
 
 
 
@@ -51,39 +51,45 @@ Click [here](https://github.com/atticus-lv/RenderStackNode/releases/tag/alpha) t
 
 
 
-### Nodes
+### Import Nodes
 
 + Render List 
 
 	> Provide Viewer operator for input tasks, and render all the input task
-
-![image-20201130131530141](img/image-20201130131530141.png)
-
+	
+	![image-20201204110924773](./img/image-20201204110924773.png)
+	
 + Task
 
     > output task( Link to the render list node)
     >
     > all the overide settings is link to this node 
 
-![image-20201130131850636](img/image-20201130131850636.png)
+    ![image-20201204110938958](E:/Typora/upload/image-20201204110938958.png)
 
 + Camera 
 
 	> Camera overide input
+	
+	![image-20201204110954289](./img/image-20201204110954289.png)
+	
++ Scripts
 
-![image-20201130133131141](img/image-20201130133131141.png)
+    > Excute the python code that type in when rendering/view this task
+
+    ![image-20201204111003118](./img/image-20201204111003118.png)
 
 + File path
 
     > format ouput of the file name 
-    >
-    > <img src="img/image-20201130133526636.png" alt="image-20201130133526636" style="zoom: 50%;" />
-
-<img src="img/image-20201130133157140.png" alt="image-20201130133157140"  />
-
+    
+    ![image-20201204111015880](./img/image-20201204111015880.png)
+    
 + Eevee Settings / Cycles Settings / Work Bench Settings
 
-    >  change the render engine
+    >  change the render engine (merge node is not necessary)
+    
+    ![image-20201204111028917](./img/image-20201204111028917.png)
 
 
 
@@ -95,9 +101,14 @@ v 0.5
 + [x] eevee, cycles basic support 
 + [x]  camera, resulotion, frame range, file format, format file name support
 
-v 1.0
+v 0.6
 
-+ [x]  command node for custom render settings overwriting
++ [x]  script node for custom render settings overwriting
++ [x]  layout merge nodes(more organize)
+
+v.1.0
+
++ [ ]  viewlayers and passes(output)
 + [ ]  render list merge node (or someting else for render all list)
 + [ ]  task marker (won't need to unlink task to no render )
 + [ ]  scene overwriting (maybe)
