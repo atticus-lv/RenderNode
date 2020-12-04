@@ -97,7 +97,7 @@ v 0.5
 
 v 1.0
 
-+ [ ]  command node for custom render settings overwriting
++ [x]  command node for custom render settings overwriting
 + [ ]  render list merge node (or someting else for render all list)
 + [ ]  task marker (won't need to unlink task to no render )
 + [ ]  scene overwriting (maybe)

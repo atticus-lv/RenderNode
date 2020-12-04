@@ -62,16 +62,20 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     def make_path(self, context):
         blend_path = context.blend_data.filepath
         blend_name = bpy.path.basename(blend_path)[:-6]
+        task = self.task_data[0]
+        if 'path' in task:
+            if not task['use_blend_file_path']:
+                directory_path = os.path.dirname(task['path']) + "\\" + f"{blend_name}_render"
+            else:
+                directory_path = os.path.dirname(bpy.data.filepath) + "\\" + f"{blend_name}_render"
+            try:
+                if not os.path.exists(directory_path):
+                    os.makedirs(directory_path)
+                return directory_path
 
-        directory_path = os.path.dirname(bpy.data.filepath) + "\\" + f"{blend_name}_render"
-        try:
-            if not os.path.exists(directory_path):
-                os.makedirs(directory_path)
-            return directory_path
-
-        except(Exception) as e:
-            self.report({'ERROR'}, f'File Path: Path Error')
-            print(directory_path, e)
+            except(Exception) as e:
+                self.report({'ERROR'}, f'File Path: Path Error')
+                print(directory_path, e)
 
     def get_postfix(self, scn):
 
