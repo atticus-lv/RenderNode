@@ -118,6 +118,7 @@ node_categorys = [
 
     RSNCategory("SCRIPTS", "Scripts", items=[
         nodeitems_utils.NodeItem("RSScriptsNode"),
+        nodeitems_utils.NodeItem("RSNodeSmtpEmailNode"),
 
     ]),
 

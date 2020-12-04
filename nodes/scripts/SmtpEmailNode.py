@@ -1,0 +1,127 @@
+import smtplib
+from email.mime.text import MIMEText
+from email.header import Header
+from RenderStackNode.node_tree import RenderStackNode
+
+import bpy
+from bpy.props import *
+
+
+class RSN_OT_SendEmail(bpy.types.Operator):
+    bl_idname = "rsn.send_email"
+    bl_label = "Send Email"
+
+    smtp_server: StringProperty(
+        name="SMTP Server",
+        description="Something Like 'smtp.qq.com' or 'smtp.gmail.com'",
+        default="")
+
+    smtp_pass: StringProperty(
+        name="SMTP Password",
+        description="The SMTP Password for your receiver email", )
+
+    content: StringProperty(
+        name="Content", default="Write you want to reamain yourself")
+    subject: StringProperty(
+        name="Subject", default="Write your subject here")
+
+    sender_name: StringProperty(name="Name", default="")
+
+    email: StringProperty(
+        name="Email",
+        description="Your sender email as well as your receiver email")
+
+    def __init__(self):
+        self.mail_host = self.smtp_server
+        self.mail_pass = self.smtp_pass
+        self.sender = self.email
+        self.receivers = self.email
+
+    def send(self):
+        message = MIMEText(self.content, 'plain', 'utf-8')
+
+        message['From'] = Header(f"{self.sender_name}<{self.email}>", 'utf-8')
+        message['To'] = Header(f"Atticus<{self.sender}>", 'utf-8')
+
+        subject = self.subject  # 发送的主题，可自由填写
+        message['Subject'] = Header(subject, 'utf-8')
+        try:
+            smtpObj = smtplib.SMTP_SSL(self.mail_host, 465)
+            smtpObj.login(self.sender, self.mail_pass)
+            smtpObj.sendmail(self.sender, self.receivers, message.as_string())
+            smtpObj.quit()
+            return True
+        except smtplib.SMTPException as e:
+            print(f"Mail sent failed!!! \n{e}")
+            return False
+
+    def execute(self, context):
+        if self.send():
+            self.report({"INFO"}, "Mail sent successfully!")
+        else:
+            self.report({"INFO"}, "Mail sent failed!")
+        return {'FINISHED'}
+
+
+class RSNodeSmtpEmailNode(RenderStackNode):
+    '''A simple input node'''
+    bl_idname = 'RSNodeSmtpEmailNode'
+    bl_label = 'SMTP Email'
+
+    smtp_server: StringProperty(
+        name="SMTP Server",
+        description="Something Like 'smtp.qq.com' or 'smtp.gmail.com'",
+        default="")
+
+    smtp_pass: StringProperty(
+        name="SMTP Password",
+        description="The SMTP Password for your receiver email", )
+
+    subject: StringProperty(
+        name="Subject", default="Write your subject here")
+
+    content: StringProperty(
+        name="Content", default="Write you want to reamain yourself")
+
+
+    sender_name: StringProperty(name="Name", default="")
+
+    email: StringProperty(
+        name="Email",
+        description="Your sender email as well as your receiver email")
+
+    def init(self, context):
+        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
+        self.width = 150
+
+    def draw_buttons(self, context, layout):
+        pass
+
+    def draw_buttons_ext(self, context, layout):
+        layout.use_property_split = True
+        layout.prop(self, "smtp_server")
+        layout.prop(self, "smtp_pass")
+        layout.prop(self, "sender_name")
+        layout.prop(self, "email")
+        layout.separator()
+        layout.prop(self, "subject")
+        layout.prop(self, "content")
+
+
+        em = layout.operator("rsn.send_email",text = "Test Email")
+        em.smtp_server = self.smtp_server
+        em.smtp_pass = self.smtp_pass
+        em.subject = self.subject
+        em.content = self.content
+        em.sender_name = self.sender_name
+        em.email = self.email
+
+
+def register():
+    bpy.utils.register_class(RSNodeSmtpEmailNode)
+    bpy.utils.register_class(RSN_OT_SendEmail)
+
+
+def unregister():
+    bpy.utils.unregister_class(RSNodeSmtpEmailNode)
+    bpy.utils.unregister_class(RSN_OT_SendEmail)

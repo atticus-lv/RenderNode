@@ -32,7 +32,8 @@ class NODE_TREE():
     def separate_nodes(self, node_list):
         dict = {}
         nt = bpy.context.space_data.edit_tree
-        node_list[:] = [node for node in node_list if nt.nodes[node].bl_idname not in ['NodeReroute', 'RSNodeTaskListNode']]
+        node_list[:] = [node for node in node_list if
+                        nt.nodes[node].bl_idname not in ['NodeReroute', 'RSNodeTaskListNode']]
         normal_node_list = [list(g) for k, g in
                             groupby(node_list, lambda name: nt.nodes[name].bl_idname == 'RSNodeTaskNode') if not k]
         task_node_list = [node for node in node_list if nt.nodes[node].bl_idname == 'RSNodeTaskNode']
@@ -113,5 +114,23 @@ class NODE_TREE():
                         task_data['scripts_file'][node.name] = node.file.name
                     else:
                         task_data['scripts_file'] = {node.name: node.file.name}
+
+            elif node.bl_idname == 'RSNodeSmtpEmailNode':
+                if 'email' in task_data:
+                    task_data['email'][node.name] = {'smtp_server': node.smtp_server,
+                                                     'smtp_pass'  : node.smtp_pass,
+                                                     'subject'    : node.subject,
+                                                     'content'    : node.content,
+                                                     'sender_name': node.sender_name,
+                                                     'email'      : node.email
+                                                     }
+                else:
+                    task_data['email'] = {node.name: {'smtp_server': node.smtp_server,
+                                                      'smtp_pass'  : node.smtp_pass,
+                                                      'subject'    : node.subject,
+                                                      'content'    : node.content,
+                                                      'sender_name': node.sender_name,
+                                                      'email'      : node.email
+                                                      }}
 
         return task_data

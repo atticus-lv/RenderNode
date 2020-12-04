@@ -8,7 +8,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
     bl_idname = "rsn.update_parms"
     bl_label = "Update Parms"
 
-    task_name:StringProperty()
+    task_name: StringProperty()
     task_data = None
 
     def reroute(self, node):
@@ -32,11 +32,18 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
 
     def updata_scripts(self):
         if 'scripts' in self.task_data:
-            for k,value in self.task_data['scripts'].items():
+            for k, value in self.task_data['scripts'].items():
                 try:
                     exec(value)
                 except Exception as e:
                     print(f"RSN ERROR: scripts node > {k} < error: {e}")
+        if 'scripts_file' in self.task_data:
+            for node_name, file_name in self.task_data['scripts_file'].items():
+                try:
+                    c = bpy.data.texts[file_name].as_string()
+                    exec(c)
+                except Exception as e:
+                    print(f"RSN ERROR: scripts node > {node_name} < error: {e}")
 
     def update_image_format(self):
         if 'color_mode' in self.task_data:

@@ -1,5 +1,5 @@
 bl_info = {
-    "name"       : "RenderStack Node ",
+    "sender_name"       : "RenderStack Node ",
     "author"     : "Atticus",
     "version"    : (0, 7),
     "blender"    : (2, 90, 0),
