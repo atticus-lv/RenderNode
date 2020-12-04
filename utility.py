@@ -103,15 +103,15 @@ class NODE_TREE():
                 task_data['path'] = node.path
 
             elif node.bl_idname == 'RSScriptsNode':
-                if 'scripts' in task_data:
-                    task_data['scripts'][node.name] = node.code
+                if node.type == 'SINGLE':
+                    if 'scripts' in task_data:
+                        task_data['scripts'][node.name] = node.code
+                    else:
+                        task_data['scripts'] = {node.name: node.code}
                 else:
-                    task_data['scripts'] = {node.name: node.code}
-
-            elif node.bl_idname == 'RSFileScriptsNode':
-                if 'scripts_file' in task_data:
-                    task_data['scripts_file'][node.name] = node.file.name
-                else:
-                    task_data['scripts_file'] = {node.name: node.file.name}
+                    if 'scripts_file' in task_data:
+                        task_data['scripts_file'][node.name] = node.file.name
+                    else:
+                        task_data['scripts_file'] = {node.name: node.file.name}
 
         return task_data

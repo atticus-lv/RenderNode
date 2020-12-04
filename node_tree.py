@@ -24,6 +24,14 @@ class RenderStackNode(bpy.types.Node):
         print("Node removed", self)
 
 
+class RenderStackNodeGroup(bpy.types.NodeCustomGroup):
+    bl_label = 'RenderStack Node Group'
+
+    @classmethod
+    def poll(cls, ntree):
+        return ntree.bl_idname == 'RenderStackNodeTree'
+
+
 #
 #  Sockets
 #
@@ -96,17 +104,19 @@ class RSNCategory(nodeitems_utils.NodeCategory):
 
 node_categorys = [
 
-    RSNCategory("CAMERA", "Camera", items=[
+    RSNCategory("INPUT", "Input", items=[
         nodeitems_utils.NodeItem("RSNodeCamInputNode"),
+        nodeitems_utils.NodeItem("RSNodeWorldInputNode")
     ]),
-    RSNCategory("LIGHTS", "Lights", items=[
-        nodeitems_utils.NodeItem("RSNodeWorldInputNode"),
+
+    RSNCategory("TASK", "Task", items=[
+        nodeitems_utils.NodeItem("RSNodeTaskNode"),
+        nodeitems_utils.NodeItem("RSNodeRenderListNode"),
 
     ]),
 
     RSNCategory("SCRIPTS", "Scripts", items=[
         nodeitems_utils.NodeItem("RSScriptsNode"),
-        nodeitems_utils.NodeItem("RSFileScriptsNode"),
 
     ]),
 
@@ -117,25 +127,12 @@ node_categorys = [
         nodeitems_utils.NodeItem("FilePathInputNode"),
     ]),
 
-    RSNCategory("TASK", "Task", items=[
-        nodeitems_utils.NodeItem("RSNodeTaskNode"),
-        nodeitems_utils.NodeItem("RSNodeRenderListNode"),
-
-    ]),
-
-    RSNCategory("WORKBENCH", "Workbench", items=[
+    RSNCategory("RENDER_SETTINGS", "Render Settings", items=[
         nodeitems_utils.NodeItem("RSNodeWorkBenchRenderSettingsNode"),
-
-    ]),
-
-    RSNCategory("EEVEE", "Eevee", items=[
         nodeitems_utils.NodeItem("RSNodeEeveeRenderSettingsNode"),
-
-    ]),
-
-    RSNCategory("CYCLES", "Cycles", items=[
         nodeitems_utils.NodeItem("RSNodeCyclesRenderSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeCyclesLightPathNode"),
+
     ]),
 
     RSNCategory("LAYOUT", "Layout", items=[
@@ -152,6 +149,8 @@ node_categorys = [
 classes = [
     RenderStackNodeTree,
     RenderStackNode,
+    RenderStackNodeGroup,
+    # Socker
     RSNodeSocketCamera,
     RSNodeSocketRenderSettings,
     RSNodeSocketOutputSettings,

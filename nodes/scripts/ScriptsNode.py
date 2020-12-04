@@ -9,6 +9,13 @@ class RSScriptsNode(RenderStackNode):
     bl_label = 'Scripts'
 
     code:StringProperty(name = 'Code to execute',default='')
+    file: PointerProperty(type=bpy.types.Text, name="Scripts file")
+
+    type:EnumProperty(
+        items=[
+            ('SINGLE','Single',''),('FILE','File','')
+        ]
+    )
 
     def init(self, context):
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
@@ -16,7 +23,10 @@ class RSScriptsNode(RenderStackNode):
 
 
     def draw_buttons(self, context, layout):
-        layout.prop(self,"code",text="")
+        if self.type == 'SINGLE':
+            layout.prop(self,"code",text="")
+        else:
+            layout.prop(self, "file", text="")
 
 
 

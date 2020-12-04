@@ -5,7 +5,7 @@ bl_info = {
     "blender"    : (2, 90, 0),
     "location"   : "Node Editor",
     "description": "Node based render queue workflow",
-    'waring':"Alpha Version! Still in development",
+    'waring'     : "Alpha Version! Still in development",
     # "doc_url"    : "",
     "category"   : "Render",
 }
@@ -13,6 +13,7 @@ bl_info = {
 import importlib
 import sys
 from .nodes import *
+from .rsn_helper import *
 
 __dict__ = {}
 __dict__["node_tree"] = f"{__name__}.node_tree"
@@ -20,6 +21,10 @@ __dict__["node_tree"] = f"{__name__}.node_tree"
 for k, v in a.items():
     for module_name in v:
         __dict__[module_name] = f"{__name__}.nodes.{k}.{module_name}"
+
+for k, v in b.items():
+    for module_name in v:
+        __dict__[module_name] = f"{__name__}.rsn_helper.{k}.{module_name}"
 
 for name in __dict__.values():
     if name in sys.modules:
