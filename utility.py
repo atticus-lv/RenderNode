@@ -133,4 +133,7 @@ class NODE_TREE():
             elif node.bl_idname == "RSNodeViewLayerInputNode":
                 task_data['view_layer'] = node.view_layer
 
+            elif node.bl_idname == "RSNodeLightStudioNode":
+                task_data['ssm_light_studio'] = node.light_studio_index
+
         return task_data

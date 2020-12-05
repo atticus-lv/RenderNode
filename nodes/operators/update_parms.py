@@ -30,6 +30,14 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         self.task_data = nt.get_task_data(task_name)
         # print(self.task_data)
 
+    def ssm_light_studio(self):
+        if 'ssm_light_studio' in self.task_data:
+            index = self.task_data['ssm_light_studio']
+            try:
+                bpy.context.scene.ssm.light_studio_index = index
+            except Exception as e:
+                print(f"RSN ERROR: SSM LightStudio node > {node_name} < error: {e}")
+
     def send_email(self):
         if 'email' in self.task_data:
             for node_name, email_dict in self.task_data['email'].items():
@@ -110,6 +118,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         self.updata_scripts()
         self.updata_view_layer()
         self.send_email()
+        self.ssm_light_studio()
 
         return {'FINISHED'}
 

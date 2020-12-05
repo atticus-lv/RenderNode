@@ -60,16 +60,17 @@ Click [here](https://github.com/atticus-lv/RenderStackNode/releases/tag/alpha) t
 
 #### Task Node
 
-+ Render List 
++ ##### Render List 
 
 	> Render all the input task,also allow to view all the input task info
 	
 	![image-20201204110924773](./img/image-20201204110924773.png)
 	
-	info format (shift click to get details):
+	*info format (shift click to get details)*:
+	
+	> *node name*
 	
 	```json
-	// node name
 	{
 	    "Task.002": [
 	        "Camera.002",
@@ -77,7 +78,10 @@ Click [here](https://github.com/atticus-lv/RenderStackNode/releases/tag/alpha) t
 	        "WorkBench Settings"
 	    ],
 	}
-	// nodes details for each task
+	```
+	> *nodes details for each task*
+	
+	```json
 	{
 	    "task_name": "Task",
 	    "camera": "Camera",
@@ -88,13 +92,15 @@ Click [here](https://github.com/atticus-lv/RenderStackNode/releases/tag/alpha) t
 	}
 	```
 	
-+ Task List
+	
+	
++ ##### Task List
 
     > Provide Viewer operator for input tasks
 
     ![屏幕截图 2020-12-04 205828](img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202020-12-04%20205828.png)
 
-+ Task
++ ##### Task
 
     > output task( Link to the render list node)
     >
@@ -104,25 +110,25 @@ Click [here](https://github.com/atticus-lv/RenderStackNode/releases/tag/alpha) t
 
 #### Settings Node
 
-+ Camera 
++ ##### Camera 
 
 	> Camera overide input
 	
 	![image-20201204110954289](./img/image-20201204110954289.png)
 	
-+ Scripts
++ ##### Scripts
 
     > Excute the python code when rendering/view this task
 
     ![image-20201204111003118](./img/image-20201204111003118.png)
 
-+ File path
++ ##### File path
 
     > format ouput of the file name 
     
     ![image-20201204111015880](./img/image-20201204111015880.png)
     
-+ Eevee Settings / Cycles Settings / Work Bench Settings
++ ##### Eevee Settings / Cycles Settings / Work Bench Settings
 
     >  change the render engine (merge node is not necessary)
     
@@ -148,6 +154,8 @@ v 0.7
 + [x]  viewlayers 
 + [x]  stmp email node 
 
+v 0.8
++ [x] SSM (one of my addons for blender), light studio node( 0.23 version / highter)
 
 v.1.0
 + [ ]  luxcore support
