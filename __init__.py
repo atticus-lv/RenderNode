@@ -1,5 +1,5 @@
 bl_info = {
-    "sender_name"       : "RenderStack Node ",
+    "sender_name": "RenderStack Node ",
     "author"     : "Atticus",
     "version"    : (0, 7),
     "blender"    : (2, 90, 0),
@@ -16,6 +16,7 @@ from .nodes import *
 from .rsn_helper import *
 
 __dict__ = {}
+__dict__['preferences'] = f"{__name__}.preferences"
 __dict__["node_tree"] = f"{__name__}.node_tree"
 
 for k, v in a.items():

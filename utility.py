@@ -117,20 +117,17 @@ class NODE_TREE():
 
             elif node.bl_idname == 'RSNodeSmtpEmailNode':
                 if 'email' in task_data:
-                    task_data['email'][node.name] = {'smtp_server': node.smtp_server,
-                                                     'smtp_pass'  : node.smtp_pass,
-                                                     'subject'    : node.subject,
+                    task_data['email'][node.name] = {'subject'    : node.subject,
                                                      'content'    : node.content,
                                                      'sender_name': node.sender_name,
                                                      'email'      : node.email
                                                      }
                 else:
-                    task_data['email'] = {node.name: {'smtp_server': node.smtp_server,
-                                                      'smtp_pass'  : node.smtp_pass,
-                                                      'subject'    : node.subject,
+                    task_data['email'] = {node.name: {'subject'    : node.subject,
                                                       'content'    : node.content,
                                                       'sender_name': node.sender_name,
                                                       'email'      : node.email
-                                                      }}
+                                                      }
+                                          }
 
         return task_data

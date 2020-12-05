@@ -32,6 +32,10 @@ class RSN_OT_SendEmail(bpy.types.Operator):
         description="Your sender email as well as your receiver email")
 
     def __init__(self):
+        pref = bpy.context.preferences.addons[__package__].preferences
+        self.smtp_server = pref.smtp_server
+        self.smtp_pass = pref.smtp_pass
+
         self.mail_host = self.smtp_server
         self.mail_pass = self.smtp_pass
         self.sender = self.email
@@ -68,14 +72,6 @@ class RSNodeSmtpEmailNode(RenderStackNode):
     bl_idname = 'RSNodeSmtpEmailNode'
     bl_label = 'SMTP Email'
 
-    smtp_server: StringProperty(
-        name="SMTP Server",
-        description="Something Like 'smtp.qq.com' or 'smtp.gmail.com'",
-        default="")
-
-    smtp_pass: StringProperty(
-        name="SMTP Password",
-        description="The SMTP Password for your receiver email", )
 
     subject: StringProperty(
         name="Subject", default="Write your subject here")
@@ -99,8 +95,6 @@ class RSNodeSmtpEmailNode(RenderStackNode):
 
     def draw_buttons_ext(self, context, layout):
         layout.use_property_split = True
-        layout.prop(self, "smtp_server")
-        layout.prop(self, "smtp_pass")
         layout.prop(self, "sender_name")
         layout.prop(self, "email")
         layout.separator()
@@ -109,8 +103,6 @@ class RSNodeSmtpEmailNode(RenderStackNode):
 
 
         em = layout.operator("rsn.send_email",text = "Test Email")
-        em.smtp_server = self.smtp_server
-        em.smtp_pass = self.smtp_pass
         em.subject = self.subject
         em.content = self.content
         em.sender_name = self.sender_name
