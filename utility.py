@@ -54,7 +54,7 @@ class NODE_TREE():
             if node.bl_idname == "RSNodeCamInputNode":
                 task_data["camera"] = node.camera.name if node.camera else None
 
-            elif node.bl_idname == "ResolutionInputNode":
+            elif node.bl_idname == "RSNodeResolutionInputNode":
                 task_data["res_x"] = node.res_x
                 task_data['res_y'] = node.res_y
                 task_data['res_scale'] = node.res_scale
@@ -71,14 +71,14 @@ class NODE_TREE():
                 task_data['engine'] = 'BLENDER_WORKBENCH'
 
 
-            elif node.bl_idname == "FrameRangeInputNode":
+            elif node.bl_idname == "RSNodeFrameRangeInputNode":
                 if node.frame_end < node.frame_start:
                     node.frame_end = node.frame_start
                 task_data["frame_start"] = node.frame_start
                 task_data["frame_end"] = node.frame_end
                 task_data["frame_step"] = node.frame_step
 
-            elif node.bl_idname == "ImageFormatInputNode":
+            elif node.bl_idname == "RSNodeImageFormatInputNode":
                 if node.file_format == "JPEG":
                     if node.color_mode == "RGBA":
                         node.color_mode = "RGB"
@@ -98,7 +98,7 @@ class NODE_TREE():
                 task_data['file_format'] = node.file_format
                 task_data['transparent'] = node.transparent
 
-            elif node.bl_idname == 'FilePathInputNode':
+            elif node.bl_idname == 'RSNodeFilePathInputNode':
                 task_data['use_blend_file_path'] = node.use_blend_file_path
                 task_data['path_format'] = node.path_format
                 task_data['path'] = node.path

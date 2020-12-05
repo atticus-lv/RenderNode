@@ -2,8 +2,8 @@ import bpy
 from bpy.props import *
 from RenderStackNode.node_tree import RenderStackNode
 
-class ResolutionInputNode(RenderStackNode):
-    bl_idname = "ResolutionInputNode"
+class RSNodeResolutionInputNode(RenderStackNode):
+    bl_idname = "RSNodeResolutionInputNode"
     bl_label = "Resolution"
 
     res_x:IntProperty(name = "Resolution X",default=1920,min = 4)
@@ -19,7 +19,7 @@ class ResolutionInputNode(RenderStackNode):
         layout.prop(self, 'res_scale',text = "%")
 
 def register():
-    bpy.utils.register_class(ResolutionInputNode)
+    bpy.utils.register_class(RSNodeResolutionInputNode)
 
 def unregister():
-    bpy.utils.unregister_class(ResolutionInputNode)
+    bpy.utils.unregister_class(RSNodeResolutionInputNode)

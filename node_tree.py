@@ -125,10 +125,11 @@ node_categorys = [
     ]),
 
     RSNCategory("OUTPUT_SETTINGS", "Output Settings", items=[
-        nodeitems_utils.NodeItem("ResolutionInputNode"),
-        nodeitems_utils.NodeItem("FrameRangeInputNode"),
-        nodeitems_utils.NodeItem("ImageFormatInputNode"),
-        nodeitems_utils.NodeItem("FilePathInputNode"),
+        nodeitems_utils.NodeItem("RSNodeResolutionInputNode"),
+        nodeitems_utils.NodeItem("RSNodeFrameRangeInputNode"),
+        nodeitems_utils.NodeItem("RSNodeImageFormatInputNode"),
+        nodeitems_utils.NodeItem("RSNodeFilePathInputNode"),
+        nodeitems_utils.NodeItem("RSNodeActiveRenderSlotNode"),
     ]),
 
     RSNCategory("RENDER_SETTINGS", "Render Settings", items=[

@@ -3,8 +3,8 @@ from bpy.props import *
 from RenderStackNode.node_tree import RenderStackNode
 
 
-class FilePathInputNode(RenderStackNode):
-    bl_idname = "FilePathInputNode"
+class RSNodeFilePathInputNode(RenderStackNode):
+    bl_idname = "RSNodeFilePathInputNode"
     bl_label = "File Path"
 
     use_blend_file_path: BoolProperty(name="Save at blend file folder", default=True)
@@ -27,8 +27,8 @@ class FilePathInputNode(RenderStackNode):
 
 
 def register():
-    bpy.utils.register_class(FilePathInputNode)
+    bpy.utils.register_class(RSNodeFilePathInputNode)
 
 
 def unregister():
-    bpy.utils.unregister_class(FilePathInputNode)
+    bpy.utils.unregister_class(RSNodeFilePathInputNode)

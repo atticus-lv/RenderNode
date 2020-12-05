@@ -3,11 +3,8 @@ from bpy.props import *
 from RenderStackNode.node_tree import RenderStackNode
 
 
-
-
-
-class FrameRangeInputNode(RenderStackNode):
-    bl_idname = "FrameRangeInputNode"
+class RSNodeFrameRangeInputNode(RenderStackNode):
+    bl_idname = "RSNodeFrameRangeInputNode"
     bl_label = "Frame Range"
 
     frame_start: IntProperty(name="Frame Start", default=1, min=0)
@@ -24,8 +21,8 @@ class FrameRangeInputNode(RenderStackNode):
 
 
 def register():
-    bpy.utils.register_class(FrameRangeInputNode)
+    bpy.utils.register_class(RSNodeFrameRangeInputNode)
 
 
 def unregister():
-    bpy.utils.unregister_class(FrameRangeInputNode)
+    bpy.utils.unregister_class(RSNodeFrameRangeInputNode)

@@ -3,8 +3,8 @@ from bpy.props import *
 from RenderStackNode.node_tree import RenderStackNode
 
 
-class ImageFormatInputNode(RenderStackNode):
-    bl_idname = "ImageFormatInputNode"
+class RSNodeImageFormatInputNode(RenderStackNode):
+    bl_idname = "RSNodeImageFormatInputNode"
     bl_label = "Image Format"
 
     file_format: EnumProperty(
@@ -37,8 +37,8 @@ class ImageFormatInputNode(RenderStackNode):
 
 
 def register():
-    bpy.utils.register_class(ImageFormatInputNode)
+    bpy.utils.register_class(RSNodeImageFormatInputNode)
 
 
 def unregister():
-    bpy.utils.unregister_class(ImageFormatInputNode)
+    bpy.utils.unregister_class(RSNodeImageFormatInputNode)
