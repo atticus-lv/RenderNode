@@ -1,8 +1,6 @@
 
 
-# 
-
-Node-based RenderStack [Blender Addon]
+# Node-based RenderStack [Blender Addon]
 
 ### **Design Target**
 
@@ -20,8 +18,6 @@ Provide users with node-based, flexible rendering output methods
 + Allow script for overwrite 
 + View overide settings
 + Render all task
-
-
 
 ### How it works
 
@@ -89,8 +85,6 @@ Click [here](https://github.com/atticus-lv/RenderStackNode/releases/tag/alpha) t
 	}
 	```
 	
-	
-	
 + Task List
 
     > Provide Viewer operator for input tasks
@@ -130,15 +124,15 @@ Click [here](https://github.com/atticus-lv/RenderStackNode/releases/tag/alpha) t
     >  change the render engine (merge node is not necessary)
     
     ![image-20201204111028917](./img/image-20201204111028917.png)
-
-
+    
+    
 
 ### Plans
 
 v 0.5
 
-+ [x]   Basic renderstack with nodes 
-+ [x] eevee, cycles basic support 
++ [x]  Basic renderstack with nodes 
++ [x]  eevee, cycles basic support 
 + [x]  camera, resulotion, frame range, file format, format file name support
 
 v 0.6
@@ -148,11 +142,15 @@ v 0.6
 
 v 0.7
 + [x]  render list merge node (or someting else for render all list)
-+ [ ]  stmp email node
++ [x]  viewlayers 
++ [ ]  stmp email node 
+
 
 v.1.0
-
-+ [ ]  viewlayers and passes(output)
++ [ ]  luxcore support
++ [ ]  passes for different enginge (output)
 + [ ]  task marker (won't need to unlink task to no render,maybe)
 + [ ]  scene overwriting (maybe)
+
+
 

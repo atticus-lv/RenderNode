@@ -28,7 +28,11 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         nt = NODE_TREE(bpy.context.space_data.edit_tree)
         task_name = self.task_name
         self.task_data = nt.get_task_data(task_name)
-        print(self.task_data)
+        # print(self.task_data)
+
+    def updata_view_layer(self):
+        if 'view_layer' in self.task_data:
+            bpy.context.window.view_layer = bpy.context.scene.view_layers[self.task_data['view_layer']]
 
     def updata_scripts(self):
         if 'scripts' in self.task_data:
@@ -93,6 +97,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         self.update_render_engine()
         self.update_frame_range()
         self.updata_scripts()
+        self.updata_view_layer()
 
         return {'FINISHED'}
 

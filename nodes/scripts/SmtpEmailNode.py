@@ -9,7 +9,7 @@ from bpy.props import *
 
 class RSN_OT_SendEmail(bpy.types.Operator):
     bl_idname = "rsn.send_email"
-    bl_label = "Send Email"
+    bl_label = "Send Email (Not ready)"
 
     smtp_server: StringProperty(
         name="SMTP Server",

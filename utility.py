@@ -130,4 +130,7 @@ class NODE_TREE():
                                                       }
                                           }
 
+            elif node.bl_idname == "RSNodeViewLayerInputNode":
+                task_data['view_layer'] = node.view_layer
+
         return task_data
