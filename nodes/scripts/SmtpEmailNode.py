@@ -32,7 +32,8 @@ class RSN_OT_SendEmail(bpy.types.Operator):
         description="Your sender email as well as your receiver email")
 
     def __init__(self):
-        pref = bpy.context.preferences.addons[__package__].preferences
+        pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
+
         self.smtp_server = pref.smtp_server
         self.smtp_pass = pref.smtp_pass
 

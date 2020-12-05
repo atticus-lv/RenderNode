@@ -127,7 +127,6 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         task = self.mark_task_names[0]
 
         bpy.ops.rsn.update_parms(task_name = task)
-
         # folder path & file name
         directory = self.make_path(context)
         postfix = self.get_postfix(scn)

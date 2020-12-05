@@ -30,6 +30,17 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         self.task_data = nt.get_task_data(task_name)
         # print(self.task_data)
 
+    def send_email(self):
+        if 'email' in self.task_data:
+            for node_name, email_dict in self.task_data['email'].items():
+                try:
+                    bpy.ops.rsn.send_email(subject=email_dict['subject'],
+                                           content=email_dict['content'],
+                                           sender_name=email_dict['sender_name'],
+                                           email=email_dict['email'])
+                except Exception as e:
+                    print(f"RSN ERROR: SMTP Email node > {node_name} < error: {e}")
+
     def updata_view_layer(self):
         if 'view_layer' in self.task_data:
             bpy.context.window.view_layer = bpy.context.scene.view_layers[self.task_data['view_layer']]
@@ -98,6 +109,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         self.update_frame_range()
         self.updata_scripts()
         self.updata_view_layer()
+        self.send_email()
 
         return {'FINISHED'}
 
