@@ -66,7 +66,7 @@ Click [here](https://github.com/atticus-lv/RenderStackNode/releases/tag/alpha) t
 	info format (shift click to get details):
 	
 	```json
-	![屏幕截图 2020-12-04 205828](img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202020-12-04%20205828.png)// node name
+	// node name
 	{
 	    "Task.002": [
 	        "Camera.002",
