@@ -10,14 +10,17 @@ Provide users with node-based, flexible rendering output methods
 
 > version 0.7 alpha
 >
-> Chinese intro video 中文介绍请看视频 https://www.bilibili.com/video/BV1wr4y1c7Tt/
+> Chinese intro video (v0.5) 中文介绍请看视频 https://www.bilibili.com/video/BV1wr4y1c7Tt/
 
 + Camera overide
-+ Render Engine overwrite  （Workbench,Eevee,Cycles）
-+ Output Setting overwrite   (Frame Range,Resulotion,path（format file name support）,image settings)
++ Render Engine overwrite (Workbench,Eevee,Cycles)
++ Output Setting overwrite (Frame Range,Resulotion,path（format file name support）,image settings)
 + Allow script for overwrite 
-+ View overide settings
-+ Render all task
++ View and switch overide settings 
++ Render all task (list)
++ smtp email 
+
+
 
 ### How it works
 
@@ -143,7 +146,7 @@ v 0.6
 v 0.7
 + [x]  render list merge node (or someting else for render all list)
 + [x]  viewlayers 
-+ [ ]  stmp email node 
++ [x]  stmp email node 
 
 
 v.1.0
