@@ -1,6 +1,7 @@
 import bpy
 from bpy.props import *
 from RenderStackNode.node_tree import RenderStackNode
+from RenderStackNode.utility import *
 
 from .TaskListNode import reroute
 
@@ -9,6 +10,7 @@ class RSN_OT_ViewerHandler(bpy.types.Operator):
     bl_label = 'Auto Update'
 
     _timer = None
+    data = None
 
     @classmethod
     def poll(self, context):
@@ -20,17 +22,23 @@ class RSN_OT_ViewerHandler(bpy.types.Operator):
         self.report({"INFO"}, 'Stop Auto Update')
 
     def modal(self, context, event):
-        rsn_viewer_modal = context.window_manager.rsn_viewer_modal
-        if not rsn_viewer_modal:
+        nt = NODE_TREE(bpy.context.space_data.edit_tree)
+
+        if not context.window_manager.rsn_viewer_modal:
             self.finish(context)
             return {'FINISHED'}
 
         elif event.type == 'TIMER':
-            if not rsn_viewer_modal:
+            if not context.window_manager.rsn_viewer_modal:
                 self.finish(context)
                 return {"FINISHED"}
+            elif context.window_manager.rsn_viewer_node == '' :
+                return {'PASS_THROUGH'}
             else:
-                bpy.ops.rsn.update_parms(task_name = context.window_manager.rsn_viewer_node )
+                try:
+                    bpy.ops.rsn.update_parms(task_name = context.window_manager.rsn_viewer_node)
+                except:
+                    pass
 
         return {'PASS_THROUGH'}
 
@@ -40,7 +48,7 @@ class RSN_OT_ViewerHandler(bpy.types.Operator):
         self._timer = context.window_manager.event_timer_add(freq, window=context.window)
         context.window_manager.modal_handler_add(self)
 
-        self.report({"INFO"}, 'Start Auto Correct EV')
+        self.report({"INFO"}, 'Start Auto Update')
         return {'RUNNING_MODAL'}
 
 
@@ -53,15 +61,27 @@ class RSNodeViewNode(RenderStackNode):
 
     def draw_buttons(self, context, layout):
         if self.inputs[0].is_linked:
-            node = reroute(input.links[0].from_node)
+            node = reroute(self.inputs[0].links[0].from_node)
             context.window_manager.rsn_viewer_node = node.name
             layout.label(text = f'Viewing {node.name}')
+            if not context.window_manager.rsn_viewer_modal:
+                layout.operator('rsn.viewer_handler',text = 'Auto Update')
+            else:
+                layout.prop(context.window_manager,'rsn_viewer_modal',text='Auto Update')
+        else:
+            context.window_manager.rsn_viewer_node = ''
+            layout.label(text=f'Viewing Nothing')
 
 def register():
+    bpy.utils.register_class(RSN_OT_ViewerHandler)
     bpy.utils.register_class(RSNodeViewNode)
     bpy.types.WindowManager.rsn_viewer_modal = BoolProperty(name='Viewer Auto Update', default=False)
     bpy.types.WindowManager.rsn_viewer_node = StringProperty(name = 'Viewer task name')
 
 
 def unregister():
+    del bpy.types.WindowManager.rsn_viewer_modal
+    del bpy.types.WindowManager.rsn_viewer_node
     bpy.utils.unregister_class(RSNodeViewNode)
+    bpy.utils.unregister_class(RSN_OT_ViewerHandler)
+

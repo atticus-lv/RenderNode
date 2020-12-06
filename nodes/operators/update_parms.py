@@ -8,6 +8,8 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
     bl_idname = "rsn.update_parms"
     bl_label = "Update Parms"
 
+    viewer_handler:BoolProperty()
+
     task_name: StringProperty()
     task_data = None
 
@@ -34,7 +36,8 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         if 'ssm_light_studio' in self.task_data:
             index = self.task_data['ssm_light_studio']
             try:
-                bpy.context.scene.ssm.light_studio_index = index
+                if bpy.context.scene.ssm.light_studio_index != index:
+                    bpy.context.scene.ssm.light_studio_index = index
             except Exception as e:
                 print(f"RSN ERROR: SSM LightStudio node > {node_name} < error: {e}")
 
@@ -50,7 +53,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                     print(f"RSN ERROR: SMTP Email node > {node_name} < error: {e}")
 
     def updata_view_layer(self):
-        if 'view_layer' in self.task_data:
+        if 'view_layer' in self.task_data and bpy.context.window.view_layer.name != self.task_data['view_layer']:
             bpy.context.window.view_layer = bpy.context.scene.view_layers[self.task_data['view_layer']]
 
     def updata_scripts(self):
@@ -77,29 +80,37 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
 
     def update_frame_range(self):
         if "frame_start" in self.task_data:
-            bpy.context.scene.frame_start = self.task_data['frame_start']
-            bpy.context.scene.frame_end = self.task_data['frame_end']
-            bpy.context.scene.frame_step = self.task_data['frame_step']
+            if bpy.context.scene.frame_start != self.task_data['frame_start']:
+                bpy.context.scene.frame_start = self.task_data['frame_start']
+            if bpy.context.scene.frame_end != self.task_data['frame_end']:
+                bpy.context.scene.frame_end = self.task_data['frame_end']
+            if bpy.context.scene.frame_step != self.task_data['frame_step']:
+                bpy.context.scene.frame_step = self.task_data['frame_step']
 
     def update_render_engine(self):
         if 'engine' in self.task_data and bpy.context.scene.render.engine != self.task_data['engine']:
             bpy.context.scene.render.engine = self.task_data['engine']
             if 'samples' in self.task_data:
                 if self.task_data['engine'] == "BLENDER_EEVEE":
-                    bpy.context.scene.eevee.taa_render_samples = self.task_data['samples']
+                    if bpy.context.scene.eevee.taa_render_samples != self.task_data['samples']:
+                        bpy.context.scene.eevee.taa_render_samples = self.task_data['samples']
                 elif self.task_data['engine'] == "CYCLES":
-                    bpy.context.scene.cycles.samples = self.task_data['samples']
+                    if bpy.context.scene.cycles.samples != self.task_data['samples']:
+                        bpy.context.scene.cycles.samples = self.task_data['samples']
 
     def update_res(self):
         if 'res_x' in self.task_data:
-            bpy.context.scene.render.resolution_x = self.task_data['res_x']
-            bpy.context.scene.render.resolution_y = self.task_data['res_y']
-            bpy.context.scene.render.resolution_percentage = self.task_data['res_scale']
+            if bpy.context.scene.render.resolution_x != self.task_data['res_x']:
+                bpy.context.scene.render.resolution_x = self.task_data['res_x']
+            if bpy.context.scene.render.resolution_y != self.task_data['res_y']:
+                bpy.context.scene.render.resolution_y = self.task_data['res_y']
+            if bpy.context.scene.render.resolution_percentage != self.task_data['res_scale']:
+                bpy.context.scene.render.resolution_percentage = self.task_data['res_scale']
 
     def update_camera(self):
         if 'camera' in self.task_data:
             cam_name = self.task_data['camera']
-            if cam_name:
+            if cam_name and bpy.context.scene.camera and bpy.context.scene.camera.name != cam_name:
                 bpy.context.scene.camera = bpy.data.objects[cam_name]
                 for area in bpy.context.screen.areas:
                     if area.type == 'VIEW_3D':
