@@ -1,24 +1,28 @@
 
 
-# Node-based RenderStack [Blender Addon]
+# RenderStackNode [Blender Addon]
+
+> #### Still In Alpha! Nodes Change Before 1.0 !
 
 ### **Design Target**
 
-Provide users with node-based, flexible rendering output methods
+Provide users with node-based, flexible rendering output workflow
 
-### Features
+![new](img/new.gif)
 
-> version 0.7 alpha (**NOT PRODUCTION READY ! !**)
->
-> Chinese intro video (v0.5) 中文介绍请看视频 https://www.bilibili.com/video/BV1wr4y1c7Tt/
+
+
+### Features v0.8
 
 + Camera overide
 + Render Engine overwrite (Workbench,Eevee,Cycles)
 + Output Setting overwrite (Frame Range,Resulotion,path（format file name support）,image settings)
 + Allow script for overwrite 
-+ View and switch overide settings 
++ Viewer Node (Just like Node Wrangler)
 + Render all task (list)
 + smtp email 
+
+> Chinese intro video (v 0.5) 中文介绍请看视频 https://www.bilibili.com/video/BV1wr4y1c7Tt/
 
 
 
@@ -156,12 +160,19 @@ v 0.7
 
 v 0.8
 + [x] SSM (one of my addons for blender), light studio node( 0.23 version / highter)
++ [x] Viewer Node
++ [ ] Worlds
 
 v.1.0
 + [ ]  luxcore support
 + [ ]  passes for different enginge (output)
-+ [ ]  task marker (won't need to unlink task to no render,maybe)
-+ [ ]  scene overwriting (maybe)
+
+Planing... 
+
++ [ ] muti blend file ( socket modules or command line)
++ [ ] octane support
++ [ ] mesh export
++ [ ] remain taskes ui 
 
 
 
