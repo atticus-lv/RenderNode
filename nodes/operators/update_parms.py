@@ -82,7 +82,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             bpy.context.scene.frame_step = self.task_data['frame_step']
 
     def update_render_engine(self):
-        if 'engine' in self.task_data:
+        if 'engine' in self.task_data and bpy.context.scene.render.engine != self.task_data['engine']:
             bpy.context.scene.render.engine = self.task_data['engine']
             if 'samples' in self.task_data:
                 if self.task_data['engine'] == "BLENDER_EEVEE":
@@ -118,6 +118,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         self.updata_scripts()
         self.updata_view_layer()
         self.send_email()
+        self.update_image_format()
         self.ssm_light_studio()
 
         return {'FINISHED'}

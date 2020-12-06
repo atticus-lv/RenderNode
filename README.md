@@ -8,7 +8,7 @@ Provide users with node-based, flexible rendering output methods
 
 ### Features
 
-> version 0.7 alpha
+> version 0.7 alpha (**NOT PRODUCTION READY ! !**)
 >
 > Chinese intro video (v0.5) 中文介绍请看视频 https://www.bilibili.com/video/BV1wr4y1c7Tt/
 
