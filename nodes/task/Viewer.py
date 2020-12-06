@@ -22,8 +22,6 @@ class RSN_OT_ViewerHandler(bpy.types.Operator):
         self.report({"INFO"}, 'Stop Auto Update')
 
     def modal(self, context, event):
-        nt = NODE_TREE(bpy.context.space_data.edit_tree)
-
         if not context.window_manager.rsn_viewer_modal:
             self.finish(context)
             return {'FINISHED'}

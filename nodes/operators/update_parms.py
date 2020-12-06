@@ -8,7 +8,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
     bl_idname = "rsn.update_parms"
     bl_label = "Update Parms"
 
-    viewer_handler:BoolProperty()
+    viewer_handler:StringProperty()
 
     task_name: StringProperty()
     task_data = None
@@ -27,7 +27,10 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         return task_node_name
 
     def get_data(self):
-        nt = NODE_TREE(bpy.context.space_data.edit_tree)
+        if self.viewer_handler != '':
+            nt = NODE_TREE(bpy.context.space_data.edit_tree,node_name = self.viewer_handler)
+        else:
+            nt = NODE_TREE(bpy.context.space_data.edit_tree)
         task_name = self.task_name
         self.task_data = nt.get_task_data(task_name)
         # print(self.task_data)

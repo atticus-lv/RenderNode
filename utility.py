@@ -3,9 +3,10 @@ from itertools import groupby
 
 
 class NODE_TREE():
-    def __init__(self, node_tree):
+    def __init__(self, node_tree, node_name=None):
         self.nt = node_tree
-        self.node_list = self.get_node_list(node_tree.nodes.active)
+        self.root_node = node_tree.nodes[node_name] if node_name else node_tree.nodes.active
+        self.node_list = self.get_node_list(self.root_node) if node_name else self.get_node_list(self.root_node)
         self.dict = self.separate_nodes(self.node_list)
 
     def get_node_list(self, node):
