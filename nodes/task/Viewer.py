@@ -5,6 +5,34 @@ from RenderStackNode.utility import *
 
 from .TaskListNode import reroute
 
+
+class RSN_OT_AddViewerNode(bpy.types.Operator):
+    bl_idname = 'rsn.add_viewer_node'
+    bl_label = 'Add Viewer Node'
+
+    @classmethod
+    def poll(self, context):
+        active_node = context.space_data.edit_tree.nodes.active
+        return active_node and active_node.bl_idname == 'RSNodeTaskNode'
+
+    def execute(self, context):
+        nt = context.space_data.edit_tree
+        task = context.space_data.edit_tree.nodes.active
+        loc_x = task.location[0] + 200
+        loc_y = task.location[1] + 100
+        viewer = None
+        for node in nt.nodes:
+            if node.bl_idname == 'RSNodeViewNode':
+                viewer = node
+                break
+        if not viewer:
+            viewer = context.space_data.edit_tree.nodes.new(type='RSNodeViewNode')
+        viewer.location[0] = loc_x
+        viewer.location[1] = loc_y
+        nt.links.new(task.outputs[0], viewer.inputs[0])
+
+        return {"FINISHED"}
+
 class RSN_OT_ViewerHandler(bpy.types.Operator):
     bl_idname = "rsn.viewer_handler"
     bl_label = 'Auto Update'
@@ -30,11 +58,11 @@ class RSN_OT_ViewerHandler(bpy.types.Operator):
             if not context.window_manager.rsn_viewer_modal:
                 self.finish(context)
                 return {"FINISHED"}
-            elif context.window_manager.rsn_viewer_node == '' :
+            elif context.window_manager.rsn_viewer_node == '':
                 return {'PASS_THROUGH'}
             else:
                 try:
-                    bpy.ops.rsn.update_parms(task_name = context.window_manager.rsn_viewer_node)
+                    bpy.ops.rsn.update_parms(task_name=context.window_manager.rsn_viewer_node)
                 except:
                     pass
 
@@ -61,25 +89,57 @@ class RSNodeViewNode(RenderStackNode):
         if self.inputs[0].is_linked:
             node = reroute(self.inputs[0].links[0].from_node)
             context.window_manager.rsn_viewer_node = node.name
-            layout.label(text = f'Viewing {node.name}')
+            layout.label(text=f'Viewing {node.name}')
             if not context.window_manager.rsn_viewer_modal:
-                layout.operator('rsn.viewer_handler',text = 'Auto Update')
+                layout.operator('rsn.viewer_handler', text='Auto Update')
             else:
-                layout.prop(context.window_manager,'rsn_viewer_modal',text='Auto Update')
+                layout.prop(context.window_manager, 'rsn_viewer_modal', text='Auto Update', icon='FILE_REFRESH')
         else:
             context.window_manager.rsn_viewer_node = ''
             layout.label(text=f'Viewing Nothing')
 
+
+def add_keybind():
+    wm = bpy.context.window_manager
+    if wm.keyconfigs.addon:
+        km = wm.keyconfigs.addon.keymaps.new(name='Node Editor', space_type='NODE_EDITOR')
+        kmi = km.keymap_items.new('rsn.add_viewer_node', 'V', 'PRESS')
+        kmi.properties.name = "RSN View Task"
+        addon_keymaps.append((km, kmi))
+
+def remove_keybind():
+    wm = bpy.context.window_manager
+    kc = wm.keyconfigs.addon
+    if kc:
+        for km, kmi in addon_keymaps:
+            km.keymap_items.remove(kmi)
+
+    addon_keymaps.clear()
+
+def draw_menu(self, context):
+    layout = self.layout
+    layout.separator()
+    layout.operator("rsn.add_viewer_node", text="View Task")
+
+
 def register():
+    bpy.utils.register_class(RSN_OT_AddViewerNode)
     bpy.utils.register_class(RSN_OT_ViewerHandler)
     bpy.utils.register_class(RSNodeViewNode)
     bpy.types.WindowManager.rsn_viewer_modal = BoolProperty(name='Viewer Auto Update', default=False)
-    bpy.types.WindowManager.rsn_viewer_node = StringProperty(name = 'Viewer task name')
+    bpy.types.WindowManager.rsn_viewer_node = StringProperty(name='Viewer task name')
+
+    bpy.types.NODE_MT_context_menu.append(draw_menu)
+    add_keybind()
 
 
 def unregister():
+    remove_keybind()
+
     del bpy.types.WindowManager.rsn_viewer_modal
     del bpy.types.WindowManager.rsn_viewer_node
     bpy.utils.unregister_class(RSNodeViewNode)
     bpy.utils.unregister_class(RSN_OT_ViewerHandler)
+    bpy.utils.unregister_class(RSN_OT_AddViewerNode)
 
+    bpy.types.NODE_MT_context_menu.remove(draw_menu)
