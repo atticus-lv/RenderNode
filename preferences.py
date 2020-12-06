@@ -2,10 +2,6 @@ import bpy
 from bpy.props import *
 
 
-def get_pref():
-    return bpy.context.preferences.addons[__package__].preferences
-
-
 class RSN_Preference(bpy.types.AddonPreferences):
     bl_idname = __package__
 
@@ -24,12 +20,18 @@ class RSN_Preference(bpy.types.AddonPreferences):
         name="SMTP Password",
         description="The SMTP Password for your receiver email", )
 
+    viewer_timer: FloatProperty(name='Update time (second)', default=0.2, min=0.1, max=2.0,step=10)
+
     def draw_nodes(self):
         layout = self.layout
         box = layout.box().split().column(align=1)
         box.label(text="SMTP Email Node")
         box.prop(self, "smtp_server", text='Server')
         box.prop(self, "smtp_pass", text='Password')
+
+        box = layout.box().split().column(align=1)
+        box.label(text="Viewer Node")
+        box.prop(self,'viewer_timer')
 
     def draw_properties(self):
         pass

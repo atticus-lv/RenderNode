@@ -22,11 +22,11 @@ class RSN_OT_AddViewerNode(bpy.types.Operator):
         loc_y = task.location[1] + 100
         viewer = None
         for node in nt.nodes:
-            if node.bl_idname == 'RSNodeViewNode':
+            if node.bl_idname == 'RSNodeViewerNode':
                 viewer = node
                 break
         if not viewer:
-            viewer = context.space_data.edit_tree.nodes.new(type='RSNodeViewNode')
+            viewer = context.space_data.edit_tree.nodes.new(type='RSNodeViewerNode')
         viewer.location[0] = loc_x
         viewer.location[1] = loc_y
         nt.links.new(task.outputs[0], viewer.inputs[0])
@@ -70,16 +70,16 @@ class RSN_OT_ViewerHandler(bpy.types.Operator):
 
     def execute(self, context):
         context.window_manager.rsn_viewer_modal = True
-        freq = 1
-        self._timer = context.window_manager.event_timer_add(freq, window=context.window)
+        pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
+        self._timer = context.window_manager.event_timer_add(pref.viewer_timer, window=context.window)
         context.window_manager.modal_handler_add(self)
 
         self.report({"INFO"}, 'Start Auto Update')
         return {'RUNNING_MODAL'}
 
 
-class RSNodeViewNode(RenderStackNode):
-    bl_idname = 'RSNodeViewNode'
+class RSNodeViewerNode(RenderStackNode):
+    bl_idname = 'RSNodeViewerNode'
     bl_label = 'Viewer'
 
     def init(self, context):
@@ -125,11 +125,11 @@ def draw_menu(self, context):
 def register():
     bpy.utils.register_class(RSN_OT_AddViewerNode)
     bpy.utils.register_class(RSN_OT_ViewerHandler)
-    bpy.utils.register_class(RSNodeViewNode)
+    bpy.utils.register_class(RSNodeViewerNode)
     bpy.types.WindowManager.rsn_viewer_modal = BoolProperty(name='Viewer Auto Update', default=False)
     bpy.types.WindowManager.rsn_viewer_node = StringProperty(name='Viewer task name')
 
-    bpy.types.NODE_MT_context_menu.append(draw_menu)
+    # bpy.types.NODE_MT_context_menu.append(draw_menu)
     add_keybind()
 
 
@@ -138,8 +138,8 @@ def unregister():
 
     del bpy.types.WindowManager.rsn_viewer_modal
     del bpy.types.WindowManager.rsn_viewer_node
-    bpy.utils.unregister_class(RSNodeViewNode)
+    bpy.utils.unregister_class(RSNodeViewerNode)
     bpy.utils.unregister_class(RSN_OT_ViewerHandler)
     bpy.utils.unregister_class(RSN_OT_AddViewerNode)
 
-    bpy.types.NODE_MT_context_menu.remove(draw_menu)
+    # bpy.types.NODE_MT_context_menu.remove(draw_menu)

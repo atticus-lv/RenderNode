@@ -17,10 +17,10 @@ class RSNodeTaskNode(RenderStackNode):
         self.outputs.new('RSNodeSocketRenderList', "Task")
 
     def draw_buttons(self, context, layout):
-        layout.prop(self, 'task_name', text="Name")
+        layout.prop(self, 'task_name', text="$task")
 
     def draw_label(self):
-        return self.task_name
+        return self.name
 
     def draw_buttons_ext(self, context, layout):
         add = layout.operator("rsnode.edit_input", text="Add Settings")
