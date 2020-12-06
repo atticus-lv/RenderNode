@@ -22,7 +22,6 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     frame_list = []
     frame_current = 1
 
-
     # 检查当前帧 是否大于任务预设的的帧数
     def frame_check(self):
         if self.frame_current >= self.frame_list[0]["frame_end"]:
@@ -78,7 +77,6 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
                 print(directory_path, e)
 
     def get_postfix(self, scn):
-
         task = self.task_data[0]
         task_name = task['task_name']
         cam = scn.camera
@@ -86,11 +84,6 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         postfix = ""
         date_now = str(time.strftime("%m-%d", time.localtime()))
         time_now = str(time.strftime("%H_%M", time.localtime()))
-
-        # if self.use_preview_render:
-        #     postfix = f"{self.preview_folder_name}/"
-        # else:
-        #     postfix = ""
 
         if 'path_format' in task:
             shot_export_name = task["path_format"]
@@ -126,7 +119,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         scn = context.scene
         task = self.mark_task_names[0]
 
-        bpy.ops.rsn.update_parms(task_name = task)
+        bpy.ops.rsn.update_parms(task_name=task)
         # folder path & file name
         directory = self.make_path(context)
         postfix = self.get_postfix(scn)
@@ -141,7 +134,6 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
 
     # init 初始化执行
     def execute(self, context):
-
         context.window_manager.render_stack_modal = True
         scn = context.scene
         scn.render.use_lock_interface = True
@@ -150,29 +142,28 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         self.rendering = False
 
         # 获取列表
-
         nt = NODE_TREE(bpy.context.space_data.edit_tree)
 
-        for i, task in enumerate(nt.dict):
+        for task in nt.dict:
             task_data = nt.get_task_data(task_name=task)
             self.task_data.append(task_data)
             self.mark_task_names.append(task)
 
             render_list = {}
-
             if "frame_start" in task_data:
                 render_list["frame_start"] = task_data["frame_start"]
                 render_list["frame_end"] = task_data["frame_end"]
                 render_list["frame_step"] = task_data["frame_step"]
             else:
-                render_list["frame_start"] = 1
-                render_list["frame_end"] = 1
+                render_list["frame_start"] = scn.frame_current
+                render_list["frame_end"] = scn.frame_current
                 render_list["frame_step"] = 1
 
             self.frame_list.append(render_list)
 
         if True in (len(self.mark_task_names) == 0, len(self.frame_list) == 0):
             scn.render.use_lock_interface = False
+            context.window_manager.render_stack_modal = False
             self.report({"WARNING"}, 'Nothing to render！')
             return {"FINISHED"}
 
@@ -203,18 +194,6 @@ class RSN_OT_RenderButton(bpy.types.Operator):
     bl_idname = "rsn.render_button"
     bl_label = "Render"
 
-    use_preview_render: BoolProperty(name="use preview render",
-                                     description="render prewive image to a preview folder",
-                                     default=False)
-
-    preview_folder_name:StringProperty(name = "Preview Folder Name", default = "Preview")
-
-    render_now: BoolProperty(name="Render right now !")
-
-    wait_time: IntProperty(name="Time to begin render",
-                           description="type in how many minutes you want to render later",
-                           default=0)
-
     @classmethod
     def poll(self, context):
         if not context.window_manager.render_stack_modal:
@@ -231,21 +210,15 @@ class RSN_OT_RenderButton(bpy.types.Operator):
         layout = self.layout
         layout.use_property_split = True
 
-        # layout.prop(self, "use_preview_render", text="Render Preview")
-        # if self.use_preview_render:
-        #     layout.prop(self,"preview_folder_name", text="Folder Name")
-
     def execute(self, context):
         blend_path = context.blend_data.filepath
 
         if blend_path == "":
-            self.report({"ERROR"},"Save your file first!")
+            self.report({"ERROR"}, "Save your file first!")
             return {"FINISHED"}
 
-        else:
-            if context.scene.render.engine == "octane":
-                self.change_shading()
-            bpy.ops.rsn.render_stack_task()
+        self.change_shading()
+        bpy.ops.rsn.render_stack_task()
 
         return {'FINISHED'}
 
