@@ -12,6 +12,7 @@ bl_info = {
 
 import importlib
 import sys
+import bpy
 from .nodes import *
 from .rsn_helper import *
 

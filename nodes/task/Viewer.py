@@ -123,9 +123,8 @@ def remove_keybind():
 
 def draw_menu(self, context):
     layout = self.layout
-    if context.space_data.tree_type == 'RenderStackNodeTree':
-        layout.operator("rsn.add_viewer_node", text="View Task")
-        layout.separator()
+    layout.separator()
+    layout.operator("rsn.add_viewer_node", text="View Task")
 
 
 def register():
@@ -140,12 +139,11 @@ def register():
 
 
 def unregister():
-    remove_keybind()
-    bpy.types.NODE_MT_context_menu.remove(draw_menu)
-
     del bpy.types.WindowManager.rsn_viewer_modal
     del bpy.types.WindowManager.rsn_viewer_node
-
     bpy.utils.unregister_class(RSNodeViewerNode)
     bpy.utils.unregister_class(RSN_OT_ViewerHandler)
     bpy.utils.unregister_class(RSN_OT_AddViewerNode)
+
+    bpy.types.NODE_MT_context_menu.remove(draw_menu)
+    remove_keybind()

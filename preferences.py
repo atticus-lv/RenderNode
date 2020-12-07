@@ -62,7 +62,25 @@ class RSN_Preference(bpy.types.AddonPreferences):
             self.draw_nodes()
 
 
+addon_keymaps = []
 
+
+def add_keybind():
+    wm = bpy.context.window_manager
+    if wm.keyconfigs.addon:
+        km = wm.keyconfigs.addon.keymaps.new(name='Node Editor', space_type='NODE_EDITOR')
+        kmi = km.keymap_items.new('rsn.add_viewer_node', 'V', 'PRESS')
+        addon_keymaps.append((km, kmi))
+
+
+def remove_keybind():
+    wm = bpy.context.window_manager
+    kc = wm.keyconfigs.addon
+    if kc:
+        for km, kmi in addon_keymaps:
+            km.keymap_items.remove(kmi)
+
+    addon_keymaps.clear()
 
 
 def register():
@@ -70,12 +88,12 @@ def register():
     bpy.utils.register_class(NodeViewerProps)
     bpy.utils.register_class(RSN_Preference)
 
-
+    add_keybind()
 
 
 def unregister():
-
-
     bpy.utils.unregister_class(RSN_Preference)
     bpy.utils.unregister_class(NodeViewerProps)
     bpy.utils.unregister_class(NodeSmtpProps)
+
+    remove_keybind()

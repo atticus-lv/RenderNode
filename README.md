@@ -80,7 +80,7 @@ Click [here](https://github.com/atticus-lv/RenderStackNode/releases/tag/alpha) t
 	        "Camera.002",
 	        "File Path.001",
 	        "WorkBench Settings"
-	    ],
+	    ]
 	}
 	```
 	> *nodes details for each task*
@@ -161,7 +161,7 @@ v 0.7
 v 0.8
 + [x] SSM (one of my addons for blender), light studio node( 0.23 version / highter)
 + [x] Viewer Node
-+ [ ] Worlds
++ [x] Worlds
 
 v.1.0
 + [ ]  luxcore support
