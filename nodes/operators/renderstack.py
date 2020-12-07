@@ -75,6 +75,8 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
             except(Exception) as e:
                 self.report({'ERROR'}, f'File Path: Path Error')
                 print(directory_path, e)
+        else:
+            return os.path.dirname(bpy.data.filepath) + "\\"
 
     def get_postfix(self, scn):
         task = self.task_data[0]

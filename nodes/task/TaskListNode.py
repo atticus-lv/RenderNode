@@ -40,12 +40,14 @@ class RSNodeTaskListNode(RenderStackNode):
         remove = row.operator("rsnode.edit_input", text="Unused", icon='REMOVE')
         remove.remove = True
 
-        col = layout.box().column(align=False)
-        for i, input in enumerate(self.inputs):
-            if input.is_linked:
-                node = reroute(input.links[0].from_node)
-                col.operator("rsn.update_parms", text=f'View {node.task_name}').task_name = node.name
-
+        if context.window_manager.rsn_viewer_modal is False:
+            col = layout.box().column(align=False)
+            for i, input in enumerate(self.inputs):
+                if input.is_linked:
+                    node = reroute(input.links[0].from_node)
+                    col.operator("rsn.update_parms", text=f'View {node.name}').task_name = node.name
+        else:
+            layout.label(text='Using Viewer Node')
 
 def register():
     bpy.utils.register_class(RSNodeTaskListNode)

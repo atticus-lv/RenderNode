@@ -34,8 +34,8 @@ class RSN_OT_SendEmail(bpy.types.Operator):
     def __init__(self):
         pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
 
-        self.smtp_server = pref.smtp_server
-        self.smtp_pass = pref.smtp_pass
+        self.smtp_server = pref.node_smtp.server
+        self.smtp_pass = pref.node_smtp.password
 
         self.mail_host = self.smtp_server
         self.mail_pass = self.smtp_pass
@@ -73,13 +73,11 @@ class RSNodeSmtpEmailNode(RenderStackNode):
     bl_idname = 'RSNodeSmtpEmailNode'
     bl_label = 'SMTP Email'
 
-
     subject: StringProperty(
         name="Subject", default="Write your subject here")
 
     content: StringProperty(
         name="Content", default="Write you want to reamain yourself")
-
 
     sender_name: StringProperty(name="Name", default="")
 
@@ -102,8 +100,7 @@ class RSNodeSmtpEmailNode(RenderStackNode):
         layout.prop(self, "subject")
         layout.prop(self, "content")
 
-
-        em = layout.operator("rsn.send_email",text = "Test Email")
+        em = layout.operator("rsn.send_email", text="Test Email")
         em.subject = self.subject
         em.content = self.content
         em.sender_name = self.sender_name

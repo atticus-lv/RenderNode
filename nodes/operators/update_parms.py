@@ -8,8 +8,9 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
     bl_idname = "rsn.update_parms"
     bl_label = "Update Parms"
 
-    viewer_handler:StringProperty()
+    viewer_handler: StringProperty()
 
+    nt: None
     task_name: StringProperty()
     task_data = None
 
@@ -28,12 +29,21 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
 
     def get_data(self):
         if self.viewer_handler != '':
-            nt = NODE_TREE(bpy.context.space_data.edit_tree,node_name = self.viewer_handler)
+            nt = NODE_TREE(bpy.context.space_data.edit_tree, node_name=self.viewer_handler)
         else:
             nt = NODE_TREE(bpy.context.space_data.edit_tree)
+        self.nt = nt
         task_name = self.task_name
-        self.task_data = nt.get_task_data(task_name)
-        # print(self.task_data)
+        try:
+            self.task_data = nt.get_task_data(task_name)
+            return True
+        except KeyError:
+            return None
+
+    def update_world(self):
+        if 'world' in self.task_data:
+            if bpy.context.scene.world.name != self.task_data['world']:
+                bpy.context.scene.world = bpy.data.worlds[self.task_data['world']]
 
     def ssm_light_studio(self):
         if 'ssm_light_studio' in self.task_data:
@@ -42,7 +52,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                 if bpy.context.scene.ssm.light_studio_index != index:
                     bpy.context.scene.ssm.light_studio_index = index
             except Exception as e:
-                print(f"RSN ERROR: SSM LightStudio node > {node_name} < error: {e}")
+                print(f"RSN ERROR: SSM LightStudio node error: {e}")
 
     def send_email(self):
         if 'email' in self.task_data:
@@ -54,6 +64,8 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                                            email=email_dict['email'])
                 except Exception as e:
                     print(f"RSN ERROR: SMTP Email node > {node_name} < error: {e}")
+                    self.nt.node[node_name].use_custom_color = 1
+                    self.nt.node[node_name].color = (1, 0, 0)
 
     def updata_view_layer(self):
         if 'view_layer' in self.task_data and bpy.context.window.view_layer.name != self.task_data['view_layer']:
@@ -66,6 +78,10 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                     exec(value)
                 except Exception as e:
                     print(f"RSN ERROR: scripts node > {k} < error: {e}")
+                    self.nt.node[k].use_custom_color = 1
+                    self.nt.node[k].color = (1,0,0)
+
+
         if 'scripts_file' in self.task_data:
             for node_name, file_name in self.task_data['scripts_file'].items():
                 try:
@@ -73,6 +89,8 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                     exec(c)
                 except Exception as e:
                     print(f"RSN ERROR: scripts node > {node_name} < error: {e}")
+                    self.nt.node[node_name].use_custom_color = 1
+                    self.nt.node[node_name].color = (1, 0, 0)
 
     def update_image_format(self):
         if 'color_mode' in self.task_data:
@@ -124,16 +142,17 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                         break
 
     def execute(self, context):
-        self.get_data()
-        self.update_camera()
-        self.update_res()
-        self.update_render_engine()
-        self.update_frame_range()
-        self.updata_scripts()
-        self.updata_view_layer()
-        self.send_email()
-        self.update_image_format()
-        self.ssm_light_studio()
+        if self.get_data():
+            self.update_camera()
+            self.update_res()
+            self.update_render_engine()
+            self.update_frame_range()
+            self.updata_view_layer()
+            self.send_email()
+            self.update_image_format()
+            self.update_world()
+            self.ssm_light_studio()
+            self.updata_scripts()
 
         return {'FINISHED'}
 

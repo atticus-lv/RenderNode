@@ -33,6 +33,7 @@ class RSN_OT_AddViewerNode(bpy.types.Operator):
 
         return {"FINISHED"}
 
+
 class RSN_OT_ViewerHandler(bpy.types.Operator):
     bl_idname = "rsn.viewer_handler"
     bl_label = 'Auto Update'
@@ -71,7 +72,7 @@ class RSN_OT_ViewerHandler(bpy.types.Operator):
     def execute(self, context):
         context.window_manager.rsn_viewer_modal = True
         pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
-        self._timer = context.window_manager.event_timer_add(pref.viewer_timer, window=context.window)
+        self._timer = context.window_manager.event_timer_add(pref.node_viewer.timer, window=context.window)
         context.window_manager.modal_handler_add(self)
 
         self.report({"INFO"}, 'Start Auto Update')
@@ -99,13 +100,16 @@ class RSNodeViewerNode(RenderStackNode):
             layout.label(text=f'Viewing Nothing')
 
 
+addon_keymaps = []
+
+
 def add_keybind():
     wm = bpy.context.window_manager
     if wm.keyconfigs.addon:
         km = wm.keyconfigs.addon.keymaps.new(name='Node Editor', space_type='NODE_EDITOR')
         kmi = km.keymap_items.new('rsn.add_viewer_node', 'V', 'PRESS')
-        kmi.properties.name = "RSN View Task"
         addon_keymaps.append((km, kmi))
+
 
 def remove_keybind():
     wm = bpy.context.window_manager
@@ -116,10 +120,12 @@ def remove_keybind():
 
     addon_keymaps.clear()
 
+
 def draw_menu(self, context):
     layout = self.layout
-    layout.separator()
-    layout.operator("rsn.add_viewer_node", text="View Task")
+    if context.space_data.tree_type == 'RenderStackNodeTree':
+        layout.operator("rsn.add_viewer_node", text="View Task")
+        layout.separator()
 
 
 def register():
@@ -129,17 +135,17 @@ def register():
     bpy.types.WindowManager.rsn_viewer_modal = BoolProperty(name='Viewer Auto Update', default=False)
     bpy.types.WindowManager.rsn_viewer_node = StringProperty(name='Viewer task name')
 
-    # bpy.types.NODE_MT_context_menu.append(draw_menu)
+    bpy.types.NODE_MT_context_menu.prepend(draw_menu)
     add_keybind()
 
 
 def unregister():
     remove_keybind()
+    bpy.types.NODE_MT_context_menu.remove(draw_menu)
 
     del bpy.types.WindowManager.rsn_viewer_modal
     del bpy.types.WindowManager.rsn_viewer_node
+
     bpy.utils.unregister_class(RSNodeViewerNode)
     bpy.utils.unregister_class(RSN_OT_ViewerHandler)
     bpy.utils.unregister_class(RSN_OT_AddViewerNode)
-
-    # bpy.types.NODE_MT_context_menu.remove(draw_menu)

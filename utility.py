@@ -137,4 +137,9 @@ class NODE_TREE():
             elif node.bl_idname == "RSNodeLightStudioNode":
                 task_data['ssm_light_studio'] = node.light_studio_index
 
+            elif node.bl_idname == "RSNodeWorldInputNode":
+                task_data['world'] = node.world.name
+
+
+
         return task_data
