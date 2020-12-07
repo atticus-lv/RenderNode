@@ -79,8 +79,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                 except Exception as e:
                     print(f"RSN ERROR: scripts node > {k} < error: {e}")
                     self.nt.node[k].use_custom_color = 1
-                    self.nt.node[k].color = (1,0,0)
-
+                    self.nt.node[k].color = (1, 0, 0)
 
         if 'scripts_file' in self.task_data:
             for node_name, file_name in self.task_data['scripts_file'].items():
@@ -94,10 +93,14 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
 
     def update_image_format(self):
         if 'color_mode' in self.task_data:
-            bpy.context.scene.render.image_settings.color_mode = self.task_data['color_mode']
-            bpy.context.scene.render.image_settings.color_depth = self.task_data['color_depth']
-            bpy.context.scene.render.image_settings.file_format = self.task_data['file_format']
-            bpy.context.scene.render.film_transparent = task_data['transparent']
+            if bpy.context.scene.render.image_settings.color_mode != self.task_data['color_mode']:
+                bpy.context.scene.render.image_settings.color_mode = self.task_data['color_mode']
+            if bpy.context.scene.render.image_settings.color_depth != self.task_data['color_depth']:
+                bpy.context.scene.render.image_settings.color_depth = self.task_data['color_depth']
+            if bpy.context.scene.render.image_settings.file_format != self.task_data['file_format']:
+                bpy.context.scene.render.image_settings.file_format = self.task_data['file_format']
+            if bpy.context.scene.render.film_transparent != self.task_data['transparent']:
+                bpy.context.scene.render.film_transparent = self.task_data['transparent']
 
     def update_frame_range(self):
         if "frame_start" in self.task_data:
