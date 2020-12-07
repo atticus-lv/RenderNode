@@ -99,6 +99,12 @@ class RSNodeViewerNode(RenderStackNode):
             context.window_manager.rsn_viewer_node = ''
             layout.label(text=f'Viewing Nothing')
 
+    def draw_buttons_ext(self, context, layout):
+        box = layout.box()
+        col = box.column(align = True)
+        col.label(text = "TIPS:")
+        col.label(text = 'Auto Update will not execute scripts node or email node')
+        col.label(text = 'Use view operator in Task List Node to execute them')
 
 addon_keymaps = []
 

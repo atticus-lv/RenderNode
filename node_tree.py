@@ -114,7 +114,7 @@ node_categorys = [
         nodeitems_utils.NodeItem("RSNodeTaskNode"),
         nodeitems_utils.NodeItem("RSNodeTaskListNode"),
         nodeitems_utils.NodeItem("RSNodeRenderListNode"),
-        nodeitems_utils.NodeItem("RSNodeViewerNode"),
+        # nodeitems_utils.NodeItem("RSNodeViewerNode"),
 
     ]),
 

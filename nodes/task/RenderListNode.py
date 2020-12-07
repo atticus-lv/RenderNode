@@ -4,13 +4,14 @@ from bpy.props import *
 from RenderStackNode.utility import NODE_TREE
 from RenderStackNode.node_tree import RenderStackNode
 
+
 class RSNode_OT_GetInfo(bpy.types.Operator):
     '''left click: get node name
 shift:get overwrite details '''
     bl_idname = 'rsn.get_info'
     bl_label = 'get info'
 
-    def invoke(self, context,event):
+    def invoke(self, context, event):
         nt = NODE_TREE(context.space_data.edit_tree)
         if event.shift:
             for k in nt.dict.keys():
@@ -36,10 +37,20 @@ class RSNodeRenderListNode(RenderStackNode):
         pass
 
     def draw_buttons_ext(self, context, layout):
+        layout.scale_y = 1.25
+        row = layout.row(align=True)
+        add = row.operator("rsnode.edit_input", text="render", icon='ADD')
+        add.remove = False
+        add.socket_type = "RSNodeSocketRenderList"
+        add.socket_name = "render"
+
+        remove = row.operator("rsnode.edit_input", text="Unused", icon='REMOVE')
+        remove.remove = True
+
         layout.operator("rsn.get_info", text=f'Print Info (Console)')
         box = layout.box()
         box.scale_y = 1.5
-        box.operator("rsn.render_button",text = f'Render Inputs')
+        box.operator("rsn.render_button", text=f'Render Inputs')
 
 
 def register():

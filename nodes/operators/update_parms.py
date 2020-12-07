@@ -148,11 +148,12 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             self.update_render_engine()
             self.update_frame_range()
             self.updata_view_layer()
-            self.send_email()
             self.update_image_format()
             self.update_world()
             self.ssm_light_studio()
-            self.updata_scripts()
+            if not context.window_manager.rsn_viewer_modal:
+                self.updata_scripts()
+                self.send_email()
 
         return {'FINISHED'}
 
