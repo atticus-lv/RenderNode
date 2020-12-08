@@ -40,6 +40,7 @@ class RSN_OT_ViewerHandler(bpy.types.Operator):
 
     _timer = None
     data = None
+    update_scripts = None
 
     @classmethod
     def poll(self, context):
@@ -64,7 +65,8 @@ class RSN_OT_ViewerHandler(bpy.types.Operator):
             else:
                 try:
                     bpy.ops.rsn.update_parms(task_name=context.window_manager.rsn_viewer_node,
-                                             viewer_handler=context.window_manager.rsn_viewer_node)
+                                             viewer_handler=context.window_manager.rsn_viewer_node,
+                                             update_scripts=self.update_scripts)
                 except:
                     pass
 
@@ -72,7 +74,8 @@ class RSN_OT_ViewerHandler(bpy.types.Operator):
 
     def execute(self, context):
         context.window_manager.rsn_viewer_modal = True
-        pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
+        pref = context.preferences.addons.get('RenderStackNode').preferences
+        self.update_scripts = pref.update_scripts
         self._timer = context.window_manager.event_timer_add(pref.node_viewer.timer, window=context.window)
         context.window_manager.modal_handler_add(self)
 

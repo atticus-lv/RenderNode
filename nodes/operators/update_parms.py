@@ -1,5 +1,5 @@
 import bpy
-from bpy.props import *
+from bpy.props import StringProperty, BoolProperty
 from RenderStackNode.utility import *
 
 
@@ -9,6 +9,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
     bl_label = "Update Parms"
 
     viewer_handler: StringProperty()
+    update_scripts: BoolProperty(default= False)
 
     nt: None
     task_name: StringProperty()
@@ -39,6 +40,11 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             return True
         except KeyError:
             return None
+
+    def update_slots(self):
+        if 'render_slot' in self.task_data:
+            if bpy.data.images['Render Result'].render_slots.active_index != self.task_data['render_slot']:
+                bpy.data.images['Render Result'].render_slots.active_index = self.task_data['render_slot']
 
     def update_world(self):
         if 'world' in self.task_data:
@@ -152,10 +158,12 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             self.update_frame_range()
             self.updata_view_layer()
             self.update_image_format()
+            self.update_slots()
             self.update_world()
             self.ssm_light_studio()
-            if not context.window_manager.rsn_viewer_modal:
+            if not self.update_scripts:
                 self.updata_scripts()
+            if not context.window_manager.rsn_viewer_modal:
                 self.send_email()
 
         return {'FINISHED'}

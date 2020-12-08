@@ -1,5 +1,4 @@
 import bpy
-from bpy.props import *
 from RenderStackNode.node_tree import RenderStackNode
 
 
@@ -30,6 +29,7 @@ class RSNodeTaskListNode(RenderStackNode):
         pass
 
     def draw_buttons_ext(self, context, layout):
+        # edit inputs
         layout.scale_y = 1.25
         row = layout.row(align=True)
         add = row.operator("rsnode.edit_input", text="Task", icon='ADD')
@@ -39,7 +39,7 @@ class RSNodeTaskListNode(RenderStackNode):
 
         remove = row.operator("rsnode.edit_input", text="Unused", icon='REMOVE')
         remove.remove = True
-
+        # view input task name
         if context.window_manager.rsn_viewer_modal is False:
             col = layout.box().column(align=False)
             for i, input in enumerate(self.inputs):
@@ -48,6 +48,7 @@ class RSNodeTaskListNode(RenderStackNode):
                     col.operator("rsn.update_parms", text=f'View {node.name}').task_name = node.name
         else:
             layout.label(text='Using Viewer Node')
+
 
 def register():
     bpy.utils.register_class(RSNodeTaskListNode)

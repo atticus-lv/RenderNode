@@ -1,6 +1,6 @@
 import json
 import bpy
-from bpy.props import *
+
 from RenderStackNode.utility import NODE_TREE
 from RenderStackNode.node_tree import RenderStackNode
 
@@ -37,16 +37,16 @@ class RSNodeRenderListNode(RenderStackNode):
         pass
 
     def draw_buttons_ext(self, context, layout):
+        # edit Inputs
         layout.scale_y = 1.25
         row = layout.row(align=True)
         add = row.operator("rsnode.edit_input", text="render", icon='ADD')
         add.remove = False
         add.socket_type = "RSNodeSocketRenderList"
         add.socket_name = "render"
-
         remove = row.operator("rsnode.edit_input", text="Unused", icon='REMOVE')
         remove.remove = True
-
+        # render buttons
         layout.operator("rsn.get_info", text=f'Print Info (Console)')
         box = layout.box()
         box.scale_y = 1.5

@@ -1,5 +1,5 @@
 import bpy
-from bpy.props import *
+from bpy.props import BoolProperty,StringProperty
 from RenderStackNode.node_tree import RenderStackNode
 
 

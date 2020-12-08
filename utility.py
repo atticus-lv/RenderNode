@@ -140,6 +140,7 @@ class NODE_TREE():
             elif node.bl_idname == "RSNodeWorldInputNode":
                 task_data['world'] = node.world.name
 
-
+            elif node.bl_idname == "RSNodeActiveRenderSlotNode":
+                task_data['render_slot'] = node.active_slot_index
 
         return task_data

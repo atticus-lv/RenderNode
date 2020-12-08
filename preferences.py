@@ -31,6 +31,8 @@ class RSN_Preference(bpy.types.AddonPreferences):
     node_smtp: PointerProperty(type=NodeSmtpProps)
     node_viewer: PointerProperty(type=NodeViewerProps)
 
+    update_scripts:BoolProperty(name = 'Update scripts nodes',description="Update scripts nodes when using viewer node to auto update")
+
     def draw_nodes(self):
         layout = self.layout
         layout.alignment = 'LEFT'
@@ -49,6 +51,7 @@ class RSN_Preference(bpy.types.AddonPreferences):
                  icon='TRIA_DOWN' if self.node_viewer.show else 'TRIA_RIGHT')
         if self.node_viewer.show:
             box.prop(self.node_viewer, 'timer',slider=1)
+            box.prop(self,'update_scripts')
 
     def draw_properties(self):
         pass
