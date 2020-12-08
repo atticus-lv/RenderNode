@@ -38,12 +38,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
             self.frame_list.pop(0)
             if len(self.frame_list) > 0:  # 如果帧数列表未空，则继续读取下一个
                 self.frame_current = self.frame_list[0]["frame_start"]
-            # show in nodes
-            try:
-                node = self.nt.nt.nodes['Processor']
-                node.curr_frame_list = get_length(self.frame_list)
-            except Exception as e:
-                print(e)
+
         else:
             self.frame_current += self.frame_list[0]["frame_step"]
 
@@ -54,6 +49,12 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     def post(self, dummy, thrd=None):
         self.rendering = False
         self.frame_check()
+        # show in nodes
+        try:
+            node = self.nt.nt.nodes['Processor']
+            node.done_frames += 1
+        except:
+            pass
 
     def cancelled(self, dummy, thrd=None):
         self.stop = True
@@ -63,7 +64,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         bpy.app.handlers.render_pre.append(self.pre)  # 检测渲染状态
         bpy.app.handlers.render_post.append(self.post)
         bpy.app.handlers.render_cancel.append(self.cancelled)
-        self._timer = bpy.context.window_manager.event_timer_add(0.5, window=bpy.context.window)  # 添加计时器检测状态
+        self._timer = bpy.context.window_manager.event_timer_add(0.2, window=bpy.context.window)  # 添加计时器检测状态
         bpy.context.window_manager.modal_handler_add(self)
 
     def remove_handles(self):
@@ -150,7 +151,9 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
 
     # init 初始化执行
     def execute(self, context):
+        context.window_manager.rsn_viewer_modal = False
         context.window_manager.render_stack_modal = True
+
         scn = context.scene
         scn.render.use_lock_interface = True
 
@@ -184,10 +187,10 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         # push to process node
         try:
             node = nt.nt.nodes['Processor']
-            node.ori_frame_list = get_length(self.frame_list)
-            print(node.name, node.ori_frame_list)
-        except Exception as e:
-            print(e)
+            node.count_frames = get_length(self.frame_list)
+            node.done_frames = 0
+        except:
+            pass
 
         self.frame_current = self.frame_list[0]["frame_start"]
         self.append_handles()
