@@ -8,8 +8,6 @@ class RenderStackNodeTree(bpy.types.NodeTree):
     bl_idname = 'RenderStackNodeTree'
     bl_label = 'RenderStack Node'
     bl_icon = 'BLENDER'
-    
-
 
 
 class RenderStackNode(bpy.types.Node):
@@ -121,10 +119,10 @@ node_categorys = [
     ]),
 
     RSNCategory("SCRIPTS", "Scripts", items=[
-        nodeitems_utils.NodeItem("RSScriptsNode"),
+        nodeitems_utils.NodeItem("RSNodeScriptsNode"),
         nodeitems_utils.NodeItem("RSNodeSmtpEmailNode"),
+        nodeitems_utils.NodeItem("RSNodeProcessorNode"),
         nodeitems_utils.NodeItem("RSNodeLightStudioNode"),
-
     ]),
 
     RSNCategory("OUTPUT_SETTINGS", "Output Settings", items=[

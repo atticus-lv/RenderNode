@@ -1,11 +1,11 @@
 import bpy
-from bpy.props import *
+from bpy.props import StringProperty,PointerProperty,EnumProperty
 from RenderStackNode.node_tree import RenderStackNode
 
 
-class RSScriptsNode(RenderStackNode):
+class RSNodeScriptsNode(RenderStackNode):
     '''A simple input node'''
-    bl_idname = 'RSScriptsNode'
+    bl_idname = 'RSNodeScriptsNode'
     bl_label = 'Scripts'
 
     code: StringProperty(name='Code to execute', default='')
@@ -32,8 +32,8 @@ class RSScriptsNode(RenderStackNode):
 
 
 def register():
-    bpy.utils.register_class(RSScriptsNode)
+    bpy.utils.register_class(RSNodeScriptsNode)
 
 
 def unregister():
-    bpy.utils.unregister_class(RSScriptsNode)
+    bpy.utils.unregister_class(RSNodeScriptsNode)

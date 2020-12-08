@@ -47,6 +47,9 @@ class NODE_TREE():
     def get_task_dict(self, task_name):
         return self.dict[task_name]
 
+    def get_active_node(self):
+        return self.nt.nodes.active
+
     def get_task_data(self, task_name):
         task_data = {}
         for node_name in self.dict[task_name]:
@@ -104,7 +107,7 @@ class NODE_TREE():
                 task_data['path_format'] = node.path_format
                 task_data['path'] = node.path
 
-            elif node.bl_idname == 'RSScriptsNode':
+            elif node.bl_idname == 'RSNodeScriptsNode':
                 if node.type == 'SINGLE':
                     if 'scripts' in task_data:
                         task_data['scripts'][node.name] = node.code

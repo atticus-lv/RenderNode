@@ -5,11 +5,19 @@ from bpy.props import *
 from RenderStackNode.utility import *
 
 
+def get_length(frame_list):
+    length = 0
+    for dict in frame_list:
+        length += (dict['frame_end'] + 1 - dict['frame_start']) // dict['frame_step']
+    return length
+
+
 class RSN_OT_RenderStackTask(bpy.types.Operator):
     """Render Tasks"""
     bl_idname = "rsn.render_stack_task"
     bl_label = "Render Stack"
 
+    nt = None
     # 渲染状态获取
     _timer = None
     stop = None
@@ -30,6 +38,12 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
             self.frame_list.pop(0)
             if len(self.frame_list) > 0:  # 如果帧数列表未空，则继续读取下一个
                 self.frame_current = self.frame_list[0]["frame_start"]
+            # show in nodes
+            try:
+                node = self.nt.nt.nodes['Processor']
+                node.curr_frame_list = get_length(self.frame_list)
+            except Exception as e:
+                print(e)
         else:
             self.frame_current += self.frame_list[0]["frame_step"]
 
@@ -143,14 +157,14 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         self.stop = False
         self.rendering = False
 
-        # 获取列表
         nt = NODE_TREE(bpy.context.space_data.edit_tree)
-
+        self.nt = nt
         for task in nt.dict:
+            # get data
             task_data = nt.get_task_data(task_name=task)
             self.task_data.append(task_data)
             self.mark_task_names.append(task)
-
+            # get frame Range
             render_list = {}
             if "frame_start" in task_data:
                 render_list["frame_start"] = task_data["frame_start"]
@@ -160,7 +174,6 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
                 render_list["frame_start"] = scn.frame_current
                 render_list["frame_end"] = scn.frame_current
                 render_list["frame_step"] = 1
-
             self.frame_list.append(render_list)
 
         if True in (len(self.mark_task_names) == 0, len(self.frame_list) == 0):
@@ -168,9 +181,15 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
             context.window_manager.render_stack_modal = False
             self.report({"WARNING"}, 'Nothing to render！')
             return {"FINISHED"}
+        # push to process node
+        try:
+            node = nt.nt.nodes['Processor']
+            node.ori_frame_list = get_length(self.frame_list)
+            print(node.name, node.ori_frame_list)
+        except Exception as e:
+            print(e)
 
         self.frame_current = self.frame_list[0]["frame_start"]
-        # 添加句柄到窗口
         self.append_handles()
 
         return {"RUNNING_MODAL"}
