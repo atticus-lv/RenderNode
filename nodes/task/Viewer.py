@@ -63,7 +63,8 @@ class RSN_OT_ViewerHandler(bpy.types.Operator):
                 return {'PASS_THROUGH'}
             else:
                 try:
-                    bpy.ops.rsn.update_parms(task_name=context.window_manager.rsn_viewer_node)
+                    bpy.ops.rsn.update_parms(task_name=context.window_manager.rsn_viewer_node,
+                                             viewer_handler=context.window_manager.rsn_viewer_node)
                 except:
                     pass
 
@@ -101,10 +102,11 @@ class RSNodeViewerNode(RenderStackNode):
 
     def draw_buttons_ext(self, context, layout):
         box = layout.box()
-        col = box.column(align = True)
-        col.label(text = "TIPS:")
-        col.label(text = 'Auto Update will not execute scripts node or email node')
-        col.label(text = 'Use view operator in Task List Node to execute them')
+        col = box.column(align=True)
+        col.label(text="TIPS:")
+        col.label(text='Auto Update will not execute scripts node or email node')
+        col.label(text='Use view operator in Task List Node to execute them')
+
 
 addon_keymaps = []
 

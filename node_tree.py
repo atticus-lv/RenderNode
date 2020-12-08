@@ -8,6 +8,8 @@ class RenderStackNodeTree(bpy.types.NodeTree):
     bl_idname = 'RenderStackNodeTree'
     bl_label = 'RenderStack Node'
     bl_icon = 'BLENDER'
+    
+
 
 
 class RenderStackNode(bpy.types.Node):

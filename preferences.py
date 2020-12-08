@@ -18,7 +18,7 @@ class NodeSmtpProps(bpy.types.PropertyGroup):
 
 class NodeViewerProps(bpy.types.PropertyGroup):
     show: BoolProperty(name="Dropdown")
-    timer: FloatProperty(name='Update time (second)', default=0.2, min=0.1, max=2.0, step=10)
+    timer: FloatProperty(name='Update time (second)', default=0.05, min=0.01, max=0.5, step=1)
 
 
 class RSN_Preference(bpy.types.AddonPreferences):
@@ -48,7 +48,7 @@ class RSN_Preference(bpy.types.AddonPreferences):
         box.prop(self.node_viewer, 'show', text="Viewer Node", emboss=False,
                  icon='TRIA_DOWN' if self.node_viewer.show else 'TRIA_RIGHT')
         if self.node_viewer.show:
-            box.prop(self.node_viewer, 'timer')
+            box.prop(self.node_viewer, 'timer',slider=1)
 
     def draw_properties(self):
         pass
