@@ -26,14 +26,12 @@ class RSNodeProcessorNode(RenderStackNode):
         sub = row.split(factor=1 - percent, align=1)
 
         if self.done_frames == 0:
-            row.label(text="Rendering...")
+            row.prop(self, 'c2', text="")
         else:
             sub.prop(self, 'c1', text="")
             sub.prop(self, 'c2', text="")
 
-        row.label(text=f'{1 - percent:.0%}')
-
-        layout.label(text=f"Done / All Frames:  {self.done_frames} / {self.count_frames}")
+        layout.label(text=f"{1 - percent:.0%} | Done / All Frames: {self.done_frames} / {self.count_frames}")
 
 
 def register():
