@@ -6,8 +6,8 @@ class RSNodeResolutionInputNode(RenderStackNode):
     bl_idname = "RSNodeResolutionInputNode"
     bl_label = "Resolution"
 
-    res_x:IntProperty(name = "Resolution X",default=1920,min = 4)
-    res_y:IntProperty(name = "Resolution Y",default=1080,min = 4)
+    res_x:IntProperty(name = "Resolution X",default=1920,min = 4,subtype='PIXEL')
+    res_y:IntProperty(name = "Resolution Y",default=1080,min = 4,subtype='PIXEL')
     res_scale:IntProperty(name = "Resolution Scale",default=100,min = 1)
 
     def init(self, context):

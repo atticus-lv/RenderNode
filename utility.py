@@ -74,6 +74,12 @@ class NODE_TREE():
             elif node.bl_idname == "RSNodeWorkBenchRenderSettingsNode":
                 task_data['engine'] = 'BLENDER_WORKBENCH'
 
+            elif node.bl_idname == 'RSNodeLuxcoreRenderSettingsNode':
+                task_data['engine'] = 'LUXCORE'
+                task_data['luxcore_half'] = {'use_samples': node.use_samples,
+                                             'samples'    : node.samples,
+                                             'use_time'   : node.use_time,
+                                             'time'       : node.time}
 
             elif node.bl_idname == "RSNodeFrameRangeInputNode":
                 if node.frame_end < node.frame_start:
