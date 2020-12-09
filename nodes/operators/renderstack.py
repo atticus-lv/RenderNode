@@ -53,6 +53,10 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         try:
             node = self.nt.nt.nodes['Processor']
             node.done_frames += 1
+            node.curr_task = self.mark_task_names[0]
+            node.frame_start = bpy.context.scene.frame_start
+            node.frame_end = bpy.context.scene.frame_end
+            node.frame_current = bpy.context.scene.frame_current
         except:
             pass
 
@@ -189,6 +193,8 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
             node = nt.nt.nodes['Processor']
             node.count_frames = get_length(self.frame_list)
             node.done_frames = 0
+            node.all_tasks = ','.join(self.mark_task_names)
+            print(node.all_tasks)
         except:
             pass
 
@@ -204,6 +210,17 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
                 self.remove_handles()
                 context.window_manager.render_stack_modal = False
                 context.scene.render.filepath = ""
+                # node
+                try:
+                    node = self.nt.nt.nodes['Processor']
+                    if len(self.mark_task_names) == 0:
+                        node.all_tasks += ',RENDER_FINISHED'
+                        node.curr_task = 'RENDER_FINISHED'
+                    else:
+                        node.all_tasks += ',RENDER_STOPED'
+                except:
+                    pass
+
                 return {"FINISHED"}
 
             elif self.rendering is False:  # 进行渲染
