@@ -13,7 +13,8 @@ class NodeSmtpProps(bpy.types.PropertyGroup):
 
     password: StringProperty(
         name="SMTP Password",
-        description="The SMTP Password for your receiver email", )
+        description="The SMTP Password for your receiver email",
+        subtype= 'PASSWORD')
 
 
 class NodeViewerProps(bpy.types.PropertyGroup):
@@ -27,14 +28,14 @@ class RSN_Preference(bpy.types.AddonPreferences):
     option: EnumProperty(items=[
         ('PROPERTIES', 'Properties', ''),
         ('NODES', 'Nodes', '')],
-        default='PROPERTIES')
+        default='NODES')
 
     log_level: EnumProperty(items=[
         ('10', 'Debug', ''),
         ('20', 'Info', ''),
         ('30', 'Warning', ''),
         ('40', 'Error', '')
-    ],default = '10')
+    ],default = '30')
 
     node_smtp: PointerProperty(type=NodeSmtpProps)
     node_viewer: PointerProperty(type=NodeViewerProps)
@@ -44,13 +45,13 @@ class RSN_Preference(bpy.types.AddonPreferences):
 
     def draw_nodes(self):
         layout = self.layout
-        layout.alignment = 'LEFT'
 
         col = layout.column(align=1)
         box = col.box().split().column(align=1)
         box.prop(self.node_smtp, 'show', text="SMTP Email Node", emboss=False,
                  icon='TRIA_DOWN' if self.node_smtp.show else 'TRIA_RIGHT')
         if self.node_smtp.show:
+            box.use_property_split = True
             box.prop(self.node_smtp, "server", text='Server')
             box.prop(self.node_smtp, "password", text='Password')
 
@@ -59,11 +60,14 @@ class RSN_Preference(bpy.types.AddonPreferences):
         box.prop(self.node_viewer, 'show', text="Viewer Node", emboss=False,
                  icon='TRIA_DOWN' if self.node_viewer.show else 'TRIA_RIGHT')
         if self.node_viewer.show:
+            box.use_property_split = True
             box.prop(self.node_viewer, 'timer', slider=1)
             box.prop(self, 'update_scripts')
 
     def draw_properties(self):
-        self.layout.prop(self,'log_level',text='Log')
+        layout = self.layout
+        layout.use_property_split = True
+        layout.prop(self,'log_level',text='Log')
 
     def draw(self, context):
         row = self.layout.row(align=1)
