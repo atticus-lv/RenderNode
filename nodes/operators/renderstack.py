@@ -213,7 +213,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
                 # node
                 try:
                     node = self.nt.nt.nodes['Processor']
-                    if len(self.mark_task_names) == 0:
+                    if len(self.mark_task_names) == 0 and len(self.frame_list) == 0:
                         node.all_tasks += ',RENDER_FINISHED'
                         node.curr_task = 'RENDER_FINISHED'
                     else:

@@ -26,6 +26,10 @@ class RSNodeProcessorNode(RenderStackNode):
     def init(self, context):
         self.width = 225
 
+    def draw_buttons_ext(self, context, layout):
+        layout.prop(self,"green",text="Color 1")
+        layout.prop(self,"red",text="Color 2")
+
     def draw_buttons(self, context, layout):
         done = self.count_frames - self.done_frames
         percent = done / self.count_frames
