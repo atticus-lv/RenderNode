@@ -119,7 +119,10 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
 
     def update_render_engine(self):
         if 'engine' in self.task_data and bpy.context.scene.render.engine != self.task_data['engine']:
-            bpy.context.scene.render.engine = self.task_data['engine']
+            if True in (self.task_data['engine'] == 'LUXCORE' and 'BlendLuxCore' in bpy.context.preferences.addons,
+                        self.task_data['engine'] != 'LUXCORE'):
+                bpy.context.scene.render.engine = self.task_data['engine']
+
         if 'samples' in self.task_data:
             if self.task_data['engine'] == "BLENDER_EEVEE":
                 if bpy.context.scene.eevee.taa_render_samples != self.task_data['samples']:
@@ -127,6 +130,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             elif self.task_data['engine'] == "CYCLES":
                 if bpy.context.scene.cycles.samples != self.task_data['samples']:
                     bpy.context.scene.cycles.samples = self.task_data['samples']
+
         if 'luxcore_half' in self.task_data:
             if bpy.context.scene.luxcore.halt.enable != True:
                 bpy.context.scene.luxcore.halt.enable = True
