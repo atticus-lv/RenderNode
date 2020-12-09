@@ -68,9 +68,9 @@ class RSNodeProcessorNode(RenderStackNode):
                         row1 = col.row(align=1)
                         row1.label(
                             text=f'Process: {1 - curr_done:.0%} ({self.frame_current + 1 - self.frame_start}/{self.frame_end + 1 - self.frame_start})')
-                        row1.label(text=f"| {self.frame_start}>{self.frame_current}<{self.frame_end} |")
+                        row1.label(text=f"{self.frame_start}< {self.frame_current} <{self.frame_end}")
 
-                        row = layout.row()
+                        row = col.row()
                         row.scale_y = 0.5
                         if 1 - curr_done == 0:
                             row.prop(self, 'red', text="")
@@ -86,14 +86,13 @@ class RSNodeProcessorNode(RenderStackNode):
                         col.label(text='RENDER FINISHED', icon = 'HEART')
 
                 elif i > index:
-                    if not name != 'RENDER_FINISHED':
-                        box = layout.box().column(align=1)
-                        row = box.row()
-                        row.label(text=name,icon = 'CHECKBOX_DEHLT')
+                    box = layout.box().column(align=1)
+                    row = box.row()
+                    row.label(text=name,icon = 'CHECKBOX_DEHLT')
 
-                        row = layout.row()
-                        row.scale_y = 0.5
-                        row.prop(self, 'red', text="")
+                    row = layout.row()
+                    row.scale_y = 0.5
+                    row.prop(self, 'red', text="")
 
 
 def register():

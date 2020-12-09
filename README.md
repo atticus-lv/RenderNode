@@ -163,16 +163,19 @@ v 0.8
 + [x] Viewer Node
 + [x] Worlds
 
+v 0.9
+
++ [x] luxcore support (basic)
++ [x] render process node (ui)
+
 v.1.0
-+ [ ]  luxcore support
-+ [ ]  passes for different enginge (output)
++ [ ]  passes for different enginge (view layer output)
 
 Planing... 
 
-+ [ ] muti blend file ( socket modules or command line)
-+ [ ] octane support
-+ [ ] mesh export
-+ [ ] remain taskes ui 
++ muti blend file ( socket modules or command line)
++ octane support
++ mesh export
 
 
 
