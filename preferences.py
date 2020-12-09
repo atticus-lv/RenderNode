@@ -25,13 +25,22 @@ class RSN_Preference(bpy.types.AddonPreferences):
     bl_idname = __package__
 
     option: EnumProperty(items=[
-        ('PROPERTIES', 'Properties', ''), ('NODES', 'Nodes', '')],
+        ('PROPERTIES', 'Properties', ''),
+        ('NODES', 'Nodes', '')],
         default='PROPERTIES')
+
+    log_level: EnumProperty(items=[
+        ('10', 'Debug', ''),
+        ('20', 'Info', ''),
+        ('30', 'Warning', ''),
+        ('40', 'Error', '')
+    ],default = '10')
 
     node_smtp: PointerProperty(type=NodeSmtpProps)
     node_viewer: PointerProperty(type=NodeViewerProps)
 
-    update_scripts:BoolProperty(name = 'Update scripts nodes',description="Update scripts nodes when using viewer node to auto update")
+    update_scripts: BoolProperty(name='Update scripts nodes',
+                                 description="Update scripts nodes when using viewer node to auto update")
 
     def draw_nodes(self):
         layout = self.layout
@@ -50,11 +59,11 @@ class RSN_Preference(bpy.types.AddonPreferences):
         box.prop(self.node_viewer, 'show', text="Viewer Node", emboss=False,
                  icon='TRIA_DOWN' if self.node_viewer.show else 'TRIA_RIGHT')
         if self.node_viewer.show:
-            box.prop(self.node_viewer, 'timer',slider=1)
-            box.prop(self,'update_scripts')
+            box.prop(self.node_viewer, 'timer', slider=1)
+            box.prop(self, 'update_scripts')
 
     def draw_properties(self):
-        pass
+        self.layout.prop(self,'log_level',text='Log')
 
     def draw(self, context):
         row = self.layout.row(align=1)
@@ -90,7 +99,6 @@ def register():
     bpy.utils.register_class(NodeSmtpProps)
     bpy.utils.register_class(NodeViewerProps)
     bpy.utils.register_class(RSN_Preference)
-
     add_keybind()
 
 
@@ -98,5 +106,4 @@ def unregister():
     bpy.utils.unregister_class(RSN_Preference)
     bpy.utils.unregister_class(NodeViewerProps)
     bpy.utils.unregister_class(NodeSmtpProps)
-
     remove_keybind()

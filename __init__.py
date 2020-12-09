@@ -19,6 +19,7 @@ from .rsn_helper import *
 __dict__ = {}
 __dict__['preferences'] = f"{__name__}.preferences"
 __dict__["node_tree"] = f"{__name__}.node_tree"
+__dict__['utility'] = f'{__name__}.utility'
 
 for k, v in a.items():
     for module_name in v:

@@ -2,6 +2,13 @@ import bpy
 from bpy.props import StringProperty, BoolProperty
 from RenderStackNode.utility import *
 
+import logging
+
+
+LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
+logging.basicConfig(format=LOG_FORMAT)
+logger = logging.getLogger('mylogger')
+
 
 class RSN_OT_UpdateParms(bpy.types.Operator):
     """Switch Scene Camera"""
@@ -37,8 +44,10 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         task_name = self.task_name
         try:
             self.task_data = nt.get_task_data(task_name)
+            logger.debug(f'GET >{task_name}< DATA')
             return True
         except KeyError:
+            logger.debug(f'GET NO >{task_name}< DATA, NO ACTION')
             return None
 
     def update_slots(self):
@@ -58,7 +67,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                 if bpy.context.scene.ssm.light_studio_index != index:
                     bpy.context.scene.ssm.light_studio_index = index
             except Exception as e:
-                print(f"RSN ERROR: SSM LightStudio node error: {e}")
+                logger.warning(f'SSM LightStudio node error', exc_info=e)
 
     def send_email(self):
         if 'email' in self.task_data:
@@ -69,7 +78,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                                            sender_name=email_dict['sender_name'],
                                            email=email_dict['email'])
                 except Exception as e:
-                    print(f"RSN ERROR: SMTP Email node > {node_name} < error: {e}")
+                    logger.warning(f'SMTP Email {node_name} error', exc_info=e)
                     self.nt.node[node_name].use_custom_color = 1
                     self.nt.node[node_name].color = (1, 0, 0)
 
@@ -83,7 +92,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                 try:
                     exec(value)
                 except Exception as e:
-                    print(f"RSN ERROR: scripts node > {k} < error: {e}")
+                    logger.warning(f'Scripts node {k} error', exc_info=e)
                     self.nt.node[k].use_custom_color = 1
                     self.nt.node[k].color = (1, 0, 0)
 
@@ -94,6 +103,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                     exec(c)
                 except Exception as e:
                     print(f"RSN ERROR: scripts node > {node_name} < error: {e}")
+                    logger.warning(f'scripts node {node_name} error', exc_info=e)
                     self.nt.node[node_name].use_custom_color = 1
                     self.nt.node[node_name].color = (1, 0, 0)
 
@@ -141,7 +151,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
 
             elif self.task_data['luxcore_half']['use_samples'] is True and self.task_data['luxcore_half'][
                 'use_time'] is False:
-                if bpy.context.scene.luxcore.halt.use_samples !=True:
+                if bpy.context.scene.luxcore.halt.use_samples != True:
                     bpy.context.scene.luxcore.halt.use_samples = True
                 if bpy.context.scene.luxcore.halt.use_time != False:
                     bpy.context.scene.luxcore.halt.use_time = False
@@ -180,6 +190,10 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                         break
 
     def execute(self, context):
+        pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
+        level = logger.getEffectiveLevel()
+        if level != int(pref.log_level):
+            logger.setLevel(int(pref.log_level))
         if self.get_data():
             self.update_camera()
             self.update_res()
@@ -194,6 +208,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                 self.updata_scripts()
             if not context.window_manager.rsn_viewer_modal:
                 self.send_email()
+            logger.debug('update parms op FINISHED')
 
         return {'FINISHED'}
 
