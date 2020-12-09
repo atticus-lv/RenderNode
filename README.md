@@ -12,15 +12,16 @@ Provide users with node-based, flexible rendering output workflow
 
 
 
-### Features v0.8
+### Features v 0.9
 
 + Camera overide
-+ Render Engine overwrite (Workbench,Eevee,Cycles)
++ Render Engine overwrite (Workbench,Eevee,Cycles,Luxcore)
 + Output Setting overwrite (Frame Range,Resulotion,path（format file name support）,image settings)
 + Allow script for overwrite 
 + Viewer Node (Just like Node Wrangler)
 + Render all task (list)
 + smtp email 
++ Render Process
 
 > Chinese intro video (v 0.5) 中文介绍请看视频 https://www.bilibili.com/video/BV1wr4y1c7Tt/
 
@@ -56,7 +57,7 @@ Then right click and **git bash here**, type in:
 
 **For Other User**
 
-Click [here](https://github.com/atticus-lv/RenderStackNode/releases/tag/alpha) to down the latest stable release
+Click [here](https://github.com/atticus-lv/RenderStackNode/releases/latest) to down the latest stable release
 
 
 
