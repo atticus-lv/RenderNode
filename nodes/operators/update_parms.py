@@ -4,7 +4,6 @@ from RenderStackNode.utility import *
 
 import logging
 
-
 LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
 logging.basicConfig(format=LOG_FORMAT)
 logger = logging.getLogger('mylogger')
@@ -50,6 +49,18 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             logger.debug(f'GET NO >{task_name}< DATA, NO ACTION')
             return None
 
+    def update_object_material(self):
+        if 'object_material' in self.task_data:
+            for node_name, dict in self.task_data['object_material'].items():
+                try:
+                    ob = bpy.data.objects[dict['object']]
+                    if ob.material_slots[dict['old_material']].material.name != dict['new_material']:
+                        ob.material_slots[dict['old_material']].material = bpy.data.materials[dict['new_material']]
+                except Exception as e:
+                    logger.warning(f'Object Material {node_name} error', exc_info=e)
+                    # self.nt.nodes[node_name].use_custom_color = 1
+                    # self.nt.nodes[node_name].color = (1, 0, 0)
+
     def update_slots(self):
         if 'render_slot' in self.task_data:
             if bpy.data.images['Render Result'].render_slots.active_index != self.task_data['render_slot']:
@@ -79,8 +90,8 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                                            email=email_dict['email'])
                 except Exception as e:
                     logger.warning(f'SMTP Email {node_name} error', exc_info=e)
-                    self.nt.node[node_name].use_custom_color = 1
-                    self.nt.node[node_name].color = (1, 0, 0)
+                    # self.nt.nodes[node_name].use_custom_color = 1
+                    # self.nt.nodes[node_name].color = (1, 0, 0)
 
     def updata_view_layer(self):
         if 'view_layer' in self.task_data and bpy.context.window.view_layer.name != self.task_data['view_layer']:
@@ -93,8 +104,8 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                     exec(value)
                 except Exception as e:
                     logger.warning(f'Scripts node {k} error', exc_info=e)
-                    self.nt.node[k].use_custom_color = 1
-                    self.nt.node[k].color = (1, 0, 0)
+                    # self.nt.nodes[k].use_custom_color = 1
+                    # self.nt.nodes[k].color = (1, 0, 0)
 
         if 'scripts_file' in self.task_data:
             for node_name, file_name in self.task_data['scripts_file'].items():
@@ -104,8 +115,8 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                 except Exception as e:
                     print(f"RSN ERROR: scripts node > {node_name} < error: {e}")
                     logger.warning(f'scripts node {node_name} error', exc_info=e)
-                    self.nt.node[node_name].use_custom_color = 1
-                    self.nt.node[node_name].color = (1, 0, 0)
+                    # self.nt.nodes[node_name].use_custom_color = 1
+                    # self.nt.nodes[node_name].color = (1, 0, 0)
 
     def update_image_format(self):
         if 'color_mode' in self.task_data:
@@ -199,6 +210,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             self.update_res()
             self.update_render_engine()
             self.update_frame_range()
+            self.update_object_material()
             self.updata_view_layer()
             self.update_image_format()
             self.update_slots()

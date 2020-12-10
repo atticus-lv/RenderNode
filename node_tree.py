@@ -108,6 +108,7 @@ node_categorys = [
         nodeitems_utils.NodeItem("RSNodeCamInputNode"),
         nodeitems_utils.NodeItem("RSNodeWorldInputNode"),
         nodeitems_utils.NodeItem('RSNodeViewLayerInputNode'),
+        nodeitems_utils.NodeItem('RSNodeObjectMaterialNode'),
     ]),
 
     RSNCategory("TASK", "Task", items=[

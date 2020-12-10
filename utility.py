@@ -152,4 +152,14 @@ class NODE_TREE():
             elif node.bl_idname == "RSNodeActiveRenderSlotNode":
                 task_data['render_slot'] = node.active_slot_index
 
+            elif node.bl_idname == 'RSNodeObjectMaterialNode':
+                if node.object and node.old_material and node.new_material:
+                    if 'object_material' in task_data:
+                        task_data['object_material'][node.name] = {'object'      : node.object.name,
+                                                                   'old_material': node.old_material.name,
+                                                                   'new_material': node.new_material.name}
+                    else:
+                        task_data['object_material'] = {node.name: {'object'      : node.object.name,
+                                                                    'old_material': node.old_material.name,
+                                                                    'new_material': node.new_material.name}}
         return task_data
