@@ -193,6 +193,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
             node = nt.nt.nodes['Processor']
             node.count_frames = get_length(self.frame_list)
             node.done_frames = 0
+            node.all_tasks = ''
             node.all_tasks = ','.join(self.mark_task_names)
             print(node.all_tasks)
         except:
@@ -220,6 +221,10 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
                         node.all_tasks += ',RENDER_STOPED'
                 except:
                     pass
+
+                self.mark_task_names.clear()
+                self.frame_list.clear()
+                self.task_data.clear()
 
                 return {"FINISHED"}
 

@@ -3,6 +3,7 @@ import bpy
 
 from RenderStackNode.utility import NODE_TREE
 from RenderStackNode.node_tree import RenderStackNode
+from .ProcessorNode import RSNodeProcessorNode
 
 
 class RSNode_OT_GetInfo(bpy.types.Operator):
@@ -38,19 +39,28 @@ class RSNodeRenderListNode(RenderStackNode):
 
     def draw_buttons_ext(self, context, layout):
         # edit Inputs
-        layout.scale_y = 1.25
-        row = layout.row(align=True)
-        add = row.operator("rsnode.edit_input", text="render", icon='ADD')
-        add.remove = False
-        add.socket_type = "RSNodeSocketRenderList"
-        add.socket_name = "render"
-        remove = row.operator("rsnode.edit_input", text="Unused", icon='REMOVE')
-        remove.remove = True
-        # render buttons
-        layout.operator("rsn.get_info", text=f'Print Info (Console)')
-        box = layout.box()
-        box.scale_y = 1.5
-        box.operator("rsn.render_button", text=f'Render Inputs')
+        if not context.window_manager.render_stack_modal:
+            layout.scale_y = 1.25
+            row = layout.row(align=True)
+            add = row.operator("rsnode.edit_input", text="render", icon='ADD')
+            add.remove = False
+            add.socket_type = "RSNodeSocketRenderList"
+            add.socket_name = "render"
+            remove = row.operator("rsnode.edit_input", text="Unused", icon='REMOVE')
+            remove.remove = True
+            # render buttons
+            layout.operator("rsn.get_info", text=f'Print Info (Console)')
+            box = layout.box()
+            box.scale_y = 1.5
+            box.operator("rsn.render_button", text=f'Render Inputs')
+        else:
+            try:
+                if 'Processor' in context.space_data.edit_tree.nodes:
+                    node = context.space_data.edit_tree.nodes['Processor']
+                    box = layout.box()
+                    RSNodeProcessorNode.draw_buttons(node, context, box)
+            except Exception as e:
+                print(e)
 
 
 def register():

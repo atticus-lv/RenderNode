@@ -115,6 +115,7 @@ node_categorys = [
         nodeitems_utils.NodeItem("RSNodeTaskNode"),
         nodeitems_utils.NodeItem("RSNodeTaskListNode"),
         nodeitems_utils.NodeItem("RSNodeRenderListNode"),
+        nodeitems_utils.NodeItem("RSNodeProcessorNode"),
         # nodeitems_utils.NodeItem("RSNodeViewerNode"),
 
     ]),
@@ -122,7 +123,6 @@ node_categorys = [
     RSNCategory("SCRIPTS", "Scripts", items=[
         nodeitems_utils.NodeItem("RSNodeScriptsNode"),
         nodeitems_utils.NodeItem("RSNodeSmtpEmailNode"),
-        nodeitems_utils.NodeItem("RSNodeProcessorNode"),
         nodeitems_utils.NodeItem("RSNodeLightStudioNode"),
     ]),
 
