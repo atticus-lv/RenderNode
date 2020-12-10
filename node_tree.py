@@ -132,6 +132,7 @@ node_categorys = [
         nodeitems_utils.NodeItem("RSNodeImageFormatInputNode"),
         nodeitems_utils.NodeItem("RSNodeFilePathInputNode"),
         nodeitems_utils.NodeItem("RSNodeActiveRenderSlotNode"),
+        nodeitems_utils.NodeItem("RSNodePassesNode"),
     ]),
 
     RSNCategory("RENDER_SETTINGS", "Render Settings", items=[
