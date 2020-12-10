@@ -1,5 +1,5 @@
 import bpy
-from bpy.props import BoolProperty
+from bpy.props import BoolProperty,StringProperty
 
 
 class RSN_OT_CreatCompositorNode(bpy.types.Operator):
@@ -7,6 +7,7 @@ class RSN_OT_CreatCompositorNode(bpy.types.Operator):
     bl_label = "Separate Passes"
 
     remove: BoolProperty(default=False)
+    view_layer:StringProperty(default="")
 
     def execute(self, context):
         scn = context.scene
@@ -19,16 +20,20 @@ class RSN_OT_CreatCompositorNode(bpy.types.Operator):
             render_layer_node = nt.nodes.new(type="CompositorNodeRLayers")
             render_layer_node.name = 'RSN Render Layers'
 
+        if self.view_layer != '':
+            render_layer_node.layer = self.view_layer
+
         try:
             nt.nodes.remove(nt.nodes['RSN Output'])
-        except:pass
+        except:
+            pass
 
         if not self.remove:
             file_output_node = nt.nodes.new(type="CompositorNodeOutputFile")
             file_output_node.name = "RSN Output"
             file_output_node.label = f"RSN Output"
 
-            file_output_node.location = (300, 100)
+            file_output_node.location = (400, -300)
             file_output_node.width = 200
             file_output_node.hide = True
 

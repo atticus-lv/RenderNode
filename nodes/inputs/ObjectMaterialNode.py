@@ -18,7 +18,7 @@ class RSNodeObjectMaterialNode(RenderStackNode):
 
     def init(self, context):
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
-        self.width = 175
+        self.width = 200
 
     def draw_buttons(self, context, layout):
         layout.prop(self, "object")
