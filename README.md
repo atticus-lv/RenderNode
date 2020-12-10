@@ -29,13 +29,18 @@ Provide users with node-based, flexible rendering output workflow
 
 ### How it works
 
- + **Render List Node** is a render task list for what you need to render.It also  provide the 'Render' button and the 'View' button.You can render your task through this node. *Now you are only able to render one renderlist at once*
+1. Use **Settings Node** to overwirte your render settings,such as:
 
- + **Task Node** You need a task node to countains all the settings you need to change(compare to the current settings)
- + **Camera Node** have the ability to change the camera
- + **file path Node** give an format name of the render files
- + **Eevee Setting Node** means that in this task you will render with the eevee engine
- + **Frame Range Node** control the frame you want to render
+	+ **Camera Node** have the ability to change the camera
+	+ **File path Node** give an format name of the render files
+	+ **Eevee Setting Node** means that in this task you will render with the eevee engine
+	+ **Frame Range Node** control the frame you want to render
+
+2. Use **Task Node** to merge your changes into one render task
+
+3. Use **Viewer Node / Task List Node** to check your overwriten scene
+
+4. Use **Render List Node** to render all the task that you need
 
 > *Once you plug a node settings to overide something into the a task,the next task will inherit it if there is not a same type Node plug input. So you may start a new render list to keep your node tree cleaner*
 
@@ -63,15 +68,13 @@ Click [here](https://github.com/atticus-lv/RenderStackNode/releases/latest) to d
 
 ### Important Nodes
 
-#### Task Node
+> Will be a document website later
 
-+ ##### Render List 
+#### Render 
+
++ ##### Render List
 
 	> Render all the input task,also allow to view all the input task info
-	
-	![image-20201204110924773](./img/image-20201204110924773.png)
-	
-	*info format (shift click to get details)*:
 	
 	> *node name*
 	
@@ -101,45 +104,49 @@ Click [here](https://github.com/atticus-lv/RenderStackNode/releases/latest) to d
 	
 + ##### Task List
 
-    > Provide Viewer operator for input tasks
+    > Provide Viewer operator for input tasks (Able to execute script node and email node)
 
-    ![屏幕截图 2020-12-04 205828](img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202020-12-04%20205828.png)
++ ##### Viewer
+
+    > Provide automatic update for task node, desire to iterate designs and view changes as soon as possible
 
 + ##### Task
 
-    > output task( Link to the render list node)
+    > output task( can be linked to the render list node directly)
     >
-    > all the overide settings is link to this node 
+    > all the overide settings changes is linked to this node 
+    
++ ##### Proccessor
 
-    ![image-20201204110938958](./img/image-20201204110938958.png)
+    > View your render process when you are rendering images, if you stop render, give you the latest info of each task
 
-#### Settings Node
+    
+
+#### Settings 
 
 + ##### Camera 
 
 	> Camera overide input
 	
-	![image-20201204110954289](./img/image-20201204110954289.png)
-	
 + ##### Scripts
 
     > Excute the python code when rendering/view this task
-
-    ![image-20201204111003118](./img/image-20201204111003118.png)
 
 + ##### File path
 
     > format ouput of the file name 
     
-    ![image-20201204111015880](./img/image-20201204111015880.png)
-    
 + ##### Eevee Settings / Cycles Settings / Work Bench Settings
 
-    >  change the render engine (merge node is not necessary)
+    >  change the render engine 
     
-    ![image-20201204111028917](./img/image-20201204111028917.png)
-    
-    
++ **Merge Settings**
+  
+  > a merge setting node, have nothing useful but merge settings, which make your node tree more clear
+
+*More ....*
+
+
 
 ### Plans
 
@@ -170,7 +177,9 @@ v 0.9
 + [x] render process node (ui)
 
 v.1.0
+
 + [ ]  passes for different enginge (view layer output)
++ [x]  object material overwrite node
 
 Planing... 
 
