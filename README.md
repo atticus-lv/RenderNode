@@ -178,7 +178,7 @@ v 0.9
 
 v.1.0
 
-+ [ ]  passes for different enginge (view layer output)
++ [x]  passes for different enginge (view layer output)
 + [x]  object material overwrite node
 
 Planing... 

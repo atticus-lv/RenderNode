@@ -90,6 +90,10 @@ class RSNodeViewerNode(RenderStackNode):
     def init(self, context):
         self.inputs.new('RSNodeSocketRenderList', "Task")
 
+    def free(self):
+        print("Node removed", self)
+        bpy.context.window_manager.rsn_viewer_modal = False
+
     def draw_buttons(self, context, layout):
         if self.inputs[0].is_linked:
             node = reroute(self.inputs[0].links[0].from_node)

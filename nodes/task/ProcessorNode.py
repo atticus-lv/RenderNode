@@ -21,8 +21,8 @@ class RSNodeProcessorNode(RenderStackNode):
     frame_end: IntProperty()
     frame_current: IntProperty()
 
-    green: FloatVectorProperty(subtype='COLOR', default=(0, 1, 0))
-    red: FloatVectorProperty(subtype='COLOR', default=(1, 0, 0))
+    green: FloatVectorProperty(subtype='COLOR', default=(0, 1, 0),min = 1,max=1)
+    red: FloatVectorProperty(subtype='COLOR', default=(0, 0, 0),min = 1,max=1)
 
     def init(self, context):
         self.width = 225

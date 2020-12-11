@@ -13,17 +13,14 @@ class RSN_OT_MaterialSwitch(bpy.types.Operator):
 
     node_name: StringProperty(name='RSNodeObjectMaterialNode', default='')
 
-    @classmethod
-    def poll(self, context):
-        return self.node_name != ''
-
     def execute(self, context):
-        nt = bpy.context.space_data.edit_tree
-        node = nt.nodes[self.node_name]
-        if node.old_material and node.new_material:
-            temp = node.new_material
-            node.new_material = node.old_material
-            node.old_material = temp
+        if self.node_name != '':
+            nt = bpy.context.space_data.edit_tree
+            node = nt.nodes[self.node_name]
+            if node.old_material and node.new_material:
+                temp = node.new_material
+                node.new_material = node.old_material
+                node.old_material = temp
 
         return {"FINISHED"}
 

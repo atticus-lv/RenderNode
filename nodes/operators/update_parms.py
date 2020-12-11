@@ -68,14 +68,16 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
     def update_object_material(self):
         if 'object_material' in self.task_data:
             for node_name, dict in self.task_data['object_material'].items():
-                ob = bpy.data.objects[dict['object']]
                 try:
-                    if ob.material_slots[dict['old_material']].material.name != dict['new_material']:
-                        ob.material_slots[dict['old_material']].material = bpy.data.materials[dict['new_material']]
-                except Exception as e:
-                    if not ob.material_slots[dict['old_material']].material.name == dict['new_material']:
-                        logger.warning(f'Object Material {node_name} error', exc_info=e)
-                        self.warning_node_color(node_name)
+                    ob = bpy.data.objects[dict['object']]
+                except:
+                    ob = None
+                if ob:
+                    try:
+                        if ob.material_slots[dict['old_material']].material.name != dict['new_material']:
+                            ob.material_slots[dict['old_material']].material = bpy.data.materials[dict['new_material']]
+                    except Exception as e:
+                        pass
 
     def update_slots(self):
         if 'render_slot' in self.task_data:
@@ -106,8 +108,8 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                                            email=email_dict['email'])
                 except Exception as e:
                     logger.warning(f'SMTP Email {node_name} error', exc_info=e)
-                    # self.nt.nodes[node_name].use_custom_color = 1
-                    # self.nt.nodes[node_name].color = (1, 0, 0)
+                    self.warning_node_color(node_name)
+
 
     def updata_view_layer(self):
         if 'view_layer' in self.task_data and bpy.context.window.view_layer.name != self.task_data['view_layer']:
@@ -115,13 +117,12 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
 
     def updata_scripts(self):
         if 'scripts' in self.task_data:
-            for k, value in self.task_data['scripts'].items():
+            for node_name, value in self.task_data['scripts'].items():
                 try:
                     exec(value)
                 except Exception as e:
-                    logger.warning(f'Scripts node {k} error', exc_info=e)
-                    # self.nt.nodes[k].use_custom_color = 1
-                    # self.nt.nodes[k].color = (1, 0, 0)
+                    logger.warning(f'Scripts node {node_name} error', exc_info=e)
+                    self.warning_node_color(node_name)
 
         if 'scripts_file' in self.task_data:
             for node_name, file_name in self.task_data['scripts_file'].items():
@@ -131,8 +132,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                 except Exception as e:
                     print(f"RSN ERROR: scripts node > {node_name} < error: {e}")
                     logger.warning(f'scripts node {node_name} error', exc_info=e)
-                    # self.nt.nodes[node_name].use_custom_color = 1
-                    # self.nt.nodes[node_name].color = (1, 0, 0)
+                    self.warning_node_color(node_name)
 
     def update_image_format(self):
         if 'color_mode' in self.task_data:
