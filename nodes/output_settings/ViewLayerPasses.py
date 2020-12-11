@@ -16,8 +16,8 @@ class RSNodeViewLayerPassesNode(RenderStackNode):
         self.outputs.new('RSNodeSocketOutputSettings', "Output Settings")
 
     def draw_buttons(self, context, layout):
-        layout.prop_search(self, "view_layer", context.scene, "view_layers", icon="RENDERLAYERS", text="")
-        layout.prop(self, 'use_passes')
+        layout.prop_search(self, "view_layer", context.scene, "view_layers", icon="RENDERLAYERS",text='')
+        layout.prop(self, 'use_passes',toggle=1)
 
 
 def register():

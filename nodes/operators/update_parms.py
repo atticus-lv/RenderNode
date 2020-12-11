@@ -74,8 +74,8 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                     ob = None
                 if ob:
                     try:
-                        if ob.material_slots[dict['old_material']].material.name != dict['new_material']:
-                            ob.material_slots[dict['old_material']].material = bpy.data.materials[dict['new_material']]
+                        if ob.material_slots[dict['slot_index']].material.name != dict['new_material']:
+                            ob.material_slots[dict['slot_index']].material = bpy.data.materials[dict['new_material']]
                     except Exception as e:
                         pass
 
