@@ -2,28 +2,23 @@
 
 # RenderStackNode [Blender Addon]
 
-> #### Still In Alpha! Nodes Change Before 1.0 !
+>  **Design Target**
+> Provide users with node-based, flexible rendering output workflow
 
-### **Design Target**
-
-Provide users with node-based, flexible rendering output workflow
-
-![new](img/new.gif)
-
-
-
-### Features v 0.9
+### Features v 1.0（beta）
 
 + Camera overide
 + Render Engine overwrite (Workbench,Eevee,Cycles,Luxcore)
 + Output Setting overwrite (Frame Range,Resulotion,path（format file name support）,image settings)
-+ Allow script for overwrite 
-+ Viewer Node (Just like Node Wrangler)
++ Object Material overwrite 
++ Allow script for overwritting
++ Viewer Node (Just like Node Wrangler,short cut V)
 + Render all task (list)
-+ smtp email 
++ Smtp email 
 + Render Process
++ View layer passes output
 
-> Chinese intro video (v 0.5) 中文介绍请看视频 https://www.bilibili.com/video/BV1wr4y1c7Tt/
+> Chinese intro video (v 0.9 / v0.5) 中文介绍请看视频 https://www.bilibili.com/video/BV1wr4y1c7Tt/
 
 
 
@@ -36,13 +31,13 @@ Provide users with node-based, flexible rendering output workflow
 	+ **Eevee Setting Node** means that in this task you will render with the eevee engine
 	+ **Frame Range Node** control the frame you want to render
 
-2. Use **Task Node** to merge your changes into one render task
+2. Use **Task Node** to merge your changes into one render task (animation or still image)
 
 3. Use **Viewer Node / Task List Node** to check your overwriten scene
 
 4. Use **Render List Node** to render all the task that you need
 
-> *Once you plug a node settings to overide something into the a task,the next task will inherit it if there is not a same type Node plug input. So you may start a new render list to keep your node tree cleaner*
+> *Once you plug a node settings to overide something into the a task,the next task will inherit it if there is not a same type Node plug input(except viewlayer passes node,frame range node). So you may start a new render list to keep your node tree cleaner*
 
 ![image-20201204110858390](./img/image-20201204110858390.png)
 
@@ -134,8 +129,12 @@ Click [here](https://github.com/atticus-lv/RenderStackNode/releases/latest) to d
 
 + ##### File path
 
-    > format ouput of the file name 
+    > format ouput of the file name ,tips on the node side bar
     
++ ##### Frame Range
+
+    > set your frame range, if not such node in a task , you will get only one image at frame 1
+
 + ##### Eevee Settings / Cycles Settings / Work Bench Settings
 
     >  change the render engine 
@@ -143,6 +142,10 @@ Click [here](https://github.com/atticus-lv/RenderStackNode/releases/latest) to d
 + **Merge Settings**
   
   > a merge setting node, have nothing useful but merge settings, which make your node tree more clear
+  
++ ##### View Layer Passes
+
+    > Separate passes into folder when rendering, if not such node in a task, nothing happend 
 
 *More ....*
 
