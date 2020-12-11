@@ -7,6 +7,27 @@ def poll_object(self, object):
     return object.type in {'MESH', 'CURVE', 'VOLUME'}
 
 
+class RSN_OT_MaterialSwitch(bpy.types.Operator):
+    bl_idname = 'rsn.material_switch'
+    bl_label = 'Switch Material'
+
+    node_name: StringProperty(name='RSNodeObjectMaterialNode', default='')
+
+    @classmethod
+    def poll(self, context):
+        return self.node_name != ''
+
+    def execute(self, context):
+        nt = bpy.context.space_data.edit_tree
+        node = nt.nodes[self.node_name]
+        if node.old_material and node.new_material:
+            temp = node.new_material
+            node.new_material = node.old_material
+            node.old_material = temp
+
+        return {"FINISHED"}
+
+
 class RSNodeObjectMaterialNode(RenderStackNode):
     bl_idname = 'RSNodeObjectMaterialNode'
     bl_label = 'Object Material'
@@ -18,12 +39,15 @@ class RSNodeObjectMaterialNode(RenderStackNode):
 
     def init(self, context):
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
-        self.width = 200
+        self.width = 225
 
     def draw_buttons(self, context, layout):
         layout.prop(self, "object")
-        layout.prop(self, 'old_material')
-        layout.prop(self, 'new_material')
+        row = layout.row(align=1)
+        row.prop(self, 'old_material', text='')
+        row.label(text="", icon='TRIA_RIGHT')
+        row.prop(self, 'new_material', text='')
+        layout.operator("rsn.material_switch", icon='ARROW_LEFTRIGHT').node_name = self.name
 
     def draw_buttons_ext(self, context, layout):
         pass
@@ -31,7 +55,9 @@ class RSNodeObjectMaterialNode(RenderStackNode):
 
 def register():
     bpy.utils.register_class(RSNodeObjectMaterialNode)
+    bpy.utils.register_class(RSN_OT_MaterialSwitch)
 
 
 def unregister():
     bpy.utils.unregister_class(RSNodeObjectMaterialNode)
+    bpy.utils.unregister_class(RSN_OT_MaterialSwitch)

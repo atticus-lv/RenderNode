@@ -34,6 +34,10 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         task_node_name = is_task_node(node)
         return task_node_name
 
+    def warning_node_color(self, node_name):
+        self.nt.nt.nodes[node_name].use_custom_color = 1
+        self.nt.nt.nodes[node_name].color = (1, 0, 0)
+
     def get_data(self):
         if self.viewer_handler != '':
             nt = NODE_TREE(bpy.context.space_data.edit_tree, node_name=self.viewer_handler)
@@ -49,17 +53,29 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             logger.debug(f'GET NO >{task_name}< DATA, NO ACTION')
             return None
 
+    def update_view_layer_passes(self):
+        if 'view_layer_passes' in self.task_data:
+            for node_name, dict in self.task_data['view_layer_passes'].items():
+                try:
+                    bpy.ops.rsn.creat_compositor_node(
+                        view_layer=self.task_data['view_layer_passes'][node_name]['view_layer'],
+                        use_passes=self.task_data['view_layer_passes'][node_name]['use_passes'])
+                except Exception as e:
+                    logger.warning(f'View Layer Passes {node_name} error', exc_info=e)
+        else:
+            bpy.ops.rsn.creat_compositor_node(use_passes=0)
+
     def update_object_material(self):
         if 'object_material' in self.task_data:
             for node_name, dict in self.task_data['object_material'].items():
+                ob = bpy.data.objects[dict['object']]
                 try:
-                    ob = bpy.data.objects[dict['object']]
                     if ob.material_slots[dict['old_material']].material.name != dict['new_material']:
                         ob.material_slots[dict['old_material']].material = bpy.data.materials[dict['new_material']]
                 except Exception as e:
-                    logger.warning(f'Object Material {node_name} error', exc_info=e)
-                    # self.nt.nodes[node_name].use_custom_color = 1
-                    # self.nt.nodes[node_name].color = (1, 0, 0)
+                    if not ob.material_slots[dict['old_material']].material.name == dict['new_material']:
+                        logger.warning(f'Object Material {node_name} error', exc_info=e)
+                        self.warning_node_color(node_name)
 
     def update_slots(self):
         if 'render_slot' in self.task_data:
@@ -220,6 +236,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                 self.updata_scripts()
             if not context.window_manager.rsn_viewer_modal:
                 self.send_email()
+                self.update_view_layer_passes()
             logger.debug('update parms op FINISHED')
 
         return {'FINISHED'}

@@ -6,7 +6,7 @@ class RSN_OT_CreatCompositorNode(bpy.types.Operator):
     bl_idname = "rsn.creat_compositor_node"
     bl_label = "Separate Passes"
 
-    remove: BoolProperty(default=False)
+    use_passes: BoolProperty(default=False)
     view_layer:StringProperty(default="")
 
     def execute(self, context):
@@ -14,24 +14,23 @@ class RSN_OT_CreatCompositorNode(bpy.types.Operator):
         scn.use_nodes = True
 
         nt = context.scene.node_tree
-        if "RSN Render Layers" in nt.nodes:
-            render_layer_node = nt.nodes['RSN Render Layers']
-        else:
+
+        try:
+            render_layer_node = nt.nodes[f'RSN {self.view_layer} Render Layers']
+        except:
             render_layer_node = nt.nodes.new(type="CompositorNodeRLayers")
-            render_layer_node.name = 'RSN Render Layers'
+            render_layer_node.name = f'RSN {self.view_layer} Render Layers'
 
         if self.view_layer != '':
             render_layer_node.layer = self.view_layer
 
         try:
-            nt.nodes.remove(nt.nodes['RSN Output'])
-        except:
-            pass
-
-        if not self.remove:
+            nt.nodes.remove(nt.nodes[f'RSN {self.view_layer} Output'])
+        except:pass
+        if self.use_passes:
             file_output_node = nt.nodes.new(type="CompositorNodeOutputFile")
-            file_output_node.name = "RSN Output"
-            file_output_node.label = f"RSN Output"
+            file_output_node.name = f"RSN {self.view_layer} Output"
+            file_output_node.label = f"RSN {self.view_layer} Output"
 
             file_output_node.location = (400, -300)
             file_output_node.width = 200

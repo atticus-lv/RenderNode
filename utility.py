@@ -130,15 +130,12 @@ class NODE_TREE():
                     task_data['email'][node.name] = {'subject'    : node.subject,
                                                      'content'    : node.content,
                                                      'sender_name': node.sender_name,
-                                                     'email'      : node.email
-                                                     }
+                                                     'email'      : node.email}
                 else:
                     task_data['email'] = {node.name: {'subject'    : node.subject,
                                                       'content'    : node.content,
                                                       'sender_name': node.sender_name,
-                                                      'email'      : node.email
-                                                      }
-                                          }
+                                                      'email'      : node.email}}
 
             elif node.bl_idname == "RSNodeViewLayerInputNode":
                 task_data['view_layer'] = node.view_layer
@@ -162,4 +159,13 @@ class NODE_TREE():
                         task_data['object_material'] = {node.name: {'object'      : node.object.name,
                                                                     'old_material': node.old_material.name,
                                                                     'new_material': node.new_material.name}}
+
+            elif node.bl_idname == 'RSNodeViewLayerPassesNode':
+                if 'view_layer_passes' in task_data:
+                    task_data['view_layer_passes'][node.name] = {'view_layer': node.view_layer,
+                                                                 'use_passes': node.use_passes}
+                else:
+                    task_data['view_layer_passes'] = {node.name: {'view_layer': node.view_layer,
+                                                                  'use_passes': node.use_passes}}
+
         return task_data
