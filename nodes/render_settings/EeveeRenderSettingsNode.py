@@ -12,8 +12,6 @@ class RSNodeEeveeRenderSettingsNode(RenderStackNode):
     def init(self, context):
         self.outputs.new('RSNodeSocketRenderSettings', "Render Settings")
 
-        self.inputs["Samples"].default_value = 128
-
     def draw_buttons(self, context, layout):
         layout.prop(self,"samples",text= 'Samples')
 
