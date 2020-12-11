@@ -21,8 +21,8 @@ class RSNodeProcessorNode(RenderStackNode):
     frame_end: IntProperty()
     frame_current: IntProperty()
 
-    green: FloatVectorProperty(subtype='COLOR', default=(0, 1, 0),min = 1,max=1)
-    red: FloatVectorProperty(subtype='COLOR', default=(0, 0, 0),min = 1,max=1)
+    green: FloatVectorProperty(subtype='COLOR', default=(0, 1, 0), min=1, max=1)
+    red: FloatVectorProperty(subtype='COLOR', default=(0, 0, 0), min=1, max=1)
 
     def init(self, context):
         self.width = 225
@@ -50,47 +50,50 @@ class RSNodeProcessorNode(RenderStackNode):
         task_list = self.all_tasks.split(",")
         layout.separator(factor=0.5)
         if self.all_tasks != '':
-            index = task_list.index(self.curr_task)
-            for i, name in enumerate(task_list):
-                if i < index:
-                    box = layout.box().column(align=1)
-                    row = box.row()
-                    row.label(text=name, icon='CHECKBOX_HLT')
-
-                elif i == index:
-                    if name != 'RENDER_FINISHED':
+            try:
+                index = task_list.index(self.curr_task)
+                for i, name in enumerate(task_list):
+                    if i < index:
                         box = layout.box().column(align=1)
-                        col = box.row().column(align=1)
+                        row = box.row()
+                        row.label(text=name, icon='CHECKBOX_HLT')
 
-                        col.label(icon="RECOVER_LAST",
-                                  text=f'Processing: {1 - curr_done:.0%} ({self.frame_current + 1 - self.frame_start} / {self.frame_end + 1 - self.frame_start})')
+                    elif i == index:
+                        if name != 'RENDER_FINISHED':
+                            box = layout.box().column(align=1)
+                            col = box.row().column(align=1)
 
-                        row1 = col.row(align=1)
-                        row1.label(text=f'{name}', icon='CHECKBOX_DEHLT')
-                        row1.label(text=f"Range: {self.frame_start} - {self.frame_current + 1} - {self.frame_end}")
+                            col.label(icon="RECOVER_LAST",
+                                      text=f'Processing: {1 - curr_done:.0%} ({self.frame_current + 1 - self.frame_start} / {self.frame_end + 1 - self.frame_start})')
 
-                        col.separator(factor=0.5)
-                        row = col.row()
-                        row.scale_y = 0.3
-                        if 1 - curr_done == 0:
-                            row.prop(self, 'red', text="")
+                            row1 = col.row(align=1)
+                            row1.label(text=f'{name}', icon='CHECKBOX_DEHLT')
+                            row1.label(text=f"Range: {self.frame_start} - {self.frame_current + 1} - {self.frame_end}")
+
+                            col.separator(factor=0.5)
+                            row = col.row()
+                            row.scale_y = 0.3
+                            if 1 - curr_done == 0:
+                                row.prop(self, 'red', text="")
+                            else:
+                                sub = row.split(factor=curr_done, align=1)
+                                sub.prop(self, 'green', text="")
+                                sub.prop(self, 'red', text="")
+
+                        elif name == 'RENDER_FINISHED':
+                            layout.separator(factor=0.5)
+                            col = layout.column(align=1)
+                            col.label(text='RENDER FINISHED', icon='HEART')
+
+                    elif i > index and name != 'RENDER_FINISHED':
+                        if name == 'RENDER_STOPED':
+                            col = layout.column(align=1)
+                            col.label(text='RENDER STOPED', icon='ORPHAN_DATA')
                         else:
-                            sub = row.split(factor=curr_done, align=1)
-                            sub.prop(self, 'green', text="")
-                            sub.prop(self, 'red', text="")
-
-                    elif name == 'RENDER_FINISHED':
-                        layout.separator(factor=0.5)
-                        col = layout.column(align=1)
-                        col.label(text='RENDER FINISHED', icon='HEART')
-
-                elif i > index and name != 'RENDER_FINISHED':
-                    if name == 'RENDER_STOPED':
-                        col = layout.column(align=1)
-                        col.label(text='RENDER STOPED', icon='ORPHAN_DATA')
-                    else:
-                        box = layout.box().column(align=1)
-                        box.label(text=name, icon='CHECKBOX_DEHLT')
+                            box = layout.box().column(align=1)
+                            box.label(text=name, icon='CHECKBOX_DEHLT')
+            except:
+                pass
 
 
 def register():

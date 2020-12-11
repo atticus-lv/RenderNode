@@ -150,7 +150,8 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
             for i in range(0, 4 - len(f"{self.frame_current}")):
                 frame_format = "0" + frame_format
 
-        scn.render.filepath = os.path.join(directory, postfix + f"_{frame_format}" + scn.render.file_extension)
+        scn.render.use_file_extension = 1
+        scn.render.filepath = os.path.join(directory, postfix + f"_{frame_format}")
         # scn.render.filepath = os.path.join(directory, f"_{frame_format}" + scn.render.file_extension)
 
     # init 初始化执行

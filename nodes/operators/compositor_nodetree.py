@@ -35,6 +35,7 @@ class RSN_OT_CreatCompositorNode(bpy.types.Operator):
             file_output_node.name = f"RSN {self.view_layer} Output"
             file_output_node.label = f"RSN {self.view_layer} Output"
 
+            file_output_node.base_path =context.scene.render.filepath
             file_output_node.location = (400, -300)
             file_output_node.width = 200
             file_output_node.hide = True
