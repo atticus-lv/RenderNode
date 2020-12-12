@@ -1,5 +1,5 @@
 import bpy
-
+from bpy.props import IntProperty
 
 class RSN_OT_SimpleTask(bpy.types.Operator):
     bl_idname = 'rsn.simple_task'
@@ -48,6 +48,9 @@ class RSN_OT_SimpleTask(bpy.types.Operator):
         nt.links.new(path.outputs[0], merge_output.inputs[0])
         nt.links.new(res.outputs[0], merge_output.inputs[1])
 
+        bpy.ops.node.join()
+        frame = nt.nodes.active
+        frame.label = 'Simple Task'
 
         return {"FINISHED"}
 
