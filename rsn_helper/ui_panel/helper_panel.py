@@ -3,7 +3,7 @@ import bpy
 class HELPER_PT_Panel(bpy.types.Panel):
     bl_idname = 'HELPER_PT_Panel'
     bl_label = 'RSN Helper'
-    bl_category = 'RSN'
+    bl_category = 'Item'
     bl_space_type = 'NODE_EDITOR'
     bl_region_type ='UI'
 
@@ -13,7 +13,7 @@ class HELPER_PT_Panel(bpy.types.Panel):
 
     def draw(self, context):
         layout = self.layout
-        layout.operator("rsn.simple_task")
+        layout.operator("rsn.move_node",text= 'Simple Task',icon = 'ADD')
 
 
 def register():

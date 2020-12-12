@@ -1,6 +1,7 @@
 import bpy
 from bpy.props import IntProperty
 
+
 class RSN_OT_SimpleTask(bpy.types.Operator):
     bl_idname = 'rsn.simple_task'
     bl_label = 'Simple Task'
@@ -30,11 +31,11 @@ class RSN_OT_SimpleTask(bpy.types.Operator):
 
         for node in nt.nodes:
             node.select = 0
-
         task.select = 1
         cam.select = 1
         eevee.select = 1
         path.select = 1
+        res.select = 1
         res.select = 1
         merge_output.select = 1
 
@@ -52,12 +53,47 @@ class RSN_OT_SimpleTask(bpy.types.Operator):
         frame = nt.nodes.active
         frame.label = 'Simple Task'
 
+        bpy.ops.rsn.move_node()
+
         return {"FINISHED"}
+
+
+class RSN_OT_MoveNode(bpy.types.Operator):
+    bl_idname = 'rsn.move_node'
+    bl_label = 'Move Node'
+    bl_options = {"UNDO"}
+
+    pos_x = None
+    pos_y = None
+    frame = None
+
+    def modal(self, context, event):
+        if event.type == 'MOUSEMOVE':
+            dx = event.mouse_x - self.pos_x
+            dy = event.mouse_y - self.pos_y
+            self.frame.location = (dx, dy)
+
+        if event.type in {'LEFTMOUSE', 'ESC'}:
+            return {"FINISHED"}
+
+        return {'RUNNING_MODAL'}
+
+    def invoke(self, context, event):
+        bpy.ops.rsn.simple_task()
+
+        nt = context.space_data.edit_tree
+        self.frame = nt.nodes.active
+        self.pos_x = event.mouse_x
+        self.pos_y = event.mouse_y
+        context.window_manager.modal_handler_add(self)
+        return {'RUNNING_MODAL'}
 
 
 def register():
     bpy.utils.register_class(RSN_OT_SimpleTask)
+    bpy.utils.register_class(RSN_OT_MoveNode)
 
 
 def unregister():
     bpy.utils.unregister_class(RSN_OT_SimpleTask)
+    bpy.utils.unregister_class(RSN_OT_MoveNode)
