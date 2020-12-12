@@ -78,7 +78,10 @@ class RSN_OT_MoveNode(bpy.types.Operator):
             return {"FINISHED"}
 
         elif event.type in {'RIGHTMOUSE', 'ESC'}:
-            return {"CANCELED"}
+            for node in context.space_data.edit_tree.nodes:
+                if node.select == 1:
+                    context.space_data.edit_tree.nodes.remove(node)
+            return {"CANCELLED"}
 
         return {'RUNNING_MODAL'}
 
