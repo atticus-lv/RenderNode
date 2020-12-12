@@ -61,20 +61,24 @@ class RSN_OT_SimpleTask(bpy.types.Operator):
 class RSN_OT_MoveNode(bpy.types.Operator):
     bl_idname = 'rsn.move_node'
     bl_label = 'Move Node'
-    bl_options = {"UNDO"}
+    bl_options = {"UNDO", 'GRAB_CURSOR', 'BLOCKING'}
 
-    pos_x = None
-    pos_y = None
     frame = None
 
     def modal(self, context, event):
         if event.type == 'MOUSEMOVE':
-            dx = event.mouse_x - self.pos_x
-            dy = event.mouse_y - self.pos_y
+            dx = event.mouse_region_x
+            dy = event.mouse_region_y
             self.frame.location = (dx, dy)
 
-        if event.type in {'LEFTMOUSE', 'ESC'}:
+        elif event.type in {"MIDDLEMOUSE", "WHEELUPMOUSE", "WHEELDOWNMOUSE"}:
+            return {"PASS_THROUGH"}
+
+        elif event.type in {'LEFTMOUSE'}:
             return {"FINISHED"}
+
+        elif event.type in {'RIGHTMOUSE', 'ESC'}:
+            return {"CANCELED"}
 
         return {'RUNNING_MODAL'}
 
@@ -83,8 +87,7 @@ class RSN_OT_MoveNode(bpy.types.Operator):
 
         nt = context.space_data.edit_tree
         self.frame = nt.nodes.active
-        self.pos_x = event.mouse_x
-        self.pos_y = event.mouse_y
+
         context.window_manager.modal_handler_add(self)
         return {'RUNNING_MODAL'}
 
