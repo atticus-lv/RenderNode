@@ -1,6 +1,6 @@
 import bpy
 from bpy.props import BoolProperty, StringProperty
-
+import os
 
 class RSN_OT_CreatCompositorNode(bpy.types.Operator):
     bl_idname = "rsn.creat_compositor_node"
@@ -25,17 +25,21 @@ class RSN_OT_CreatCompositorNode(bpy.types.Operator):
             render_layer_node.layer = self.view_layer
 
         try:
+            com =context.scene.node_tree.nodes['Composite']
+            nt.links.new(render_layer_node.outputs[0],com.inputs[0])
+        except Exception as e:print(e)
+
+        try:
             nt.nodes.remove(nt.nodes[f'RSN {self.view_layer} Output'])
-            # nt.nodes.remove(nt.nodes[f'Render Layers'])
-        except:
-            pass
+        except Exception as e: print(e)
+
 
         if self.use_passes:
             file_output_node = nt.nodes.new(type="CompositorNodeOutputFile")
             file_output_node.name = f"RSN {self.view_layer} Output"
             file_output_node.label = f"RSN {self.view_layer} Output"
 
-            file_output_node.base_path =context.scene.render.filepath
+            file_output_node.base_path =os.path.join(context.scene.render.filepath,self.view_layer)
             file_output_node.location = (400, -300)
             file_output_node.width = 200
             file_output_node.hide = True
@@ -44,7 +48,7 @@ class RSN_OT_CreatCompositorNode(bpy.types.Operator):
 
             for i, output in enumerate(render_layer_node.outputs):
                 name = output.name
-                output_name = f"{name}/{name}_"
+                output_name = f"{name}_"
                 if output_name not in file_output_node.file_slots:
                     file_output_node.file_slots.new(name=output_name)
                 nt.links.new(render_layer_node.outputs[name], file_output_node.inputs[output_name])

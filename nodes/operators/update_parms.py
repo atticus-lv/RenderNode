@@ -3,6 +3,8 @@ from bpy.props import StringProperty, BoolProperty
 from RenderStackNode.utility import *
 
 import logging
+import time
+import os
 
 LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
 logging.basicConfig(format=LOG_FORMAT)
@@ -53,6 +55,68 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             logger.debug(f'GET NO >{task_name}< DATA, NO ACTION')
             return None
 
+    def update_path(self):
+        dir = self.make_path()
+        postfix = self.get_postfix()
+
+        bpy.context.scene.render.use_file_extension = 1
+        if bpy.context.scene.render.filepath !=os.path.join(dir, postfix):
+            bpy.context.scene.render.filepath = os.path.join(dir, postfix)
+
+    def make_path(self):
+        blend_path = bpy.context.blend_data.filepath
+        blend_name = bpy.path.basename(blend_path)[:-6]
+        task = self.task_data
+        if 'path' in task:
+            if not task['use_blend_file_path']:
+                directory_path = os.path.dirname(task['path']) + "\\" + f"{blend_name}_render"
+            else:
+                directory_path = os.path.dirname(bpy.data.filepath) + "\\" + f"{blend_name}_render"
+            try:
+                if not os.path.exists(directory_path):
+                    os.makedirs(directory_path)
+                return directory_path
+
+            except(Exception) as e:
+                self.report({'ERROR'}, f'File Path: No Such a Path')
+                print(directory_path, e)
+        else:
+            return os.path.dirname(bpy.data.filepath) + "\\"
+
+    def get_postfix(self):
+        scn = bpy.context.scene
+        cam = scn.camera
+
+        postfix = ""
+        date_now = str(time.strftime("%m-%d", time.localtime()))
+        time_now = str(time.strftime("%H_%M", time.localtime()))
+
+        if 'path_format' in self.task_data:
+            shot_export_name = self.task_data["path_format"]
+            for string in shot_export_name.split("/"):
+                for r in string.split('$'):
+                    if r.startswith("date"):
+                        postfix += date_now + '_'
+                    elif r.startswith("time"):
+                        postfix += time_now + '_'
+                    # camera
+                    elif r.startswith("camera"):
+                        postfix += cam.name + '_'
+                    elif r.startswith("res"):
+                        postfix += f"{scn.render.resolution_x}x{scn.render.resolution_y}" + "_"
+                    elif r.startswith("ev"):
+                        postfix += scn.view_settings.exposure + "_"
+                    elif r.startswith("task"):
+                        postfix += self.task_data["task_name"] + "_"
+                    else:
+                        postfix += r
+
+                if postfix.endswith("_"): postfix = postfix[:-1]
+                postfix += "/"
+
+            if postfix.endswith("/"): postfix = postfix[:-1]
+        return postfix
+
     def update_view_layer_passes(self):
         if 'view_layer_passes' in self.task_data:
             for node_name, dict in self.task_data['view_layer_passes'].items():
@@ -63,7 +127,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                 except Exception as e:
                     logger.warning(f'View Layer Passes {node_name} error', exc_info=e)
         else:
-            bpy.ops.rsn.creat_compositor_node(use_passes=0)
+            bpy.ops.rsn.creat_compositor_node(use_passes=0,view_layer = bpy.context.window.view_layer.name)
 
     def update_object_material(self):
         if 'object_material' in self.task_data:
@@ -229,6 +293,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             self.update_object_material()
             self.updata_view_layer()
             self.update_image_format()
+            self.update_path()
             self.update_slots()
             self.update_world()
             self.ssm_light_studio()

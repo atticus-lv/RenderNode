@@ -141,9 +141,9 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         task = self.mark_task_names[0]
 
         bpy.ops.rsn.update_parms(task_name=task)
-        # folder path & file name
-        directory = self.make_path(context)
-        postfix = self.get_postfix(scn)
+        # # folder path & file name
+        # directory = self.make_path(context)
+        # postfix = self.get_postfix(scn)
 
         frame_format = f"{self.frame_current}"
         if len(f"{self.frame_current}") < 4:
@@ -151,7 +151,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
                 frame_format = "0" + frame_format
 
         scn.render.use_file_extension = 1
-        scn.render.filepath = os.path.join(directory, postfix + f"_{frame_format}")
+        scn.render.filepath +=  f"_{frame_format}"
         # scn.render.filepath = os.path.join(directory, f"_{frame_format}" + scn.render.file_extension)
 
     # init 初始化执行
