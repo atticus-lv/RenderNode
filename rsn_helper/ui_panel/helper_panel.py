@@ -9,7 +9,7 @@ class HELPER_PT_Panel(bpy.types.Panel):
 
     @classmethod
     def poll(self, context):
-        return bpy.context.space_data.edit_tree.bl_idname =='RenderStackNodeTree'
+        return context.space_data.edit_tree and context.space_data.edit_tree.bl_idname =='RenderStackNodeTree'
 
     def draw(self, context):
         layout = self.layout

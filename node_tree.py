@@ -124,6 +124,8 @@ node_categorys = [
         nodeitems_utils.NodeItem("RSNodeScriptsNode"),
         nodeitems_utils.NodeItem("RSNodeSmtpEmailNode"),
         nodeitems_utils.NodeItem("RSNodeLightStudioNode"),
+        # nodeitems_utils.NodeItem("RSNodeServerNode"),
+        # nodeitems_utils.NodeItem("RSNodeClientNode"),
     ]),
 
     RSNCategory("OUTPUT_SETTINGS", "Output Settings", items=[
@@ -141,7 +143,6 @@ node_categorys = [
         nodeitems_utils.NodeItem("RSNodeCyclesRenderSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeCyclesLightPathNode"),
         nodeitems_utils.NodeItem("RSNodeLuxcoreRenderSettingsNode"),
-        # nodeitems_utils.NodeItem("RSNodeLuxcoreWorldSettingsNode"),
 
     ]),
 
