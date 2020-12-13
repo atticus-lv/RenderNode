@@ -18,10 +18,10 @@ class RenderStackNode(bpy.types.Node):
         return ntree.bl_idname == 'RenderStackNodeTree'
 
     def copy(self, node):
-        print("Copied node", node)
+        print("RSN Copied node", node.name)
 
     def free(self):
-        print("Node removed", self)
+        print("RSN removed node", self.name)
 
 
 class RenderStackNodeGroup(bpy.types.NodeCustomGroup):
