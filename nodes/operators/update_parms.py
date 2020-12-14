@@ -41,18 +41,21 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         self.nt.nt.nodes[node_name].color = (1, 0, 0)
 
     def get_data(self):
-        if self.viewer_handler != '':
-            nt = NODE_TREE(bpy.context.space_data.edit_tree, node_name=self.viewer_handler)
-        else:
-            nt = NODE_TREE(bpy.context.space_data.edit_tree)
-        self.nt = nt
-        task_name = self.task_name
         try:
-            self.task_data = nt.get_task_data(task_name)
-            logger.debug(f'GET >{task_name}< DATA')
-            return True
-        except KeyError:
-            logger.debug(f'GET NO >{task_name}< DATA, NO ACTION')
+            if self.viewer_handler != '':
+                nt = NODE_TREE(bpy.context.space_data.edit_tree, node_name=self.viewer_handler)
+            else:
+                nt = NODE_TREE(bpy.context.space_data.edit_tree)
+            self.nt = nt
+            task_name = self.task_name
+            try:
+                self.task_data = nt.get_task_data(task_name)
+                logger.debug(f'GET >{task_name}< DATA')
+                return True
+            except KeyError:
+                logger.debug(f'GET NO >{task_name}< DATA, NO ACTION')
+                return None
+        except:
             return None
 
     def update_ev(self):

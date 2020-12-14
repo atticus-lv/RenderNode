@@ -154,6 +154,9 @@ node_categorys = [
         nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Merge Output Settings", settings={
             "node_type": repr("OUTPUT_SETTINGS"),
         }),
+        nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Merge Output Settings", settings={
+            "node_type": repr("SETTINGS"),
+        }),
 
     ]),
 ]

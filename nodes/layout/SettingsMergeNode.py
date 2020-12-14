@@ -11,7 +11,7 @@ class RSNodeSettingsMergeNode(RenderStackNode):
     node_type: EnumProperty(name='node type', items=[
         ('OUTPUT_SETTINGS', 'Output Settings', ''),
         ('RENDER_SETTINGS', 'Render Settings', ''),
-        ('SCRIPTS', 'Scripts', '')
+        ('SETTINGS', 'Settings', '')
     ],
                             default='OUTPUT_SETTINGS'
                             )
@@ -34,6 +34,11 @@ class RSNodeSettingsMergeNode(RenderStackNode):
             add.remove = False
             add.socket_type = "RSNodeSocketRenderSettings"
             add.socket_name = "Render Settings"
+        else:
+            add = layout.operator("rsnode.edit_input", text="Add Settings", icon='ADD')
+            add.remove = False
+            add.socket_type = "RSNodeSocketTaskSettings"
+            add.socket_name = "Settings"
 
         remove = layout.operator("rsnode.edit_input", text="Remove Unused",icon = 'REMOVE')
         remove.remove = True
