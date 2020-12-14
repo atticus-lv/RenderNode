@@ -153,11 +153,11 @@ class NODE_TREE():
                 if node.object and node.new_material:
                     if 'object_material' in task_data:
                         task_data['object_material'][node.name] = {'object'      : node.object.name,
-                                                                   'slot_index': node.slot_index,
+                                                                   'slot_index'  : node.slot_index,
                                                                    'new_material': node.new_material.name}
                     else:
                         task_data['object_material'] = {node.name: {'object'      : node.object.name,
-                                                                    'slot_index': node.slot_index,
+                                                                    'slot_index'  : node.slot_index,
                                                                     'new_material': node.new_material.name}}
 
             elif node.bl_idname == 'RSNodeViewLayerPassesNode':
@@ -167,5 +167,11 @@ class NODE_TREE():
                 else:
                     task_data['view_layer_passes'] = {node.name: {'view_layer': node.view_layer,
                                                                   'use_passes': node.use_passes}}
+
+            elif node.bl_idname == 'RSNodeColorManagementNode':
+                task_data['view_transform'] = node.view_transform
+                task_data['look'] = node.look
+                task_data['ev'] = node.ev
+                task_data['gamma'] =node.gamma
 
         return task_data

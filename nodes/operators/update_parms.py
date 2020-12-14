@@ -55,12 +55,27 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             logger.debug(f'GET NO >{task_name}< DATA, NO ACTION')
             return None
 
+    def update_ev(self):
+        if 'ev' in self.task_data:
+            if bpy.context.scene.view_settings.exposure != self.task_data['ev']:
+                bpy.context.scene.view_settings.exposure = self.task_data['ev']
+            if bpy.context.scene.view_settings.view_transform != self.task_data['view_transform']:
+                bpy.context.scene.view_settings.view_transform = self.task_data['view_transform']
+            if bpy.context.scene.view_settings.look != self.task_data['look']:
+                try:
+                    bpy.context.scene.view_settings.look = self.task_data['look']
+                except:
+                    pass
+            if bpy.context.scene.view_settings.gamma != self.task_data['gamma']:
+                bpy.context.scene.view_settings.gamma = self.task_data['gamma']
+
     def update_path(self):
         dir = self.make_path()
         postfix = self.get_postfix()
+        if bpy.context.scene.render.use_file_extension != 1:
+            bpy.context.scene.render.use_file_extension = 1
 
-        bpy.context.scene.render.use_file_extension = 1
-        if bpy.context.scene.render.filepath !=os.path.join(dir, postfix):
+        if bpy.context.scene.render.filepath != os.path.join(dir, postfix):
             bpy.context.scene.render.filepath = os.path.join(dir, postfix)
 
     def make_path(self):
@@ -127,7 +142,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                 except Exception as e:
                     logger.warning(f'View Layer Passes {node_name} error', exc_info=e)
         else:
-            bpy.ops.rsn.creat_compositor_node(use_passes=0,view_layer = bpy.context.window.view_layer.name)
+            bpy.ops.rsn.creat_compositor_node(use_passes=0, view_layer=bpy.context.window.view_layer.name)
 
     def update_object_material(self):
         if 'object_material' in self.task_data:
@@ -173,7 +188,6 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                 except Exception as e:
                     logger.warning(f'SMTP Email {node_name} error', exc_info=e)
                     self.warning_node_color(node_name)
-
 
     def updata_view_layer(self):
         if 'view_layer' in self.task_data and bpy.context.window.view_layer.name != self.task_data['view_layer']:
@@ -287,19 +301,20 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             logger.setLevel(int(pref.log_level))
         if self.get_data():
             self.update_camera()
+            self.update_ev()
             self.update_res()
             self.update_render_engine()
             self.update_frame_range()
             self.update_object_material()
             self.updata_view_layer()
             self.update_image_format()
-            self.update_path()
             self.update_slots()
             self.update_world()
             self.ssm_light_studio()
             if not self.update_scripts:
                 self.updata_scripts()
             if not context.window_manager.rsn_viewer_modal:
+                self.update_path()
                 self.send_email()
                 self.update_view_layer_passes()
             logger.debug('update parms op FINISHED')

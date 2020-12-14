@@ -109,6 +109,7 @@ node_categorys = [
         nodeitems_utils.NodeItem("RSNodeWorldInputNode"),
         nodeitems_utils.NodeItem('RSNodeViewLayerInputNode'),
         nodeitems_utils.NodeItem('RSNodeObjectMaterialNode'),
+        nodeitems_utils.NodeItem('RSNodeColorManagementNode'),
     ]),
 
     RSNCategory("TASK", "Task", items=[
