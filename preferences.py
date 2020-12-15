@@ -14,7 +14,7 @@ class NodeSmtpProps(bpy.types.PropertyGroup):
     password: StringProperty(
         name="SMTP Password",
         description="The SMTP Password for your receiver email",
-        subtype= 'PASSWORD')
+        subtype='PASSWORD')
 
 
 class NodeViewerProps(bpy.types.PropertyGroup):
@@ -35,7 +35,7 @@ class RSN_Preference(bpy.types.AddonPreferences):
         ('20', 'Info', ''),
         ('30', 'Warning', ''),
         ('40', 'Error', '')
-    ],default = '30')
+    ], default='30')
 
     node_smtp: PointerProperty(type=NodeSmtpProps)
     node_viewer: PointerProperty(type=NodeViewerProps)
@@ -67,7 +67,7 @@ class RSN_Preference(bpy.types.AddonPreferences):
     def draw_properties(self):
         layout = self.layout
         layout.use_property_split = True
-        layout.prop(self,'log_level',text='Log')
+        layout.prop(self, 'log_level', text='Log')
 
     def draw(self, context):
         row = self.layout.row(align=1)
@@ -84,10 +84,14 @@ addon_keymaps = []
 def add_keybind():
     wm = bpy.context.window_manager
     if wm.keyconfigs.addon:
+        # viewer node
         km = wm.keyconfigs.addon.keymaps.new(name='Node Editor', space_type='NODE_EDITOR')
         kmi = km.keymap_items.new('rsn.add_viewer_node', 'V', 'PRESS')
         addon_keymaps.append((km, kmi))
 
+        # km = wm.keyconfigs.addon.keymaps.new(name='Node Editor', space_type='NODE_EDITOR')
+        # kmi = km.keymap_items.new('rsn.merge_task', 'M', 'PRESS')
+        # addon_keymaps.append((km, kmi))
 
 def remove_keybind():
     wm = bpy.context.window_manager

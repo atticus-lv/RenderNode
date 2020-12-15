@@ -11,7 +11,6 @@ class RSN_OT_MergeTask(bpy.types.Operator):
     def poll(self, context):
         return context.space_data.edit_tree and context.space_data.edit_tree.bl_idname == 'RenderStackNodeTree'
 
-
     def execute(self, context):
         nt = context.space_data.edit_tree
         # get and sort task node
