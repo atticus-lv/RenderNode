@@ -20,7 +20,10 @@ class NODE_TREE():
             for input in node.inputs:
                 if input.is_linked:
                     sub_node = input.links[0].from_node
-                    get_sub_node(sub_node)
+                    if sub_node.mute:
+                        continue
+                    else:
+                        get_sub_node(sub_node)
                 else:
                     continue
             # get node itself after get all input nodes
@@ -172,6 +175,6 @@ class NODE_TREE():
                 task_data['view_transform'] = node.view_transform
                 task_data['look'] = node.look
                 task_data['ev'] = node.ev
-                task_data['gamma'] =node.gamma
+                task_data['gamma'] = node.gamma
 
         return task_data
