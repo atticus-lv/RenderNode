@@ -147,6 +147,21 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         else:
             bpy.ops.rsn.creat_compositor_node(use_passes=0, view_layer=bpy.context.window.view_layer.name)
 
+    def update_object_psr(self):
+        if 'object_psr' in self.task_data:
+            for node_name, dict in self.task_data['object_psr'].items():
+                try:
+                    ob = bpy.data.objects[dict['object']]
+                except:
+                    ob = None
+                if ob:
+                    if ob.location != dict['location'] and dict['use_p']:
+                        ob.location = dict['location']
+                    if ob.scale != dict['scale'] and dict['use_s']:
+                        ob.scale = dict['scale']
+                    if ob.rotation_euler != dict['rotation'] and dict['use_r']:
+                        ob.rotation_euler = dict['rotation']
+
     def update_object_material(self):
         if 'object_material' in self.task_data:
             for node_name, dict in self.task_data['object_material'].items():
@@ -307,11 +322,16 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             self.update_ev()
             self.update_res()
             self.update_render_engine()
-            self.update_frame_range()
+
             self.update_object_material()
+            self.update_object_psr()
+
+            self.update_frame_range()
             self.updata_view_layer()
+
             self.update_image_format()
             self.update_slots()
+
             self.update_world()
             self.ssm_light_studio()
             if not self.update_scripts:

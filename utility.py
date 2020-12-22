@@ -162,6 +162,24 @@ class NODE_TREE():
                         task_data['object_material'] = {node.name: {'object'      : node.object.name,
                                                                     'slot_index'  : node.slot_index,
                                                                     'new_material': node.new_material.name}}
+            elif node.bl_idname == 'RSNodeObjectPSRNode':
+                if node.object and True in {node.use_p, node.use_s, node.use_r}:
+                    if 'object_psr' in task_data:
+                        task_data['object_psr'][node.name] = {'object'  : node.object.name,
+                                                              'use_p'   : node.use_p,
+                                                              'use_s'   : node.use_s,
+                                                              'use_r'   : node.use_r,
+                                                              'location': node.p,
+                                                              'scale'   : node.s,
+                                                              'rotation': node.r, }
+                    else:
+                        task_data['object_psr'] = {node.name: {'object'  : node.object.name,
+                                                               'use_p'   : node.use_p,
+                                                               'use_s'   : node.use_s,
+                                                               'use_r'   : node.use_r,
+                                                               'location': node.p,
+                                                               'scale'   : node.s,
+                                                               'rotation': node.r, }}
 
             elif node.bl_idname == 'RSNodeViewLayerPassesNode':
                 if 'view_layer_passes' in task_data:
