@@ -12,8 +12,9 @@ class RSN_OT_AddViewerNode(bpy.types.Operator):
 
     @classmethod
     def poll(self, context):
-        active_node = context.space_data.edit_tree.nodes.active
-        return active_node and active_node.bl_idname == 'RSNodeTaskNode'
+        if context.space_data.edit_tree:
+            active_node = context.space_data.edit_tree.nodes.active
+            return active_node and active_node.bl_idname == 'RSNodeTaskNode'
 
     def execute(self, context):
         nt = context.space_data.edit_tree

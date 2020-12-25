@@ -4,6 +4,7 @@ import rna_keymap_ui
 
 class RSN_MT_PieMenu(Menu):
     bl_label = "RSN Helper"
+    bl_idname = "RSN_MT_PieMenu"
 
     def draw(self, context):
         layout = self.layout
@@ -11,7 +12,7 @@ class RSN_MT_PieMenu(Menu):
         pie = layout.menu_pie()
 
         pie.operator("rsn.merge_task")
-        pie.operator("rsn.simple_task")
+        pie.operator("rsn.move_node",text = 'Simple Task')
         pie.operator("rsn.add_viewer_node")
 
 addon_keymaps = []
@@ -23,7 +24,7 @@ def register():
         # ssm pie menu
         km = wm.keyconfigs.addon.keymaps.new(name='Node Editor', space_type='NODE_EDITOR')
         kmi = km.keymap_items.new('wm.call_menu_pie', 'F', 'PRESS')
-        kmi.properties.name = "RSN Helper"
+        kmi.properties.name = "RSN_MT_PieMenu"
         addon_keymaps.append((km, kmi))
 
 

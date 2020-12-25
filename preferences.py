@@ -95,7 +95,7 @@ def add_keybind():
 
         km = wm.keyconfigs.addon.keymaps.new(name='Node Editor', space_type='NODE_EDITOR')
         kmi = km.keymap_items.new('wm.call_menu_pie', 'F', 'PRESS')
-        kmi.properties.name = "RSN Helper"
+        kmi.properties.name = "RSN_MT_PieMenu"
         addon_keymaps.append((km, kmi))
 
 def remove_keybind():
