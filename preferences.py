@@ -93,6 +93,10 @@ def add_keybind():
         kmi = km.keymap_items.new('rsn.mute_nodes', 'M', 'PRESS')
         addon_keymaps.append((km, kmi))
 
+        km = wm.keyconfigs.addon.keymaps.new(name='Node Editor', space_type='NODE_EDITOR')
+        kmi = km.keymap_items.new('wm.call_menu_pie', 'F', 'PRESS')
+        kmi.properties.name = "RSN Helper"
+        addon_keymaps.append((km, kmi))
 
 def remove_keybind():
     wm = bpy.context.window_manager

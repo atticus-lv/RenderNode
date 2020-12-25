@@ -75,6 +75,7 @@ class RSN_OT_MoveNode(bpy.types.Operator):
             return {"PASS_THROUGH"}
 
         elif event.type in {'LEFTMOUSE'}:
+            context.space_data.edit_tree.nodes.remove(self.frame)
             return {"FINISHED"}
 
         elif event.type in {'RIGHTMOUSE', 'ESC'}:
