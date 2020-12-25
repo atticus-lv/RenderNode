@@ -126,6 +126,8 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                         postfix += scn.view_settings.exposure + "_"
                     elif r.startswith("task"):
                         postfix += self.task_data["task_name"] + "_"
+                    elif r.startswith("vl"):
+                        postfix += bpy.context.view_layer.name + '_'
                     else:
                         postfix += r
 

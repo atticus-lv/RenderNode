@@ -33,7 +33,7 @@ class RSNodeFilePathInputNode(RenderStackNode):
         col.label(text= '$task: $task in Task Node')
         col.label(text= '$camera: name of scene camera')
         col.label(text= '$res: resolution (XxY)')
-        col.label(text= '$view_layer: name of scene view layer')
+        col.label(text= '$vl: name of scene view layer')
         col.label(text= '$date: month-day')
         col.label(text= '$time: hour-min')
         col.label(text= '/: create folder,should be a folder name in front of "/"')

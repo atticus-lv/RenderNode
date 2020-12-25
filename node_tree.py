@@ -110,6 +110,7 @@ node_categorys = [
         nodeitems_utils.NodeItem('RSNodeViewLayerInputNode'),
         nodeitems_utils.NodeItem('RSNodeObjectMaterialNode'),
         nodeitems_utils.NodeItem('RSNodeObjectPSRNode'),
+        nodeitems_utils.NodeItem('RSNodeObjectDataNode'),
         nodeitems_utils.NodeItem('RSNodeColorManagementNode'),
     ]),
 
