@@ -33,6 +33,7 @@ class RSNodeFilePathInputNode(RenderStackNode):
         col.label(text= '$task: $task in Task Node')
         col.label(text= '$camera: name of scene camera')
         col.label(text= '$res: resolution (XxY)')
+        col.label(text= '$engine: render engine')
         col.label(text= '$vl: name of scene view layer')
         col.label(text= '$date: month-day')
         col.label(text= '$time: hour-min')

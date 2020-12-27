@@ -37,6 +37,12 @@ class RSN_Preference(bpy.types.AddonPreferences):
         ('40', 'Error', '')
     ], default='30')
 
+    file_path_separator:EnumProperty(items=[
+        ('.', 'Dot', ''),
+        ('_', 'Underscore', ''),
+        (' ', 'Space', ''),
+    ], default='.')
+
     node_smtp: PointerProperty(type=NodeSmtpProps)
     node_viewer: PointerProperty(type=NodeViewerProps)
 
@@ -68,6 +74,8 @@ class RSN_Preference(bpy.types.AddonPreferences):
         layout = self.layout
         layout.use_property_split = True
         layout.prop(self, 'log_level', text='Log')
+        row = layout.row(align = 1)
+        row.prop(self, 'file_path_separator', text='File Path Separator')
 
     def draw(self, context):
         row = self.layout.row(align=1)

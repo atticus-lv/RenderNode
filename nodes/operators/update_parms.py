@@ -104,6 +104,8 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
     def get_postfix(self):
         scn = bpy.context.scene
         cam = scn.camera
+        pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
+        separator= pref.file_path_separator
 
         postfix = ""
         date_now = str(time.strftime("%m-%d", time.localtime()))
@@ -114,24 +116,25 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             for string in shot_export_name.split("/"):
                 for r in string.split('$'):
                     if r.startswith("date"):
-                        postfix += date_now + '_'
+                        postfix += date_now + separator
                     elif r.startswith("time"):
-                        postfix += time_now + '_'
-                    # camera
+                        postfix += time_now + separator
                     elif r.startswith("camera"):
-                        postfix += cam.name + '_'
+                        postfix += cam.name + separator
+                    elif r.startswith("engine"):
+                        postfix += bpy.context.scene.render.engine + separator
                     elif r.startswith("res"):
-                        postfix += f"{scn.render.resolution_x}x{scn.render.resolution_y}" + "_"
+                        postfix += f"{scn.render.resolution_x}x{scn.render.resolution_y}" + separator
                     elif r.startswith("ev"):
-                        postfix += scn.view_settings.exposure + "_"
+                        postfix += scn.view_settings.exposure + separator
                     elif r.startswith("task"):
-                        postfix += self.task_data["task_name"] + "_"
+                        postfix += self.task_data["task_name"] + separator
                     elif r.startswith("vl"):
-                        postfix += bpy.context.view_layer.name + '_'
+                        postfix += bpy.context.view_layer.name + separator
                     else:
                         postfix += r
 
-                if postfix.endswith("_"): postfix = postfix[:-1]
+                if postfix.endswith(separator): postfix = postfix[:-1]
                 postfix += "/"
 
             if postfix.endswith("/"): postfix = postfix[:-1]
