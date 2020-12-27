@@ -12,11 +12,12 @@ class RSNodeSettingsMergeNode(RenderStackNode):
         ('OUTPUT_SETTINGS', 'Output Settings', ''),
         ('RENDER_SETTINGS', 'Render Settings', ''),
         ('SETTINGS', 'Settings', '')
-    ],
-                            default='OUTPUT_SETTINGS'
-                            )
+    ],default='OUTPUT_SETTINGS')
 
     def init(self, context):
+        self.inputs.new('RSNodeSocketTaskSettings', "Settings")
+        self.inputs.new('RSNodeSocketTaskSettings', "Settings")
+        self.inputs.new('RSNodeSocketTaskSettings', "Settings")
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
         self.width = 180
 
@@ -24,21 +25,10 @@ class RSNodeSettingsMergeNode(RenderStackNode):
         pass
 
     def draw_buttons_ext(self, context, layout):
-        if self.node_type == 'OUTPUT_SETTINGS':
-            add = layout.operator("rsnode.edit_input", text="Add Output Settings",icon = 'ADD')
-            add.remove = False
-            add.socket_type = "RSNodeSocketOutputSettings"
-            add.socket_name = "Output Settings"
-        elif self.node_type == 'RENDER_SETTINGS':
-            add = layout.operator("rsnode.edit_input", text="Add Render Settings",icon = 'ADD')
-            add.remove = False
-            add.socket_type = "RSNodeSocketRenderSettings"
-            add.socket_name = "Render Settings"
-        else:
-            add = layout.operator("rsnode.edit_input", text="Add Settings", icon='ADD')
-            add.remove = False
-            add.socket_type = "RSNodeSocketTaskSettings"
-            add.socket_name = "Settings"
+        add = layout.operator("rsnode.edit_input", text="Add Settings", icon='ADD')
+        add.remove = False
+        add.socket_type = "RSNodeSocketTaskSettings"
+        add.socket_name = "Settings"
 
         remove = layout.operator("rsnode.edit_input", text="Remove Unused",icon = 'REMOVE')
         remove.remove = True

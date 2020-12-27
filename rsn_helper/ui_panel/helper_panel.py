@@ -13,8 +13,9 @@ class HELPER_PT_Panel(bpy.types.Panel):
 
     def draw(self, context):
         layout = self.layout
-        layout.operator("rsn.move_node",text= 'Simple Task',icon = 'ADD')
-        layout.operator("rsn.merge_task",text= 'Merge Task',icon = 'SHORTDISPLAY')
+        layout.label(text='Call out helper menu',icon = "EVENT_F")
+        # layout.operator("rsn.move_node",text= 'Simple Task',icon = 'ADD')
+        # layout.operator("rsn.merge_task",text= 'Merge Task',icon = 'SHORTDISPLAY')
 
 
 def register():

@@ -8,7 +8,7 @@ class RSN_OT_SimpleTask(bpy.types.Operator):
 
     @classmethod
     def poll(self, context):
-        return bpy.context.space_data.edit_tree and bpy.context.space_data.edit_tree.bl_idname == 'RenderStackNodeTree'
+        return context.space_data.edit_tree and bpy.context.space_data.edit_tree.bl_idname == 'RenderStackNodeTree'
 
     def execute(self, context):
         nt = context.space_data.edit_tree
@@ -39,10 +39,6 @@ class RSN_OT_SimpleTask(bpy.types.Operator):
         res.select = 1
         merge_output.select = 1
 
-        nt.nodes.active = merge_output
-        for i in range(2):
-            bpy.ops.rsnode.edit_input(socket_type="RSNodeSocketOutputSettings", socket_name="Output Settings")
-
         nt.links.new(cam.outputs[0], task.inputs[0])
         nt.links.new(eevee.outputs[0], task.inputs[1])
         nt.links.new(merge_output.outputs[0], task.inputs[2])
@@ -64,6 +60,10 @@ class RSN_OT_MoveNode(bpy.types.Operator):
     bl_options = {"UNDO", 'GRAB_CURSOR', 'BLOCKING'}
 
     frame = None
+
+    @classmethod
+    def poll(self, context):
+        return context.space_data.edit_tree and bpy.context.space_data.edit_tree.bl_idname == 'RenderStackNodeTree'
 
     def modal(self, context, event):
         if event.type == 'MOUSEMOVE':

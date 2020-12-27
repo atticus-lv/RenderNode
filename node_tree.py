@@ -110,7 +110,7 @@ node_categorys = [
         nodeitems_utils.NodeItem('RSNodeViewLayerInputNode'),
         nodeitems_utils.NodeItem('RSNodeObjectMaterialNode'),
         nodeitems_utils.NodeItem('RSNodeObjectPSRNode'),
-        nodeitems_utils.NodeItem('RSNodeObjectDataNode'),
+        # nodeitems_utils.NodeItem('RSNodeObjectDataNode'),
         nodeitems_utils.NodeItem('RSNodeColorManagementNode'),
     ]),
 
@@ -119,7 +119,7 @@ node_categorys = [
         nodeitems_utils.NodeItem("RSNodeTaskListNode"),
         nodeitems_utils.NodeItem("RSNodeRenderListNode"),
         nodeitems_utils.NodeItem("RSNodeProcessorNode"),
-        # nodeitems_utils.NodeItem("RSNodeViewerNode"),
+        nodeitems_utils.NodeItem("RSNodeViewerNode"),
 
     ]),
 
@@ -150,14 +150,8 @@ node_categorys = [
     ]),
 
     RSNCategory("LAYOUT", "Layout", items=[
-        nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Merge Render Settings", settings={
+        nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Merge Settings", settings={
             "node_type": repr("RENDER_SETTINGS"),
-        }),
-        nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Merge Output Settings", settings={
-            "node_type": repr("OUTPUT_SETTINGS"),
-        }),
-        nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Merge Output Settings", settings={
-            "node_type": repr("SETTINGS"),
         }),
 
     ]),
