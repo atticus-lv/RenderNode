@@ -26,7 +26,8 @@ class RSN_MT_PieMenu(Menu):
             row = pie.box().row(align=True)
             row.prop(context.space_data.edit_tree, 'name')
             row.prop(context.space_data.edit_tree, 'use_fake_user', icon_only=1)
-
+        else:
+            pie.operator("node.new_node_tree")
 
 addon_keymaps = []
 

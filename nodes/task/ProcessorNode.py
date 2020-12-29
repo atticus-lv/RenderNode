@@ -64,7 +64,7 @@ class RSNodeProcessorNode(RenderStackNode):
                             col = box.row().column(align=1)
 
                             col.label(icon="RECOVER_LAST",
-                                      text=f'Processing: {1 - curr_done:.0%} ({self.frame_current + 1 - self.frame_start} / {self.frame_end + 1 - self.frame_start})')
+                                      text=f'Processing: {curr_done:.0%} ({self.frame_current + 1 - self.frame_start} / {self.frame_end + 1 - self.frame_start})')
 
                             row1 = col.row(align=1)
                             row1.label(text=f'{name}', icon='CHECKBOX_DEHLT')

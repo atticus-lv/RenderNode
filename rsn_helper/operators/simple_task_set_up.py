@@ -49,8 +49,6 @@ class RSN_OT_SimpleTask(bpy.types.Operator):
         frame = nt.nodes.active
         frame.label = 'Simple Task'
 
-        bpy.ops.rsn.move_node()
-
         return {"FINISHED"}
 
 
