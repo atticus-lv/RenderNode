@@ -5,7 +5,7 @@ bl_info = {
     "blender"    : (2, 91, 0),
     "location"   : "Node Editor > RenderStackNode",
     "description": "Node based render queue workflow",
-    'waring'     : "Beta Version! Still in development",
+    # 'waring'     : "Beta Version! Still in development",
     # "doc_url"    : "",
     "category"   : "Render",
 }

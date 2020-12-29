@@ -17,6 +17,8 @@ class RSNodeTaskNode(RenderStackNode):
         self.outputs.new('RSNodeSocketRenderList', "Task")
 
     def draw_buttons(self, context, layout):
+        layout.use_property_split = 1
+        layout.use_property_decorate = 0
         layout.prop(self, 'task_name', text="$task")
 
     def draw_label(self):

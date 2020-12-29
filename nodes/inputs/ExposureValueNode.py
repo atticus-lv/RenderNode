@@ -34,15 +34,17 @@ class RSNodeColorManagementNode(RenderStackNode):
 
     def init(self, context):
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
+        self.width = 200
 
     def draw_buttons(self, context, layout):
         layout.use_property_split = 1
         layout.use_property_decorate = 0
-        layout.prop(self, 'view_transform')
-        layout.prop(self, 'look')
+        col = layout.column(align = 1)
+        col.prop(self, 'view_transform')
+        col.prop(self, 'look')
 
-        layout.prop(self, 'ev', slider=1)
-        layout.prop(self, 'gamma')
+        col.prop(self, 'ev', slider=1)
+        col.prop(self, 'gamma')
 
 
 def register():

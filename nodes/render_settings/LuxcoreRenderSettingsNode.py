@@ -18,20 +18,22 @@ class RSNodeLuxcoreRenderSettingsNode(RenderStackNode):
         self.width = 225
 
     def draw_buttons(self, context, layout):
-        row = layout.row(align = True)
+        col = layout.column(align = 1)
+        row = col.row(align = True)
         row.prop(self, "use_samples")
         row.prop(self,"samples")
 
-        row = layout.row(align=True)
+        row = col.row(align=True)
         row.prop(self,'use_time')
         row.prop(self,'time')
 
     def draw_buttons_ext(self, context, layout):
-        row = layout.row(align=True)
+        col = layout.column(align=1)
+        row = col.row(align=True)
         row.prop(self, "use_samples")
         row.prop(self, "samples")
 
-        row = layout.row(align=True)
+        row = col.row(align=True)
         row.prop(self, 'use_time')
         row.prop(self, 'time')
 

@@ -7,13 +7,17 @@ class RSNodeFilePathInputNode(RenderStackNode):
     bl_idname = "RSNodeFilePathInputNode"
     bl_label = "File Path"
 
-    use_blend_file_path: BoolProperty(name="Save at blend file folder", default=True)
-    path: StringProperty(default='C:/tmp/')
-    path_format: StringProperty(default="$task/$camera", name="Format Name")
+    use_blend_file_path: BoolProperty(name="Save in file directory",
+                                      description='Save in blend file directory',
+                                      default=True)
+    path: StringProperty(default='')
+    path_format: StringProperty(default="$task/$camera",
+                                name="Formatted Name",
+                                description='Formatted Name,View sidebar usage')
 
     def init(self, context):
         self.outputs.new('RSNodeSocketOutputSettings', "Output Settings")
-        self.width = 200
+        self.width = 220
 
     def draw_buttons(self, context, layout):
         layout.prop(self, 'use_blend_file_path')
@@ -21,9 +25,7 @@ class RSNodeFilePathInputNode(RenderStackNode):
             row = layout.row(align=1)
             row.prop(self, 'path')
             row.operator('buttons.directory_browse', icon='FILEBROWSER', text='')
-        sp = layout.split(factor=0.4)
-        sp.label(text="Format Name")
-        sp.prop(self, 'path_format',text='')
+        layout.prop(self, 'path_format',text='')
 
 
     def draw_buttons_ext(self, context, layout):

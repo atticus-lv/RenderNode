@@ -30,10 +30,11 @@ class RSNodeImageFormatInputNode(RenderStackNode):
         self.outputs.new('RSNodeSocketOutputSettings', "Output Settings")
 
     def draw_buttons(self, context, layout):
-        layout.prop(self, 'file_format', text='')
-        layout.prop(self, 'color_mode', text='')
-        layout.prop(self, 'color_depth', text='')
-        layout.prop(self, 'transparent')
+        col = layout.column(align=1)
+        col.prop(self, 'file_format', text='')
+        col.prop(self, 'color_mode', text='')
+        col.prop(self, 'color_depth', text='')
+        col.prop(self, 'transparent')
 
 
 def register():

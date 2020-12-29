@@ -16,11 +16,12 @@ class RSN_OT_FillOriginPSR(bpy.types.Operator):
 
     def execute(self, context):
         nt = context.space_data.edit_tree
-        obj = bpy.data.objects[self.object_name]
-        node = nt.nodes[self.node_name]
-        node.p = obj.location
-        node.s = obj.scale
-        node.r = obj.rotation_euler
+        if self.object_name:
+            obj = bpy.data.objects[self.object_name]
+            node = nt.nodes[self.node_name]
+            node.p = obj.location
+            node.s = obj.scale
+            node.r = obj.rotation_euler
 
         return {'FINISHED'}
 
@@ -31,7 +32,7 @@ class RSNodeObjectPSRNode(RenderStackNode):
 
     object: PointerProperty(type=bpy.types.Object, name='Object')
 
-    use_p: BoolProperty(name='P')
+    use_p: BoolProperty(name='P', default=True)
     use_s: BoolProperty(name='S')
     use_r: BoolProperty(name='R')
 
@@ -47,19 +48,29 @@ class RSNodeObjectPSRNode(RenderStackNode):
         layout.use_property_split = 1
         layout.use_property_decorate = False
 
-        layout.prop(self, "object")
-        row = layout.row(align=True)
+        col = layout.column(align=1)
+        col.prop(self, "object")
+
+        col.separator(factor=0.5)
+        row = col.row(align=True)
+
         row.prop(self, "use_p")
         row.prop(self, "use_s")
         row.prop(self, "use_r")
 
-        if self.use_p: layout.prop(self, 'p')
-        if self.use_s: layout.prop(self, 's')
-        if self.use_r: layout.prop(self, 'r')
+        col.separator(factor=0.5)
+        if self.use_p: col.prop(self, 'p')
 
-        fill = layout.operator("rsn.fill_origin_psr")
-        fill.object_name = self.object.name if self.object else ''
-        fill.node_name = self.name
+        col.separator(factor=0.5)
+        if self.use_s: col.prop(self, 's')
+
+        col.separator(factor=0.5)
+        if self.use_r: col.prop(self, 'r')
+
+        if self.object:
+            fill = col.operator("rsn.fill_origin_psr")
+            fill.object_name = self.object.name if self.object else ''
+            fill.node_name = self.name
 
     def draw_buttons_ext(self, context, layout):
         pass

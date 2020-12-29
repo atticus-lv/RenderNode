@@ -8,7 +8,6 @@ class RSNodeViewLayerInputNode(RenderStackNode):
 
     view_layer: StringProperty(name="View Layer",
                                description='Just Check Out View Layer, you should set its details in property panel')
-
     def init(self, context):
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
         # self.width = 200

@@ -28,10 +28,11 @@ class RSNodeObjectMaterialNode(RenderStackNode):
 
     def draw_buttons(self, context, layout):
         layout.use_property_split = 1
-        layout.use_property_decorate = False
-        layout.prop(self, "object")
-        layout.prop(self, 'slot_index', text='Slot')
-        layout.prop(self, 'new_material', text='Material')
+        layout.use_property_decorate = 0
+        col = layout.column(align=1)
+        col.prop(self, "object")
+        col.prop(self, 'slot_index', text='Slot')
+        col.prop(self, 'new_material', text='Material')
 
     def draw_buttons_ext(self, context, layout):
         pass
