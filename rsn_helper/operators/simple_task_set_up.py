@@ -20,13 +20,15 @@ class RSN_OT_SimpleTask(bpy.types.Operator):
         eevee = nt.nodes.new('RSNodeEeveeRenderSettingsNode')
         path = nt.nodes.new('RSNodeFilePathInputNode')
         res = nt.nodes.new('RSNodeResolutionInputNode')
+        range = nt.nodes.new('RSNodeFrameRangeInputNode')
         merge_output = nt.nodes.new('RSNodeSettingsMergeNode')
 
         task.location = (x, y)
         cam.location = (x - 300, y)
         eevee.location = (x - 300, y - 100)
-        path.location = (x - 550, y - 200)
-        res.location = (x - 500, y - 350)
+        path.location = (x - 550, y - 150)
+        res.location = (x - 550, y - 270)
+        range.location = (x - 550, y - 380)
         merge_output.location = (x - 300, y - 200)
 
         for node in nt.nodes:
@@ -36,7 +38,7 @@ class RSN_OT_SimpleTask(bpy.types.Operator):
         eevee.select = 1
         path.select = 1
         res.select = 1
-        res.select = 1
+        range.select = 1
         merge_output.select = 1
 
         nt.links.new(cam.outputs[0], task.inputs[0])
@@ -44,6 +46,7 @@ class RSN_OT_SimpleTask(bpy.types.Operator):
         nt.links.new(merge_output.outputs[0], task.inputs[2])
         nt.links.new(path.outputs[0], merge_output.inputs[0])
         nt.links.new(res.outputs[0], merge_output.inputs[1])
+        nt.links.new(range.outputs[0], merge_output.inputs[2])
 
         bpy.ops.node.join()
         frame = nt.nodes.active
