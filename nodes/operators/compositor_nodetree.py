@@ -9,11 +9,32 @@ class RSN_OT_CreatCompositorNode(bpy.types.Operator):
     use_passes: BoolProperty(default=False)
     view_layer: StringProperty(default="")
 
+    def set_context_layer(self):
+        nt = bpy.context.scene.node_tree
+        context_layer = None
+        for node in bpy.context.scene.node_tree.nodes:
+            if node.name == [f'RSN {bpy.context.view_layer.name} Render Layers']:
+                context_layer = node
+        if not context_layer:
+            context_layer = nt.nodes.new(type="CompositorNodeRLayers")
+            context_layer.name = f'RSN {bpy.context.view_layer.name} Render Layers'
+
+        try:
+            com =bpy.context.scene.node_tree.nodes['Composite']
+            nt.links.new(context_layer.outputs[0],com.inputs[0])
+        except Exception as e:
+            print(e)
+
     def execute(self, context):
         scn = context.scene
         scn.use_nodes = True
 
         nt = context.scene.node_tree
+
+
+
+
+        self.set_context_layer()
 
         try:
             render_layer_node = nt.nodes[f'RSN {self.view_layer} Render Layers']
@@ -25,14 +46,8 @@ class RSN_OT_CreatCompositorNode(bpy.types.Operator):
             render_layer_node.layer = self.view_layer
 
         try:
-            com =context.scene.node_tree.nodes['Composite']
-            nt.links.new(render_layer_node.outputs[0],com.inputs[0])
-        except Exception as e:print(e)
-
-        try:
             nt.nodes.remove(nt.nodes[f'RSN {self.view_layer} Output'])
         except Exception as e: print(e)
-
 
         if self.use_passes:
             file_output_node = nt.nodes.new(type="CompositorNodeOutputFile")
