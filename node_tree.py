@@ -6,8 +6,8 @@ from bpy.props import *
 class RenderStackNodeTree(bpy.types.NodeTree):
     '''RenderStackNodeTree Node Tree'''
     bl_idname = 'RenderStackNodeTree'
-    bl_label = 'RenderStack Node'
-    bl_icon = 'BLENDER'
+    bl_label = 'RenderStackNode Editor'
+    bl_icon = 'CAMERA_DATA'
 
 
 class RenderStackNode(bpy.types.Node):
