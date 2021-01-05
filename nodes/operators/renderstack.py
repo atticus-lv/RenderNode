@@ -151,7 +151,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
                 frame_format = "0" + frame_format
 
         scn.render.use_file_extension = 1
-        scn.render.filepath +=  f"_{frame_format}"
+        scn.render.filepath += f"_{frame_format}"
         # scn.render.filepath = os.path.join(directory, f"_{frame_format}" + scn.render.file_extension)
 
     # init 初始化执行
