@@ -24,7 +24,7 @@ class RSN_OT_CreatCompositorNode(bpy.types.Operator):
             com = bpy.context.scene.node_tree.nodes['Composite']
             nt.links.new(context_layer.outputs[0], com.inputs[0])
         except Exception as e:
-            print(e)
+            self.report({"ERROR"}, 'No Composite Node Found(Check its name must be "Composite") ')
 
     def execute(self, context):
         scn = context.scene
@@ -46,7 +46,7 @@ class RSN_OT_CreatCompositorNode(bpy.types.Operator):
         try:
             nt.nodes.remove(nt.nodes[f'RSN {self.view_layer} Output'])
         except Exception as e:
-            print(e)
+            pass
 
         if self.use_passes:
             file_output_node = nt.nodes.new(type="CompositorNodeOutputFile")
