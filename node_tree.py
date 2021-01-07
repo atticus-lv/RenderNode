@@ -37,7 +37,7 @@ class RenderStackNode(bpy.types.Node):
                             bpy.ops.rsn.update_parms(task_name=task_node.name,
                                                      viewer_handler=bpy.context.window_manager.rsn_viewer_node,
                                                      update_scripts=pref.node_viewer.update_scripts,
-                                                     use_email=False)
+                                                     use_render_mode=False)
                         except Exception as e:
                             print(e)
         except (IndexError):

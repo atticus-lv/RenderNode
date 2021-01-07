@@ -16,7 +16,8 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
     bl_idname = "rsn.update_parms"
     bl_label = "Update Parms"
 
-    use_email:BoolProperty(default=True)
+
+    use_render_mode:BoolProperty(default=True)
 
     viewer_handler: StringProperty()
     update_scripts: BoolProperty(default=False)
@@ -341,13 +342,13 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
 
             self.update_world()
             self.ssm_light_studio()
-            if pref.node_viewer.update_scripts:
+            if pref.node_viewer.update_scripts or use_render_mode:
                 self.updata_scripts()
-            if pref.node_viewer.update_path:
+            if pref.node_viewer.update_path or use_render_mode:
                 self.update_path()
-            if pref.node_viewer.update_view_layer_passes:
+            if pref.node_viewer.update_view_layer_passes or use_render_mode:
                 self.update_view_layer_passes()
-            if self.use_email:
+            if self.use_render_mode:
                 self.send_email()
             logger.debug('update parms op FINISHED')
 
