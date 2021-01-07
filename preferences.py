@@ -19,11 +19,11 @@ class NodeSmtpProps(bpy.types.PropertyGroup):
 
 class NodeViewerProps(bpy.types.PropertyGroup):
     show: BoolProperty(name="Dropdown")
-    update_scripts: BoolProperty(name='Update scripts node',
+    update_scripts: BoolProperty(name='Update Scripts ',
                                  description="Update scripts node when using viewer node")
-    update_path: BoolProperty(name='Update File Path node',
+    update_path: BoolProperty(name='Update File Path',
                               description="Update File Path node when using viewer node")
-    update_view_layer_passes: BoolProperty(name='Update ViewLayer Passes node',
+    update_view_layer_passes: BoolProperty(name='Update ViewLayer Passes',
                                            description="Update ViewLayer Passes node when using viewer node")
 
 

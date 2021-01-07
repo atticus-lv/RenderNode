@@ -14,13 +14,9 @@ class RSN_OT_FillOriginPSR(bpy.types.Operator):
     object_name: StringProperty(default='')
     node_name: StringProperty()
 
-    @classmethod
-    def poll(self, context):
-        return self.object_name != ''
-
     def execute(self, context):
         nt = context.space_data.edit_tree
-        if self.object_name:
+        if self.object_name != '':
             obj = bpy.data.objects[self.object_name]
             node = nt.nodes[self.node_name]
             node.p = obj.location

@@ -41,21 +41,31 @@ class RSNodeViewerNode(RenderStackNode):
     bl_idname = 'RSNodeViewerNode'
     bl_label = 'Viewer'
 
+    show_pref: BoolProperty(default=False)
+
     def init(self, context):
         self.inputs.new('RSNodeSocketRenderList', "Task")
+        self.width =175
 
     def free(self):
         print("Node removed", self)
 
     def draw_buttons(self, context, layout):
+        pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
+        row = layout.row(align=1)
         if self.inputs[0].is_linked:
             node = reroute(self.inputs[0].links[0].from_node)
             context.window_manager.rsn_viewer_node = node.name
-            layout.label(text=node.name, icon='HIDE_OFF')
+            row.label(text=node.name, icon='HIDE_OFF')
 
         else:
             context.window_manager.rsn_viewer_node = ''
-            layout.label(text='', icon='HIDE_ON')
+            row.label(text='', icon='HIDE_ON')
+        row.prop(self, 'show_pref', icon_only=1, icon='TRIA_DOWN' if self.show_pref else "TRIA_LEFT")
+        if self.show_pref:
+            layout.prop(pref.node_viewer, 'update_scripts', toggle=1)
+            layout.prop(pref.node_viewer, 'update_path', toggle=1)
+            layout.prop(pref.node_viewer, 'update_view_layer_passes', toggle=1)
 
     def draw_buttons_ext(self, context, layout):
         box = layout.box()
