@@ -156,7 +156,6 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
 
     # init 初始化执行
     def execute(self, context):
-        context.window_manager.rsn_viewer_modal = False
         context.window_manager.render_stack_modal = True
 
         scn = context.scene
