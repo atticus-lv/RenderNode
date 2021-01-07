@@ -19,13 +19,12 @@ class RSNodeFrameRangeInputNode(RenderStackNode):
 
     def init(self, context):
         self.outputs.new('RSNodeSocketOutputSettings', "Output Settings")
-        self.width = 220
+        self.width = 200
 
     def draw_buttons(self, context, layout):
-        col = layout.column(align=1)
         row = layout.row(align=1)
-        row.prop(self, 'frame_start')
-        row.prop(self, 'frame_end')
+        row.prop(self, 'frame_start',text='Start')
+        row.prop(self, 'frame_end',text='End')
         row.prop(self, 'use_step', icon_only=1, icon="TRIA_DOWN" if self.use_step else "TRIA_LEFT")
         if self.use_step:
             col = layout.column(align=1)

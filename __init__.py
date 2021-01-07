@@ -1,9 +1,9 @@
 bl_info = {
     "sender_name": "RenderStack Node ",
     "author"     : "Atticus",
-    "version"    : (1, 0, 4),
+    "version"    : (1, 0, 5),
     "blender"    : (2, 91, 0),
-    "location"   : "Node Editor > RenderStackNode",
+    "location"   : "Node Editor > RenderStackNode Editor",
     "description": "Node based render queue workflow",
     # 'waring'     : "Beta Version! Still in development",
     # "doc_url"    : "",

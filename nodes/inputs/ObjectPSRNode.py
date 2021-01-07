@@ -11,8 +11,8 @@ class RSN_OT_FillOriginPSR(bpy.types.Operator):
     bl_idname = 'rsn.fill_origin_psr'
     bl_label = 'Fill Current PSR'
 
-    object_name: StringProperty(default='', update=update_node)
-    node_name: StringProperty(update=update_node)
+    object_name: StringProperty(default='')
+    node_name: StringProperty()
 
     @classmethod
     def poll(self, context):
