@@ -3,11 +3,15 @@ from bpy.props import *
 from RenderStackNode.node_tree import RenderStackNode
 
 
+def update_node(self, context):
+    self.update()
+
+
 class RSNodeLightStudioNode(RenderStackNode):
     bl_idname = 'RSNodeLightStudioNode'
     bl_label = 'SSM Light Studio'
 
-    light_studio_index: IntProperty(name='light studio index')
+    light_studio_index: IntProperty(name='light studio index',update=update_node)
 
     def init(self, context):
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")

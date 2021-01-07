@@ -3,12 +3,16 @@ from bpy.props import *
 from RenderStackNode.node_tree import RenderStackNode
 
 
+def update_node(self, context):
+    self.update()
+
+
 class RSNodeWorldInputNode(RenderStackNode):
     '''A simple input node'''
     bl_idname = 'RSNodeWorldInputNode'
     bl_label = 'World'
 
-    world: PointerProperty(name="World", type=bpy.types.World)
+    world: PointerProperty(name="World", type=bpy.types.World, update=update_node)
 
     def init(self, context):
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
@@ -18,9 +22,9 @@ class RSNodeWorldInputNode(RenderStackNode):
         layout.prop(self, 'world', text="")
 
 
-
 def register():
     bpy.utils.register_class(RSNodeWorldInputNode)
+
 
 def unregister():
     bpy.utils.unregister_class(RSNodeWorldInputNode)

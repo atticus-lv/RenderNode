@@ -3,12 +3,16 @@ from bpy.props import *
 from RenderStackNode.node_tree import RenderStackNode
 
 
+def update_node(self, context):
+    self.update()
+
+
 class RSN_OT_FillOriginPSR(bpy.types.Operator):
     bl_idname = 'rsn.fill_origin_psr'
     bl_label = 'Fill Current PSR'
 
-    object_name: StringProperty(default='')
-    node_name: StringProperty()
+    object_name: StringProperty(default='', update=update_node)
+    node_name: StringProperty(update=update_node)
 
     @classmethod
     def poll(self, context):
@@ -30,15 +34,15 @@ class RSNodeObjectPSRNode(RenderStackNode):
     bl_idname = 'RSNodeObjectPSRNode'
     bl_label = 'Object PSR'
 
-    object: PointerProperty(type=bpy.types.Object, name='Object')
+    object: PointerProperty(type=bpy.types.Object, name='Object', update=update_node)
 
-    use_p: BoolProperty(name='P', default=True)
-    use_s: BoolProperty(name='S')
-    use_r: BoolProperty(name='R')
+    use_p: BoolProperty(name='P', default=True, update=update_node)
+    use_s: BoolProperty(name='S', update=update_node)
+    use_r: BoolProperty(name='R', update=update_node)
 
-    p: FloatVectorProperty(name='Location', subtype='TRANSLATION')
-    s: FloatVectorProperty(name='Scale', default=(1, 1, 1))
-    r: FloatVectorProperty(name='Rotation', subtype='EULER')
+    p: FloatVectorProperty(name='Location', subtype='TRANSLATION', update=update_node)
+    s: FloatVectorProperty(name='Scale', default=(1, 1, 1), update=update_node)
+    r: FloatVectorProperty(name='Rotation', subtype='EULER', update=update_node)
 
     def init(self, context):
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")

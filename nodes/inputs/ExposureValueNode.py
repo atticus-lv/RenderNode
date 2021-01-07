@@ -3,6 +3,10 @@ from bpy.props import *
 from RenderStackNode.node_tree import RenderStackNode
 
 
+def update_node(self, context):
+    self.update()
+
+
 class RSNodeColorManagementNode(RenderStackNode):
     '''A simple input node'''
     bl_idname = 'RSNodeColorManagementNode'
@@ -15,7 +19,7 @@ class RSNodeColorManagementNode(RenderStackNode):
                                      ('Filmic Log', 'Filmic Log', ''),
                                      ('Filmic', 'Filmic', ''),
                                      ('Standard', 'Standard', '')],
-                                 default='Filmic')
+                                 default='Filmic',update=update_node)
 
     look: EnumProperty(name='Look',
                        items=[
@@ -27,10 +31,10 @@ class RSNodeColorManagementNode(RenderStackNode):
                            ('High Contrast', 'High Contrast', ''),
                            ('Very High Contrast', 'Very High Contrast', ''),
                            ('None', 'None', '')],
-                       default='None')
+                       default='None',update=update_node)
 
-    ev: FloatProperty(name="Exposure Value", default=0, soft_min=-3, soft_max=3)
-    gamma: FloatProperty(name="Gamma", default=1.0)
+    ev: FloatProperty(name="Exposure Value", default=0, soft_min=-3, soft_max=3,update=update_node)
+    gamma: FloatProperty(name="Gamma", default=1.0,update=update_node)
 
     def init(self, context):
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
@@ -39,7 +43,7 @@ class RSNodeColorManagementNode(RenderStackNode):
     def draw_buttons(self, context, layout):
         layout.use_property_split = 1
         layout.use_property_decorate = 0
-        col = layout.column(align = 1)
+        col = layout.column(align=1)
         col.prop(self, 'view_transform')
         col.prop(self, 'look')
 

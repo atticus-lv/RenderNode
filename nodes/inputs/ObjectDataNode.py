@@ -3,12 +3,16 @@ from bpy.props import *
 from RenderStackNode.node_tree import RenderStackNode
 
 
+def update_node(self, context):
+    self.update()
+
+
 class RSNodeObjectDataNode(RenderStackNode):
     bl_idname = 'RSNodeObjectDataNode'
     bl_label = 'Object Data'
 
-    object: PointerProperty(type=bpy.types.Object, name='Object')
-    data_path: StringProperty(name='Data Path')
+    object: PointerProperty(type=bpy.types.Object, name='Object', update=update_node)
+    data_path: StringProperty(name='Data Path', update=update_node)
 
     def init(self, context):
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")

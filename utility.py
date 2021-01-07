@@ -1,5 +1,27 @@
 import bpy
 from itertools import groupby
+import logging
+
+LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
+logging.basicConfig(format=LOG_FORMAT)
+logger = logging.getLogger('mylogger')
+
+
+def trace_back_node(node_input, node_type='RSNodeTaskNode'):
+    def trace_back(node):
+        try:
+            if node.outputs[0].is_linked:
+                parent_node = node.outputs[0].links[0].to_node
+                if parent_node.bl_idname == node_type:
+                    return parent_node
+                else:
+                    return trace_back(parent_node)
+        except Exception as e:
+            logger.debug(e)
+
+    node = bpy.context.space_data.edit_tree.nodes[node_input]
+    get_node = trace_back(node)
+    return get_node
 
 
 class NODE_TREE():

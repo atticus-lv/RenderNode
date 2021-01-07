@@ -7,12 +7,16 @@ def poll_camera(self, object):
     return object.type == 'CAMERA'
 
 
+def update_node(self, context):
+    self.update()
+
+
 class RSNodeCamInputNode(RenderStackNode):
     '''A simple input node'''
     bl_idname = 'RSNodeCamInputNode'
     bl_label = 'Camera'
 
-    camera: PointerProperty(name="Camera", type=bpy.types.Object, poll=poll_camera)
+    camera: PointerProperty(name="Camera", type=bpy.types.Object, poll=poll_camera, update=update_node)
 
     def init(self, context):
         self.outputs.new('RSNodeSocketCamera', "Camera")
@@ -22,9 +26,9 @@ class RSNodeCamInputNode(RenderStackNode):
         layout.prop(self, 'camera', text="")
 
 
-
 def register():
     bpy.utils.register_class(RSNodeCamInputNode)
+
 
 def unregister():
     bpy.utils.unregister_class(RSNodeCamInputNode)

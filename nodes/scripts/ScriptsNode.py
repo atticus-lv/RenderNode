@@ -1,6 +1,10 @@
 import bpy
-from bpy.props import StringProperty,PointerProperty,EnumProperty
+from bpy.props import StringProperty, PointerProperty, EnumProperty
 from RenderStackNode.node_tree import RenderStackNode
+
+
+def update_node(self, context):
+    self.update()
 
 
 class RSNodeScriptsNode(RenderStackNode):
@@ -8,8 +12,8 @@ class RSNodeScriptsNode(RenderStackNode):
     bl_idname = 'RSNodeScriptsNode'
     bl_label = 'Scripts'
 
-    code: StringProperty(name='Code to execute', default='')
-    file: PointerProperty(type=bpy.types.Text, name="Scripts file")
+    code: StringProperty(name='Code to execute', default='', update=update_node)
+    file: PointerProperty(type=bpy.types.Text, name="Scripts file", update=update_node)
 
     type: EnumProperty(
         name='Type',

@@ -3,6 +3,10 @@ from bpy.props import *
 from RenderStackNode.node_tree import RenderStackNode
 
 
+def update_node(self, context):
+    self.update()
+
+
 class RSNodeImageFormatInputNode(RenderStackNode):
     bl_idname = "RSNodeImageFormatInputNode"
     bl_label = "Image Format"
@@ -12,17 +16,17 @@ class RSNodeImageFormatInputNode(RenderStackNode):
         items=[('PNG', 'PNG', '', 'IMAGE_DATA', 0),
                ('JPEG', 'JPEG', '', 'IMAGE_DATA', 1),
                ('OPEN_EXR_MULTILAYER', 'OpenEXR Multilayer', '', 'IMAGE_DATA', 2)],
-        default='PNG')
+        default='PNG', update=update_node)
 
     color_mode: EnumProperty(
         name='Color Mode',
         items=[('BW', 'BW', ''), ('RGB', 'RGB', ''), ('RGBA', 'RGBA', '')],
-        default='RGBA', )
+        default='RGBA', update=update_node)
 
     color_depth: EnumProperty(
         name='Color Depth',
         items=[('8', '8', ''), ('16', '16', ''), ('32', '32', '')],
-        default='16', )
+        default='16', update=update_node)
 
     transparent: BoolProperty(default=False, name="Transparent")
 

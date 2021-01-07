@@ -2,13 +2,15 @@ import bpy
 from bpy.props import *
 from RenderStackNode.node_tree import RenderStackNode
 
+def update_node(self, context):
+    self.update()
 
 class RSNodeViewLayerPassesNode(RenderStackNode):
     bl_idname = "RSNodeViewLayerPassesNode"
     bl_label = "View Layer Passes"
 
-    use_passes: BoolProperty(name="Separate Passes")
-    view_layer: StringProperty(name="View Layer", default="")
+    use_passes: BoolProperty(name="Separate Passes",update=update_node)
+    view_layer: StringProperty(name="View Layer", default="",update=update_node)
 
     def init(self, context):
         self.outputs.new('RSNodeSocketOutputSettings', "Output Settings")

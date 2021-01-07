@@ -19,7 +19,12 @@ class NodeSmtpProps(bpy.types.PropertyGroup):
 
 class NodeViewerProps(bpy.types.PropertyGroup):
     show: BoolProperty(name="Dropdown")
-    timer: FloatProperty(name='Update time (second)', default=0.05, min=0.01, max=0.5, step=1)
+    update_scripts: BoolProperty(name='Update scripts node',
+                                 description="Update scripts node when using viewer node")
+    update_path: BoolProperty(name='Update File Path node',
+                              description="Update File Path node when using viewer node")
+    update_view_layer_passes: BoolProperty(name='Update ViewLayer Passes node',
+                                           description="Update ViewLayer Passes node when using viewer node")
 
 
 class RSN_Preference(bpy.types.AddonPreferences):
@@ -37,7 +42,7 @@ class RSN_Preference(bpy.types.AddonPreferences):
         ('40', 'Error', '')
     ], default='30')
 
-    file_path_separator:EnumProperty(items=[
+    file_path_separator: EnumProperty(items=[
         ('.', 'Dot', ''),
         ('_', 'Underscore', ''),
         (' ', 'Space', ''),
@@ -45,9 +50,6 @@ class RSN_Preference(bpy.types.AddonPreferences):
 
     node_smtp: PointerProperty(type=NodeSmtpProps)
     node_viewer: PointerProperty(type=NodeViewerProps)
-
-    update_scripts: BoolProperty(name='Update scripts nodes',
-                                 description="Update scripts nodes when using viewer node to auto update")
 
     def draw_nodes(self):
         layout = self.layout
@@ -67,14 +69,14 @@ class RSN_Preference(bpy.types.AddonPreferences):
                  icon='TRIA_DOWN' if self.node_viewer.show else 'TRIA_RIGHT')
         if self.node_viewer.show:
             box.use_property_split = True
-            box.prop(self.node_viewer, 'timer', slider=1)
-            box.prop(self, 'update_scripts')
+            box.prop(self.node_viewer, 'update_scripts')
+            box.prop(self.node_viewer, 'update_path')
 
     def draw_properties(self):
         layout = self.layout
         layout.use_property_split = True
         layout.prop(self, 'log_level', text='Log')
-        row = layout.row(align = 1)
+        row = layout.row(align=1)
         row.prop(self, 'file_path_separator', text='File Path Separator')
 
     def draw(self, context):
@@ -105,6 +107,7 @@ def add_keybind():
         kmi = km.keymap_items.new('wm.call_menu_pie', 'F', 'PRESS')
         kmi.properties.name = "RSN_MT_PieMenu"
         addon_keymaps.append((km, kmi))
+
 
 def remove_keybind():
     wm = bpy.context.window_manager

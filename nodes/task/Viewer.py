@@ -35,55 +35,6 @@ class RSN_OT_AddViewerNode(bpy.types.Operator):
         return {"FINISHED"}
 
 
-class RSN_OT_ViewerHandler(bpy.types.Operator):
-    bl_idname = "rsn.viewer_handler"
-    bl_label = 'Auto Update'
-
-    _timer = None
-    data = None
-    update_scripts = None
-
-    @classmethod
-    def poll(self, context):
-        return context.window_manager.rsn_viewer_modal is False
-
-    def finish(self, context):
-        context.window_manager.event_timer_remove(self._timer)
-        context.window_manager.rsn_viewer_modal = False
-        self.report({"INFO"}, 'Stop Auto Update')
-
-    def modal(self, context, event):
-        if not context.window_manager.rsn_viewer_modal:
-            self.finish(context)
-            return {'FINISHED'}
-
-        elif event.type == 'TIMER':
-            if not context.window_manager.rsn_viewer_modal:
-                self.finish(context)
-                return {"FINISHED"}
-            elif context.window_manager.rsn_viewer_node == '':
-                return {'PASS_THROUGH'}
-            else:
-                try:
-                    bpy.ops.rsn.update_parms(task_name=context.window_manager.rsn_viewer_node,
-                                             viewer_handler=context.window_manager.rsn_viewer_node,
-                                             update_scripts=self.update_scripts)
-                except:
-                    pass
-
-        return {'PASS_THROUGH'}
-
-    def execute(self, context):
-        context.window_manager.rsn_viewer_modal = True
-        pref = context.preferences.addons.get('RenderStackNode').preferences
-        self.update_scripts = pref.update_scripts
-        self._timer = context.window_manager.event_timer_add(pref.node_viewer.timer, window=context.window)
-        context.window_manager.modal_handler_add(self)
-
-        self.report({"INFO"}, 'Start Auto Update')
-        return {'RUNNING_MODAL'}
-
-
 class RSNodeViewerNode(RenderStackNode):
     bl_idname = 'RSNodeViewerNode'
     bl_label = 'Viewer'
@@ -100,10 +51,7 @@ class RSNodeViewerNode(RenderStackNode):
             node = reroute(self.inputs[0].links[0].from_node)
             context.window_manager.rsn_viewer_node = node.name
             layout.label(text=f'Viewing {node.name}')
-            if not context.window_manager.rsn_viewer_modal:
-                layout.operator('rsn.viewer_handler', text='Auto Update')
-            else:
-                layout.prop(context.window_manager, 'rsn_viewer_modal', text='Auto Update', icon='FILE_REFRESH')
+
         else:
             context.window_manager.rsn_viewer_node = ''
             layout.label(text=f'Viewing Nothing')
@@ -145,7 +93,6 @@ def draw_menu(self, context):
 
 def register():
     bpy.utils.register_class(RSN_OT_AddViewerNode)
-    bpy.utils.register_class(RSN_OT_ViewerHandler)
     bpy.utils.register_class(RSNodeViewerNode)
     bpy.types.WindowManager.rsn_viewer_modal = BoolProperty(name='Viewer Auto Update', default=False)
     bpy.types.WindowManager.rsn_viewer_node = StringProperty(name='Viewer task name')
@@ -159,7 +106,6 @@ def unregister():
     del bpy.types.WindowManager.rsn_viewer_node
     bpy.utils.unregister_class(RSNodeViewerNode)
     bpy.utils.unregister_class(RSN_OT_ViewerHandler)
-    bpy.utils.unregister_class(RSN_OT_AddViewerNode)
 
     bpy.types.NODE_MT_context_menu.remove(draw_menu)
     remove_keybind()
