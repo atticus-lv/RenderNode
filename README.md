@@ -5,20 +5,20 @@
 >  **Design Target**
 > Provide users with node-based, flexible rendering output workflow
 
-### Features v 1.0（beta）
+![原型](img/prototype.jpg)
+
+### Features v 1.0
 
 + Camera overide
 + Render Engine overwrite (Workbench,Eevee,Cycles,Luxcore)
 + Output Setting overwrite (Frame Range,Resulotion,path（format file name support）,image settings)
-+ Object Material overwrite 
++ Object Material/Location overwrite 
 + Allow script for overwritting
 + Viewer Node (Just like Node Wrangler,short cut V)
 + Render all task (list)
 + Smtp email 
 + Render Process
 + View layer passes output
-
-> Chinese intro video (v 0.9 / v0.5) 中文介绍请看视频 https://www.bilibili.com/video/BV1wr4y1c7Tt/
 
 
 
@@ -39,7 +39,7 @@
 
 > *Once you plug a node settings to overide something into the a task,the next task will inherit it if there is not a same type Node plug input(except viewlayer passes node,frame range node). So you may start a new render list to keep your node tree cleaner*
 
-![image-20201204110858390](./img/image-20201204110858390.png)
+![1.0](img/1.0.png)
 
 
 
