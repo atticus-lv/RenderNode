@@ -21,7 +21,7 @@
 + View layer passes output
 
 > Known Error:
-> Use 2.92 lower version (render with cuda) may cause blender unfix bug
+> Render with cuda may cause blender internal errors (python state error)
 
 
 ### How it works

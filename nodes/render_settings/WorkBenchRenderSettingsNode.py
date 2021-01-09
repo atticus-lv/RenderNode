@@ -1,4 +1,5 @@
 import bpy
+from bpy.props import *
 from RenderStackNode.node_tree import RenderStackNode
 
 
@@ -11,12 +12,22 @@ class WorkBenchRenderSettingsNode(RenderStackNode):
     bl_idname = 'RSNodeWorkBenchRenderSettingsNode'
     bl_label = 'WorkBench Settings'
 
+    # render_aa: EnumProperty(name='Samples',
+    #                         items=[('OFF', 'No Anti-Aliasing', ''),
+    #                                ('FXAA', 'Single Pass Anti-Aliasing'),
+    #                                ('5', '5 Samples'),
+    #                                ('8', '8 Samples'),
+    #                                ('11', '11 Samples'),
+    #                                ('16', '16 Samples'),
+    #                                ('32', '32 Samples'),
+    #                                ])
+
     def init(self, context):
-        self.outputs.new('RSNodeSocketRenderSettings', "Render Settings", update=update_node)
+        self.outputs.new('RSNodeSocketRenderSettings', "Render Settings")
 
     def draw_buttons(self, context, layout):
+        # layout.prop(self,'render_aa')
         pass
-
 
 def register():
     bpy.utils.register_class(WorkBenchRenderSettingsNode)
