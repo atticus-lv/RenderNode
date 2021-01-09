@@ -71,6 +71,7 @@ class RSN_Preference(bpy.types.AddonPreferences):
             box.use_property_split = True
             box.prop(self.node_viewer, 'update_scripts')
             box.prop(self.node_viewer, 'update_path')
+            box.prop(self.node_viewer, 'update_view_layer_passes')
 
     def draw_properties(self):
         layout = self.layout

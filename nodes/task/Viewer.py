@@ -56,11 +56,11 @@ class RSNodeViewerNode(RenderStackNode):
         if self.inputs[0].is_linked:
             node = reroute(self.inputs[0].links[0].from_node)
             context.window_manager.rsn_viewer_node = node.name
-            row.label(text=node.name, icon='HIDE_OFF')
+            row.label(text=f'{node.name} | {node.label}', icon='NODE_SEL')
 
         else:
             context.window_manager.rsn_viewer_node = ''
-            row.label(text='', icon='HIDE_ON')
+            row.label(text='', icon='NODE')
         row.prop(self, 'show_pref', icon_only=1, icon='TRIA_DOWN' if self.show_pref else "TRIA_LEFT")
         if self.show_pref:
             layout.prop(pref.node_viewer, 'update_scripts', toggle=1)
