@@ -105,14 +105,13 @@ def draw_menu(self, context):
 def register():
     bpy.utils.register_class(RSN_OT_AddViewerNode)
     bpy.utils.register_class(RSNodeViewerNode)
-    bpy.types.WindowManager.rsn_viewer_node = StringProperty(name='Viewer task name')
 
     bpy.types.NODE_MT_context_menu.prepend(draw_menu)
     add_keybind()
 
 
 def unregister():
-    del bpy.types.WindowManager.rsn_viewer_node
+
     bpy.utils.unregister_class(RSNodeViewerNode)
     bpy.utils.unregister_class(RSN_OT_ViewerHandler)
 

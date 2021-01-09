@@ -16,14 +16,12 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
     bl_idname = "rsn.update_parms"
     bl_label = "Update Parms"
 
+    use_render_mode: BoolProperty(default=True, description="Prevent from python context error")
 
-    use_render_mode:BoolProperty(default=True)
-
-    viewer_handler: StringProperty()
+    view_mode_handler: StringProperty()
     update_scripts: BoolProperty(default=False)
 
     nt: None
-    task_name: StringProperty()
     task_data = None
 
     def reroute(self, node):
@@ -44,22 +42,20 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         self.nt.nt.nodes[node_name].color = (1, 0, 0)
 
     def get_data(self):
-        try:
-            if self.viewer_handler != '':
-                nt = NODE_TREE(bpy.context.space_data.edit_tree, node_name=self.viewer_handler)
-            else:
-                nt = NODE_TREE(bpy.context.space_data.edit_tree)
-            self.nt = nt
-            task_name = self.task_name
-            try:
-                self.task_data = nt.get_task_data(task_name)
-                logger.debug(f'GET >{task_name}< DATA')
-                return True
-            except KeyError:
-                logger.debug(f'GET NO >{task_name}< DATA, NO ACTION')
-                return None
-        except:
-            return None
+        if not self.use_render_mode:
+            rsn_tree = RSN_NodeTree()
+            self.nt = rsn_tree.get_context_tree()
+        else:
+            rsn_tree = RSN_NodeTree()
+            self.nt = rsn_tree.get_wm_node_tree()
+
+        rsn_task = RSN_Task(node_tree=self.nt,
+                            root_node_name=self.view_mode_handler)
+        node_list_dict = rsn_task.get_sub_node_from_task(task_name=self.view_mode_handler,
+                                                         return_dict=True)
+        self.task_data = rsn_task.get_task_data(task_name=self.view_mode_handler,
+                                           task_dict=node_list_dict)
+        logger.debug(f'Get >{self.view_mode_handler}< data')
 
     def update_ev(self):
         if 'ev' in self.task_data:
@@ -88,7 +84,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         blend_path = bpy.context.blend_data.filepath
         blend_name = bpy.path.basename(blend_path)[:-6]
         task = self.task_data
-        if 'path' in task:
+        if 'path' in task and task['path'] != '':
             if not task['use_blend_file_path']:
                 directory_path = os.path.dirname(task['path']) + "\\" + f"{blend_name}_render"
             else:
@@ -108,7 +104,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         scn = bpy.context.scene
         cam = scn.camera
         pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
-        separator= pref.file_path_separator
+        separator = pref.file_path_separator
 
         postfix = ""
         date_now = str(time.strftime("%m-%d", time.localtime()))
@@ -130,8 +126,8 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                         postfix += f"{scn.render.resolution_x}x{scn.render.resolution_y}" + separator
                     elif r.startswith("ev"):
                         postfix += scn.view_settings.exposure + separator
-                    elif r.startswith("task"):
-                        postfix += self.task_data["task_name"] + separator
+                    elif r.startswith("label"):
+                        postfix += self.task_data["label"] + separator
                     elif r.startswith("vl"):
                         postfix += bpy.context.view_layer.name + separator
                     else:
@@ -322,35 +318,34 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
 
     def execute(self, context):
         pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
-        level = logger.getEffectiveLevel()
-        if level != int(pref.log_level):
-            logger.setLevel(int(pref.log_level))
-        if self.get_data():
-            self.update_camera()
-            self.update_ev()
-            self.update_res()
-            self.update_render_engine()
+        logger.setLevel(int(pref.log_level))
+        logger.debug('update parms op START')
+        self.get_data()
+        self.update_camera()
+        self.update_ev()
+        self.update_res()
+        self.update_render_engine()
 
-            self.update_object_material()
-            self.update_object_psr()
+        self.update_object_material()
+        self.update_object_psr()
 
-            self.update_frame_range()
-            self.updata_view_layer()
+        self.update_frame_range()
+        self.updata_view_layer()
 
-            self.update_image_format()
-            self.update_slots()
+        self.update_image_format()
+        self.update_slots()
 
-            self.update_world()
-            self.ssm_light_studio()
-            if pref.node_viewer.update_scripts or self.use_render_mode:
-                self.updata_scripts()
-            if pref.node_viewer.update_path or self.use_render_mode:
-                self.update_path()
-            if pref.node_viewer.update_view_layer_passes or self.use_render_mode:
-                self.update_view_layer_passes()
-            if self.use_render_mode:
-                self.send_email()
-            logger.debug('update parms op FINISHED')
+        self.update_world()
+        self.ssm_light_studio()
+        if pref.node_viewer.update_scripts or self.use_render_mode:
+            self.updata_scripts()
+        if pref.node_viewer.update_path or self.use_render_mode:
+            self.update_path()
+        if pref.node_viewer.update_view_layer_passes or self.use_render_mode:
+            self.update_view_layer_passes()
+        if self.use_render_mode:
+            self.send_email()
+        logger.debug('update parms op FINISHED')
 
         return {'FINISHED'}
 

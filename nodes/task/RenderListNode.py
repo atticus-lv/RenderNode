@@ -1,7 +1,8 @@
 import json
 import bpy
 
-from RenderStackNode.utility import NODE_TREE
+from bpy.props import *
+from RenderStackNode.utility import *
 from RenderStackNode.node_tree import RenderStackNode
 from .ProcessorNode import RSNodeProcessorNode
 
@@ -13,12 +14,18 @@ shift:get overwrite details '''
     bl_label = 'get info'
 
     def invoke(self, context, event):
-        nt = NODE_TREE(context.space_data.edit_tree)
+        rsn_tree = RSN_NodeTree()
+        rsn_tree.set_context_tree_as_wm_tree()
+
+        nt = rsn_tree.get_wm_node_tree()
+        rsn_task = RSN_Task(node_tree=self.nt,
+                            root_node_name=self.render_list_node_name)
+
         if event.shift:
-            for k in nt.dict.keys():
+            for k in nt.node_list_dict.keys():
                 print(json.dumps(nt.get_task_data(k), indent=4, ensure_ascii=False))
         else:
-            print(json.dumps(nt.dict, indent=4, ensure_ascii=False))
+            print(json.dumps(nt.node_list_dict, indent=4, ensure_ascii=False))
 
         return {"FINISHED"}
 
@@ -28,9 +35,9 @@ class RSNodeRenderListNode(RenderStackNode):
     bl_idname = 'RSNodeRenderListNode'
     bl_label = 'Render List'
 
+    show_process: BoolProperty(name='Show Processor Node')
+
     def init(self, context):
-        self.inputs.new('RSNodeSocketRenderList', "Task")
-        self.inputs.new('RSNodeSocketRenderList', "Task")
         self.inputs.new('RSNodeSocketRenderList', "Task")
 
     def draw_buttons(self, context, layout):
@@ -39,18 +46,13 @@ class RSNodeRenderListNode(RenderStackNode):
     def draw_buttons_ext(self, context, layout):
         # edit Inputs
         layout.scale_y = 1.25
-        row = layout.row(align=True)
-        add = row.operator("rsnode.edit_input", text="render", icon='ADD')
-        add.remove = False
-        add.socket_type = "RSNodeSocketRenderList"
-        add.socket_name = "render"
-        remove = row.operator("rsnode.edit_input", text="Unused", icon='REMOVE')
-        remove.remove = True
-        # render buttons
-        layout.operator("rsn.get_info", text=f'Print Info (Console)')
+        # layout.operator("rsn.get_info", text=f'Print Info (Console)')
         box = layout.box()
         box.scale_y = 1.5
-        box.operator("rsn.render_button", text=f'Render Inputs')
+        box.operator("rsn.render_button", text=f'Render Inputs').render_list_node_name = self.name
+
+        # layout.prop(self,"show_process")
+
 
 
 

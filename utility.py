@@ -2,24 +2,54 @@ import bpy
 from itertools import groupby
 import logging
 
+
 # LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
 # logging.basicConfig(format=LOG_FORMAT)
 # logger = logging.getLogger('mylogger')
 
 
-class NODE_TREE():
-    def __init__(self, node_tree, node_name=None):
-        self.nt = node_tree
-        self.root_node = node_tree.nodes[node_name] if node_name else node_tree.nodes.active
-        self.node_list = self.get_node_list(self.root_node) if node_name else self.get_node_list(self.root_node)
-        self.dict = self.separate_nodes(self.node_list)
+class RSN_NodeTree():
+    def get_context_tree(self, return_name=False):
+        try:
+            name = bpy.context.space_data.edit_tree.name
+            return bpy.context.space_data.edit_tree.name if return_name else bpy.data.node_groups[name]
+        except:
+            return None
 
-    def get_node_list(self, node):
+    def set_wm_node_tree(self, node_tree_name):
+        bpy.context.window_manager.rsn_cur_tree_name = node_tree_name
+
+    def get_wm_node_tree(self, get_name=False):
+        name = bpy.context.window_manager.rsn_cur_tree_name
+        if get_name:
+            return name
+        else:
+            return bpy.data.node_groups[name]
+
+    def set_context_tree_as_wm_tree(self):
+        tree_name = self.get_context_tree(return_name=1)
+        if tree_name:
+            self.set_wm_node_tree(tree_name)
+
+
+class RSN_Task():
+    def __init__(self, node_tree, root_node_name):
+        self.nt = node_tree
+        self.root_node = self.nt.nodes[root_node_name]
+
+    def get_node_from_name(self, name):
+        return self.nt.nodes[name]
+
+    def get_root_node(self):
+        return self.root_node
+
+    def get_sub_node_from_node(self, root_node):
         node_list = []
 
-        def get_node(node):
-            if len(node_list) == 0 or (node.name != node_list[-1] and len(node_list) != 0):
-                node_list.append(node.name)
+        def append_node_to_list(node):
+            if node.bl_idname != 'NodeReroute':
+                if len(node_list) == 0 or (len(node_list) != 0 and node.name != node_list[-1]):
+                    node_list.append(node.name)
 
         def get_sub_node(node):
             for input in node.inputs:
@@ -31,38 +61,52 @@ class NODE_TREE():
                         get_sub_node(sub_node)
                 else:
                     continue
-            # get node itself after get all input nodes
-            get_node(node)
+            append_node_to_list(node)
 
-        get_sub_node(node)
+        get_sub_node(root_node)
 
         return node_list
 
-    def separate_nodes(self, node_list):
-        dict = {}
-        nt = bpy.context.space_data.edit_tree
+    def get_sub_node_dict_from_node_list(self, node_list, parent_node_type, black_list=None):
+        'RSNodeTaskListNode'
+        node_list_dict = {}
+        if not black_list: black_list = []
+
         node_list[:] = [node for node in node_list if
-                        nt.nodes[node].bl_idname not in ['NodeReroute', 'RSNodeTaskListNode']]
-        normal_node_list = [list(g) for k, g in
-                            groupby(node_list, lambda name: nt.nodes[name].bl_idname == 'RSNodeTaskNode') if not k]
-        task_node_list = [node for node in node_list if nt.nodes[node].bl_idname == 'RSNodeTaskNode']
+                        self.nt.nodes[node].bl_idname not in black_list]
+        children_node_list = [list(g) for k, g in
+                              groupby(node_list, lambda name: self.nt.nodes[name].bl_idname == parent_node_type) if
+                              not k]
+        parent_node_list = [node for node in node_list if self.nt.nodes[node].bl_idname == parent_node_type]
 
-        for i in range(len(task_node_list)):
-            dict[task_node_list[i]] = normal_node_list[i]
+        for i in range(len(parent_node_list)):
+            node_list_dict[parent_node_list[i]] = children_node_list[i]
 
-        return dict
+        return node_list_dict
 
-    def get_task_dict(self, task_name):
-        return self.dict[task_name]
+    def get_sub_node_from_task(self, task_name, return_dict=False, type='RSNodeTaskNode'):
+        task = self.get_node_from_name(task_name)
+        node_list = self.get_sub_node_from_node(task)
+        if not return_dict:
+            return node_list
+        else:
+            return self.get_sub_node_dict_from_node_list(node_list=node_list,
+                                                         parent_node_type=type)
 
-    def get_active_node(self):
-        return self.nt.nodes.active
+    def get_sub_node_from_render_list(self,return_dict=False,type= 'RSNodeTaskNode'):
+        render_list = self.get_node_from_name(self.root_node.name)
+        node_list = self.get_sub_node_from_node(render_list)
+        if not return_dict:
+            return node_list
+        else:
+            return self.get_sub_node_dict_from_node_list(node_list=node_list,
+                                                         parent_node_type=type)
 
-    def get_task_data(self, task_name):
+    def get_task_data(self, task_name, task_dict):
         task_data = {}
-        for node_name in self.dict[task_name]:
+        for node_name in task_dict[task_name]:
             node = self.nt.nodes[node_name]
-            task_data['task_name'] = self.nt.nodes[task_name].task_name
+            task_data['label'] = self.nt.nodes[task_name].label
             if node.bl_idname == "RSNodeCamInputNode":
                 task_data["camera"] = node.camera.name if node.camera else None
 

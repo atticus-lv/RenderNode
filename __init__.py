@@ -2,10 +2,10 @@ bl_info = {
     "sender_name": "RenderStack Node ",
     "author"     : "Atticus",
     "version"    : (1, 0, 5),
-    "blender"    : (2, 91, 0),
+    "blender"    : (2, 92, 0),
     "location"   : "Node Editor > RenderStackNode Editor",
     "description": "Node based render queue workflow",
-    # 'waring'     : "Beta Version! Still in development",
+    'waring'     : "Use 2.92 below may cause python state error! ",
     # "doc_url"    : "",
     "category"   : "Render",
 }

@@ -3,6 +3,8 @@ from bpy.props import *
 
 
 class RSNode_OT_EditInput(bpy.types.Operator):
+    """Add/Remove socket input for active node
+    """
     bl_idname = "rsnode.edit_input"
     bl_label = "Add Task"
 
@@ -21,6 +23,9 @@ class RSNode_OT_EditInput(bpy.types.Operator):
                     active_node.inputs.remove(input)
 
         return {"FINISHED"}
+
+
+
 
 
 def register():
