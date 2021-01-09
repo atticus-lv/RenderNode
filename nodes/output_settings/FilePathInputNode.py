@@ -15,7 +15,7 @@ class RSNodeFilePathInputNode(RenderStackNode):
                                       description='Save in blend file directory',
                                       default=True, update=update_node)
     path: StringProperty(default='', update=update_node)
-    path_format: StringProperty(default="$task/$camera",
+    path_format: StringProperty(default="$label/$camera",
                                 name="Formatted Name",
                                 description='Formatted Name,View sidebar usage',
                                 update=update_node)

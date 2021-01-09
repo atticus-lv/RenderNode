@@ -13,6 +13,7 @@ class RSNodeTaskNode(RenderStackNode):
         self.inputs.new('RSNodeSocketTaskSettings', "Settings")
         self.inputs.new('RSNodeSocketTaskSettings', "Settings")
         self.outputs.new('RSNodeSocketRenderList', "Task")
+        self.label = 'task1'
 
     def draw_buttons(self, context, layout):
         layout.use_property_split = 1

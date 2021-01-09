@@ -17,7 +17,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     bl_idname = "rsn.render_stack_task"
     bl_label = "Render Stack"
 
-    render_list_node_name:StringProperty()
+    render_list_node_name: StringProperty()
     nt = None
     # 渲染状态获取
     _timer = None
@@ -87,7 +87,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         task = self.mark_task_names[0]
         pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
 
-        bpy.ops.rsn.update_parms(task_name=task,viewer_handler = task,use_render_mode=True)
+        bpy.ops.rsn.update_parms(task_name=task, viewer_handler=task, use_render_mode=True)
 
         scn.render.use_file_extension = 1
         scn.render.filepath += f"{pref.file_path_separator}{self.frame_current:04d}"
@@ -113,13 +113,17 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         self.rendering = False
 
         rsn_tree = RSN_NodeTree()
-        self.nt = rsn_tree.get_wm_node_tree
-        rsn_task = RSN_Task(node_tree = self.nt,root_node_name = self.render_list_node_name)
-        node_list_dict = rsn_task.get_sub_node_from_render_list(return_dict = 1)
+        rsn_tree.set_context_tree_as_wm_tree()
+        self.nt = rsn_tree.get_wm_node_tree()
+
+        rsn_task = RSN_Task(node_tree=self.nt,
+                            root_node_name=self.render_list_node_name)
+        node_list_dict = rsn_task.get_sub_node_from_render_list(return_dict=1)
+        logger.info(f'Get all data:\n{node_list_dict}')
 
         for task in node_list_dict:
-            # get data
-            task_data = nt.get_task_data(task_name=task)
+            task_data = rsn_task.get_task_data(task_name=task,
+                                               task_dict=node_list_dict)
             self.task_data.append(task_data)
             self.mark_task_names.append(task)
             # get frame Range
@@ -134,6 +138,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
                 render_list["frame_step"] = 1
             self.frame_list.append(render_list)
 
+        print(self.task_data,self.mark_task_names)
         if True in (len(self.mark_task_names) == 0, len(self.frame_list) == 0):
             scn.render.use_lock_interface = False
             context.window_manager.rsn_running_modal = False
@@ -144,7 +149,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
 
         self.frame_current = self.frame_list[0]["frame_start"]
         self.append_handles()
-
+        # return {"FINISHED"}
         return {"RUNNING_MODAL"}
 
     def finish_process_node(self):
@@ -187,6 +192,8 @@ class RSN_OT_RenderButton(bpy.types.Operator):
     bl_idname = "rsn.render_button"
     bl_label = "Render"
 
+    render_list_node_name: StringProperty()
+
     @classmethod
     def poll(self, context):
         if not context.window_manager.rsn_running_modal:
@@ -211,7 +218,7 @@ class RSN_OT_RenderButton(bpy.types.Operator):
             return {"FINISHED"}
 
         self.change_shading()
-        bpy.ops.rsn.render_stack_task()
+        bpy.ops.rsn.render_stack_task(render_list_node_name=self.render_list_node_name)
 
         return {'FINISHED'}
 
@@ -224,7 +231,7 @@ def register():
     bpy.utils.register_class(RSN_OT_RenderStackTask)
     bpy.utils.register_class(RSN_OT_RenderButton)
     bpy.types.WindowManager.rsn_running_modal = BoolProperty(default=False)
-    bpy.types.WindowManager.rsn_cur_tree_name = StringProperty(name = 'current rendering tree',default='')
+    bpy.types.WindowManager.rsn_cur_tree_name = StringProperty(name='current rendering tree', default='')
     bpy.types.WindowManager.rsn_viewer_node = StringProperty(name='Viewer task name')
 
 
@@ -234,4 +241,3 @@ def unregister():
     del bpy.types.WindowManager.rsn_running_modal
     del bpy.types.WindowManager.rsn_cur_tree_name
     del bpy.types.WindowManager.rsn_viewer_node
-

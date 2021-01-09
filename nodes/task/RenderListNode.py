@@ -14,7 +14,13 @@ shift:get overwrite details '''
     bl_label = 'get info'
 
     def invoke(self, context, event):
-        nt = NODE_TREE(context.space_data.edit_tree)
+        rsn_tree = RSN_NodeTree()
+        rsn_tree.set_context_tree_as_wm_tree()
+
+        nt = rsn_tree.get_wm_node_tree()
+        rsn_task = RSN_Task(node_tree=self.nt,
+                            root_node_name=self.render_list_node_name)
+
         if event.shift:
             for k in nt.node_list_dict.keys():
                 print(json.dumps(nt.get_task_data(k), indent=4, ensure_ascii=False))
@@ -43,7 +49,7 @@ class RSNodeRenderListNode(RenderStackNode):
         # layout.operator("rsn.get_info", text=f'Print Info (Console)')
         box = layout.box()
         box.scale_y = 1.5
-        box.operator("rsn.render_button", text=f'Render Inputs')
+        box.operator("rsn.render_button", text=f'Render Inputs').render_list_node_name = self.name
 
         if self.show_process:
             try:

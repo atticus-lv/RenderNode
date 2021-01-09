@@ -35,7 +35,7 @@ class RSN_NodeTree():
 class RSN_Task():
     def __init__(self, node_tree, root_node_name):
         self.nt = node_tree
-        self.root_node = node_tree.nodes[root_node_name]
+        self.root_node = self.nt.nodes[root_node_name]
 
     def get_node_from_name(self, name):
         return self.nt.nodes[name]
@@ -93,8 +93,8 @@ class RSN_Task():
             return self.get_sub_node_dict_from_node_list(node_list=node_list,
                                                          parent_node_type=type)
 
-    def get_sub_node_from_render_list(self, render_list_name = self.root_node,return_dict=False,type= 'RSNodeRenderListNode'):
-        render_list = self.get_node_from_name(render_list_name)
+    def get_sub_node_from_render_list(self,return_dict=False,type= 'RSNodeTaskNode'):
+        render_list = self.get_node_from_name(self.root_node.name)
         node_list = self.get_sub_node_from_node(render_list)
         if not return_dict:
             return node_list

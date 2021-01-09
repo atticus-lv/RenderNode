@@ -1,7 +1,7 @@
 import bpy
 import nodeitems_utils
 from bpy.props import *
-from RenderStackNode.utility import NODE_TREE
+from RenderStackNode.utility import *
 
 
 class RenderStackNodeTree(bpy.types.NodeTree):
@@ -27,13 +27,17 @@ class RenderStackNode(bpy.types.Node):
     def update(self):
         try:
             if self.outputs[0].is_linked:
-                nt = NODE_TREE(bpy.context.space_data.edit_tree, bpy.context.window_manager.rsn_viewer_node)
-                if self.name in nt.__node_list__:
-                    pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
-                    bpy.ops.rsn.update_parms(task_name=bpy.context.window_manager.rsn_viewer_node,
-                                             viewer_handler=bpy.context.window_manager.rsn_viewer_node,
-                                             update_scripts=pref.node_viewer.update_scripts,
-                                             use_render_mode=False)
+                rsn_task = RSN_Task(node_tree=bpy.context.space_data.edit_tree,
+                                    root_node_name=bpy.context.window_manager.rsn_viewer_node)
+                try:
+                    __node_list__ = rsn_task.get_sub_node_from_node(rsn_task.get_node_from_name('Viewer'))
+                    if self.name in __node_list__:
+                        pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
+                        bpy.ops.rsn.update_parms(view_mode_handler=bpy.context.window_manager.rsn_viewer_node,
+                                                 update_scripts=pref.node_viewer.update_scripts,
+                                                 use_render_mode=False)
+                except Exception as e:
+                    print(e)
 
         except (IndexError, AttributeError) as e:
             pass

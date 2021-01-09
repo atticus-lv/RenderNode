@@ -53,8 +53,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                             root_node_name=self.view_mode_handler)
         node_list_dict = rsn_task.get_sub_node_from_task(task_name=self.view_mode_handler,
                                                          return_dict=True)
-
-        self.task_data = rsn.get_task_data(task_name=self.view_mode_handler,
+        self.task_data = rsn_task.get_task_data(task_name=self.view_mode_handler,
                                            task_dict=node_list_dict)
         logger.debug(f'GET >{self.view_mode_handler}< DATA')
 
