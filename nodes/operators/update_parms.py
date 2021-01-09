@@ -55,7 +55,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                                                          return_dict=True)
         self.task_data = rsn_task.get_task_data(task_name=self.view_mode_handler,
                                            task_dict=node_list_dict)
-        logger.debug(f'GET >{self.view_mode_handler}< DATA')
+        logger.debug(f'Get >{self.view_mode_handler}< data')
 
     def update_ev(self):
         if 'ev' in self.task_data:

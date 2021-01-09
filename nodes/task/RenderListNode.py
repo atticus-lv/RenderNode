@@ -51,11 +51,9 @@ class RSNodeRenderListNode(RenderStackNode):
         box.scale_y = 1.5
         box.operator("rsn.render_button", text=f'Render Inputs').render_list_node_name = self.name
 
-        if self.show_process:
-            try:
-                RSNodeProcessorNode.draw_buttons(context, layout)
-            except:
-                pass
+        # layout.prop(self,"show_process")
+
+
 
 
 def register():

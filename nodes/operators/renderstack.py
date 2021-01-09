@@ -1,8 +1,13 @@
 import os
 import time
+import logging
 
 from bpy.props import *
 from RenderStackNode.utility import *
+
+LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
+logging.basicConfig(format=LOG_FORMAT)
+logger = logging.getLogger('mylogger')
 
 
 def get_length(frame_list):
@@ -49,7 +54,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
 
     def update_process_node(self):
         try:
-            node = self.nt.nt.nodes['Processor']
+            node = self.nt.nodes['Processor']
             node.done_frames += 1
             node.curr_task = self.mark_task_names[0]
             node.frame_start = bpy.context.scene.frame_start
@@ -62,7 +67,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         self.rendering = False
         self.frame_check()
         # show in nodes
-        self.update_process_node()
+        # self.update_process_node()
 
     def cancelled(self, dummy, thrd=None):
         self.stop = True
@@ -87,7 +92,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         task = self.mark_task_names[0]
         pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
 
-        bpy.ops.rsn.update_parms(task_name=task, viewer_handler=task, use_render_mode=True)
+        bpy.ops.rsn.update_parms(view_mode_handler=task, use_render_mode=True)
 
         scn.render.use_file_extension = 1
         scn.render.filepath += f"{pref.file_path_separator}{self.frame_current:04d}"
@@ -103,6 +108,11 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         except:
             pass
 
+    def init_logger(self, node_list_dict):
+        pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
+        logger.setLevel(int(pref.log_level))
+        logger.info(f'Get all data:\n{node_list_dict}')
+
     # init 初始化执行
     def execute(self, context):
         context.window_manager.rsn_running_modal = True
@@ -116,14 +126,13 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         rsn_tree.set_context_tree_as_wm_tree()
         self.nt = rsn_tree.get_wm_node_tree()
 
-        rsn_task = RSN_Task(node_tree=self.nt,
-                            root_node_name=self.render_list_node_name)
+        rsn_task = RSN_Task(node_tree=self.nt, root_node_name=self.render_list_node_name)
         node_list_dict = rsn_task.get_sub_node_from_render_list(return_dict=1)
-        logger.info(f'Get all data:\n{node_list_dict}')
+
+        self.init_logger(node_list_dict)
 
         for task in node_list_dict:
-            task_data = rsn_task.get_task_data(task_name=task,
-                                               task_dict=node_list_dict)
+            task_data = rsn_task.get_task_data(task_name=task, task_dict=node_list_dict)
             self.task_data.append(task_data)
             self.mark_task_names.append(task)
             # get frame Range
@@ -137,24 +146,24 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
                 render_list["frame_end"] = scn.frame_current
                 render_list["frame_step"] = 1
             self.frame_list.append(render_list)
+            print(self.frame_list)
 
-        print(self.task_data,self.mark_task_names)
         if True in (len(self.mark_task_names) == 0, len(self.frame_list) == 0):
             scn.render.use_lock_interface = False
             context.window_manager.rsn_running_modal = False
             self.report({"WARNING"}, 'Nothing to render！')
             return {"FINISHED"}
 
-        self.init_process_node()
+        # self.init_process_node()
 
         self.frame_current = self.frame_list[0]["frame_start"]
         self.append_handles()
-        # return {"FINISHED"}
+
         return {"RUNNING_MODAL"}
 
     def finish_process_node(self):
         try:
-            node = self.nt.nt.nodes['Processor']
+            node = self.nt.nodes['Processor']
             if len(self.mark_task_names) == 0 and len(self.frame_list) == 0:
                 node.all_tasks += ',RENDER_FINISHED'
                 node.curr_task = 'RENDER_FINISHED'
@@ -171,7 +180,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
                 bpy.context.window_manager.rsn_running_modal = False
                 bpy.context.scene.render.filepath = ""
 
-                self.finish_process_node()
+                # self.finish_process_node()
 
                 self.mark_task_names.clear()
                 self.frame_list.clear()
