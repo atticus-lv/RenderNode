@@ -7,7 +7,7 @@
 
 ![原型](img/prototype.jpg)
 
-### Features v 1.0
+### Features v 1.0.5
 
 + Camera overide
 + Render Engine overwrite (Workbench,Eevee,Cycles,Luxcore)
@@ -20,6 +20,8 @@
 + Render Process
 + View layer passes output
 
+> Known Error:
+> Use 2.92 lower version (render with cuda) may cause blender unfix bug
 
 
 ### How it works

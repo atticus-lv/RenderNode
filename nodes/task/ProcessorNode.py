@@ -34,7 +34,7 @@ class RSNodeProcessorNode(RenderStackNode):
     def draw_buttons(self, context, layout):
         done = self.count_frames - self.done_frames
         percent = done / self.count_frames
-
+        # total
         col = layout.column(align=1)
         col.scale_y = 1
         col.label(text=f"Total: {1 - percent:.0%} | Process: {self.done_frames} / {self.count_frames}")
@@ -45,7 +45,7 @@ class RSNodeProcessorNode(RenderStackNode):
         else:
             sub.prop(self, 'green', text="")
             sub.prop(self, 'red', text="")
-
+        # tasks
         curr_done = (self.frame_current + 1 - self.frame_start) / (self.frame_end + 1 - self.frame_start)
         task_list = self.all_tasks.split(",")
         layout.separator(factor=0.5)
@@ -64,11 +64,8 @@ class RSNodeProcessorNode(RenderStackNode):
                             col = box.row().column(align=1)
 
                             col.label(icon="RECOVER_LAST",
-                                      text=f'Processing: {curr_done:.0%} ({self.frame_current + 1 - self.frame_start} / {self.frame_end + 1 - self.frame_start})')
-
-                            row1 = col.row(align=1)
-                            row1.label(text=f'{name}', icon='CHECKBOX_DEHLT')
-                            row1.label(text=f"Range: {self.frame_start} - {self.frame_current + 1} - {self.frame_end}")
+                                      text=f'{name}: {curr_done:.0%} ({self.frame_current + 1 - self.frame_start} / {self.frame_end + 1 - self.frame_start})')
+                            col.label(text=f"Range: {self.frame_start} - {self.frame_current + 1} - {self.frame_end}")
 
                             col.separator(factor=0.5)
                             row = col.row()

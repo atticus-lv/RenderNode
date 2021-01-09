@@ -60,14 +60,14 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
             node.frame_start = bpy.context.scene.frame_start
             node.frame_end = bpy.context.scene.frame_end
             node.frame_current = bpy.context.scene.frame_current
-        except:
-            pass
+        except Exception as e:
+            logger.debug(f'Processor {e}')
 
     def post(self, dummy, thrd=None):
         self.rendering = False
         self.frame_check()
         # show in nodes
-        # self.update_process_node()
+        self.update_process_node()
 
     def cancelled(self, dummy, thrd=None):
         self.stop = True
@@ -99,19 +99,19 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
 
     def init_process_node(self):
         try:
-            node = nt.nt.nodes['Processor']
+            node = self.nt.nodes['Processor']
             node.count_frames = get_length(self.frame_list)
             node.done_frames = 0
             node.all_tasks = ''
             node.all_tasks = ','.join(self.mark_task_names)
             print(node.all_tasks)
-        except:
-            pass
+        except Exception as e:
+            logger.debug(f'Processor {e}')
 
     def init_logger(self, node_list_dict):
         pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
         logger.setLevel(int(pref.log_level))
-        logger.info(f'Get all data:\n{node_list_dict}')
+        logger.info(f'Get all data:\n\n{node_list_dict}\n')
 
     # init 初始化执行
     def execute(self, context):
@@ -146,7 +146,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
                 render_list["frame_end"] = scn.frame_current
                 render_list["frame_step"] = 1
             self.frame_list.append(render_list)
-            print(self.frame_list)
+            # print(self.frame_list)
 
         if True in (len(self.mark_task_names) == 0, len(self.frame_list) == 0):
             scn.render.use_lock_interface = False
@@ -154,7 +154,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
             self.report({"WARNING"}, 'Nothing to render！')
             return {"FINISHED"}
 
-        # self.init_process_node()
+        self.init_process_node()
 
         self.frame_current = self.frame_list[0]["frame_start"]
         self.append_handles()
@@ -169,8 +169,8 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
                 node.curr_task = 'RENDER_FINISHED'
             else:
                 node.all_tasks += ',RENDER_STOPED'
-        except:
-            pass
+        except Exception as e:
+            logger.debug(f'Processor {e}')
 
     def modal(self, context, event):
         # 计时器内事件
@@ -180,7 +180,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
                 bpy.context.window_manager.rsn_running_modal = False
                 bpy.context.scene.render.filepath = ""
 
-                # self.finish_process_node()
+                self.finish_process_node()
 
                 self.mark_task_names.clear()
                 self.frame_list.clear()
