@@ -28,14 +28,14 @@ class RenderStackNode(bpy.types.Node):
         try:
             if self.outputs[0].is_linked:
                 nt = NODE_TREE(bpy.context.space_data.edit_tree, bpy.context.window_manager.rsn_viewer_node)
-                if self.name in nt.node_list:
+                if self.name in nt.__node_list__:
                     pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
                     bpy.ops.rsn.update_parms(task_name=bpy.context.window_manager.rsn_viewer_node,
                                              viewer_handler=bpy.context.window_manager.rsn_viewer_node,
                                              update_scripts=pref.node_viewer.update_scripts,
                                              use_render_mode=False)
 
-        except (IndexError):
+        except (IndexError, AttributeError) as e:
             pass
 
 

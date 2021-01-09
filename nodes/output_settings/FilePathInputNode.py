@@ -36,7 +36,7 @@ class RSNodeFilePathInputNode(RenderStackNode):
         box = layout.box()
         col = box.column(align=1)
         col.label(text="USAGE:")
-        col.label(text='$task: $task in Task Node')
+        col.label(text='$label: Task label')
         col.label(text='$camera: name of scene camera')
         col.label(text='$res: resolution (XxY)')
         col.label(text='$engine: render engine')

@@ -17,6 +17,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     bl_idname = "rsn.render_stack_task"
     bl_label = "Render Stack"
 
+    render_list_node_name:StringProperty()
     nt = None
     # 渲染状态获取
     _timer = None
@@ -46,10 +47,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     def pre(self, dummy, thrd=None):
         self.rendering = True
 
-    def post(self, dummy, thrd=None):
-        self.rendering = False
-        self.frame_check()
-        # show in nodes
+    def update_process_node(self):
         try:
             node = self.nt.nt.nodes['Processor']
             node.done_frames += 1
@@ -59,6 +57,12 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
             node.frame_current = bpy.context.scene.frame_current
         except:
             pass
+
+    def post(self, dummy, thrd=None):
+        self.rendering = False
+        self.frame_check()
+        # show in nodes
+        self.update_process_node()
 
     def cancelled(self, dummy, thrd=None):
         self.stop = True
@@ -77,96 +81,43 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         bpy.app.handlers.render_cancel.remove(self.cancelled)
         bpy.context.window_manager.event_timer_remove(self._timer)
 
-    def make_path(self, context):
-        blend_path = context.blend_data.filepath
-        blend_name = bpy.path.basename(blend_path)[:-6]
-        task = self.task_data[0]
-        if 'path' in task:
-            if not task['use_blend_file_path']:
-                directory_path = os.path.dirname(task['path']) + "\\" + f"{blend_name}_render"
-            else:
-                directory_path = os.path.dirname(bpy.data.filepath) + "\\" + f"{blend_name}_render"
-            try:
-                if not os.path.exists(directory_path):
-                    os.makedirs(directory_path)
-                return directory_path
-
-            except(Exception) as e:
-                self.report({'ERROR'}, f'File Path: Path Error')
-                print(directory_path, e)
-        else:
-            return os.path.dirname(bpy.data.filepath) + "\\"
-
-    def get_postfix(self, scn):
-        task = self.task_data[0]
-        task_name = task['task_name']
-        cam = scn.camera
-
-        postfix = ""
-        date_now = str(time.strftime("%m-%d", time.localtime()))
-        time_now = str(time.strftime("%H_%M", time.localtime()))
-
-        if 'path_format' in task:
-            shot_export_name = task["path_format"]
-            for string in shot_export_name.split("/"):
-                for r in string.split('$'):
-                    if r.startswith("date"):
-                        postfix += date_now + '_'
-                    elif r.startswith("time"):
-                        postfix += time_now + '_'
-                    # camera
-                    elif r.startswith("camera"):
-                        postfix += cam.name + '_'
-                    elif r.startswith("res"):
-                        postfix += f"{scn.render.resolution_x}x{scn.render.resolution_y}" + "_"
-                    elif r.startswith("ev"):
-                        postfix += scn.view_settings.exposure + "_"
-                    elif r.startswith("view_layer"):
-                        postfix += f"{bpy.context.window.view_layer.name}" + '_'
-                    elif r.startswith("task"):
-                        postfix += task_name + "_"
-                    else:
-                        postfix += r
-
-                if postfix.endswith("_"): postfix = postfix[:-1]
-                postfix += "/"
-
-            if postfix.endswith("/"): postfix = postfix[:-1]
-
-        return postfix
-
     # 激活下一任务
-    def switch2task(self, context):
-        scn = context.scene
+    def switch2task(self):
+        scn = bpy.context.scene
         task = self.mark_task_names[0]
+        pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
 
-        bpy.ops.rsn.update_parms(task_name=task)
-        # # folder path & file name
-        # directory = self.make_path(context)
-        # postfix = self.get_postfix(scn)
-
-        frame_format = f"{self.frame_current}"
-        if len(f"{self.frame_current}") < 4:
-            for i in range(0, 4 - len(f"{self.frame_current}")):
-                frame_format = "0" + frame_format
+        bpy.ops.rsn.update_parms(task_name=task,viewer_handler = task,use_render_mode=True)
 
         scn.render.use_file_extension = 1
-        scn.render.filepath += f"_{frame_format}"
-        # scn.render.filepath = os.path.join(directory, f"_{frame_format}" + scn.render.file_extension)
+        scn.render.filepath += f"{pref.file_path_separator}{self.frame_current:04d}"
+
+    def init_process_node(self):
+        try:
+            node = nt.nt.nodes['Processor']
+            node.count_frames = get_length(self.frame_list)
+            node.done_frames = 0
+            node.all_tasks = ''
+            node.all_tasks = ','.join(self.mark_task_names)
+            print(node.all_tasks)
+        except:
+            pass
 
     # init 初始化执行
     def execute(self, context):
-        context.window_manager.render_stack_modal = True
-
+        context.window_manager.rsn_running_modal = True
         scn = context.scene
         scn.render.use_lock_interface = True
 
         self.stop = False
         self.rendering = False
 
-        nt = NODE_TREE(bpy.context.space_data.edit_tree)
-        self.nt = nt
-        for task in nt.dict:
+        rsn_tree = RSN_NodeTree()
+        self.nt = rsn_tree.get_wm_node_tree
+        rsn_task = RSN_Task(node_tree = self.nt,root_node_name = self.render_list_node_name)
+        node_list_dict = rsn_task.get_sub_node_from_render_list(return_dict = 1)
+
+        for task in node_list_dict:
             # get data
             task_data = nt.get_task_data(task_name=task)
             self.task_data.append(task_data)
@@ -185,42 +136,37 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
 
         if True in (len(self.mark_task_names) == 0, len(self.frame_list) == 0):
             scn.render.use_lock_interface = False
-            context.window_manager.render_stack_modal = False
+            context.window_manager.rsn_running_modal = False
             self.report({"WARNING"}, 'Nothing to render！')
             return {"FINISHED"}
-        # push to process node
-        try:
-            node = nt.nt.nodes['Processor']
-            node.count_frames = get_length(self.frame_list)
-            node.done_frames = 0
-            node.all_tasks = ''
-            node.all_tasks = ','.join(self.mark_task_names)
-            print(node.all_tasks)
-        except:
-            pass
+
+        self.init_process_node()
 
         self.frame_current = self.frame_list[0]["frame_start"]
         self.append_handles()
 
         return {"RUNNING_MODAL"}
 
+    def finish_process_node(self):
+        try:
+            node = self.nt.nt.nodes['Processor']
+            if len(self.mark_task_names) == 0 and len(self.frame_list) == 0:
+                node.all_tasks += ',RENDER_FINISHED'
+                node.curr_task = 'RENDER_FINISHED'
+            else:
+                node.all_tasks += ',RENDER_STOPED'
+        except:
+            pass
+
     def modal(self, context, event):
         # 计时器内事件
         if event.type == 'TIMER':
             if True in (len(self.mark_task_names) == 0, self.stop is True, len(self.frame_list) == 0):  # 取消或者列表为空 停止
                 self.remove_handles()
-                context.window_manager.render_stack_modal = False
-                context.scene.render.filepath = ""
-                # node
-                try:
-                    node = self.nt.nt.nodes['Processor']
-                    if len(self.mark_task_names) == 0 and len(self.frame_list) == 0:
-                        node.all_tasks += ',RENDER_FINISHED'
-                        node.curr_task = 'RENDER_FINISHED'
-                    else:
-                        node.all_tasks += ',RENDER_STOPED'
-                except:
-                    pass
+                bpy.context.window_manager.rsn_running_modal = False
+                bpy.context.scene.render.filepath = ""
+
+                self.finish_process_node()
 
                 self.mark_task_names.clear()
                 self.frame_list.clear()
@@ -229,20 +175,21 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
                 return {"FINISHED"}
 
             elif self.rendering is False:  # 进行渲染
-                self.switch2task(context)
-                context.scene.frame_current = self.frame_current
+                self.switch2task()
+                bpy.context.scene.frame_current = self.frame_current
                 bpy.ops.render.render("INVOKE_DEFAULT", write_still=True)
 
         return {"PASS_THROUGH"}
 
 
 class RSN_OT_RenderButton(bpy.types.Operator):
+    """Need Scene Camera"""
     bl_idname = "rsn.render_button"
     bl_label = "Render"
 
     @classmethod
     def poll(self, context):
-        if not context.window_manager.render_stack_modal:
+        if not context.window_manager.rsn_running_modal:
             return context.scene.camera is not None
 
     def change_shading(self):
@@ -276,10 +223,15 @@ class RSN_OT_RenderButton(bpy.types.Operator):
 def register():
     bpy.utils.register_class(RSN_OT_RenderStackTask)
     bpy.utils.register_class(RSN_OT_RenderButton)
-    bpy.types.WindowManager.render_stack_modal = BoolProperty(default=False)
+    bpy.types.WindowManager.rsn_running_modal = BoolProperty(default=False)
+    bpy.types.WindowManager.rsn_cur_tree_name = StringProperty(name = 'current rendering tree',default='')
+    bpy.types.WindowManager.rsn_viewer_node = StringProperty(name='Viewer task name')
 
 
 def unregister():
     bpy.utils.unregister_class(RSN_OT_RenderStackTask)
     bpy.utils.unregister_class(RSN_OT_RenderButton)
-    del bpy.types.WindowManager.render_stack_modal
+    del bpy.types.WindowManager.rsn_running_modal
+    del bpy.types.WindowManager.rsn_cur_tree_name
+    del bpy.types.WindowManager.rsn_viewer_node
+
