@@ -17,11 +17,12 @@ class RSNode_OT_EditInput(bpy.types.Operator):
         active_node = node_tree.nodes.active
         if not self.remove:
             active_node.inputs.new(self.socket_type, self.socket_name)
+            print('Add Socket Succeed!')
         else:
             for input in active_node.inputs:
                 if not input.is_linked:
                     active_node.inputs.remove(input)
-
+            self.remove = False
         return {"FINISHED"}
 
 

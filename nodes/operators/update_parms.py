@@ -38,8 +38,8 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         return task_node_name
 
     def warning_node_color(self, node_name):
-        self.nt.nt.nodes[node_name].use_custom_color = 1
-        self.nt.nt.nodes[node_name].color = (1, 0, 0)
+        self.nt.nodes[node_name].use_custom_color = 1
+        self.nt.nodes[node_name].color = (1, 0, 0)
 
     def get_data(self):
         if not self.use_render_mode:
