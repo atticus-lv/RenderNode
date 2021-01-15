@@ -2,11 +2,9 @@ import bpy
 from itertools import groupby
 import logging
 
-
 # LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
 # logging.basicConfig(format=LOG_FORMAT)
 # logger = logging.getLogger('mylogger')
-
 
 class RSN_NodeTree():
     def get_context_tree(self, return_name=False):
@@ -35,10 +33,14 @@ class RSN_NodeTree():
 class RSN_Task():
     def __init__(self, node_tree, root_node_name):
         self.nt = node_tree
-        self.root_node = self.nt.nodes[root_node_name]
+        self.root_node = self.get_node_from_name(root_node_name)
 
     def get_node_from_name(self, name):
-        return self.nt.nodes[name]
+        try:
+            node = self.nt.nodes[name]
+            return node
+        except KeyError:
+            return None
 
     def get_root_node(self):
         return self.root_node

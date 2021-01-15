@@ -117,7 +117,6 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     def execute(self, context):
         context.window_manager.rsn_running_modal = True
         scn = context.scene
-        scn.render.use_lock_interface = True
 
         self.stop = False
         self.rendering = False
@@ -218,6 +217,7 @@ class RSN_OT_RenderButton(bpy.types.Operator):
     def draw(self, context):
         layout = self.layout
         layout.use_property_split = True
+        layout.prop(context.scene.render, 'use_lock_interface')
 
     def execute(self, context):
         blend_path = context.blend_data.filepath

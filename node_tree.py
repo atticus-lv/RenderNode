@@ -30,14 +30,14 @@ class RenderStackNode(bpy.types.Node):
                 rsn_task = RSN_Task(node_tree=bpy.context.space_data.edit_tree,
                                     root_node_name=bpy.context.window_manager.rsn_viewer_node)
                 try:
-                    __node_list__ = rsn_task.get_sub_node_from_node(rsn_task.get_node_from_name('Viewer'))
-                    if self.name in __node_list__:
+                    viewer = rsn_task.get_node_from_name('Viewer')
+                    if viewer and self.name in rsn_task.get_sub_node_from_node(viewer) :
                         pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
                         bpy.ops.rsn.update_parms(view_mode_handler=bpy.context.window_manager.rsn_viewer_node,
                                                  update_scripts=pref.node_viewer.update_scripts,
                                                  use_render_mode=False)
                 except Exception as e:
-                    print(e)
+                    pass
 
         except (IndexError, AttributeError) as e:
             pass
