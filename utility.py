@@ -2,6 +2,7 @@ import bpy
 from itertools import groupby
 import logging
 
+
 # LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
 # logging.basicConfig(format=LOG_FORMAT)
 # logger = logging.getLogger('mylogger')
@@ -72,7 +73,7 @@ class RSN_Task():
     def get_sub_node_dict_from_node_list(self, node_list, parent_node_type, black_list=None):
         'RSNodeTaskListNode'
         node_list_dict = {}
-        if not black_list: black_list = ['RSNodeTaskListNode','RSNodeRenderListNode']
+        if not black_list: black_list = ['RSNodeTaskListNode', 'RSNodeRenderListNode']
 
         node_list[:] = [node for node in node_list if
                         self.nt.nodes[node].bl_idname not in black_list]
@@ -86,8 +87,6 @@ class RSN_Task():
                 node_list_dict[parent_node_list[i]] = children_node_list[i]
             except IndexError:
                 pass
-        print(node_list)
-        print(node_list_dict)
         return node_list_dict
 
     def get_sub_node_from_task(self, task_name, return_dict=False, type='RSNodeTaskNode'):
@@ -99,7 +98,7 @@ class RSN_Task():
             return self.get_sub_node_dict_from_node_list(node_list=node_list,
                                                          parent_node_type=type)
 
-    def get_sub_node_from_render_list(self,return_dict=False,type= 'RSNodeTaskNode'):
+    def get_sub_node_from_render_list(self, return_dict=False, type='RSNodeTaskNode'):
         render_list = self.get_node_from_name(self.root_node.name)
         node_list = self.get_sub_node_from_node(render_list)
         if not return_dict:

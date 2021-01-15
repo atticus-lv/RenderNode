@@ -104,7 +104,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
             node.done_frames = 0
             node.all_tasks = ''
             node.all_tasks = ','.join(self.mark_task_names)
-            print(node.all_tasks)
+            logger.info(node.all_tasks)
         except Exception as e:
             logger.debug(f'Processor {e}')
 

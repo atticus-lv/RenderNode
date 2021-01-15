@@ -17,6 +17,23 @@ class HELPER_PT_Panel(bpy.types.Panel):
         layout.scale_y = 1.25
         layout.label(text='Call out helper menu', icon="EVENT_F")
 
+        try:
+            if hasattr(bpy.context.space_data, 'edit_tree'):
+                if bpy.context.space_data.edit_tree.nodes.active.bl_idname == 'RSNodeFilePathInputNode':
+                    box = layout.box()
+                    col = box.column(align=1)
+                    col.label(text="USAGE:")
+                    col.label(text='$label: Task label')
+                    col.label(text='$camera: name of scene camera')
+                    col.label(text='$res: resolution (XxY)')
+                    col.label(text='$engine: render engine')
+                    col.label(text='$vl: name of scene view layer')
+                    col.label(text='$date: month-day')
+                    col.label(text='$time: hour-min')
+                    col.label(text='/: create folder,should be a folder name in front of "/"')
+        except Exception:
+            pass
+
 
 def register():
     bpy.utils.register_class(HELPER_PT_Panel)

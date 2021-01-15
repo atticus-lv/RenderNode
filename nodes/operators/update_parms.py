@@ -81,14 +81,12 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             bpy.context.scene.render.filepath = os.path.join(dir, postfix)
 
     def make_path(self):
-        blend_path = bpy.context.blend_data.filepath
-        blend_name = bpy.path.basename(blend_path)[:-6]
         task = self.task_data
         if 'path' in task and task['path'] != '':
             if not task['use_blend_file_path']:
-                directory_path = os.path.dirname(task['path']) + "\\" + f"{blend_name}_render"
+                directory_path = os.path.dirname(task['path'])
             else:
-                directory_path = os.path.dirname(bpy.data.filepath) + "\\" + f"{blend_name}_render"
+                directory_path = os.path.dirname(bpy.data.filepath)
             try:
                 if not os.path.exists(directory_path):
                     os.makedirs(directory_path)
@@ -130,6 +128,12 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                         postfix += self.task_data["label"] + separator
                     elif r.startswith("vl"):
                         postfix += bpy.context.view_layer.name + separator
+                    elif r.startswith("blend"):
+                        try:
+                            blend_name = bpy.path.basename(bpy.data.filepath)[:-6]
+                            postfix += blend_name
+                        except Exception as e:
+                            print(e)
                     else:
                         postfix += r
 
