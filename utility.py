@@ -72,7 +72,7 @@ class RSN_Task():
     def get_sub_node_dict_from_node_list(self, node_list, parent_node_type, black_list=None):
         'RSNodeTaskListNode'
         node_list_dict = {}
-        if not black_list: black_list = []
+        if not black_list: black_list = ['RSNodeTaskListNode','RSNodeRenderListNode']
 
         node_list[:] = [node for node in node_list if
                         self.nt.nodes[node].bl_idname not in black_list]
@@ -82,8 +82,12 @@ class RSN_Task():
         parent_node_list = [node for node in node_list if self.nt.nodes[node].bl_idname == parent_node_type]
 
         for i in range(len(parent_node_list)):
-            node_list_dict[parent_node_list[i]] = children_node_list[i]
-
+            try:
+                node_list_dict[parent_node_list[i]] = children_node_list[i]
+            except IndexError:
+                pass
+        print(node_list)
+        print(node_list_dict)
         return node_list_dict
 
     def get_sub_node_from_task(self, task_name, return_dict=False, type='RSNodeTaskNode'):

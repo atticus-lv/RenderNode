@@ -202,6 +202,11 @@ class RSN_OT_RenderButton(bpy.types.Operator):
 
     render_list_node_name: StringProperty()
 
+    nt = None
+    task_data = []
+    mark_task_names = []
+    frame_list = []
+
     @classmethod
     def poll(self, context):
         if not context.window_manager.rsn_running_modal:
@@ -214,10 +219,55 @@ class RSN_OT_RenderButton(bpy.types.Operator):
                     if space.type == 'VIEW_3D' and space.shading.type == "RENDERED":
                         space.shading.type = 'SOLID'
 
+    def get_render_data(self):
+        rsn_tree = RSN_NodeTree()
+        rsn_tree.set_context_tree_as_wm_tree()
+        self.nt = rsn_tree.get_wm_node_tree()
+
+        rsn_task = RSN_Task(node_tree=self.nt, root_node_name=self.render_list_node_name)
+        node_list_dict = rsn_task.get_sub_node_from_render_list(return_dict=1)
+
+        for task in node_list_dict:
+            task_data = rsn_task.get_task_data(task_name=task, task_dict=node_list_dict)
+            self.task_data.append(task_data)
+            self.mark_task_names.append(task)
+            # get frame Range
+            render_list = {}
+            if "frame_start" in task_data:
+                render_list["frame_start"] = task_data["frame_start"]
+                render_list["frame_end"] = task_data["frame_end"]
+                render_list["frame_step"] = task_data["frame_step"]
+            else:
+                render_list["frame_start"] = bpy.context.scene.frame_current
+                render_list["frame_end"] = bpy.context.scene.frame_current
+                render_list["frame_step"] = 1
+            self.frame_list.append(render_list)
+
     def draw(self, context):
         layout = self.layout
-        layout.use_property_split = True
-        layout.prop(context.scene.render, 'use_lock_interface')
+        layout.prop(context.scene.render, 'use_lock_interface', toggle=0)
+
+        box = layout.split().box()
+        row = box.row(align = 1)
+        row.label(text='Index')
+        row.label(text='Task Node')
+        row.label(text='Task Label')
+        row.label(text='Frame Range')
+
+        col = box.split().box().column(align=1)
+        for i, task_node in enumerate(self.mark_task_names):
+            row = col.row(align = 1)
+            # Index
+            row.label(text=f'{i}')
+            # node and mute
+            node = bpy.context.space_data.edit_tree.nodes[task_node]
+            sub = row.row(align=0)
+            sub.prop(node, 'mute', text='', icon='PANEL_CLOSE' if node.mute else 'CHECKMARK')
+            sub.label(text = task_node)
+            # label
+            row.label(text=self.task_data[i]['label'])
+            # Range
+            row.label(text=f'{self.frame_list[i]["frame_start"]}-{self.frame_list[i]["frame_end"]}')
 
     def execute(self, context):
         blend_path = context.blend_data.filepath
@@ -232,8 +282,12 @@ class RSN_OT_RenderButton(bpy.types.Operator):
         return {'FINISHED'}
 
     def invoke(self, context, event):
-        self.use_preview_render = False
-        return context.window_manager.invoke_props_dialog(self)
+        self.nt = None
+        self.task_data = []
+        self.mark_task_names = []
+        self.frame_list = []
+        self.get_render_data()
+        return context.window_manager.invoke_props_dialog(self,width = 500)
 
 
 def register():

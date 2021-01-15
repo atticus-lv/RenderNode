@@ -25,7 +25,18 @@ class RSNodeTaskListNode(RenderStackNode):
 
         self.outputs.new('RSNodeSocketRenderList', 'Task')
 
-
+    def draw_buttons(self, context, layout):
+        try:
+            if hasattr(bpy.context.space_data, 'edit_tree'):
+                if bpy.context.space_data.edit_tree.nodes.active.name == self.name:
+                    row = layout.row(align=1)
+                    a = row.operator("rsnode.edit_input", icon='ADD', text='Add')
+                    a.socket_type = 'RSNodeSocketRenderList'
+                    a.socket_name = 'Task'
+                    r = row.operator("rsnode.edit_input", icon='REMOVE', text='Del')
+                    r.remove = 1
+        except Exception:
+            pass
 
 
 

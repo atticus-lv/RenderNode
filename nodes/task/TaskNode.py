@@ -20,6 +20,19 @@ class RSNodeTaskNode(RenderStackNode):
         layout.use_property_decorate = 0
         layout.prop(self, 'label', text="Label")
 
+        try:
+            if hasattr(bpy.context.space_data, 'edit_tree'):
+                if bpy.context.space_data.edit_tree.nodes.active.name == self.name:
+                    row = layout.row(align=1)
+                    a = row.operator("rsnode.edit_input", icon='ADD', text='Add')
+                    a.socket_type = 'RSNodeSocketTaskSettings'
+                    a.socket_name = "Settings"
+                    r = row.operator("rsnode.edit_input", icon='REMOVE', text='Del')
+                    r.remove = 1
+
+        except Exception:
+            pass
+
 
 def register():
     bpy.utils.register_class(RSNodeTaskNode)

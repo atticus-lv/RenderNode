@@ -97,9 +97,11 @@ def remove_keybind():
 
 
 def draw_menu(self, context):
-    layout = self.layout
-    layout.separator()
-    layout.operator("rsn.add_viewer_node", text="View Task")
+    if context.space_data.edit_tree.nodes.active.bl_idname == 'RSNodeTaskNode':
+        layout = self.layout
+        layout.separator()
+        layout.operator("rsn.add_viewer_node", text="View Task")
+
 
 
 def register():

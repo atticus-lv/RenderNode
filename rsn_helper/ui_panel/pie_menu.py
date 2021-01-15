@@ -23,27 +23,6 @@ class RSN_MT_PieMenu(Menu):
     bl_label = "RSN Helper"
     bl_idname = "RSN_MT_PieMenu"
 
-    def draw_edit_input(self, col):
-        try:
-            node = bpy.context.space_data.edit_tree.nodes.active
-        except:
-            node = None
-        if node:
-            col.label(text='Edit Input')
-            row = col.row(align=1)
-            if node.bl_idname in {'RSNodeTaskNode', 'RSNodeSettingsMergeNode'}:
-                a = row.operator("rsnode.edit_input", icon='ADD', text='Add')
-                a.socket_type = 'RSNodeSocketTaskSettings'
-                a.socket_name = "Settings"
-                r = row.operator("rsnode.edit_input", icon='REMOVE', text='Remove')
-                r.remove = 1
-            elif node.bl_idname in {'RSNodeRenderListNode', 'RSNodeTaskListNode'}:
-                a = row.operator("rsnode.edit_input", icon='ADD', text='Add')
-                a.socket_type = 'RSNodeSocketRenderList'
-                a.socket_name = 'Task'
-                r = row.operator("rsnode.edit_input", icon='REMOVE', text='Remove')
-                r.remove = 1
-
     def draw(self, context):
         layout = self.layout
         layout.scale_y = 1.25
@@ -52,7 +31,6 @@ class RSN_MT_PieMenu(Menu):
         # left
         pie.separator()
 
-        # col.operator("rsn.add_viewer_node", icon='HIDE_OFF', text='View Task')
         # right
         col1 = pie.column()
         col = col1.box().column()
@@ -61,9 +39,6 @@ class RSN_MT_PieMenu(Menu):
         col = col1.box().column()
         col.operator("rsn.merge_settings", icon='OUTLINER')
         col.operator("rsn.merge_task", icon='OUTLINER')
-
-        col = col1.box().column()
-        self.draw_edit_input(col)
 
         # bottom
         if context.space_data.edit_tree and context.space_data.edit_tree.bl_idname == 'RenderStackNodeTree':
