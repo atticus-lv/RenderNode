@@ -108,14 +108,12 @@ def register():
     bpy.utils.register_class(RSN_OT_AddViewerNode)
     bpy.utils.register_class(RSNodeViewerNode)
 
-    bpy.types.NODE_MT_context_menu.prepend(draw_menu)
+    # bpy.types.NODE_MT_context_menu.prepend(draw_menu)
     add_keybind()
 
 
 def unregister():
-
     bpy.utils.unregister_class(RSNodeViewerNode)
-    bpy.utils.unregister_class(RSN_OT_ViewerHandler)
 
-    bpy.types.NODE_MT_context_menu.remove(draw_menu)
+    # bpy.types.NODE_MT_context_menu.remove(draw_menu)
     remove_keybind()

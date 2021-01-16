@@ -3,6 +3,7 @@ from bpy.props import *
 from RenderStackNode.node_tree import RenderStackNode
 
 
+
 class RSNodeTaskNode(RenderStackNode):
     '''A simple Task node'''
     bl_idname = "RSNodeTaskNode"
