@@ -17,7 +17,6 @@ class RSNodeSettingsMergeNode(RenderStackNode):
     def init(self, context):
         self.inputs.new('RSNodeSocketTaskSettings', "Settings")
         self.inputs.new('RSNodeSocketTaskSettings', "Settings")
-        self.inputs.new('RSNodeSocketTaskSettings', "Settings")
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
         self.width = 180
 
