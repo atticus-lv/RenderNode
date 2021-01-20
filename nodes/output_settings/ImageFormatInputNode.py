@@ -28,7 +28,7 @@ class RSNodeImageFormatInputNode(RenderStackNode):
         items=[('8', '8', ''), ('16', '16', ''), ('32', '32', '')],
         default='16', update=update_node)
 
-    transparent: BoolProperty(default=False, name="Transparent")
+    transparent: BoolProperty(default=False, name="Transparent", update=update_node)
 
     def init(self, context):
         self.outputs.new('RSNodeSocketOutputSettings', "Output Settings")
