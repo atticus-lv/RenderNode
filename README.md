@@ -7,7 +7,7 @@
 
 ![原型](img/prototype.jpg)
 
-### Features v 1.0.6
+### Features v 1.0.7
 
 + Camera overwrite
 + Render engine overwrite 
@@ -27,7 +27,7 @@
 + Smtp email 
 + Render Process
     + render info confirm
-    + 
+    + process bar
 + View layer passes output
 
 > Known Error:
@@ -47,7 +47,7 @@
 
 2. Use **Task Node** to merge your changes into one render task (animation or still image)
 
-3. Use **Viewer Node / Task List Node** to check your overwriten scene
+3. Use **Viewer Node** to check your overwriten scene
 
 4. Use **Render List Node** to render all the task that you need
 
