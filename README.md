@@ -7,21 +7,33 @@
 
 ![原型](img/prototype.jpg)
 
-### Features v 1.0.5
+### Features v 1.0.6
 
-+ Camera overide
-+ Render Engine overwrite (Workbench,Eevee,Cycles,Luxcore)
-+ Output Setting overwrite (Frame Range,Resulotion,path（format file name support）,image settings)
-+ Object Material/Location overwrite 
-+ Allow script for overwritting
-+ Viewer Node (Just like Node Wrangler,short cut V)
-+ Render all task (list)
++ Camera overwrite
++ Render engine overwrite 
+    + Workbench,Eevee,Cycles
+    + Luxcore
++ Output setting overwrite 
+    + Frame Range
+    + Resulotion,
+    + path (format file name support)
+    + image settings
++ Object  overwrite 
+    + Material
+    + Location/Rotation/Scale
++ Script overwrite
++ Viewer Node (output task overwrite)
++ Renderlist  (render all task)
 + Smtp email 
 + Render Process
+    + render info confirm
+    + 
 + View layer passes output
 
 > Known Error:
 > Render with cuda may cause blender internal errors (python state error)
+
+
 
 
 ### How it works

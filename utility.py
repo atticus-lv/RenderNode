@@ -91,12 +91,15 @@ class RSN_Task():
 
     def get_sub_node_from_task(self, task_name, return_dict=False, type='RSNodeTaskNode'):
         task = self.get_node_from_name(task_name)
-        node_list = self.get_sub_node_from_node(task)
-        if not return_dict:
-            return node_list
-        else:
-            return self.get_sub_node_dict_from_node_list(node_list=node_list,
-                                                         parent_node_type=type)
+        try:
+            node_list = self.get_sub_node_from_node(task)
+            if not return_dict:
+                return node_list
+            else:
+                return self.get_sub_node_dict_from_node_list(node_list=node_list,
+                                                             parent_node_type=type)
+        except AttributeError:
+            pass
 
     def get_sub_node_from_render_list(self, return_dict=False, type='RSNodeTaskNode'):
         render_list = self.get_node_from_name(self.root_node.name)

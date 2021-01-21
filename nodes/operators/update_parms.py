@@ -27,7 +27,6 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
     def reroute(self, node):
         def is_task_node(node):
             if node.bl_idname == "RSNodeTaskNode":
-                print(f">> get task node {node.name}")
                 return node.name
 
             sub_node = node.inputs[0].links[0].from_node
@@ -53,9 +52,13 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                             root_node_name=self.view_mode_handler)
         node_list_dict = rsn_task.get_sub_node_from_task(task_name=self.view_mode_handler,
                                                          return_dict=True)
-        self.task_data = rsn_task.get_task_data(task_name=self.view_mode_handler,
-                                           task_dict=node_list_dict)
-        logger.debug(f'Get >{self.view_mode_handler}< data')
+        if node_list_dict:
+            self.task_data = rsn_task.get_task_data(task_name=self.view_mode_handler,
+                                                    task_dict=node_list_dict)
+        if self.task_data:
+            logger.debug(f'Get >{self.view_mode_handler}< data')
+        else:
+            logger.debug(f'Not task is linked to the viewer')
 
     def update_ev(self):
         if 'ev' in self.task_data:
@@ -131,9 +134,10 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                     elif r.startswith("blend"):
                         try:
                             blend_name = bpy.path.basename(bpy.data.filepath)[:-6]
-                            postfix += blend_name
+                            r.replace("blend", blend_name)
+                            postfix += r + separator
                         except Exception as e:
-                            print(e)
+                            pass
                     else:
                         postfix += r
 
@@ -325,30 +329,32 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         logger.setLevel(int(pref.log_level))
         logger.debug('update parms op START')
         self.get_data()
-        self.update_camera()
-        self.update_ev()
-        self.update_res()
-        self.update_render_engine()
+        if self.task_data:
+            self.update_camera()
+            self.update_ev()
+            self.update_res()
+            self.update_render_engine()
 
-        self.update_object_material()
-        self.update_object_psr()
+            self.update_object_material()
+            self.update_object_psr()
 
-        self.update_frame_range()
-        self.updata_view_layer()
+            self.update_frame_range()
+            self.updata_view_layer()
 
-        self.update_image_format()
-        self.update_slots()
+            self.update_image_format()
+            self.update_slots()
 
-        self.update_world()
-        self.ssm_light_studio()
-        if pref.node_viewer.update_scripts or self.use_render_mode:
-            self.updata_scripts()
-        if pref.node_viewer.update_path or self.use_render_mode:
-            self.update_path()
-        if pref.node_viewer.update_view_layer_passes or self.use_render_mode:
-            self.update_view_layer_passes()
-        if self.use_render_mode:
-            self.send_email()
+            self.update_world()
+            self.ssm_light_studio()
+            if pref.node_viewer.update_scripts or self.use_render_mode:
+                self.updata_scripts()
+            if pref.node_viewer.update_path or self.use_render_mode:
+                self.update_path()
+            if pref.node_viewer.update_view_layer_passes or self.use_render_mode:
+                self.update_view_layer_passes()
+            if self.use_render_mode:
+                self.send_email()
+
         logger.debug('update parms op FINISHED')
 
         return {'FINISHED'}
