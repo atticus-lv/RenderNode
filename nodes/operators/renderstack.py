@@ -248,7 +248,7 @@ class RSN_OT_RenderButton(bpy.types.Operator):
         layout.prop(context.scene.render, 'use_lock_interface', toggle=0)
 
         box = layout.split().box()
-        row = box.row(align = 1)
+        row = box.row(align=1)
         row.label(text='Index')
         row.label(text='Task Node')
         row.label(text='Task Label')
@@ -256,14 +256,14 @@ class RSN_OT_RenderButton(bpy.types.Operator):
 
         col = box.split().box().column(align=1)
         for i, task_node in enumerate(self.mark_task_names):
-            row = col.row(align = 1)
+            row = col.row(align=1)
             # Index
             row.label(text=f'{i}')
             # node and mute
             node = bpy.context.space_data.edit_tree.nodes[task_node]
             sub = row.row(align=0)
             sub.prop(node, 'mute', text='', icon='PANEL_CLOSE' if node.mute else 'CHECKMARK')
-            sub.label(text = task_node)
+            sub.label(text=task_node)
             # label
             row.label(text=self.task_data[i]['label'])
             # Range
@@ -287,7 +287,11 @@ class RSN_OT_RenderButton(bpy.types.Operator):
         self.mark_task_names = []
         self.frame_list = []
         self.get_render_data()
-        return context.window_manager.invoke_props_dialog(self,width = 500)
+        return context.window_manager.invoke_props_dialog(self, width=500)
+
+
+def update_rsn_viewer_node(self, context):
+    pass
 
 
 def register():
@@ -295,7 +299,7 @@ def register():
     bpy.utils.register_class(RSN_OT_RenderButton)
     bpy.types.WindowManager.rsn_running_modal = BoolProperty(default=False)
     bpy.types.WindowManager.rsn_cur_tree_name = StringProperty(name='current rendering tree', default='')
-    bpy.types.WindowManager.rsn_viewer_node = StringProperty(name='Viewer task name')
+    bpy.types.WindowManager.rsn_viewer_node = StringProperty(name='Viewer task name', update=update_rsn_viewer_node)
 
 
 def unregister():
