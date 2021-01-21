@@ -134,9 +134,8 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                     elif r.startswith("blend"):
                         try:
                             blend_name = bpy.path.basename(bpy.data.filepath)[:-6]
-                            r.replace("blend", blend_name)
-                            postfix += r + separator
-                        except Exception as e:
+                            postfix += blend_name + r[5:] + separator
+                        except Exception:
                             pass
                     else:
                         postfix += r

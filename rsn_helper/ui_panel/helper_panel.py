@@ -23,6 +23,7 @@ class HELPER_PT_Panel(bpy.types.Panel):
                     box = layout.box()
                     col = box.column(align=1)
                     col.label(text="USAGE:")
+                    col.label(text='$blend: name of your file (save first!)')
                     col.label(text='$label: Task label')
                     col.label(text='$camera: name of scene camera')
                     col.label(text='$res: resolution (XxY)')
