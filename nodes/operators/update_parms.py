@@ -65,7 +65,10 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             if bpy.context.scene.view_settings.exposure != self.task_data['ev']:
                 bpy.context.scene.view_settings.exposure = self.task_data['ev']
             if bpy.context.scene.view_settings.view_transform != self.task_data['view_transform']:
-                bpy.context.scene.view_settings.view_transform = self.task_data['view_transform']
+                try:
+                    bpy.context.scene.view_settings.view_transform = self.task_data['view_transform']
+                except:
+                    pass
             if bpy.context.scene.view_settings.look != self.task_data['look']:
                 try:
                     bpy.context.scene.view_settings.look = self.task_data['look']
