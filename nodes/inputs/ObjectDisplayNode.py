@@ -3,10 +3,6 @@ from bpy.props import *
 from ...node_tree import RenderStackNode
 
 
-def poll_object(self, object):
-    return object.type in {'MESH', 'CURVE', 'VOLUME'}
-
-
 def update_node(self, context):
     self.update_parms()
 
@@ -15,7 +11,7 @@ class RSNodeObjectDisplayNode(RenderStackNode):
     bl_idname = 'RSNodeObjectDisplayNode'
     bl_label = 'Object Display'
 
-    object: PointerProperty(type=bpy.types.Object, poll=poll_object, name='Object', update=update_node)
+    object: PointerProperty(type=bpy.types.Object, name='Object', update=update_node)
     hide_viewport: BoolProperty(name='Hide Viewport', default=False, update=update_node)
     hide_render: BoolProperty(name='Hide Render', default=False, update=update_node)
 
@@ -29,9 +25,6 @@ class RSNodeObjectDisplayNode(RenderStackNode):
         row = col.row(align=1)
         row.prop(self, 'hide_viewport', icon='HIDE_OFF' if not self.hide_viewport else 'HIDE_ON')
         row.prop(self, 'hide_render', icon='RESTRICT_RENDER_OFF' if not self.hide_render else 'RESTRICT_RENDER_ON')
-
-    def draw_buttons_ext(self, context, layout):
-        pass
 
 
 def register():

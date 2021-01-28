@@ -1,6 +1,7 @@
 import bpy
 import nodeitems_utils
 from bpy.props import *
+
 from .utility import *
 from .preferences import get_pref
 
@@ -31,9 +32,8 @@ class RenderStackNode(bpy.types.Node):
     def update_parms(self):
         if bpy.context.window_manager.rsn_node_list != '':
             node_list = bpy.context.window_manager.rsn_node_list.split(',')
-
-            pref = get_pref()
             if self.name in node_list:
+                pref = get_pref()
                 bpy.ops.rsn.update_parms(view_mode_handler=bpy.context.window_manager.rsn_viewer_node,
                                          update_scripts=pref.node_viewer.update_scripts,
                                          use_render_mode=False)
@@ -123,11 +123,11 @@ node_categorys = [
         nodeitems_utils.NodeItem("RSNodeCamInputNode"),
         nodeitems_utils.NodeItem("RSNodeWorldInputNode"),
         nodeitems_utils.NodeItem('RSNodeViewLayerInputNode'),
+        nodeitems_utils.NodeItem('RSNodeColorManagementNode'),
         nodeitems_utils.NodeItem('RSNodeObjectDisplayNode'),
         nodeitems_utils.NodeItem('RSNodeObjectMaterialNode'),
         nodeitems_utils.NodeItem('RSNodeObjectPSRNode'),
         # nodeitems_utils.NodeItem('RSNodeObjectDataNode'),
-        nodeitems_utils.NodeItem('RSNodeColorManagementNode'),
     ]),
 
     RSNCategory("TASK", "Task", items=[
@@ -162,14 +162,12 @@ node_categorys = [
         nodeitems_utils.NodeItem("RSNodeCyclesRenderSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeCyclesLightPathNode"),
         nodeitems_utils.NodeItem("RSNodeLuxcoreRenderSettingsNode"),
-
     ]),
 
     RSNCategory("LAYOUT", "Layout", items=[
         nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Merge Settings", settings={
             "node_type": repr("RENDER_SETTINGS"),
         }),
-
     ]),
 ]
 
@@ -177,7 +175,7 @@ classes = [
     RenderStackNodeTree,
     RenderStackNode,
     RenderStackNodeGroup,
-    # Socker
+    # Socket
     RSNodeSocketCamera,
     RSNodeSocketRenderSettings,
     RSNodeSocketOutputSettings,
