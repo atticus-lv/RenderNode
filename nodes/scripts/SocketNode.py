@@ -1,6 +1,6 @@
 import bpy
 from bpy.props import *
-from RenderStackNode.node_tree import RenderStackNode
+from ...node_tree import RenderStackNode
 
 import socket as st
 

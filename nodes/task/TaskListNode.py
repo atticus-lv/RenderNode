@@ -1,5 +1,5 @@
 import bpy
-from RenderStackNode.node_tree import RenderStackNode
+from ...node_tree import RenderStackNode
 
 
 def reroute(node):

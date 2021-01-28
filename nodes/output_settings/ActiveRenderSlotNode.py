@@ -1,14 +1,17 @@
 import bpy
 from bpy.props import IntProperty
-from RenderStackNode.node_tree import RenderStackNode
+from ...node_tree import RenderStackNode
+
+
 def update_node(self, context):
-    self.update()
+    self.update_parms()
+
 
 class RSNodeActiveRenderSlotNode(RenderStackNode):
     bl_idname = "RSNodeActiveRenderSlotNode"
     bl_label = 'Render Slot'
 
-    active_slot_index: IntProperty(default=0, min=0, max=7,update=update_node)
+    active_slot_index: IntProperty(default=0, min=0, max=7, update=update_node)
 
     def init(self, context):
         self.outputs.new('RSNodeSocketOutputSettings', "Output Settings")
@@ -23,5 +26,3 @@ def register():
 
 def unregister():
     bpy.utils.unregister_class(RSNodeActiveRenderSlotNode)
-
-

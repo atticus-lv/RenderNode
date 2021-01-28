@@ -2,8 +2,8 @@ import json
 import bpy
 
 from bpy.props import *
-from RenderStackNode.utility import *
-from RenderStackNode.node_tree import RenderStackNode
+from ...utility import *
+from ...node_tree import RenderStackNode
 from .ProcessorNode import RSNodeProcessorNode
 
 

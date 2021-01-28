@@ -1,6 +1,6 @@
 import bpy
 from bpy.props import *
-from RenderStackNode.node_tree import RenderStackNode
+from ...node_tree import RenderStackNode
 
 
 def poll_object(self, object):
@@ -11,10 +11,10 @@ def update_slot_index(self, context):
     if self.object:
         if self.slot_index > len(self.object.material_slots) - 1:
             self.slot_index = len(self.object.material_slots) - 1
-    self.update()
+    self.update_parms()
 
 def update_node(self, context):
-    self.update()
+    self.update_parms()
 
 class RSNodeObjectMaterialNode(RenderStackNode):
     bl_idname = 'RSNodeObjectMaterialNode'

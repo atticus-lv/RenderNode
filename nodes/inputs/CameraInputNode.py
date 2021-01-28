@@ -1,6 +1,6 @@
 import bpy
 from bpy.props import *
-from RenderStackNode.node_tree import RenderStackNode
+from ...node_tree import RenderStackNode
 
 
 def poll_camera(self, object):
@@ -8,7 +8,7 @@ def poll_camera(self, object):
 
 
 def update_node(self, context):
-    self.update()
+    self.update_parms()
 
 
 class RSNodeCamInputNode(RenderStackNode):

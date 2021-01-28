@@ -1,7 +1,7 @@
 import bpy
 import nodeitems_utils
 from bpy.props import *
-from RenderStackNode.utility import *
+from .utility import *
 
 
 class RenderStackNodeTree(bpy.types.NodeTree):
@@ -28,22 +28,14 @@ class RenderStackNode(bpy.types.Node):
         pass
 
     def update_parms(self):
-        try:
-            if self.outputs[0].is_linked:
-                rsn_task = RSN_Task(node_tree=bpy.context.space_data.edit_tree,
-                                    root_node_name=bpy.context.window_manager.rsn_viewer_node)
-                try:
-                    viewer = rsn_task.get_node_from_name('Viewer')
-                    if viewer and self.name in rsn_task.get_sub_node_from_node(viewer):
-                        pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
-                        bpy.ops.rsn.update_parms(view_mode_handler=bpy.context.window_manager.rsn_viewer_node,
-                                                 update_scripts=pref.node_viewer.update_scripts,
-                                                 use_render_mode=False)
-                except Exception as e:
-                    pass
+        if bpy.context.window_manager.rsn_node_list != '':
+            node_list = bpy.context.window_manager.rsn_node_list.split(',')
 
-        except (IndexError, AttributeError) as e:
-            pass
+            pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
+            if self.name in node_list:
+                bpy.ops.rsn.update_parms(view_mode_handler=bpy.context.window_manager.rsn_viewer_node,
+                                         update_scripts=pref.node_viewer.update_scripts,
+                                         use_render_mode=False)
 
 
 class RenderStackNodeGroup(bpy.types.NodeCustomGroup):

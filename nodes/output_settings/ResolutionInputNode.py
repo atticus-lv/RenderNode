@@ -3,7 +3,7 @@ import os
 import shutil
 
 from bpy.props import *
-from RenderStackNode.node_tree import RenderStackNode
+from ...node_tree import RenderStackNode
 
 from bpy.types import AddonPreferences
 from bpy.types import Operator, Menu, Panel
@@ -12,7 +12,7 @@ from bl_ui.utils import PresetPanel
 
 
 def update_node(self, context):
-    self.update()
+    self.update_parms()
 
 
 class RSNodeResolutionInputNode(RenderStackNode):

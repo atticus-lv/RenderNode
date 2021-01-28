@@ -1,7 +1,7 @@
 import bpy
 from bpy.props import *
-from RenderStackNode.node_tree import RenderStackNode
-from RenderStackNode.utility import *
+from ...node_tree import RenderStackNode
+from ...utility import *
 
 from .TaskListNode import reroute
 
@@ -45,39 +45,42 @@ class RSNodeViewerNode(RenderStackNode):
     def init(self, context):
         self.inputs.new('RSNodeSocketRenderList', "Task")
         self.width = 175
-        context.window_manager.rsn_node_list = ''
 
     def update(self):
-
         rsn_task = RSN_Task(node_tree=bpy.context.space_data.edit_tree,
                             root_node_name=self.name)
         node_list = rsn_task.get_sub_node_from_node(self)
         if len(node_list) > 0:
-            node_list_str = ' '.join(node_list)
+            node_list_str = ','.join(node_list)
 
             if bpy.context.window_manager.rsn_node_list != node_list_str:
+                bpy.context.window_manager.rsn_node_list = node_list_str
+
                 pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
 
                 if self.inputs[0].is_linked:
                     node = reroute(self.inputs[0].links[0].from_node)
-                    bpy.ops.rsn.update_parms(view_mode_handler= node.name,
+                    bpy.context.window_manager.rsn_viewer_node = node.name
+                    bpy.ops.rsn.update_parms(view_mode_handler=node.name,
                                              update_scripts=pref.node_viewer.update_scripts,
                                              use_render_mode=False)
+                else:
+                    bpy.context.window_manager.rsn_viewer_node = ''
 
     def free(self):
         print("Node removed", self)
 
     def draw_buttons(self, context, layout):
-        pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
         row = layout.row(align=1)
-        if self.inputs[0].is_linked:
-            node = reroute(self.inputs[0].links[0].from_node)
-            context.window_manager.rsn_viewer_node = node.name
+        if self.inputs[0].is_linked and context.window_manager.rsn_viewer_node != '':
+            node = context.space_data.edit_tree.nodes[context.window_manager.rsn_viewer_node]
             row.label(text=f'{node.name} | {node.label}', icon='NODE_SEL')
 
         else:
-            context.window_manager.rsn_viewer_node = ''
             row.label(text='', icon='NODE')
+
+        # preferences.
+        pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
         row.prop(self, 'show_pref', icon_only=1, icon='TRIA_DOWN' if self.show_pref else "TRIA_LEFT")
         if self.show_pref:
             layout.prop(pref.node_viewer, 'update_scripts', toggle=1)
@@ -124,7 +127,7 @@ def register():
     bpy.utils.register_class(RSN_OT_AddViewerNode)
     bpy.utils.register_class(RSNodeViewerNode)
 
-    bpy.types.WindowManager.rsn_node_list = StringProperty()
+    bpy.types.WindowManager.rsn_node_list = StringProperty(default='')
 
     # bpy.types.NODE_MT_context_menu.prepend(draw_menu)
     add_keybind()

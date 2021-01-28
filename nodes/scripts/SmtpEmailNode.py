@@ -1,7 +1,7 @@
 import smtplib
 from email.mime.text import MIMEText
 from email.header import Header
-from RenderStackNode.node_tree import RenderStackNode
+from ...node_tree import RenderStackNode
 
 import bpy
 from bpy.props import *
