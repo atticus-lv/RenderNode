@@ -264,8 +264,8 @@ class RSN_Task():
                 task_data['gamma'] = node.gamma
 
             elif node.bl_idname == 'RSNodeTaskInfoInputsNode':
-                data = json.loads(node.file.as_string())
                 try:
+                    data = json.loads(node.file.as_string())
                     task_data.update(data)
                 except Exception:
                     node.use_custom_color = 1

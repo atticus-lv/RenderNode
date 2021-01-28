@@ -7,7 +7,9 @@
 
 ![原型](img/prototype.jpg)
 
-### Features v 1.0.7
+
+
+### Features v 1.1.0
 
 + Camera overwrite
 + Render engine overwrite 
@@ -21,8 +23,9 @@
 + Object  overwrite 
     + Material
     + Location/Rotation/Scale
+    + Display
 + Script overwrite
-+ Viewer Node (output task overwrite)
++ Viewer Node 
 + Renderlist  (render all task)
 + Smtp email 
 + Render Process
@@ -35,9 +38,9 @@
 
 
 
-
 ### How it works
 
+![1.0](img/1.0.png)
 1. Use **Settings Node** to overwirte your render settings,such as:
 
 	+ **Camera Node** have the ability to change the camera
@@ -53,7 +56,28 @@
 
 > *Once you plug a node settings to overide something into the a task,the next task will inherit it if there is not a same type Node plug input. So you may start a new render list to keep your node tree cleaner*
 
-![1.0](img/1.0.png)
+
+
+**But also, we can use node like this**
+
+![1.1](img/1.1.png)
+> In 1.1.0 version, there is a **task info** node for direct input the changes with text file:
+> when it links to a **task** which is linking to a **viewer**,the scene will load these changes below
+
+```json
+{
+    "label": "task1",
+    "camera": "Camera",
+    "engine": "BLENDER_EEVEE",
+    "samples": 64,
+    "use_blend_file_path": true,
+    "path_format": "$blend_render/$label$camera",
+    "path": "",
+    "res_x": 1920,
+    "res_y": 1080,
+    "res_scale": 100
+}
+```
 
 
 
@@ -71,76 +95,15 @@ Then right click and **git bash here**, type in:
 
 **For Other User**
 
-Click [here](https://github.com/atticus-lv/RenderStackNode/releases/latest) to down the latest stable release
-
-
-
-### Important Nodes
-
-> Will be a document website later
-
-#### Render 
-
-+ ##### Render List
-
-	> Render all the input task
-	
-+ ##### Viewer
-
-    > Provide automatic update for task node, desire to iterate designs and view changes as soon as possible
-
-+ ##### Task
-
-    > output task( can be linked to the render list node directly)
-    >
-    > all the overide settings changes is linked to this node 
-    
-+ ##### Proccessor
-
-    > View your render process when you are rendering images, if you stop render, give you the latest info of each task
-
-    
-
-#### Settings 
-
-+ ##### Camera 
-
-	> Camera overide input
-	
-+ ##### Scripts
-
-    > Excute the python code when rendering/view this task
-
-+ ##### File path
-
-    > format ouput of the file name ,tips on the node side bar
-    
-+ ##### Frame Range
-
-    > set your render frame range
-
-+ ##### Eevee Settings / Cycles Settings / Work Bench Settings
-
-    >  change the render engine .But you can use your own eninge with the script node
-    
-+ **Merge Settings**
-  
-  > a merge setting node, have nothing useful but merge settings, which make your node tree more clear
-  
-+ ##### View Layer Passes
-
-    > Separate passes into folder when rendering, if not such node in a task, nothing happend 
-
-*More ....*
+Click 👇Code to down the zip file, then install as usual addon 
 
 
 
 ### Plans
 
-+ muti blend file ( socket modules or command line)
-+ octane support
++ muti blend file ( socket modules or command line )
++ octane/redshift support ( actually you can make it with script node)
 + mesh export
 + sim task
-
 
 

@@ -201,7 +201,7 @@ class RSN_OT_ClipBoard(bpy.types.Operator):
     bl_idname = 'rsn.clip_board'
     bl_label = 'Copy'
 
-    data_to_copy = StringProperty(default='Nothing is copied')
+    data_to_copy: StringProperty(default='Nothing is copied')
 
     def execute(self, context):
         bpy.context.window_manager.clipboard = self.data_to_copy
@@ -219,7 +219,7 @@ class RSN_OT_ShowTaskDetails(bpy.types.Operator):
 
     def draw(self, context):
         layout = self.layout
-        row = layout.split(factor=0.3,align=1)
+        row = layout.split(factor=0.3, align=1)
         row.operator('rsn.clip_board', text='Copy').data_to_copy = self.task_data
         row.label(text='')
 
