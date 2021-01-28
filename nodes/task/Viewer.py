@@ -2,6 +2,7 @@ import bpy
 from bpy.props import *
 from ...node_tree import RenderStackNode
 from ...utility import *
+from ...preferences import get_pref
 
 from .TaskListNode import reroute
 
@@ -56,7 +57,7 @@ class RSNodeViewerNode(RenderStackNode):
             if bpy.context.window_manager.rsn_node_list != node_list_str:
                 bpy.context.window_manager.rsn_node_list = node_list_str
 
-                pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
+                pref = get_pref()
 
                 if self.inputs[0].is_linked:
                     node = reroute(self.inputs[0].links[0].from_node)
@@ -80,7 +81,7 @@ class RSNodeViewerNode(RenderStackNode):
             row.label(text='', icon='NODE')
 
         # preferences.
-        pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
+        pref = get_pref()
         row.prop(self, 'show_pref', icon_only=1, icon='TRIA_DOWN' if self.show_pref else "TRIA_LEFT")
         if self.show_pref:
             layout.prop(pref.node_viewer, 'update_scripts', toggle=1)

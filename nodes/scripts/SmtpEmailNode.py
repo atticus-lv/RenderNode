@@ -2,6 +2,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.header import Header
 from ...node_tree import RenderStackNode
+from ...preferences import get_pref
 
 import bpy
 from bpy.props import *
@@ -32,7 +33,7 @@ class RSN_OT_SendEmail(bpy.types.Operator):
         description="Your sender email as well as your receiver email")
 
     def __init__(self):
-        pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
+        pref = get_pref()
 
         self.smtp_server = pref.node_smtp.server
         self.smtp_pass = pref.node_smtp.password

@@ -4,6 +4,7 @@ import logging
 
 from bpy.props import *
 from ...utility import *
+from ...preferences import get_pref
 
 LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
 logging.basicConfig(format=LOG_FORMAT)
@@ -90,7 +91,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     def switch2task(self):
         scn = bpy.context.scene
         task = self.mark_task_names[0]
-        pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
+        pref = get_pref()
 
         bpy.ops.rsn.update_parms(view_mode_handler=task, use_render_mode=True)
 
@@ -109,7 +110,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
             logger.debug(f'Processor {e}')
 
     def init_logger(self, node_list_dict):
-        pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
+        pref = get_pref()
         logger.setLevel(int(pref.log_level))
         logger.info(f'Get all data:\n\n{node_list_dict}\n')
 

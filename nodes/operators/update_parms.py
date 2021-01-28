@@ -1,6 +1,7 @@
 import bpy
 from bpy.props import StringProperty, BoolProperty
 from ...utility import *
+from ...preferences import get_pref
 
 import logging
 import time
@@ -107,7 +108,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
     def get_postfix(self):
         scn = bpy.context.scene
         cam = scn.camera
-        pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
+        pref = get_pref()
         separator = pref.file_path_separator
 
         postfix = ""
@@ -340,7 +341,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                         break
 
     def execute(self, context):
-        pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
+        pref = get_pref()
         logger.setLevel(int(pref.log_level))
         logger.debug('update parms op START')
         self.get_data()

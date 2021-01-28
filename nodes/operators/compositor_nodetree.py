@@ -2,6 +2,7 @@ import bpy
 from bpy.props import BoolProperty, StringProperty
 import os
 
+from ...preferences import get_pref
 
 class RSN_OT_CreatCompositorNode(bpy.types.Operator):
     bl_idname = "rsn.creat_compositor_node"
@@ -60,7 +61,7 @@ class RSN_OT_CreatCompositorNode(bpy.types.Operator):
 
             nt = context.scene.node_tree
 
-            pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
+            pref = get_pref()
             separator = pref.file_path_separator
 
             for i, output in enumerate(render_layer_node.outputs):

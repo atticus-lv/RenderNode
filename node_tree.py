@@ -2,6 +2,7 @@ import bpy
 import nodeitems_utils
 from bpy.props import *
 from .utility import *
+from .preferences import get_pref
 
 
 class RenderStackNodeTree(bpy.types.NodeTree):
@@ -31,7 +32,7 @@ class RenderStackNode(bpy.types.Node):
         if bpy.context.window_manager.rsn_node_list != '':
             node_list = bpy.context.window_manager.rsn_node_list.split(',')
 
-            pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
+            pref = get_pref()
             if self.name in node_list:
                 bpy.ops.rsn.update_parms(view_mode_handler=bpy.context.window_manager.rsn_viewer_node,
                                          update_scripts=pref.node_viewer.update_scripts,

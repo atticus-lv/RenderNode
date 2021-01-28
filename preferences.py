@@ -1,7 +1,12 @@
 import bpy
+import rna_keymap_ui
 from bpy.props import *
 
-import rna_keymap_ui
+from . import __folder_name__
+
+
+def get_pref():
+    return bpy.context.preferences.addons.get(__folder_name__).preferences
 
 
 class NodeSmtpProps(bpy.types.PropertyGroup):
