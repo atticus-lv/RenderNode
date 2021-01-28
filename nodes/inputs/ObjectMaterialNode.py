@@ -37,8 +37,6 @@ class RSNodeObjectMaterialNode(RenderStackNode):
         col.prop(self, 'slot_index', text='Slot')
         col.prop(self, 'new_material', text='Material')
 
-    def draw_buttons_ext(self, context, layout):
-        pass
 
 
 def register():

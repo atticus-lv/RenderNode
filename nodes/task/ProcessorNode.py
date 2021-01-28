@@ -53,20 +53,21 @@ class RSNodeProcessorNode(RenderStackNode):
             try:
                 index = task_list.index(self.curr_task)
                 for i, name in enumerate(task_list):
+                    # task finish
                     if i < index:
                         box = layout.box().column(align=1)
                         row = box.row()
                         row.label(text=name, icon='CHECKBOX_HLT')
-
+                    # task rendering
                     elif i == index:
                         if name != 'RENDER_FINISHED':
                             box = layout.box().column(align=1)
                             col = box.row().column(align=1)
-
+                            # title
                             col.label(icon="RECOVER_LAST",
                                       text=f'{name}: {curr_done:.0%} ({self.frame_current + 1 - self.frame_start} / {self.frame_end + 1 - self.frame_start})')
                             col.label(text=f"Range: {self.frame_start} - {self.frame_current + 1} - {self.frame_end}")
-
+                            # process bar
                             col.separator(factor=0.5)
                             row = col.row()
                             row.scale_y = 0.3
@@ -76,16 +77,18 @@ class RSNodeProcessorNode(RenderStackNode):
                                 sub = row.split(factor=curr_done, align=1)
                                 sub.prop(self, 'green', text="")
                                 sub.prop(self, 'red', text="")
-
+                        # last task finish
                         elif name == 'RENDER_FINISHED':
                             layout.separator(factor=0.5)
                             col = layout.column(align=1)
                             col.label(text='RENDER FINISHED', icon='HEART')
-
+                    # task waiting
                     elif i > index and name != 'RENDER_FINISHED':
+                        # stop render
                         if name == 'RENDER_STOPED':
                             col = layout.column(align=1)
                             col.label(text='RENDER STOPED', icon='ORPHAN_DATA')
+                        # task waiting
                         else:
                             box = layout.box().column(align=1)
                             box.label(text=name, icon='CHECKBOX_DEHLT')

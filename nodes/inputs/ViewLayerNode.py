@@ -23,6 +23,7 @@ class RSNodeViewLayerInputNode(RenderStackNode):
         layout.prop_search(self, "view_layer", context.scene, "view_layers", icon="RENDERLAYERS", text='')
 
     def draw_buttons_ext(self, context, layout):
+        layout.prop_search(self, "view_layer", context.scene, "view_layers", icon="RENDERLAYERS", text='')
         layout.label(text="Just Check Out View Layer")
         layout.label(text="You should set its details in property panel")
 

@@ -72,8 +72,6 @@ class RSNodeObjectPSRNode(RenderStackNode):
             fill.object_name = self.object.name if self.object else ''
             fill.node_name = self.name
 
-    def draw_buttons_ext(self, context, layout):
-        pass
 
 
 def register():

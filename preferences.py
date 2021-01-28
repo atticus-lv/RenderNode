@@ -11,11 +11,11 @@ def get_pref():
 
 class NodeSmtpProps(bpy.types.PropertyGroup):
     show: BoolProperty(name="Dropdown")
+
     server: StringProperty(
         name="SMTP Server",
         description="Something Like 'smtp.qq.com' or 'smtp.gmail.com'",
         default="")
-
     password: StringProperty(
         name="SMTP Password",
         description="The SMTP Password for your receiver email",
@@ -24,6 +24,7 @@ class NodeSmtpProps(bpy.types.PropertyGroup):
 
 class NodeViewerProps(bpy.types.PropertyGroup):
     show: BoolProperty(name="Dropdown")
+
     update_scripts: BoolProperty(name='Update Scripts ',
                                  description="Update scripts node when using viewer node")
     update_path: BoolProperty(name='Update File Path',
@@ -56,35 +57,6 @@ class RSN_Preference(bpy.types.AddonPreferences):
     node_smtp: PointerProperty(type=NodeSmtpProps)
     node_viewer: PointerProperty(type=NodeViewerProps)
 
-    def draw_nodes(self):
-        layout = self.layout
-
-        col = layout.column(align=1)
-        box = col.box().split().column(align=1)
-        box.prop(self.node_smtp, 'show', text="SMTP Email Node", emboss=False,
-                 icon='TRIA_DOWN' if self.node_smtp.show else 'TRIA_RIGHT')
-        if self.node_smtp.show:
-            box.use_property_split = True
-            box.prop(self.node_smtp, "server", text='Server')
-            box.prop(self.node_smtp, "password", text='Password')
-
-        col.separator(factor=0.2)
-        box = col.box().split().column(align=1)
-        box.prop(self.node_viewer, 'show', text="Viewer Node", emboss=False,
-                 icon='TRIA_DOWN' if self.node_viewer.show else 'TRIA_RIGHT')
-        if self.node_viewer.show:
-            box.use_property_split = True
-            box.prop(self.node_viewer, 'update_scripts')
-            box.prop(self.node_viewer, 'update_path')
-            box.prop(self.node_viewer, 'update_view_layer_passes')
-
-    def draw_properties(self):
-        layout = self.layout
-        layout.use_property_split = True
-        layout.prop(self, 'log_level', text='Log')
-        row = layout.row(align=1)
-        row.prop(self, 'file_path_separator', text='File Path Separator')
-
     def draw(self, context):
         row = self.layout.row(align=1)
         row.prop(self, "option", expand=1)
@@ -93,6 +65,41 @@ class RSN_Preference(bpy.types.AddonPreferences):
         elif self.option == "NODES":
             self.draw_nodes()
 
+    def draw_nodes(self):
+        layout = self.layout
+
+        col = layout.column(align=1)
+        box = col.box().split().column(align=1)
+        self.stmp_node(box)
+
+        col.separator(factor=0.2)
+        box = col.box().split().column(align=1)
+        self.viewer_node(box)
+
+    def draw_properties(self):
+        layout = self.layout
+        layout.use_property_split = True
+        layout.prop(self, 'log_level', text='Log')
+        row = layout.row(align=1)
+        row.prop(self, 'file_path_separator', text='File Path Separator')
+
+    def stmp_node(self, box):
+        box.prop(self.node_smtp, 'show', text="SMTP Email Node", emboss=False,
+                 icon='TRIA_DOWN' if self.node_smtp.show else 'TRIA_RIGHT')
+        if self.node_smtp.show:
+            box.use_property_split = True
+            box.prop(self.node_smtp, "server", text='Server')
+            box.prop(self.node_smtp, "password", text='Password')
+
+    def viewer_node(self, box):
+        box.prop(self.node_viewer, 'show', text="Viewer Node", emboss=False,
+                 icon='TRIA_DOWN' if self.node_viewer.show else 'TRIA_RIGHT')
+        if self.node_viewer.show:
+            box.use_property_split = True
+            box.prop(self.node_viewer, 'update_scripts')
+            box.prop(self.node_viewer, 'update_path')
+            box.prop(self.node_viewer, 'update_view_layer_passes')
+
 
 addon_keymaps = []
 
@@ -100,16 +107,14 @@ addon_keymaps = []
 def add_keybind():
     wm = bpy.context.window_manager
     if wm.keyconfigs.addon:
-        # viewer node
         km = wm.keyconfigs.addon.keymaps.new(name='Node Editor', space_type='NODE_EDITOR')
+        # viewer node
         kmi = km.keymap_items.new('rsn.add_viewer_node', 'V', 'PRESS')
         addon_keymaps.append((km, kmi))
-
-        km = wm.keyconfigs.addon.keymaps.new(name='Node Editor', space_type='NODE_EDITOR')
+        # mute node
         kmi = km.keymap_items.new('rsn.mute_nodes', 'M', 'PRESS')
         addon_keymaps.append((km, kmi))
-
-        km = wm.keyconfigs.addon.keymaps.new(name='Node Editor', space_type='NODE_EDITOR')
+        # helper pie
         kmi = km.keymap_items.new('wm.call_menu_pie', 'F', 'PRESS')
         kmi.properties.name = "RSN_MT_PieMenu"
         addon_keymaps.append((km, kmi))

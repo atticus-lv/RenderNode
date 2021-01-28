@@ -27,8 +27,6 @@ class RSNodeObjectDataNode(RenderStackNode):
         if self.object and hasattr(self.object.data, self.data_path):
             layout.prop(self.object.data, self.data_path)
 
-    def draw_buttons_ext(self, context, layout):
-        pass
 
 
 def register():
