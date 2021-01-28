@@ -1,6 +1,7 @@
 import os
 import time
 import logging
+import json
 
 from bpy.props import *
 from ...utility import *
@@ -196,6 +197,28 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         return {"PASS_THROUGH"}
 
 
+class RSN_OT_ShowTaskDetails(bpy.types.Operator):
+    bl_idname = 'rsn.show_task_details'
+    bl_label = 'Show Details'
+
+    task_data: StringProperty(name='task data (json)')
+
+    def execute(self, context):
+        return {'FINISHED'}
+
+    def draw(self, context):
+        layout = self.layout
+        layout.label(text='Details')
+        col = layout.box().column(align=1)
+        if self.task_data != '':
+            l = self.task_data.split(',')
+            for s in l:
+                col.label(text=s)
+
+    def invoke(self, context, event):
+        return context.window_manager.invoke_popup(self, width=500)
+
+
 class RSN_OT_RenderButton(bpy.types.Operator):
     """Need Scene Camera"""
     bl_idname = "rsn.render_button"
@@ -250,31 +273,43 @@ class RSN_OT_RenderButton(bpy.types.Operator):
 
         box = layout.split().box()
         row = box.row(align=1)
-        row.label(text='Index')
-        row.label(text='Task Node')
-        row.label(text='Task Label')
-        row.label(text='Frame Range')
 
-        col = box.split().box().column(align=1)
+        col1 = row.column(align=1).box()
+        col2 = row.column(align=1).box()
+        col3 = row.column(align=1).box()
+        col4 = row.column(align=1).box()
+        col5 = row.column(align=1).box()
+        col5.scale_x = 0.5
+        col1.label(text='Index')
+        col2.label(text='Task Node')
+        col3.label(text='Task Label')
+        col4.label(text='Frame Range')
+        col5.label(text='Info')
+
         for i, task_node in enumerate(self.mark_task_names):
-            row = col.row(align=1)
             # Index
-            row.label(text=f'{i}')
+            col1.label(text=f'{i}')
             # node and mute
             node = bpy.context.space_data.edit_tree.nodes[task_node]
-            sub = row.row(align=0)
-            sub.prop(node, 'mute', text='', icon='PANEL_CLOSE' if node.mute else 'CHECKMARK')
-            sub.label(text=task_node)
+            col2.prop(node, 'mute', text=task_node, icon='PANEL_CLOSE' if node.mute else 'CHECKMARK')
             # label
-            row.label(text=self.task_data[i]['label'])
+            col3.label(text=self.task_data[i]['label'])
             # Range
-            row.label(text=f'{self.frame_list[i]["frame_start"]}-{self.frame_list[i]["frame_end"]}')
+            fs = self.frame_list[i]["frame_start"]
+            fe = self.frame_list[i]["frame_end"]
+            col4.label(text=f'{fs} → {fe} ({fs - fe + 1})')
+            # task_data
+            d = json.dumps(self.task_data[i])
+            col5.operator('rsn.show_task_details', icon='INFO', text='').task_data = d
 
     def execute(self, context):
         blend_path = context.blend_data.filepath
 
         if blend_path == "":
             self.report({"ERROR"}, "Save your file first!")
+            return {"FINISHED"}
+        elif context.scene.render.image_settings.file_format in {'AVI_JPEG', 'AVI_RAW', 'FFMPEG'}:
+            self.report({"ERROR"}, "Not Support Anunimation Format")
             return {"FINISHED"}
 
         self.change_shading()
@@ -297,7 +332,9 @@ def update_rsn_viewer_node(self, context):
 
 def register():
     bpy.utils.register_class(RSN_OT_RenderStackTask)
+    bpy.utils.register_class(RSN_OT_ShowTaskDetails)
     bpy.utils.register_class(RSN_OT_RenderButton)
+
     bpy.types.WindowManager.rsn_running_modal = BoolProperty(default=False)
     bpy.types.WindowManager.rsn_cur_tree_name = StringProperty(name='current rendering tree', default='')
     bpy.types.WindowManager.rsn_viewer_node = StringProperty(name='Viewer task name', update=update_rsn_viewer_node)
@@ -305,7 +342,9 @@ def register():
 
 def unregister():
     bpy.utils.unregister_class(RSN_OT_RenderStackTask)
+    bpy.utils.unregister_class(RSN_OT_ShowTaskDetails)
     bpy.utils.unregister_class(RSN_OT_RenderButton)
+
     del bpy.types.WindowManager.rsn_running_modal
     del bpy.types.WindowManager.rsn_cur_tree_name
     del bpy.types.WindowManager.rsn_viewer_node
