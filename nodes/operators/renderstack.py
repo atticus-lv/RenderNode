@@ -3,7 +3,7 @@ import time
 import logging
 
 from bpy.props import *
-from RenderStackNode.utility import *
+from ...utility import *
 
 LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
 logging.basicConfig(format=LOG_FORMAT)

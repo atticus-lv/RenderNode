@@ -1,11 +1,11 @@
 bl_info = {
     "sender_name": "RenderStack Node ",
     "author"     : "Atticus",
-    "version"    : (1, 0, 7),
+    "version"    : (1, 0, 8),
     "blender"    : (2, 92, 0),
     "location"   : "Node Editor > RenderStackNode Editor",
     "description": "Node based render queue workflow",
-    'warning'     : "Use Cuda to render may cause python state error! ",
+    'warning'    : "Use Cuda to render may cause python state error! ",
     # "doc_url"    : "",
     "category"   : "Render",
 }
@@ -16,18 +16,20 @@ import bpy
 from .nodes import *
 from .rsn_helper import *
 
+__folder_name__ = __name__
+
 __dict__ = {}
-__dict__['preferences'] = f"{__name__}.preferences"
-__dict__["node_tree"] = f"{__name__}.node_tree"
-__dict__['utility'] = f'{__name__}.utility'
+__dict__['preferences'] = f"{__folder_name__}.preferences"
+__dict__["node_tree"] = f"{__folder_name__}.node_tree"
+__dict__['utility'] = f'{__folder_name__}.utility'
 
 for k, v in a.items():
     for module_name in v:
-        __dict__[module_name] = f"{__name__}.nodes.{k}.{module_name}"
+        __dict__[module_name] = f"{__folder_name__}.nodes.{k}.{module_name}"
 
 for k, v in b.items():
     for module_name in v:
-        __dict__[module_name] = f"{__name__}.rsn_helper.{k}.{module_name}"
+        __dict__[module_name] = f"{__folder_name__}.rsn_helper.{k}.{module_name}"
 
 for name in __dict__.values():
     if name in sys.modules:

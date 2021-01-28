@@ -3,12 +3,13 @@ import os
 import shutil
 
 from bpy.props import *
-from ...node_tree import RenderStackNode
-
 from bpy.types import AddonPreferences
 from bpy.types import Operator, Menu, Panel
 from bl_operators.presets import AddPresetBase
 from bl_ui.utils import PresetPanel
+
+from ...node_tree import RenderStackNode
+from ... import __folder_name__
 
 
 def update_node(self, context):
@@ -98,7 +99,8 @@ def add_res_preset_to_user():
     destination = get_files_from_path(rsn_presets_folder)
 
     addon_folder = bpy.utils.user_resource('SCRIPTS', "addons")
-    bundled_presets_folder = os.path.join(addon_folder, 'RenderstackNode', 'preset', 'resolution_preset')
+
+    bundled_presets_folder = os.path.join(addon_folder, __folder_name__, 'preset', 'resolution_preset')
     # Check what's in the add-on presets folder
     source = get_files_from_path(bundled_presets_folder)
 

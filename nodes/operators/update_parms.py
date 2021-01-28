@@ -1,6 +1,6 @@
 import bpy
 from bpy.props import StringProperty, BoolProperty
-from RenderStackNode.utility import *
+from ...utility import *
 
 import logging
 import time
