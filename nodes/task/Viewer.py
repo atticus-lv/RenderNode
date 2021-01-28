@@ -22,7 +22,7 @@ class RSN_OT_AddViewerNode(bpy.types.Operator):
         task = context.space_data.edit_tree.nodes.active
         loc_x = task.location[0] + 200
         loc_y = task.location[1] + 25
-
+        # remove viewer node
         for node in nt.nodes:
             if node.bl_idname == 'RSNodeViewerNode':
                 context.space_data.edit_tree.nodes.remove(node)
@@ -33,7 +33,9 @@ class RSN_OT_AddViewerNode(bpy.types.Operator):
 
         nt.links.new(task.outputs[0], viewer.inputs[0])
         viewer.update()
-
+        # force update
+        dg = context.evaluated_depsgraph_get()
+        dg.update()
         return {"FINISHED"}
 
 

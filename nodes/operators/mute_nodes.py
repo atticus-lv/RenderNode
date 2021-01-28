@@ -1,6 +1,7 @@
 import bpy
 from bpy.props import StringProperty
 
+
 class RSN_OT_MuteNodes(bpy.types.Operator):
     bl_idname = "rsn.mute_nodes"
     bl_label = "Mute Nodes"
@@ -24,6 +25,9 @@ class RSN_OT_MuteNodes(bpy.types.Operator):
         else:
             node = bpy.context.space_data.edit_tree.nodes[self.node_name]
             node.mute = 0 if node.mute == True else 1
+
+        dg = context.evaluated_depsgraph_get()
+        dg.update()
 
         return {'FINISHED'}
 
