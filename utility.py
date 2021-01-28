@@ -219,6 +219,17 @@ class RSN_Task():
                         task_data['object_material'] = {node.name: {'object'      : node.object.name,
                                                                     'slot_index'  : node.slot_index,
                                                                     'new_material': node.new_material.name}}
+
+            elif node.bl_idname == 'RSNodeObjectDisplayNode':
+                if 'object_display' in task_data:
+                    task_data['object_display'][node.name] = {'object'       : node.object.name,
+                                                              'hide_viewport': node.hide_viewport,
+                                                              'hide_render'  : node.hide_render}
+                else:
+                    task_data['object_display'] = {node.name: {'object'       : node.object.name,
+                                                               'hide_viewport': node.hide_viewport,
+                                                               'hide_render'  : node.hide_render}}
+
             elif node.bl_idname == 'RSNodeObjectPSRNode':
                 if node.object and True in {node.use_p, node.use_s, node.use_r}:
                     if 'object_psr' in task_data:

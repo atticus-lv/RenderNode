@@ -24,7 +24,7 @@ class RSNodeCamInputNode(RenderStackNode):
 
     def draw_buttons(self, context, layout):
         layout.prop(self, 'camera', text="")
-
+    
 
 def register():
     bpy.utils.register_class(RSNodeCamInputNode)

@@ -21,13 +21,12 @@ class RSN_OT_AddViewerNode(bpy.types.Operator):
         task = context.space_data.edit_tree.nodes.active
         loc_x = task.location[0] + 200
         loc_y = task.location[1] + 25
-        viewer = None
+
         for node in nt.nodes:
             if node.bl_idname == 'RSNodeViewerNode':
-                viewer = node
-                break
-        if not viewer:
-            viewer = context.space_data.edit_tree.nodes.new(type='RSNodeViewerNode')
+                context.space_data.edit_tree.nodes.remove(node)
+
+        viewer = context.space_data.edit_tree.nodes.new(type='RSNodeViewerNode')
         viewer.location[0] = loc_x
         viewer.location[1] = loc_y
 
@@ -45,7 +44,25 @@ class RSNodeViewerNode(RenderStackNode):
 
     def init(self, context):
         self.inputs.new('RSNodeSocketRenderList', "Task")
-        self.width =175
+        self.width = 175
+        context.window_manager.rsn_node_list = ''
+
+    def update(self):
+
+        rsn_task = RSN_Task(node_tree=bpy.context.space_data.edit_tree,
+                            root_node_name=self.name)
+        node_list = rsn_task.get_sub_node_from_node(self)
+        if len(node_list) > 0:
+            node_list_str = ' '.join(node_list)
+
+            if bpy.context.window_manager.rsn_node_list != node_list_str:
+                pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
+
+                if self.inputs[0].is_linked:
+                    node = reroute(self.inputs[0].links[0].from_node)
+                    bpy.ops.rsn.update_parms(view_mode_handler= node.name,
+                                             update_scripts=pref.node_viewer.update_scripts,
+                                             use_render_mode=False)
 
     def free(self):
         print("Node removed", self)
@@ -103,10 +120,11 @@ def draw_menu(self, context):
         layout.operator("rsn.add_viewer_node", text="View Task")
 
 
-
 def register():
     bpy.utils.register_class(RSN_OT_AddViewerNode)
     bpy.utils.register_class(RSNodeViewerNode)
+
+    bpy.types.WindowManager.rsn_node_list = StringProperty()
 
     # bpy.types.NODE_MT_context_menu.prepend(draw_menu)
     add_keybind()
@@ -115,5 +133,6 @@ def register():
 def unregister():
     bpy.utils.unregister_class(RSNodeViewerNode)
 
+    del bpy.types.WindowManager.rsn_node_list
     # bpy.types.NODE_MT_context_menu.remove(draw_menu)
     remove_keybind()

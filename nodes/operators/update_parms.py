@@ -161,6 +161,19 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         else:
             bpy.ops.rsn.creat_compositor_node(use_passes=0, view_layer=bpy.context.window.view_layer.name)
 
+    def update_object_display(self):
+        if 'object_display' in self.task_data:
+            for node_name, dict in self.task_data['object_display'].items():
+                try:
+                    ob = bpy.data.objects[dict['object']]
+                except:
+                    ob = None
+                if ob:
+                    if ob.hide_viewport != dict['hide_viewport']:
+                        ob.hide_viewport = dict['hide_viewport']
+                    if ob.hide_render != dict['hide_render']:
+                        ob.hide_render = dict['hide_render']
+
     def update_object_psr(self):
         if 'object_psr' in self.task_data:
             for node_name, dict in self.task_data['object_psr'].items():
@@ -337,6 +350,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             self.update_res()
             self.update_render_engine()
 
+            self.update_object_display()
             self.update_object_material()
             self.update_object_psr()
 

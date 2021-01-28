@@ -25,13 +25,16 @@ class RenderStackNode(bpy.types.Node):
         print("RSN removed node", self.name)
 
     def update(self):
+        pass
+
+    def update_parms(self):
         try:
             if self.outputs[0].is_linked:
                 rsn_task = RSN_Task(node_tree=bpy.context.space_data.edit_tree,
                                     root_node_name=bpy.context.window_manager.rsn_viewer_node)
                 try:
                     viewer = rsn_task.get_node_from_name('Viewer')
-                    if viewer and self.name in rsn_task.get_sub_node_from_node(viewer) :
+                    if viewer and self.name in rsn_task.get_sub_node_from_node(viewer):
                         pref = bpy.context.preferences.addons.get('RenderStackNode').preferences
                         bpy.ops.rsn.update_parms(view_mode_handler=bpy.context.window_manager.rsn_viewer_node,
                                                  update_scripts=pref.node_viewer.update_scripts,
@@ -127,6 +130,7 @@ node_categorys = [
         nodeitems_utils.NodeItem("RSNodeCamInputNode"),
         nodeitems_utils.NodeItem("RSNodeWorldInputNode"),
         nodeitems_utils.NodeItem('RSNodeViewLayerInputNode'),
+        nodeitems_utils.NodeItem('RSNodeObjectDisplayNode'),
         nodeitems_utils.NodeItem('RSNodeObjectMaterialNode'),
         nodeitems_utils.NodeItem('RSNodeObjectPSRNode'),
         # nodeitems_utils.NodeItem('RSNodeObjectDataNode'),
