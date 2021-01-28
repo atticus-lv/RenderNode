@@ -197,6 +197,17 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         return {"PASS_THROUGH"}
 
 
+class RSN_OT_ClipBoard(bpy.types.Operator):
+    bl_idname = 'rsn.clip_board'
+    bl_label = 'Copy'
+
+    data_to_copy = StringProperty(default='Nothing is copied')
+
+    def execute(self, context):
+        bpy.context.window_manager.clipboard = self.data_to_copy
+        return {'FINISHED'}
+
+
 class RSN_OT_ShowTaskDetails(bpy.types.Operator):
     bl_idname = 'rsn.show_task_details'
     bl_label = 'Show Details'
@@ -208,15 +219,18 @@ class RSN_OT_ShowTaskDetails(bpy.types.Operator):
 
     def draw(self, context):
         layout = self.layout
-        layout.label(text='Details')
+        row = layout.split(factor=0.3,align=1)
+        row.operator('rsn.clip_board', text='Copy').data_to_copy = self.task_data
+        row.label(text='')
+
         col = layout.box().column(align=1)
         if self.task_data != '':
-            l = self.task_data.split(',')
+            l = self.task_data.split('\n')
             for s in l:
                 col.label(text=s)
 
     def invoke(self, context, event):
-        return context.window_manager.invoke_popup(self, width=500)
+        return context.window_manager.invoke_popup(self, width=300)
 
 
 class RSN_OT_RenderButton(bpy.types.Operator):
@@ -279,6 +293,7 @@ class RSN_OT_RenderButton(bpy.types.Operator):
         col3 = row.column(align=1).box()
         col4 = row.column(align=1).box()
         col5 = row.column(align=1).box()
+        col1.scale_x = 0.5
         col5.scale_x = 0.5
         col1.label(text='Index')
         col2.label(text='Task Node')
@@ -299,7 +314,7 @@ class RSN_OT_RenderButton(bpy.types.Operator):
             fe = self.frame_list[i]["frame_end"]
             col4.label(text=f'{fs} → {fe} ({fs - fe + 1})')
             # task_data
-            d = json.dumps(self.task_data[i])
+            d = json.dumps(self.task_data[i], indent=4)
             col5.operator('rsn.show_task_details', icon='INFO', text='').task_data = d
 
     def execute(self, context):
@@ -333,6 +348,7 @@ def update_rsn_viewer_node(self, context):
 def register():
     bpy.utils.register_class(RSN_OT_RenderStackTask)
     bpy.utils.register_class(RSN_OT_ShowTaskDetails)
+    bpy.utils.register_class(RSN_OT_ClipBoard)
     bpy.utils.register_class(RSN_OT_RenderButton)
 
     bpy.types.WindowManager.rsn_running_modal = BoolProperty(default=False)
@@ -342,6 +358,7 @@ def register():
 
 def unregister():
     bpy.utils.unregister_class(RSN_OT_RenderStackTask)
+    bpy.utils.unregister_class(RSN_OT_ClipBoard)
     bpy.utils.unregister_class(RSN_OT_ShowTaskDetails)
     bpy.utils.unregister_class(RSN_OT_RenderButton)
 
