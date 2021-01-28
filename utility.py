@@ -1,7 +1,7 @@
 import bpy
 from itertools import groupby
 import logging
-
+import json
 
 # LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
 # logging.basicConfig(format=LOG_FORMAT)
@@ -262,5 +262,13 @@ class RSN_Task():
                 task_data['look'] = node.look
                 task_data['ev'] = node.ev
                 task_data['gamma'] = node.gamma
+
+            elif node.bl_idname == 'RSNodeTaskInfoInputsNode':
+                data = json.loads(node.file.as_string())
+                try:
+                    task_data.update(data)
+                except Exception:
+                    node.use_custom_color = 1
+                    node.color = (1,0,0)
 
         return task_data

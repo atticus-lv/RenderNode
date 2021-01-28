@@ -143,6 +143,7 @@ node_categorys = [
         nodeitems_utils.NodeItem("RSNodeScriptsNode"),
         nodeitems_utils.NodeItem("RSNodeSmtpEmailNode"),
         nodeitems_utils.NodeItem("RSNodeLightStudioNode"),
+        nodeitems_utils.NodeItem("RSNodeTaskInfoInputsNode"),
         # nodeitems_utils.NodeItem("RSNodeServerNode"),
         # nodeitems_utils.NodeItem("RSNodeClientNode"),
     ]),
