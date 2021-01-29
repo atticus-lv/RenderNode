@@ -47,10 +47,8 @@ class RSN_OT_MergeSelectedNodes(bpy.types.Operator):
 
 
 def register():
-    bpy.utils.register_class(RSN_OT_MergeTask)
     bpy.utils.register_class(RSN_OT_MergeSelectedNodes)
 
 
 def unregister():
-    bpy.utils.unregister_class(RSN_OT_MergeTask)
     bpy.utils.unregister_class(RSN_OT_MergeSelectedNodes)

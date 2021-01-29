@@ -31,7 +31,7 @@ class HELPER_PT_Panel(bpy.types.Panel):
                     col.label(text='$vl: name of scene view layer')
                     col.label(text='$date: month-day')
                     col.label(text='$time: hour-min')
-                    col.label(text='/: create folder,should be a folder name in front of "/"')
+                    col.label(text='/: create folder,should be dict_input folder name in front of "/"')
         except Exception:
             pass
 

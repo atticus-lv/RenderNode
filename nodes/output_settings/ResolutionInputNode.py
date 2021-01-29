@@ -61,7 +61,7 @@ class RSN_PT_ResolutionPresetPanel(PresetPanel, Panel):
 
 class RSN_OT_AddResolutionPreset(AddPresetBase, Operator):
     bl_idname = 'rsn.add_resolution_preset'
-    bl_label = 'Add a preset'
+    bl_label = 'Add dict_input preset'
     preset_menu = 'SSM_MT_CamPresets'
 
     node_name: StringProperty(name='Node to add preset')

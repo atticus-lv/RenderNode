@@ -1,7 +1,7 @@
 bl_info = {
     "sender_name": "RenderStack Node ",
     "author"     : "Atticus",
-    "version"    : (1, 1, 0),
+    "version"    : (1, 1, 2),
     "blender"    : (2, 92, 0),
     "location"   : "Node Editor > RenderStackNode Editor",
     "description": "Node based render queue workflow",
@@ -12,25 +12,32 @@ bl_info = {
 
 import importlib
 import sys
+import os
+import json
+from itertools import groupby
 import bpy
-from .nodes import *
-from .rsn_helper import *
 
+# get folder name
 __folder_name__ = __name__
-
 __dict__ = {}
-__dict__['preferences'] = f"{__folder_name__}.preferences"
-__dict__["node_tree"] = f"{__folder_name__}.node_tree"
-__dict__['utility'] = f'{__folder_name__}.utility'
+dir = os.path.dirname(__file__)
 
-for k, v in a.items():
-    for module_name in v:
-        __dict__[module_name] = f"{__folder_name__}.nodes.{k}.{module_name}"
+# get all .py file path
+py_paths = [os.path.join(root, f) for root, dirs, files in os.walk(dir) for f in files if
+            f.endswith('.py') and f != '__init__.py']
 
-for k, v in b.items():
-    for module_name in v:
-        __dict__[module_name] = f"{__folder_name__}.rsn_helper.{k}.{module_name}"
+for i, path in enumerate(py_paths):
+    name = os.path.basename(path)[:-3]
+    correct_path = path.replace('\\', '/')
+    # split path with folder name
+    path_list = [list(g) for k, g in groupby(correct_path.split('/'), lambda x: x == __folder_name__) if
+                 not k]
+    # combine path and make dict like this: 'name:folder.name'
+    if not 'preset' in path_list[-1]:
+        r_name_raw = __folder_name__ + '.' + '.'.join(path_list[-1])
+        __dict__[name] = r_name_raw[:-3]
 
+# auto reload
 for name in __dict__.values():
     if name in sys.modules:
         importlib.reload(sys.modules[name])
