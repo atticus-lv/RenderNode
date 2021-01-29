@@ -57,13 +57,18 @@ node_categorys = [
         # nodeitems_utils.NodeItem("RSNodeClientNode"),
     ]),
     RSNCategory("LAYOUT", "Layout", items=[
-        nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Merge Settings", settings={
+        nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Merge", settings={
             "node_type": repr("MERGE"),
         }),
-        nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Switch Settings", settings={
+        nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Switch", settings={
             "node_type": repr("SWITCH"),
-            "label"    : repr("Switch Settings"),
+            "label"    : repr("Switch"),
         }),
+        nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Version", settings={
+            "node_type": repr("VERSION"),
+            "label"    : repr("Version"),
+        }),
+
     ]),
 ]
 
