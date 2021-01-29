@@ -3,12 +3,11 @@ import os
 import shutil
 
 from bpy.props import *
-from bpy.types import AddonPreferences
 from bpy.types import Operator, Menu, Panel
 from bl_operators.presets import AddPresetBase
 from bl_ui.utils import PresetPanel
 
-from ...node_tree import RenderStackNode
+from ...nodes.BASE.node_tree import RenderStackNode
 from ... import __folder_name__
 
 

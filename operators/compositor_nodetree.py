@@ -2,7 +2,7 @@ import bpy
 from bpy.props import BoolProperty, StringProperty
 import os
 
-from ...preferences import get_pref
+from ..preferences import get_pref
 
 class RSN_OT_CreatCompositorNode(bpy.types.Operator):
     bl_idname = "rsn.creat_compositor_node"

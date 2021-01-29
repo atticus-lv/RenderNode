@@ -4,8 +4,8 @@ import logging
 import json
 
 from bpy.props import *
-from ...utility import *
-from ...preferences import get_pref
+from ..utility import *
+from ..preferences import get_pref
 
 LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
 logging.basicConfig(format=LOG_FORMAT)

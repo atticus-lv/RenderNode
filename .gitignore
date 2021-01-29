@@ -20,10 +20,10 @@ nodes/inputs/__pycache__/ViewLayerNode.cpython-37.pyc
 nodes/inputs/__pycache__/WorldInputNode.cpython-37.pyc
 nodes/layout/__pycache__/__init__.cpython-37.pyc
 nodes/layout/__pycache__/SettingsMergeNode.cpython-37.pyc
-nodes/operators/__pycache__/__init__.cpython-37.pyc
-nodes/operators/__pycache__/edit_input.cpython-37.pyc
-nodes/operators/__pycache__/renderstack.cpython-37.pyc
-nodes/operators/__pycache__/update_parms.cpython-37.pyc
+operators/__pycache__/__init__.cpython-37.pyc
+operators/__pycache__/edit_input.cpython-37.pyc
+operators/__pycache__/renderstack.cpython-37.pyc
+operators/__pycache__/update_parms.cpython-37.pyc
 nodes/output_settings/__pycache__/__init__.cpython-37.pyc
 nodes/output_settings/__pycache__/ActiveRenderSlot.cpython-37.pyc
 nodes/output_settings/__pycache__/FilePathInputNode.cpython-37.pyc

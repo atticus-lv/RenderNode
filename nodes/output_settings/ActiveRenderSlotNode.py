@@ -1,6 +1,6 @@
 import bpy
 from bpy.props import IntProperty
-from ...node_tree import RenderStackNode
+from ...nodes.BASE.node_tree import RenderStackNode
 
 
 def update_node(self, context):

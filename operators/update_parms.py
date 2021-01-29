@@ -1,7 +1,7 @@
 import bpy
 from bpy.props import StringProperty, BoolProperty
-from ...utility import *
-from ...preferences import get_pref
+from ..utility import *
+from ..preferences import get_pref
 
 import logging
 import time
