@@ -13,17 +13,19 @@ def update_slot_index(self, context):
             self.slot_index = len(self.object.material_slots) - 1
     self.update_parms()
 
+
 def update_node(self, context):
     self.update_parms()
+
 
 class RSNodeObjectMaterialNode(RenderStackNode):
     bl_idname = 'RSNodeObjectMaterialNode'
     bl_label = 'Object Material'
 
-    object: PointerProperty(type=bpy.types.Object, poll=poll_object, name='Object',update=update_node)
+    object: PointerProperty(type=bpy.types.Object, poll=poll_object, name='Object', update=update_node)
 
     slot_index: IntProperty(min=0, default=0, name="Slot index", update=update_slot_index)
-    new_material: PointerProperty(type=bpy.types.Material, name='New Mat',update=update_node)
+    new_material: PointerProperty(type=bpy.types.Material, name='New Mat', update=update_node)
 
     def init(self, context):
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
@@ -36,7 +38,6 @@ class RSNodeObjectMaterialNode(RenderStackNode):
         col.prop(self, "object")
         col.prop(self, 'slot_index', text='Slot')
         col.prop(self, 'new_material', text='Material')
-
 
 
 def register():

@@ -4,7 +4,7 @@ from ...nodes.BASE.node_tree import RenderStackNode
 
 
 class RSNodeSettingsMergeNode(RenderStackNode):
-    '''A simple input node'''
+    """A simple input node"""
     bl_idname = 'RSNodeSettingsMergeNode'
     bl_label = 'Merge'
 
@@ -34,6 +34,7 @@ class RSNodeSettingsMergeNode(RenderStackNode):
                 pass
         else:
             layout.operator('rsn.switch_setting').node = self.name
+
 
 def register():
     bpy.utils.register_class(RSNodeSettingsMergeNode)

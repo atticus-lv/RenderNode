@@ -82,9 +82,9 @@ class RSN_OT_AddResolutionPreset(AddPresetBase, Operator):
 def get_files_from_path(path):
     files = []
     for dirName, subdirList, fileList in os.walk(path):
-        dir = dirName.replace(path, '')
+        dir_ = dirName.replace(path, '')
         for f in fileList:
-            files.append(os.path.join(dir, f))
+            files.append(os.path.join(dir_, f))
     return files
 
 

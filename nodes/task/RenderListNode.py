@@ -4,8 +4,8 @@ from ...nodes.BASE.node_tree import RenderStackNode
 
 
 class RSNode_OT_GetInfo(bpy.types.Operator):
-    '''left click: get node name
-shift:get overwrite details '''
+    """left click: get node name
+shift:get overwrite details """
     bl_idname = 'rsn.get_info'
     bl_label = 'get info'
 
@@ -27,7 +27,7 @@ shift:get overwrite details '''
 
 
 class RSNodeRenderListNode(RenderStackNode):
-    '''Render List Node'''
+    """Render List Node"""
     bl_idname = 'RSNodeRenderListNode'
     bl_label = 'Render List'
 

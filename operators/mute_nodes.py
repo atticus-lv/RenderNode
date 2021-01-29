@@ -24,7 +24,7 @@ class RSN_OT_MuteNodes(bpy.types.Operator):
                     if node.type != "rsn.mute_nodes": node.mute = 0
         else:
             node = bpy.context.space_data.edit_tree.nodes[self.node_name]
-            node.mute = 0 if node.mute == True else 1
+            node.mute = 0 if node.mute else 1
 
         dg = context.evaluated_depsgraph_get()
         dg.update()

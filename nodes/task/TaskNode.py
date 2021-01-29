@@ -3,7 +3,7 @@ from ...nodes.BASE.node_tree import RenderStackNode
 
 
 class RSNodeTaskNode(RenderStackNode):
-    '''A simple Task node'''
+    """A simple Task node"""
     bl_idname = "RSNodeTaskNode"
     bl_label = 'Task'
 

@@ -23,8 +23,8 @@ class RSNodeFrameRangeInputNode(RenderStackNode):
 
     def draw_buttons(self, context, layout):
         row = layout.row(align=1)
-        row.prop(self, 'frame_start',text='Start')
-        row.prop(self, 'frame_end',text='End')
+        row.prop(self, 'frame_start', text='Start')
+        row.prop(self, 'frame_end', text='End')
         row.prop(self, 'use_step', icon_only=1, icon="TRIA_DOWN" if self.use_step else "TRIA_LEFT")
         if self.use_step:
             col = layout.column(align=1)

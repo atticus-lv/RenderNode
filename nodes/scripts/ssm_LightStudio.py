@@ -11,7 +11,7 @@ class RSNodeLightStudioNode(RenderStackNode):
     bl_idname = 'RSNodeLightStudioNode'
     bl_label = 'SSM Light Studio'
 
-    light_studio_index: IntProperty(name='light studio index',update=update_node)
+    light_studio_index: IntProperty(name='light studio index', update=update_node)
 
     def init(self, context):
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")

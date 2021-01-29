@@ -8,7 +8,7 @@ from ...nodes.BASE.node_tree import RenderStackNode
 
 
 class RSNodeProcessorNode(RenderStackNode):
-    '''A simple input node'''
+    """A simple input node"""
     bl_idname = 'RSNodeProcessorNode'
     bl_label = 'Processor'
 

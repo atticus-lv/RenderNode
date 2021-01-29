@@ -70,7 +70,7 @@ class RSN_OT_SendEmail(bpy.types.Operator):
 
 
 class RSNodeSmtpEmailNode(RenderStackNode):
-    '''A simple input node'''
+    """A simple input node"""
     bl_idname = 'RSNodeSmtpEmailNode'
     bl_label = 'SMTP Email'
 

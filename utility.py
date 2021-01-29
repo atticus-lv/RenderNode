@@ -3,11 +3,12 @@ from itertools import groupby
 import logging
 import json
 
+
 # LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
 # logging.basicConfig(format=LOG_FORMAT)
 # logger = logging.getLogger('mylogger')
 
-class RSN_NodeTree():
+class RSN_NodeTree:
     def get_context_tree(self, return_name=False):
         try:
             name = bpy.context.space_data.edit_tree.name
@@ -31,7 +32,7 @@ class RSN_NodeTree():
             self.set_wm_node_tree(tree_name)
 
 
-class RSN_Task():
+class RSN_Task:
     def __init__(self, node_tree, root_node_name):
         self.nt = node_tree
         self.root_node = self.get_node_from_name(root_node_name)
@@ -71,7 +72,7 @@ class RSN_Task():
         return node_list
 
     def get_sub_node_dict_from_node_list(self, node_list, parent_node_type, black_list=None):
-        'RSNodeTaskListNode'
+        """RSNodeTaskListNode"""
         node_list_dict = {}
         if not black_list: black_list = ['RSNodeTaskListNode', 'RSNodeRenderListNode']
 
@@ -269,6 +270,6 @@ class RSN_Task():
                     task_data.update(data)
                 except Exception:
                     node.use_custom_color = 1
-                    node.color = (1,0,0)
+                    node.color = (1, 0, 0)
 
         return task_data

@@ -6,7 +6,7 @@ import socket as st
 
 
 class RSNodeServerNode(RenderStackNode):
-    '''A simple input node'''
+    """A simple input node"""
     bl_idname = 'RSNodeServerNode'
     bl_label = 'Server'
 
@@ -64,7 +64,7 @@ class RSNodeServerNode(RenderStackNode):
 
 
 class RSNodeClientNode(RenderStackNode):
-    '''A simple input node'''
+    """A simple input node"""
     bl_idname = 'RSNodeClientNode'
     bl_label = 'Client'
 

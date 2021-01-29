@@ -14,7 +14,7 @@ def reroute(node):
 
 
 class RSNodeTaskListNode(RenderStackNode):
-    '''Render List Node'''
+    """Render List Node"""
     bl_idname = 'RSNodeTaskListNode'
     bl_label = 'Task List'
 
@@ -37,7 +37,6 @@ class RSNodeTaskListNode(RenderStackNode):
                     r.remove = 1
         except Exception:
             pass
-
 
 
 def register():

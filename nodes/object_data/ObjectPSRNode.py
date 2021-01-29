@@ -73,7 +73,6 @@ class RSNodeObjectPSRNode(RenderStackNode):
             fill.node_name = self.name
 
 
-
 def register():
     bpy.utils.register_class(RSNodeObjectPSRNode)
     bpy.utils.register_class(RSN_OT_FillOriginPSR)

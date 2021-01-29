@@ -9,7 +9,7 @@ class RSNodeSocketCamera(bpy.types.NodeSocket):
         layout.label(text=text)
 
     def draw_color(self, context, node):
-        return (0, 0.8, 1.0, 1.0)
+        return 0, 0.8, 1.0, 1.0
 
 
 class RSNodeSocketTaskSettings(bpy.types.NodeSocket):
@@ -20,7 +20,7 @@ class RSNodeSocketTaskSettings(bpy.types.NodeSocket):
         layout.label(text=text)
 
     def draw_color(self, context, node):
-        return (0.6, 0.6, 0.6, 1.0)
+        return 0.6, 0.6, 0.6, 1.0
 
 
 class RSNodeSocketRenderSettings(bpy.types.NodeSocket):
@@ -31,7 +31,7 @@ class RSNodeSocketRenderSettings(bpy.types.NodeSocket):
         layout.label(text=text)
 
     def draw_color(self, context, node):
-        return (0, 1, 0.5, 1.0)
+        return 0, 1, 0.5, 1.0
 
 
 class RSNodeSocketOutputSettings(bpy.types.NodeSocket):
@@ -42,7 +42,7 @@ class RSNodeSocketOutputSettings(bpy.types.NodeSocket):
         layout.label(text=text)
 
     def draw_color(self, context, node):
-        return (1, 0.8, 0.2, 1.0)
+        return 1, 0.8, 0.2, 1.0
 
 
 class RSNodeSocketRenderList(bpy.types.NodeSocket):
@@ -53,7 +53,7 @@ class RSNodeSocketRenderList(bpy.types.NodeSocket):
         layout.label(text=text)
 
     def draw_color(self, context, node):
-        return (0.95, 0.95, 0.95, 1.0)
+        return 0.95, 0.95, 0.95, 1.0
 
 
 classes = [

@@ -8,7 +8,7 @@ def update_node(self, context):
 
 
 class RSNodeEeveeRenderSettingsNode(RenderStackNode):
-    '''A simple input node'''
+    """A simple input node"""
     bl_idname = 'RSNodeEeveeRenderSettingsNode'
     bl_label = 'Eevee Settings'
 

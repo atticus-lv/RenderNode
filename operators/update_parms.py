@@ -102,7 +102,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                     os.makedirs(directory_path)
                 return directory_path
 
-            except(Exception) as e:
+            except Exception as e:
                 self.report({'ERROR'}, f'File Path: No Such a Path')
                 print(directory_path, e)
         else:
@@ -296,7 +296,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                     bpy.context.scene.cycles.samples = self.task_data['samples']
 
         if 'luxcore_half' in self.task_data:
-            if bpy.context.scene.luxcore.halt.enable != True:
+            if not bpy.context.scene.luxcore.halt.enable:
                 bpy.context.scene.luxcore.halt.enable = True
 
             if self.task_data['luxcore_half']['use_samples'] is False and self.task_data['luxcore_half'][
@@ -305,18 +305,18 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
 
             elif self.task_data['luxcore_half']['use_samples'] is True and self.task_data['luxcore_half'][
                 'use_time'] is False:
-                if bpy.context.scene.luxcore.halt.use_samples != True:
+                if not bpy.context.scene.luxcore.halt.use_samples:
                     bpy.context.scene.luxcore.halt.use_samples = True
-                if bpy.context.scene.luxcore.halt.use_time != False:
+                if bpy.context.scene.luxcore.halt.use_time:
                     bpy.context.scene.luxcore.halt.use_time = False
                 if bpy.context.scene.luxcore.halt.samples != self.task_data['luxcore_half']['samples']:
                     bpy.context.scene.luxcore.halt.samples = self.task_data['luxcore_half']['samples']
 
             elif self.task_data['luxcore_half']['use_samples'] is False and self.task_data['luxcore_half'][
                 'use_time'] is True:
-                if bpy.context.scene.luxcore.halt.use_samples != False:
+                if bpy.context.scene.luxcore.halt.use_samples:
                     bpy.context.scene.luxcore.halt.use_samples = False
-                if bpy.context.scene.luxcore.halt.use_time != True:
+                if not bpy.context.scene.luxcore.halt.use_time:
                     bpy.context.scene.luxcore.halt.use_time = True
                 if bpy.context.scene.luxcore.halt.time != self.task_data['luxcore_half']['time']:
                     bpy.context.scene.luxcore.halt.time = self.task_data['luxcore_half']['time']

@@ -28,7 +28,6 @@ class RSNodeObjectDataNode(RenderStackNode):
             layout.prop(self.object.data, self.data_path)
 
 
-
 def register():
     bpy.utils.register_class(RSNodeObjectDataNode)
 

@@ -70,7 +70,7 @@ class RSN_Preference(bpy.types.AddonPreferences):
 
         col = layout.column(align=1)
         box = col.box().split().column(align=1)
-        self.stmp_node(box)
+        self.smtp_node(box)
 
         col.separator(factor=0.2)
         box = col.box().split().column(align=1)
@@ -83,7 +83,7 @@ class RSN_Preference(bpy.types.AddonPreferences):
         row = layout.row(align=1)
         row.prop(self, 'file_path_separator', text='File Path Separator')
 
-    def stmp_node(self, box):
+    def smtp_node(self, box):
         box.prop(self.node_smtp, 'show', text="SMTP Email Node", emboss=False,
                  icon='TRIA_DOWN' if self.node_smtp.show else 'TRIA_RIGHT')
         if self.node_smtp.show:

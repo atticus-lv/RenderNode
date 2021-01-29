@@ -8,7 +8,7 @@ def update_node(self, context):
 
 
 class RSNodeCyclesLightPathNode(RenderStackNode):
-    '''A simple input node'''
+    """A simple input node"""
     bl_idname = 'RSNodeCyclesLightPathNode'
     bl_label = 'Cycles Light Path'
 

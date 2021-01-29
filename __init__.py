@@ -10,20 +10,19 @@ bl_info = {
     "category"   : "Render",
 }
 
+import bpy
 import importlib
 import sys
 import os
-import json
 from itertools import groupby
-import bpy
 
 # get folder name
 __folder_name__ = __name__
 __dict__ = {}
-dir = os.path.dirname(__file__)
+dir_name = os.path.dirname(__file__)
 
 # get all .py file path
-py_paths = [os.path.join(root, f) for root, dirs, files in os.walk(dir) for f in files if
+py_paths = [os.path.join(root, f) for root, dirs, files in os.walk(dir_name) for f in files if
             f.endswith('.py') and f != '__init__.py']
 
 for i, path in enumerate(py_paths):
@@ -33,7 +32,7 @@ for i, path in enumerate(py_paths):
     path_list = [list(g) for k, g in groupby(correct_path.split('/'), lambda x: x == __folder_name__) if
                  not k]
     # combine path and make dict like this: 'name:folder.name'
-    if not 'preset' in path_list[-1]:
+    if 'preset' not in path_list[-1]:
         r_name_raw = __folder_name__ + '.' + '.'.join(path_list[-1])
         __dict__[name] = r_name_raw[:-3]
 

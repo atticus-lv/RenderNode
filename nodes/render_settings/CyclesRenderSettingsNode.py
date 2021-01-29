@@ -8,7 +8,7 @@ def update_node(self, context):
 
 
 class RSNodeCyclesRenderSettingsNode(RenderStackNode):
-    '''A simple input node'''
+    """A simple input node"""
     bl_idname = 'RSNodeCyclesRenderSettingsNode'
     bl_label = 'Cycles Settings'
 

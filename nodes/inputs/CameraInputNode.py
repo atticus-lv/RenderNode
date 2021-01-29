@@ -12,7 +12,7 @@ def update_node(self, context):
 
 
 class RSNodeCamInputNode(RenderStackNode):
-    '''A simple input node'''
+    """A simple input node"""
     bl_idname = 'RSNodeCamInputNode'
     bl_label = 'Camera'
 
