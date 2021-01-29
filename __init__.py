@@ -6,7 +6,7 @@ bl_info = {
     "location"   : "Node Editor > RenderStackNode Editor",
     "description": "Node based render queue workflow",
     'warning'    : "",
-    # "doc_url"    : "",
+    "doc_url"    : "https://github.com/atticus-lv/RenderStackNode/wiki",
     "category"   : "Render",
 }
 
