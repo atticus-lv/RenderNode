@@ -23,11 +23,6 @@ node_categorys = [
         nodeitems_utils.NodeItem('RSNodeViewLayerInputNode'),
         nodeitems_utils.NodeItem('RSNodeColorManagementNode'),
         nodeitems_utils.NodeItem("RSNodeTaskInfoInputsNode"),
-
-        nodeitems_utils.NodeItem('RSNodeObjectDisplayNode'),
-        nodeitems_utils.NodeItem('RSNodeObjectMaterialNode'),
-        nodeitems_utils.NodeItem('RSNodeObjectPSRNode'),
-        # nodeitems_utils.NodeItem('RSNodeObjectDataNode'),
     ]),
 
     RSNCategory("OBJECT", "Object", items=[
