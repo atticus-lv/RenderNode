@@ -132,7 +132,7 @@ node_categorys = [
 
     RSNCategory("TASK", "Task", items=[
         nodeitems_utils.NodeItem("RSNodeTaskNode"),
-        nodeitems_utils.NodeItem("RSNodeTaskListNode"),
+        # nodeitems_utils.NodeItem("RSNodeTaskListNode"),
         nodeitems_utils.NodeItem("RSNodeRenderListNode"),
         nodeitems_utils.NodeItem("RSNodeProcessorNode"),
         nodeitems_utils.NodeItem("RSNodeViewerNode"),
@@ -167,7 +167,11 @@ node_categorys = [
 
     RSNCategory("LAYOUT", "Layout", items=[
         nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Merge Settings", settings={
-            "node_type": repr("RENDER_SETTINGS"),
+            "node_type": repr("MERGE"),
+        }),
+        nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Switch Settings", settings={
+            "node_type": repr("SWITCH"),
+            "label": repr("Switch Settings"),
         }),
     ]),
 ]

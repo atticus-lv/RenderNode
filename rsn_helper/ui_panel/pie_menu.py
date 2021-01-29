@@ -37,8 +37,7 @@ class RSN_MT_PieMenu(Menu):
         col.operator("rsn.move_node", text='Simple Task')
 
         col = col1.box().column()
-        col.operator("rsn.merge_settings", icon='OUTLINER')
-        col.operator("rsn.merge_task", icon='OUTLINER')
+        col.operator("rsn.merge_selected_nodes", icon='OUTLINER')
 
         # bottom
         if context.space_data.edit_tree and context.space_data.edit_tree.bl_idname == 'RenderStackNodeTree':
