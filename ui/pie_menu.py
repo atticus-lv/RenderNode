@@ -1,7 +1,13 @@
+import os
 import bpy
+import rna_keymap_ui
 from bpy.types import Menu
 from bpy.props import *
-import rna_keymap_ui
+
+from .icon_utils import RSN_Preview
+
+merge_icon = RSN_Preview(image='merge.png', name='merge_icon')
+simple_task_icon = RSN_Preview(image='flow.png', name='simple_task_icon')
 
 
 class RSN_OT_SwitchTree(bpy.types.Operator):
@@ -34,10 +40,12 @@ class RSN_MT_PieMenu(Menu):
         # right
         col1 = pie.column()
         col = col1.box().column()
-        col.operator("rsn.move_node", text='Simple Task')
+        # simple_icon = preview_collections["rsn_icon"]["simple_task_icon"]
+        col.operator("rsn.move_node", text='Simple Task', icon_value=simple_task_icon.get_image_icon_id())
 
         col = col1.box().column()
-        col.operator("rsn.merge_selected_nodes", icon='OUTLINER')
+        # merge_icon = preview_collections["rsn_icon"]["merge_icon"]
+        col.operator("rsn.merge_selected_nodes", icon_value=merge_icon.get_image_icon_id())
 
         # bottom
         if context.space_data.edit_tree and context.space_data.edit_tree.bl_idname == 'RenderStackNodeTree':
@@ -62,10 +70,17 @@ class RSN_MT_PieMenu(Menu):
 addon_keymaps = []
 
 
-def register():
-    bpy.utils.register_class(RSN_MT_PieMenu)
-    bpy.utils.register_class(RSN_OT_SwitchTree)
+def register_icon():
+    merge_icon.register()
+    simple_task_icon.register()
 
+
+def unregister_icon():
+    merge_icon.unregister()
+    simple_task_icon.unregister()
+
+
+def add_keybind():
     wm = bpy.context.window_manager
     if wm.keyconfigs.addon:
         # ssm pie menu
@@ -75,10 +90,7 @@ def register():
         addon_keymaps.append((km, kmi))
 
 
-def unregister():
-    bpy.utils.unregister_class(RSN_MT_PieMenu)
-    bpy.utils.unregister_class(RSN_OT_SwitchTree)
-
+def remove_keybind():
     wm = bpy.context.window_manager
     kc = wm.keyconfigs.addon
     if kc:
@@ -86,3 +98,17 @@ def unregister():
             km.keymap_items.remove(kmi)
 
     addon_keymaps.clear()
+
+
+def register():
+    register_icon()
+    bpy.utils.register_class(RSN_MT_PieMenu)
+    bpy.utils.register_class(RSN_OT_SwitchTree)
+    add_keybind()
+
+
+def unregister():
+    unregister_icon()
+    bpy.utils.unregister_class(RSN_MT_PieMenu)
+    bpy.utils.unregister_class(RSN_OT_SwitchTree)
+    remove_keybind()
