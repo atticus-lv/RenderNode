@@ -38,7 +38,7 @@ class RSN_Preference(bpy.types.AddonPreferences):
 
     option: EnumProperty(items=[
         ('PROPERTIES', 'Properties', ''),
-        ('NODES', 'Nodes', '')],
+        ('NODES', 'Nodes', ''), ],
         default='NODES')
 
     log_level: EnumProperty(items=[
@@ -53,6 +53,9 @@ class RSN_Preference(bpy.types.AddonPreferences):
         ('_', 'Underscore', ''),
         (' ', 'Space', ''),
     ], default='.')
+
+    need_update: BoolProperty(name='Need Update')
+    latest_version: IntProperty()
 
     node_smtp: PointerProperty(type=NodeSmtpProps)
     node_viewer: PointerProperty(type=NodeViewerProps)
@@ -79,9 +82,15 @@ class RSN_Preference(bpy.types.AddonPreferences):
     def draw_properties(self):
         layout = self.layout
         layout.use_property_split = True
+
         layout.prop(self, 'log_level', text='Log')
-        row = layout.row(align=1)
-        row.prop(self, 'file_path_separator', text='File Path Separator')
+        layout.prop(self, 'file_path_separator', text='File Path Separator')
+
+        layout.separator()
+        row = layout.split(factor=0.7)
+        row.separator()
+        row.operator('rsn.check_update',
+                        text='Latest Version' if not self.need_update else f"New Version {''.join(str(self.latest_version).split())}!")
 
     def smtp_node(self, box):
         box.prop(self.node_smtp, 'show', text="SMTP Email Node", emboss=False,

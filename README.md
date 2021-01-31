@@ -1,14 +1,12 @@
 
 
 # RenderStackNode [Blender Addon]
-
+> ##### v1.1.4
 #### Intro
 
 Check [**Wiki**](https://github.com/atticus-lv/RenderStackNode/wiki) for more information
 
 #### Install 
-
-###### v1.1.4
 
 **Common User**
 
