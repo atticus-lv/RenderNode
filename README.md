@@ -6,9 +6,17 @@
 
 Check [**Wiki**](https://github.com/atticus-lv/RenderStackNode/wiki) for more information
 
-#### Plans
+#### Install
 
-+ muti blend file ( socket modules or command line )
-+ octane/redshift support ( actually you can make it with script node)
-+ mesh export
-+ sim task
+**Common User**
+Click [here](https://github.com/atticus-lv/RenderStackNode/archive/main.zip) to down the zip file, then install as usual addon
+
+Familiar with git
+Go to your addon folder(For example,you are using windows)
+
+`cd C:\Users\{YourUserName}\AppData\Roaming\Blender Foundation\Blender\2.92\scripts\addons`
+
+Then clone the repository
+
+`git clone https://github.com/atticus-lv/RenderStackNode.git`
+
