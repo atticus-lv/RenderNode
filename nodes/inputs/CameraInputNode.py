@@ -20,11 +20,14 @@ class RSNodeCamInputNode(RenderStackNode):
 
     def init(self, context):
         self.outputs.new('RSNodeSocketCamera', "Camera")
-        self.width = 150
+        self.width = 180
 
     def draw_buttons(self, context, layout):
-        layout.prop(self, 'camera', text="")
-    
+        row = layout.row(align=1)
+        row.prop(self, 'camera', text="")
+        if self.camera:
+            row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF',text='').name = self.camera.name
+
 
 def register():
     bpy.utils.register_class(RSNodeCamInputNode)
