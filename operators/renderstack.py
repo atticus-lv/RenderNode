@@ -302,11 +302,17 @@ class RSN_OT_RenderButton(bpy.types.Operator):
 
     def render_options(self, context):
         layout = self.layout.box()
-        layout.label(text='Options')
         row = layout.row(align=0)
+        sub = row.row(align=1)
+        sub.label(text='Open folder after render', icon='FILEBROWSER')
+        sub.prop(self, 'open_dir', text='')
+        sub = row.row(align=1)
+        sub.label(text='Empty filepath after render', icon_value=empty_icon.get_image_icon_id())
+        sub.prop(self, 'clean_path', text='')
+
+        row = layout.row(align=0)
+        row.prop(context.preferences.view, 'render_display_type')
         row.prop(context.scene.render, 'use_lock_interface', icon_only=1)
-        row.prop(self, 'open_dir', icon='FILEBROWSER')
-        row.prop(self, 'clean_path', icon_value=empty_icon.get_image_icon_id())
 
     def draw(self, context):
         layout = self.layout
