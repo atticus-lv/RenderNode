@@ -40,19 +40,24 @@ class RSNodeProcessorNode(RenderStackNode):
         # total
         col = layout.column(align=1)
         col.scale_y = 1
+
         col.label(text=f"Total: {1 - percent:.0%} | Process: {self.done_frames} / {self.count_frames}")
+
+        col1 = col
         row = col.row(align=1)
         sub = row.split(factor=1 - percent, align=1)
         if self.done_frames == 0:
+            col1.label(text='Rendering the first image...', icon='SORTTIME')
             row.prop(self, 'red', text="")
         else:
             sub.prop(self, 'green', text="")
             sub.prop(self, 'red', text="")
         # tasks
-        curr_done = (self.frame_current + 1 - self.frame_start) / (self.frame_end + 1 - self.frame_start)
-
+        curr_done = (self.frame_current - self.frame_start) / (self.frame_end + 1 - self.frame_start)
         task_list = self.all_tasks.split(",")
+
         layout.separator(factor=0.5)
+
         if self.all_tasks != '':
             try:
                 index = task_list.index(self.curr_task)
@@ -74,7 +79,7 @@ class RSNodeProcessorNode(RenderStackNode):
                                       text=f'{name} | {label}')
                             # process bar
                             col.label(
-                                text=f"{curr_done:.0%}: {self.frame_start} - {self.frame_current + 1} - {self.frame_end}")
+                                text=f"{curr_done:.0%}: {self.frame_start} - {self.frame_current} - {self.frame_end}")
                             col.separator(factor=0.5)
                             row = col.row()
                             row.scale_y = 0.3

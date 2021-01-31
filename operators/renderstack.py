@@ -67,8 +67,8 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
             node.curr_task = self.mark_task_names[0]
             node.task_data = json.dumps(self.task_data_list[0], indent=2)
 
-            node.frame_start = bpy.context.scene.frame_start
-            node.frame_end = bpy.context.scene.frame_end
+            node.frame_start = self.frame_list[0]["frame_start"]
+            node.frame_end = self.frame_list[0]["frame_end"]
             node.frame_current = bpy.context.scene.frame_current
         except Exception as e:
             logger.debug(f'Processor {e}')
