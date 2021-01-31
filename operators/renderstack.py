@@ -6,10 +6,13 @@ import json
 from bpy.props import *
 from ..utility import *
 from ..preferences import get_pref
+from ..ui.icon_utils import RSN_Preview
 
 LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
 logging.basicConfig(format=LOG_FORMAT)
 logger = logging.getLogger('mylogger')
+
+empty_icon = RSN_Preview(image='empty.png', name='empty_icon')
 
 
 def get_length(frame_list):
@@ -25,6 +28,9 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     bl_label = "Render Stack"
 
     render_list_node_name: StringProperty()
+    open_dir: BoolProperty(name='Open folder after render', default=True)
+    clean_path: BoolProperty(name='clean path after rendering', default=True)
+
     nt = None
     # 渲染状态获取
     _timer = None
@@ -59,7 +65,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
             node = self.nt.nodes['Processor']
             node.done_frames += 1
             node.curr_task = self.mark_task_names[0]
-            node.task_data = json.dumps(self.task_data_list[0],indent=2)
+            node.task_data = json.dumps(self.task_data_list[0], indent=2)
 
             node.frame_start = bpy.context.scene.frame_start
             node.frame_end = bpy.context.scene.frame_end
@@ -175,19 +181,28 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         except Exception as e:
             logger.debug(f'Processor {e}')
 
+    def finish(self):
+        self.finish_process_node()
+        self.mark_task_names.clear()
+        self.frame_list.clear()
+        self.task_data_list.clear()
+        if self.open_dir:
+            try:
+                output_dir = os.path.dirname(bpy.context.scene.render.filepath)
+                os.startfile(output_dir)
+            except:
+                logger.warning('RSN File path error, can not open dir after rendering')
+        if self.clean_path:
+            bpy.context.scene.render.filepath = ""
+
     def modal(self, context, event):
         # 计时器内事件
         if event.type == 'TIMER':
             if True in (len(self.mark_task_names) == 0, self.stop is True, len(self.frame_list) == 0):  # 取消或者列表为空 停止
                 self.remove_handles()
                 bpy.context.window_manager.rsn_running_modal = False
-                bpy.context.scene.render.filepath = ""
 
-                self.finish_process_node()
-
-                self.mark_task_names.clear()
-                self.frame_list.clear()
-                self.task_data_list.clear()
+                self.finish()
 
                 return {"FINISHED"}
 
@@ -241,6 +256,8 @@ class RSN_OT_RenderButton(bpy.types.Operator):
     bl_label = "Render"
 
     render_list_node_name: StringProperty()
+    open_dir: BoolProperty(name='Open folder after render', default=True)
+    clean_path: BoolProperty(name='Empty filepath after render', default=True)
 
     nt = None
     task_data = []
@@ -283,9 +300,16 @@ class RSN_OT_RenderButton(bpy.types.Operator):
                 render_list["frame_step"] = 1
             self.frame_list.append(render_list)
 
+    def render_options(self, context):
+        layout = self.layout.box()
+        layout.label(text='Options')
+        row = layout.row(align=0)
+        row.prop(context.scene.render, 'use_lock_interface', icon_only=1)
+        row.prop(self, 'open_dir', icon='FILEBROWSER')
+        row.prop(self, 'clean_path', icon_value=empty_icon.get_image_icon_id())
+
     def draw(self, context):
         layout = self.layout
-        layout.prop(context.scene.render, 'use_lock_interface', toggle=0)
 
         box = layout.split().box()
         row = box.row(align=1)
@@ -319,6 +343,9 @@ class RSN_OT_RenderButton(bpy.types.Operator):
             d = json.dumps(self.task_data[i], indent=4)
             col5.operator('rsn.show_task_details', icon='INFO', text='').task_data = d
 
+        self.render_options(context)
+        layout.separator(factor=0.25)
+
     def execute(self, context):
         blend_path = context.blend_data.filepath
 
@@ -330,7 +357,9 @@ class RSN_OT_RenderButton(bpy.types.Operator):
             return {"FINISHED"}
 
         self.change_shading()
-        bpy.ops.rsn.render_stack_task(render_list_node_name=self.render_list_node_name)
+        bpy.ops.rsn.render_stack_task(render_list_node_name=self.render_list_node_name,
+                                      open_dir=self.open_dir,
+                                      clean_path=self.clean_path)
 
         return {'FINISHED'}
 
@@ -348,6 +377,8 @@ def update_rsn_viewer_node(self, context):
 
 
 def register():
+    empty_icon.register()
+
     bpy.utils.register_class(RSN_OT_RenderStackTask)
     bpy.utils.register_class(RSN_OT_ShowTaskDetails)
     bpy.utils.register_class(RSN_OT_ClipBoard)
@@ -359,6 +390,8 @@ def register():
 
 
 def unregister():
+    empty_icon.unregister()
+
     bpy.utils.unregister_class(RSN_OT_RenderStackTask)
     bpy.utils.unregister_class(RSN_OT_ClipBoard)
     bpy.utils.unregister_class(RSN_OT_ShowTaskDetails)
