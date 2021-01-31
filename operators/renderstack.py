@@ -33,7 +33,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     # mark
     render_mark = None
     mark_task_names = []
-    task_data = []
+    task_data_list = []
     # item
     frame_list = []
     frame_current = 1
@@ -42,7 +42,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     def frame_check(self):
         if self.frame_current >= self.frame_list[0]["frame_end"]:
             self.mark_task_names.pop(0)
-            self.task_data.pop(0)
+            self.task_data_list.pop(0)
             self.frame_list.pop(0)
             if len(self.frame_list) > 0:  # 如果帧数列表未空，则继续读取下一个
                 self.frame_current = self.frame_list[0]["frame_start"]
@@ -59,6 +59,8 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
             node = self.nt.nodes['Processor']
             node.done_frames += 1
             node.curr_task = self.mark_task_names[0]
+            node.task_data = json.dumps(self.task_data_list[0],indent=2)
+
             node.frame_start = bpy.context.scene.frame_start
             node.frame_end = bpy.context.scene.frame_end
             node.frame_current = bpy.context.scene.frame_current
@@ -134,7 +136,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
 
         for task in node_list_dict:
             task_data = rsn_task.get_task_data(task_name=task, task_dict=node_list_dict)
-            self.task_data.append(task_data)
+            self.task_data_list.append(task_data)
             self.mark_task_names.append(task)
             # get frame Range
             render_list = {}
@@ -185,7 +187,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
 
                 self.mark_task_names.clear()
                 self.frame_list.clear()
-                self.task_data.clear()
+                self.task_data_list.clear()
 
                 return {"FINISHED"}
 
@@ -313,7 +315,7 @@ class RSN_OT_RenderButton(bpy.types.Operator):
             fs = self.frame_list[i]["frame_start"]
             fe = self.frame_list[i]["frame_end"]
             col4.label(text=f'{fs} → {fe} ({fs - fe + 1})')
-            # task_data
+            # task_data_list
             d = json.dumps(self.task_data[i], indent=4)
             col5.operator('rsn.show_task_details', icon='INFO', text='').task_data = d
 

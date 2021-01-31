@@ -3,7 +3,7 @@ bl_info = {
     "author"     : "Atticus",
     "version"    : (1, 1, 3),
     "blender"    : (2, 92, 0),
-    "location"   : "Node Editor > RenderStackNode Editor",
+    "location"   : "Node Editor > Render Editor",
     "description": "Node based render queue workflow",
     'warning'    : "",
     "doc_url"    : "https://github.com/atticus-lv/RenderStackNode/wiki",

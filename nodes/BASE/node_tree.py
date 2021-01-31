@@ -9,7 +9,7 @@ from ...preferences import get_pref
 class RenderStackNodeTree(bpy.types.NodeTree):
     """RenderStackNodeTree Node Tree"""
     bl_idname = 'RenderStackNodeTree'
-    bl_label = 'RenderStackNode Editor'
+    bl_label = 'Render Editor'
     bl_icon = 'CAMERA_DATA'
 
 
