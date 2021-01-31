@@ -86,11 +86,10 @@ class RSN_Preference(bpy.types.AddonPreferences):
         layout.prop(self, 'log_level', text='Log')
         layout.prop(self, 'file_path_separator', text='File Path Separator')
 
-        layout.separator()
         row = layout.split(factor=0.7)
         row.separator()
-        row.operator('rsn.check_update',
-                        text='Latest Version' if not self.need_update else f"New Version {''.join(str(self.latest_version).split())}!")
+        row.operator('rsn.check_update',icon='URL',
+                        text='Check Update' if not self.need_update else f"New Version {''.join(str(self.latest_version).split())}!")
 
     def smtp_node(self, box):
         box.prop(self.node_smtp, 'show', text="SMTP Email Node", emboss=False,
