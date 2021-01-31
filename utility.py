@@ -233,22 +233,27 @@ class RSN_Task:
 
             elif node.bl_idname == 'RSNodeObjectPSRNode':
                 if node.object and True in {node.use_p, node.use_s, node.use_r}:
+                    d = {'object': node.object.name,
+                         'use_p' : node.use_p,
+                         'use_s' : node.use_s,
+                         'use_r' : node.use_r, }
+
                     if 'object_psr' in task_data:
-                        task_data['object_psr'][node.name] = {'object'  : node.object.name,
-                                                              'use_p'   : node.use_p,
-                                                              'use_s'   : node.use_s,
-                                                              'use_r'   : node.use_r,
-                                                              'location': node.p,
-                                                              'scale'   : node.s,
-                                                              'rotation': node.r, }
+                        if node.use_p:
+                            d['location'] = list(node.p)
+                        if node.use_s:
+                            d['scale'] = list(node.s)
+                        if node.use_r:
+                            d['rotation'] = list(node.r)
+                        task_data['object_psr'][node.name] = d
                     else:
-                        task_data['object_psr'] = {node.name: {'object'  : node.object.name,
-                                                               'use_p'   : node.use_p,
-                                                               'use_s'   : node.use_s,
-                                                               'use_r'   : node.use_r,
-                                                               'location': node.p,
-                                                               'scale'   : node.s,
-                                                               'rotation': node.r, }}
+                        if node.use_p:
+                            d['location'] = list(node.p)
+                        if node.use_s:
+                            d['scale'] = list(node.s)
+                        if node.use_r:
+                            d['rotation'] = list(node.r)
+                        task_data['object_psr'] = {node.name: d}
 
             elif node.bl_idname == 'RSNodeViewLayerPassesNode':
                 if 'view_layer_passes' in task_data:

@@ -186,12 +186,15 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                 except:
                     ob = None
                 if ob:
-                    if ob.location != dict['location'] and dict['use_p']:
-                        ob.location = dict['location']
-                    if ob.scale != dict['scale'] and dict['use_s']:
-                        ob.scale = dict['scale']
-                    if ob.rotation_euler != dict['rotation'] and dict['use_r']:
-                        ob.rotation_euler = dict['rotation']
+                    if 'location' in dict and dict['use_p']:
+                        if ob.location != dict['location']:
+                            ob.location = dict['location']
+                    if 'scale' in dict and dict['use_s']:
+                        if ob.scale != dict['scale']:
+                            ob.scale = dict['scale']
+                    if 'rotation' in dict and dict['use_r']:
+                        if ob.rotation_euler != dict['rotation']:
+                            ob.rotation_euler = dict['rotation']
 
     def update_object_material(self):
         if 'object_material' in self.task_data:
