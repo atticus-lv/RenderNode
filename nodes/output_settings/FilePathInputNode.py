@@ -1,7 +1,8 @@
 import bpy
 from bpy.props import BoolProperty, StringProperty
-from ...nodes.BASE.node_tree import RenderStackNode
 
+from ...nodes.BASE.node_tree import RenderStackNode
+from ...preferences import get_pref
 
 def update_node(self, context):
     self.update_parms()
@@ -32,6 +33,9 @@ class RSNodeFilePathInputNode(RenderStackNode):
             row.operator('buttons.directory_browse', icon='FILEBROWSER', text='')
         layout.prop(self, 'path_format', text='')
 
+        pref = get_pref()
+        if not pref.node_viewer.update_path:
+            layout.label(text='Update is disable in viewer node',icon = 'ERROR')
 
 def register():
     bpy.utils.register_class(RSNodeFilePathInputNode)

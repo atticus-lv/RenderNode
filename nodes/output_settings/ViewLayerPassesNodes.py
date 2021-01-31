@@ -1,6 +1,8 @@
 import bpy
 from bpy.props import *
+
 from ...nodes.BASE.node_tree import RenderStackNode
+from ...preferences import get_pref
 
 
 def update_node(self, context):
@@ -20,6 +22,10 @@ class RSNodeViewLayerPassesNode(RenderStackNode):
     def draw_buttons(self, context, layout):
         layout.prop_search(self, "view_layer", context.scene, "view_layers", icon="RENDERLAYERS", text='')
         layout.prop(self, 'use_passes', toggle=1)
+
+        pref = get_pref()
+        if not pref.node_viewer.update_view_layer_passes:
+            layout.label(text='Update is disable in viewer node', icon='ERROR')
 
 
 def register():

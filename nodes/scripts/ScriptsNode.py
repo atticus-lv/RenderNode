@@ -1,7 +1,8 @@
 import bpy
 from bpy.props import StringProperty, PointerProperty, EnumProperty
-from ...nodes.BASE.node_tree import RenderStackNode
 
+from ...nodes.BASE.node_tree import RenderStackNode
+from ...preferences import get_pref
 
 def update_node(self, context):
     self.update_parms()
@@ -34,6 +35,9 @@ class RSNodeScriptsNode(RenderStackNode):
         else:
             layout.prop(self, "file", text="")
 
+        pref = get_pref()
+        if not pref.node_viewer.update_scripts:
+            layout.label(text='Update is disable in viewer node',icon = 'ERROR')
 
 def register():
     bpy.utils.register_class(RSNodeScriptsNode)

@@ -27,7 +27,7 @@ class RSN_OT_SimpleTask(bpy.types.Operator):
         cam.location = (x - 200, y)
         eevee.location = (x - 200, y - 100)
         path.location = (x - 450, y - 150)
-        res.location = (x - 450, y - 270)
+        res.location = (x - 450, y - 300)
         # range.location = (x - 450, y - 380)
         merge_output.location = (x - 200, y - 200)
 
