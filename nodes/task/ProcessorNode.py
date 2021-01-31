@@ -115,4 +115,3 @@ def register():
 
 def unregister():
     bpy.utils.unregister_class(RSNodeProcessorNode)
-    # bpy.utils.previews.remove("icon_smile")
