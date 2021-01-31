@@ -6,7 +6,9 @@
 
 Check [**Wiki**](https://github.com/atticus-lv/RenderStackNode/wiki) for more information
 
-#### Install
+#### Install 
+
+###### v1.1.4
 
 **Common User**
 
