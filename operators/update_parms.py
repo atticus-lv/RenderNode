@@ -13,7 +13,7 @@ logger = logging.getLogger('mylogger')
 
 
 class RSN_OT_UpdateParms(bpy.types.Operator):
-    """Switch Scene Camera"""
+    """Update RSN parameters"""
     bl_idname = "rsn.update_parms"
     bl_label = "Update Parms"
 

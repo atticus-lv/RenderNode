@@ -1,14 +1,16 @@
 import bpy
-from itertools import groupby
-import logging
 import json
-
+import logging
+from itertools import groupby
 
 # LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
 # logging.basicConfig(format=LOG_FORMAT)
 # logger = logging.getLogger('mylogger')
 
+
 class RSN_NodeTree:
+    """To store context node tree for getting data in renderstack"""
+
     def get_context_tree(self, return_name=False):
         try:
             name = bpy.context.space_data.edit_tree.name
@@ -33,6 +35,8 @@ class RSN_NodeTree:
 
 
 class RSN_Task:
+    """Tree method"""
+
     def __init__(self, node_tree, root_node_name):
         self.nt = node_tree
         self.root_node = self.get_node_from_name(root_node_name)
@@ -48,14 +52,17 @@ class RSN_Task:
         return self.root_node
 
     def get_sub_node_from_node(self, root_node):
+        """Depth first search"""
         node_list = []
 
         def append_node_to_list(node):
+            """Skip the reroute node"""
             if node.bl_idname != 'NodeReroute':
                 if len(node_list) == 0 or (len(node_list) != 0 and node.name != node_list[-1]):
                     node_list.append(node.name)
 
         def get_sub_node(node):
+            """Skip the mute node"""
             for input in node.inputs:
                 if input.is_linked:
                     sub_node = input.links[0].from_node
@@ -72,7 +79,7 @@ class RSN_Task:
         return node_list
 
     def get_sub_node_dict_from_node_list(self, node_list, parent_node_type, black_list=None):
-        """RSNodeTaskListNode"""
+        """Use Task node as separator to get sub nodes in this task"""
         node_list_dict = {}
         if not black_list: black_list = ['RSNodeTaskListNode', 'RSNodeRenderListNode']
 
@@ -86,11 +93,13 @@ class RSN_Task:
         for i in range(len(parent_node_list)):
             try:
                 node_list_dict[parent_node_list[i]] = children_node_list[i]
+            # release the node behind the parent
             except IndexError:
                 pass
         return node_list_dict
 
     def get_sub_node_from_task(self, task_name, return_dict=False, type='RSNodeTaskNode'):
+        """pack method for task node"""
         task = self.get_node_from_name(task_name)
         try:
             node_list = self.get_sub_node_from_node(task)
@@ -103,6 +112,7 @@ class RSN_Task:
             pass
 
     def get_sub_node_from_render_list(self, return_dict=False, type='RSNodeTaskNode'):
+        """pack method for render list node(get all task)"""
         render_list = self.get_node_from_name(self.root_node.name)
         node_list = self.get_sub_node_from_node(render_list)
         if not return_dict:
@@ -112,6 +122,7 @@ class RSN_Task:
                                                          parent_node_type=type)
 
     def get_task_data(self, task_name, task_dict):
+        """transfer nodes to data"""
         task_data = {}
         for node_name in task_dict[task_name]:
             node = self.nt.nodes[node_name]

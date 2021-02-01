@@ -32,16 +32,16 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     clean_path: BoolProperty(name='clean path after rendering', default=True)
 
     nt = None
-    # 渲染状态获取
+    # render state
     _timer = None
     stop = None
     rendering = None
-    # mark
+    # marker and data list
     render_mark = None
     mark_task_names = []
     task_data_list = []
-    # item
     frame_list = []
+    # frame check
     frame_current = 1
 
     # 检查当前帧 是否大于任务预设的的帧数
@@ -56,7 +56,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         else:
             self.frame_current += self.frame_list[0]["frame_step"]
 
-    # 渲染状态获取
+    # set render state
     def pre(self, dummy, thrd=None):
         self.rendering = True
 

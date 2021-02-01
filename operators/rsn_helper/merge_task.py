@@ -3,6 +3,7 @@ import numpy
 from bpy.props import IntProperty
 
 class RSN_OT_MergeSelectedNodes(bpy.types.Operator):
+    """Merge selected settings or tasks"""
     bl_idname = 'rsn.merge_selected_nodes'
     bl_label = 'Merge Selection'
 

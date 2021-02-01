@@ -3,6 +3,7 @@ from bpy.props import StringProperty
 
 
 class RSN_OT_SwitchSetting(bpy.types.Operator):
+    """Switch between 2 nodes with switch node"""
     bl_idname = 'rsn.switch_setting'
     bl_label = 'Switch'
     bl_options = {'REGISTER', 'UNDO'}
