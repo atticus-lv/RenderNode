@@ -179,8 +179,8 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         self.frame_current = self.frame_list[0]["frame_start"]
         self.append_handles()
 
-        self.ori_render_display_type = context.preferences.render_display_type
-        context.preferences.render_display_type = self.render_display_type
+        self.ori_render_display_type = context.preferences.view.render_display_type
+        context.preferences.view.render_display_type = self.render_display_type
         return {"RUNNING_MODAL"}
 
     def finish_process_node(self):
@@ -208,7 +208,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         if self.clean_path:
             bpy.context.scene.render.filepath = ""
 
-        bpy.context.preferences.render_display_type = self.ori_render_display_type
+        bpy.context.preferences.view.render_display_type = self.ori_render_display_type
 
     def modal(self, context, event):
         # 计时器内事件
@@ -279,7 +279,7 @@ class RSN_OT_RenderButton(bpy.types.Operator):
         ('AREA', 'Image Editor', ''),
         ('WINDOW', 'New Window', '')],
         default='WINDOW',
-        name='Render Display Type', )
+        name='Render Display Type')
 
     nt = None
     task_data = []
@@ -387,7 +387,8 @@ class RSN_OT_RenderButton(bpy.types.Operator):
         self.change_shading()
         bpy.ops.rsn.render_stack_task(render_list_node_name=self.render_list_node_name,
                                       open_dir=self.open_dir,
-                                      clean_path=self.clean_path)
+                                      clean_path=self.clean_path,
+                                      render_display_type=self.render_display_type)
 
         return {'FINISHED'}
 
