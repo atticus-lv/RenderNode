@@ -41,6 +41,7 @@ class RSN_OT_AddViewerNode(bpy.types.Operator):
 
         nt.links.new(task.outputs[0], viewer.inputs[0])
         viewer.update()
+        viewer.select = 0
         # force update
         dg = context.evaluated_depsgraph_get()
         dg.update()
@@ -106,27 +107,6 @@ class RSNodeViewerNode(RenderStackNode):
         col.label(text='Use view operator in Task List Node to execute them')
 
 
-addon_keymaps = []
-
-
-def add_keybind():
-    wm = bpy.context.window_manager
-    if wm.keyconfigs.addon:
-        km = wm.keyconfigs.addon.keymaps.new(name='Node Editor', space_type='NODE_EDITOR')
-        kmi = km.keymap_items.new('rsn.add_viewer_node', 'V', 'PRESS')
-        addon_keymaps.append((km, kmi))
-
-
-def remove_keybind():
-    wm = bpy.context.window_manager
-    kc = wm.keyconfigs.addon
-    if kc:
-        for km, kmi in addon_keymaps:
-            km.keymap_items.remove(kmi)
-
-    addon_keymaps.clear()
-
-
 def draw_menu(self, context):
     if context.space_data.edit_tree.nodes.active.bl_idname == 'RSNodeTaskNode':
         layout = self.layout
@@ -141,7 +121,6 @@ def register():
     bpy.types.WindowManager.rsn_node_list = StringProperty(default='')
 
     # bpy.types.NODE_MT_context_menu.prepend(draw_menu)
-    add_keybind()
 
 
 def unregister():
@@ -149,4 +128,3 @@ def unregister():
 
     del bpy.types.WindowManager.rsn_node_list
     # bpy.types.NODE_MT_context_menu.remove(draw_menu)
-    remove_keybind()

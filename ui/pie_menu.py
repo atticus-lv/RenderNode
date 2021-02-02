@@ -67,9 +67,6 @@ class RSN_MT_PieMenu(Menu):
             pie.operator("node.new_node_tree")
 
 
-addon_keymaps = []
-
-
 def register_icon():
     merge_icon.register()
     simple_task_icon.register()
@@ -80,35 +77,13 @@ def unregister_icon():
     simple_task_icon.unregister()
 
 
-def add_keybind():
-    wm = bpy.context.window_manager
-    if wm.keyconfigs.addon:
-        # ssm pie menu
-        km = wm.keyconfigs.addon.keymaps.new(name='Node Editor', space_type='NODE_EDITOR')
-        kmi = km.keymap_items.new('wm.call_menu_pie', 'F', 'PRESS')
-        kmi.properties.name = "RSN_MT_PieMenu"
-        addon_keymaps.append((km, kmi))
-
-
-def remove_keybind():
-    wm = bpy.context.window_manager
-    kc = wm.keyconfigs.addon
-    if kc:
-        for km, kmi in addon_keymaps:
-            km.keymap_items.remove(kmi)
-
-    addon_keymaps.clear()
-
-
 def register():
     register_icon()
     bpy.utils.register_class(RSN_MT_PieMenu)
     bpy.utils.register_class(RSN_OT_SwitchTree)
-    add_keybind()
 
 
 def unregister():
     unregister_icon()
     bpy.utils.unregister_class(RSN_MT_PieMenu)
     bpy.utils.unregister_class(RSN_OT_SwitchTree)
-    remove_keybind()
