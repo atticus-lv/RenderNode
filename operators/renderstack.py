@@ -30,7 +30,14 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     render_list_node_name: StringProperty()
     open_dir: BoolProperty(name='Open folder after render', default=True)
     clean_path: BoolProperty(name='clean path after rendering', default=True)
+    render_display_type: EnumProperty(items=[
+        ('NONE', 'Keep User Interface', ''),
+        ('SCREEN', 'Maximized Area', ''),
+        ('AREA', 'Image Editor', ''),
+        ('WINDOW', 'New Window', '')],
+        default='WINDOW')
 
+    ori_render_display_type = None
     nt = None
     # render state
     _timer = None
@@ -172,6 +179,8 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         self.frame_current = self.frame_list[0]["frame_start"]
         self.append_handles()
 
+        self.ori_render_display_type = context.preferences.render_display_type
+        context.preferences.render_display_type = self.render_display_type
         return {"RUNNING_MODAL"}
 
     def finish_process_node(self):
@@ -198,6 +207,8 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
                 logger.warning('RSN File path error, can not open dir after rendering')
         if self.clean_path:
             bpy.context.scene.render.filepath = ""
+
+        bpy.context.preferences.render_display_type = self.ori_render_display_type
 
     def modal(self, context, event):
         # 计时器内事件
@@ -262,6 +273,13 @@ class RSN_OT_RenderButton(bpy.types.Operator):
     render_list_node_name: StringProperty()
     open_dir: BoolProperty(name='Open folder after render', default=True)
     clean_path: BoolProperty(name='Empty filepath after render', default=True)
+    render_display_type: EnumProperty(items=[
+        ('NONE', 'Keep User Interface', ''),
+        ('SCREEN', 'Maximized Area', ''),
+        ('AREA', 'Image Editor', ''),
+        ('WINDOW', 'New Window', '')],
+        default='WINDOW',
+        name='Render Display Type', )
 
     nt = None
     task_data = []
@@ -315,7 +333,7 @@ class RSN_OT_RenderButton(bpy.types.Operator):
         sub.prop(self, 'clean_path', text='')
 
         row = layout.row(align=0)
-        row.prop(context.preferences.view, 'render_display_type')
+        row.prop(self, 'render_display_type')
         row.prop(context.scene.render, 'use_lock_interface', icon_only=1)
 
     def draw(self, context):
