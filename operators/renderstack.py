@@ -99,13 +99,17 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     # 激活下一任务
     def switch2task(self):
         scn = bpy.context.scene
-        task = self.mark_task_names[0]
-        pref = get_pref()
+        scn.render.use_file_extension = 1
 
+        task = self.mark_task_names[0]
         bpy.ops.rsn.update_parms(view_mode_handler=task, use_render_mode=True)
 
-        scn.render.use_file_extension = 1
-        scn.render.filepath += f"{pref.file_path_separator}{self.frame_current:04d}"
+        pref = get_pref()
+        frame_style = pref.node_file_path.frame_complement
+        if frame_style != 'None':
+            scn.render.filepath += f"{pref.node_file_path.file_path_separator}{self.frame_current:{frame_style}}"
+        else:
+            scn.render.filepath += f"{pref.node_file_path.file_path_separator}"
 
     def init_process_node(self):
         try:

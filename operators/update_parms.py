@@ -112,7 +112,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         scn = bpy.context.scene
         cam = scn.camera
         pref = get_pref()
-        separator = pref.file_path_separator
+        separator = pref.node_file_path.file_path_separator
 
         postfix = ""
         date_now = str(time.strftime("%m-%d", time.localtime()))

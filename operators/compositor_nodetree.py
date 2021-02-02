@@ -4,6 +4,7 @@ import os
 
 from ..preferences import get_pref
 
+
 class RSN_OT_CreatCompositorNode(bpy.types.Operator):
     bl_idname = "rsn.creat_compositor_node"
     bl_label = "Separate Passes"
@@ -62,7 +63,7 @@ class RSN_OT_CreatCompositorNode(bpy.types.Operator):
             nt = context.scene.node_tree
 
             pref = get_pref()
-            separator = pref.file_path_separator
+            separator = pref.node_file_path.file_path_separator
 
             for i, output in enumerate(render_layer_node.outputs):
                 name = output.name
