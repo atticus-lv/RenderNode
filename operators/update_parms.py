@@ -39,8 +39,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
 
     def warning_node_color(self, node_name):
         try:
-            self.nt.nodes[node_name].use_custom_color = 1
-            self.nt.nodes[node_name].color = (1, 0, 0)
+            self.nt.nodes[node_name].warning = 1
         except Exception:
             pass
 
