@@ -6,6 +6,8 @@ from ...nodes.BASE.node_tree import RenderStackNode
 def active_version(self, context):
     if self.active > len(self.inputs):
         self.active = len(self.inputs)
+    elif self.active < 1:
+        self.active = 1
 
     for input in self.inputs:
         if input.is_linked:
@@ -34,7 +36,7 @@ class RSNodeSettingsMergeNode(RenderStackNode):
         ('VERSION', 'Version', ''),
     ], default='MERGE')
 
-    active: IntProperty(name='Active Version', default=1, update=active_version, min=1)
+    active: IntProperty(name='Active Version', default=1, update=active_version)
 
     def init(self, context):
         self.inputs.new('RSNodeSocketTaskSettings', "Input")
