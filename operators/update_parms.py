@@ -6,10 +6,25 @@ from ..preferences import get_pref
 import logging
 import time
 import os
+from functools import wraps
 
 LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
 logging.basicConfig(format=LOG_FORMAT)
 logger = logging.getLogger('mylogger')
+
+
+def timefn(fn):
+    @wraps(fn)
+    def measure_time(*args, **kwargs):
+        t1 = time.time()
+        result = fn(*args, **kwargs)
+        t2 = time.time()
+        s = f'{(t2 - t1) * 1000: .4f} ms'
+        bpy.context.window_manager.rsn_tree_time = s
+        logger.debug(f"@timefn: {fn.__name__} took {s}")
+        return result
+
+    return measure_time
 
 
 class RSN_OT_UpdateParms(bpy.types.Operator):
@@ -346,38 +361,42 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                         break
 
     def execute(self, context):
-        pref = get_pref()
-        logger.setLevel(int(pref.log_level))
-        logger.debug('update parms op START')
-        self.get_data()
-        if self.task_data:
-            self.update_camera()
-            self.update_ev()
-            self.update_res()
-            self.update_render_engine()
+        @timefn
+        def update_parms():
+            pref = get_pref()
+            logger.setLevel(int(pref.log_level))
 
-            self.update_object_display()
-            self.update_object_material()
-            self.update_object_psr()
+            self.get_data()
 
-            self.update_frame_range()
-            self.updata_view_layer()
+            if self.task_data:
+                self.update_camera()
+                self.update_ev()
+                self.update_res()
+                self.update_render_engine()
 
-            self.update_image_format()
-            self.update_slots()
+                self.update_object_display()
+                self.update_object_material()
+                self.update_object_psr()
 
-            self.update_world()
-            self.ssm_light_studio()
-            if pref.node_viewer.update_scripts or self.use_render_mode:
-                self.updata_scripts()
-            if pref.node_viewer.update_path or self.use_render_mode:
-                self.update_path()
-            if pref.node_viewer.update_view_layer_passes or self.use_render_mode:
-                self.update_view_layer_passes()
-            if self.use_render_mode:
-                self.send_email()
+                self.update_frame_range()
+                self.updata_view_layer()
 
-        logger.debug('update parms op FINISHED')
+                self.update_image_format()
+                self.update_slots()
+
+                self.update_world()
+                self.ssm_light_studio()
+
+                if pref.node_viewer.update_scripts or self.use_render_mode:
+                    self.updata_scripts()
+                if pref.node_viewer.update_path or self.use_render_mode:
+                    self.update_path()
+                if pref.node_viewer.update_view_layer_passes or self.use_render_mode:
+                    self.update_view_layer_passes()
+                if self.use_render_mode:
+                    self.send_email()
+
+        update_parms()
 
         return {'FINISHED'}
 

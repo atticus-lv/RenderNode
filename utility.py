@@ -3,6 +3,7 @@ import json
 import logging
 from itertools import groupby
 
+
 # LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
 # logging.basicConfig(format=LOG_FORMAT)
 # logger = logging.getLogger('mylogger')

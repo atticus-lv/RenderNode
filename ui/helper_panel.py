@@ -1,4 +1,5 @@
 import bpy
+from bpy.props import *
 
 
 class HELPER_PT_Panel(bpy.types.Panel):
@@ -16,6 +17,8 @@ class HELPER_PT_Panel(bpy.types.Panel):
         layout = self.layout
         layout.scale_y = 1.25
         layout.label(text='Call out helper menu', icon="EVENT_F")
+
+        layout.label(text=f'Update:{context.window_manager.rsn_tree_time}',icon = 'MOD_TIME')
 
         try:
             if hasattr(bpy.context.space_data, 'edit_tree'):
@@ -37,6 +40,7 @@ class HELPER_PT_Panel(bpy.types.Panel):
 
 
 def register():
+    bpy.types.WindowManager.rsn_tree_time = StringProperty()
     bpy.utils.register_class(HELPER_PT_Panel)
 
 
