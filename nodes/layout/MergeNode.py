@@ -63,6 +63,16 @@ class RSNodeSettingsMergeNode(RenderStackNode):
         else:
             layout.operator('rsn.switch_setting').node = self.name
 
+    def update(self):
+        if self.name in bpy.context.window_manager.rsn_node_list:
+            for i, input in enumerate(self.inputs):
+                if input.is_linked:
+                    node = input.links[0].from_node
+                    if i == self.active - 1:
+                        node.mute = 0
+                    else:
+                        node.mute = 1
+
 
 def register():
     bpy.utils.register_class(RSNodeSettingsMergeNode)
