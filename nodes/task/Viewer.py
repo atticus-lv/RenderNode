@@ -81,6 +81,7 @@ class RSNodeViewerNode(RenderStackNode):
 
     def free(self):
         print("Node removed", self)
+        bpy.context.window_manager.rsn_viewer_node = ''
 
     def draw_buttons(self, context, layout):
         row = layout.row(align=1)
