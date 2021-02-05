@@ -23,6 +23,7 @@ class RSNodeFilePathInputNode(RenderStackNode):
 
     def init(self, context):
         self.outputs.new('RSNodeSocketOutputSettings', "Output Settings")
+        self.path_format = get_pref().node_file_path.path_format
         self.width = 220
 
     def draw_buttons(self, context, layout):

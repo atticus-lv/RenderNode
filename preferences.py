@@ -39,6 +39,9 @@ class NodeViewerProps(bpy.types.PropertyGroup):
 class NodeFilePathProps(bpy.types.PropertyGroup):
     show: BoolProperty(name="Dropdown")
 
+    path_format: StringProperty(name='Default Path Format',
+                                   default='$blend_render/$label$camera')
+
     file_path_separator: EnumProperty(items=[
         ('.', 'Dot', ''),
         ('_', 'Underscore', ''),
@@ -120,6 +123,7 @@ class RSN_Preference(bpy.types.AddonPreferences):
                  icon='TRIA_DOWN' if self.node_file_path.show else 'TRIA_RIGHT')
         if self.node_file_path.show:
             box.use_property_split = True
+            box.prop(self.node_file_path, "path_format")
             box.prop(self.node_file_path, "file_path_separator")
             box.prop(self.node_file_path, "frame_complement")
 
