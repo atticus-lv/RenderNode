@@ -35,7 +35,12 @@ class RSNodeObjectMaterialNode(RenderStackNode):
         layout.use_property_split = 1
         layout.use_property_decorate = 0
         col = layout.column(align=1)
-        col.prop(self, "object")
+
+        row = col.row(align=1)
+        row.prop(self, "object")
+        if self.object:
+            row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.object.name
+
         col.prop(self, 'slot_index', text='Slot')
         col.prop(self, 'new_material', text='Material')
 

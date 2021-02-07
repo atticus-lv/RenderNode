@@ -21,7 +21,11 @@ class RSNodeObjectDisplayNode(RenderStackNode):
 
     def draw_buttons(self, context, layout):
         col = layout.column(align=0)
-        col.prop(self, "object")
+
+        row = col.row(align=1)
+        row.prop(self, "object")
+        if self.object:
+            row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.object.name
         row = col.row(align=1)
         row.prop(self, 'hide_viewport', icon='HIDE_OFF' if not self.hide_viewport else 'HIDE_ON')
         row.prop(self, 'hide_render', icon='RESTRICT_RENDER_OFF' if not self.hide_render else 'RESTRICT_RENDER_ON')

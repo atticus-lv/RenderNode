@@ -49,7 +49,11 @@ class RSNodeObjectPSRNode(RenderStackNode):
         layout.use_property_decorate = False
 
         col = layout.column(align=1)
-        col.prop(self, "object")
+
+        row = col.row(align=1)
+        row.prop(self, "object")
+        if self.object:
+            row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.object.name
 
         col.separator(factor=0.5)
         row = col.row(align=True)
