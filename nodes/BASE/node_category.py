@@ -29,7 +29,7 @@ node_categorys = [
         nodeitems_utils.NodeItem('RSNodeObjectDisplayNode'),
         nodeitems_utils.NodeItem('RSNodeObjectMaterialNode'),
         nodeitems_utils.NodeItem('RSNodeObjectPSRNode'),
-        # nodeitems_utils.NodeItem('RSNodeObjectDataNode'),
+        nodeitems_utils.NodeItem('RSNodeObjectDataNode'),
     ]),
 
     RSNCategory("OUTPUT_SETTINGS", "Output Settings", items=[

@@ -192,6 +192,19 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                     if ob.hide_render != dict['hide_render']:
                         ob.hide_render = dict['hide_render']
 
+    def update_object_data(self):
+        if 'object_data' in self.task_data:
+            for node_name, dict in self.task_data['object_data'].items():
+                try:
+                    ob = bpy.data.objects[dict['object']]
+                except:
+                    ob = None
+                if ob:
+                    value = dict['value']
+                    setattr(ob.data,dict['data_path'], value)
+                    print(value)
+
+
     def update_object_psr(self):
         if 'object_psr' in self.task_data:
             for node_name, dict in self.task_data['object_psr'].items():
@@ -375,6 +388,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                 self.update_render_engine()
 
                 self.update_object_display()
+                self.update_object_data()
                 self.update_object_material()
                 self.update_object_psr()
 

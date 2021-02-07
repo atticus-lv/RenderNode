@@ -3,6 +3,8 @@ import json
 import logging
 from itertools import groupby
 
+from mathutils import Color, Vector
+
 
 # LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
 # logging.basicConfig(format=LOG_FORMAT)
@@ -232,6 +234,34 @@ class RSN_Task:
                         task_data['object_material'] = {node.name: {'object'      : node.object.name,
                                                                     'slot_index'  : node.slot_index,
                                                                     'new_material': node.new_material.name}}
+
+            elif node.bl_idname == 'RSNodeObjectDataNode':
+                value = None
+                if node.object:
+                    if node.data_path != '' and hasattr(node.object.data, node.data_path):
+                        d_type = type(getattr(node.object.data, node.data_path, None))
+                        if d_type == int:
+                            value = node.int_value
+                        elif d_type == float:
+                            value = node.float_value
+                        elif d_type == str:
+                            value = node.string_value
+                        elif d_type == bool:
+                            value = node.bool_value
+                        elif d_type == Color:
+                            value = node.color_value
+                        elif d_type == Vector:
+                            value = node.vector_value
+                    if value != None:
+                        if 'object_data' in task_data:
+
+                            task_data['object_data'][node.name] = {'object'   : node.object.name,
+                                                                   'data_path': node.data_path,
+                                                                   'value'    : value}
+                        else:
+                            task_data['object_data'] = {node.name: {'object'   : node.object.name,
+                                                                    'data_path': node.data_path,
+                                                                    'value'    : value}}
 
             elif node.bl_idname == 'RSNodeObjectDisplayNode':
                 if 'object_display' in task_data:
