@@ -1,7 +1,7 @@
 
 
 # RenderStackNode [Blender Addon]
-> ##### v1.1.4
+> ##### v1.1.5
 #### Intro
 
 Check [**Wiki**](https://github.com/atticus-lv/RenderStackNode/wiki) for more information
