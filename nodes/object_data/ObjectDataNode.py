@@ -33,10 +33,13 @@ class RSNodeObjectDataNode(RenderStackNode):
     def draw_buttons(self, context, layout):
         layout.use_property_split = 1
         layout.use_property_decorate = 0
-        layout.prop(self, 'object')
+
+        row = layout.row(align=1)
+        row.prop(self, 'object')
         layout.prop(self, 'data_path')
 
         if self.object:
+            row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.object.name
             if self.data_path != '' and hasattr(self.object.data, self.data_path):
                 d_type = type(getattr(self.object.data, self.data_path, None))
                 if d_type == int:

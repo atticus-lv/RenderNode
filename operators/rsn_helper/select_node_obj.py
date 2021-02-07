@@ -16,7 +16,9 @@ class RSN_OT_SelectObject(bpy.types.Operator):
 
     def execute(self, context):
         if self.name:
-            context.view_layer.objects.active = bpy.data.objects[self.name]
+            ob = bpy.data.objects[self.name]
+            ob.select_set(1)
+            context.view_layer.objects.active = ob
 
         return {"FINISHED"}
 
