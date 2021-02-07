@@ -200,13 +200,13 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                 except:
                     ob = None
                 if ob:
-                    if 'location' in dict and dict['use_p']:
+                    if 'location' in dict:
                         if ob.location != dict['location']:
                             ob.location = dict['location']
-                    if 'scale' in dict and dict['use_s']:
+                    if 'scale' in dict:
                         if ob.scale != dict['scale']:
                             ob.scale = dict['scale']
-                    if 'rotation' in dict and dict['use_r']:
+                    if 'rotation' in dict:
                         if ob.rotation_euler != dict['rotation']:
                             ob.rotation_euler = dict['rotation']
 

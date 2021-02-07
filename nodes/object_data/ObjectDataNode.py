@@ -58,18 +58,32 @@ class RSNodeObjectDataNode(RenderStackNode):
                     elif d_type == Vector:
                         layout.prop(self, 'vector_value')
 
+    def get_data(self):
+        task_data_obj = {}
+        value = None
+        if self.object and self.data_path != '':
+            obj, data_path = source_attr(self.object.data, self.data_path)
+            if hasattr(obj, data_path):
+                d_type = type(getattr(obj, data_path, None))
+                if d_type == int:
+                    value = self.int_value
+                elif d_type == float:
+                    value = self.float_value
+                elif d_type == str:
+                    value = self.string_value
+                elif d_type == bool:
+                    value = self.bool_value
+                elif d_type == Color:
+                    value = list(self.color_value)
+                elif d_type == Vector:
+                    value = list(self.vector_value)
 
-def source_attr(src_obj, scr_data_path):
-    def get_obj_and_attr(obj, data_path):
-        path = data_path.split('.')
-        if len(path) == 1:
-            return obj, path[0]
-        else:
-            back_obj = getattr(obj, path[0])
-            back_path = '.'.join(path[1:])
-            return get_obj_and_attr(back_obj, back_path)
+            if value != None:
+                task_data_obj[self.name] = {'object'   : self.object.name,
+                                            'data_path': self.data_path,
+                                            'value'    : value}
 
-    return get_obj_and_attr(src_obj, scr_data_path)
+        return task_data_obj
 
 
 def register():

@@ -30,6 +30,15 @@ class RSNodeFrameRangeInputNode(RenderStackNode):
             col = layout.column(align=1)
             col.prop(self, 'frame_step')
 
+    def get_data(self):
+        task_data = {}
+        if self.frame_end < self.frame_start:
+            self.frame_end = self.frame_start
+        task_data["frame_start"] = self.frame_start
+        task_data["frame_end"] = self.frame_end
+        task_data["frame_step"] = self.frame_step
+        return task_data
+
 
 def register():
     bpy.utils.register_class(RSNodeFrameRangeInputNode)

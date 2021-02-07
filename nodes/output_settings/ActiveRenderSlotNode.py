@@ -19,6 +19,10 @@ class RSNodeActiveRenderSlotNode(RenderStackNode):
     def draw_buttons(self, context, layout):
         layout.prop(self, 'active_slot_index', text="Render Slot")
 
+    def get_data(self):
+        task_data = {}
+        task_data['render_slot'] = self.active_slot_index
+        return task_data
 
 def register():
     bpy.utils.register_class(RSNodeActiveRenderSlotNode)

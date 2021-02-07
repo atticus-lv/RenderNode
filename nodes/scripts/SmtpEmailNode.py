@@ -107,6 +107,14 @@ class RSNodeSmtpEmailNode(RenderStackNode):
         em.sender_name = self.sender_name
         em.email = self.email
 
+    def get_data(self):
+        task_data_obj = {}
+        task_data_obj[self.name] = {'subject'    : self.subject,
+                                    'content'    : self.content,
+                                    'sender_name': self.sender_name,
+                                    'email'      : self.email}
+        return task_data_obj
+
 
 def register():
     bpy.utils.register_class(RSNodeSmtpEmailNode)

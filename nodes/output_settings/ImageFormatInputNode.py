@@ -40,6 +40,28 @@ class RSNodeImageFormatInputNode(RenderStackNode):
         col.prop(self, 'color_depth', text='')
         col.prop(self, 'transparent')
 
+    def get_data(self):
+        task_data = {}
+        if self.file_format == "JPEG":
+            if self.color_mode == "RGBA":
+                self.color_mode = "RGB"
+            if self.color_depth in ("16", "32"):
+                self.color_depth = "8"
+
+        elif self.file_format == "PNG":
+            if self.color_depth == '32':
+                self.color_depth = "16"
+
+        elif self.file_format == "OPEN_EXR_MULTILAYER":
+            if self.color_depth == "8":
+                self.color_depth = "16"
+
+        task_data['color_mode'] = self.color_mode
+        task_data['color_depth'] = self.color_depth
+        task_data['file_format'] = self.file_format
+        task_data['transparent'] = self.transparent
+        return task_data
+
 
 def register():
     bpy.utils.register_class(RSNodeImageFormatInputNode)

@@ -33,6 +33,11 @@ class RSNodeLightStudioNode(RenderStackNode):
 
         layout.prop(self, "light_studio_index", text='Index')
 
+    def get_data(self):
+        task_data = {}
+        task_data['ssm_light_studio'] = self.light_studio_index
+        return task_data
+
 
 def register():
     bpy.utils.register_class(RSNodeLightStudioNode)

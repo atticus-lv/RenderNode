@@ -35,10 +35,8 @@ class RenderStackNode(bpy.types.Node):
         print("RSN Copied node", node.name)
 
     def free(self):
+        """Remove Node"""
         print("RSN removed node", self.name)
-
-    def update(self):
-        pass
 
     def update_parms(self):
         if bpy.context.window_manager.rsn_node_list != '':
@@ -48,6 +46,14 @@ class RenderStackNode(bpy.types.Node):
                 bpy.ops.rsn.update_parms(view_mode_handler=bpy.context.window_manager.rsn_viewer_node,
                                          update_scripts=pref.node_viewer.update_scripts,
                                          use_render_mode=False)
+
+    def update(self):
+        """Only the viewer node have this method"""
+        pass
+
+    def get_data(self):
+        """For get self date into rsn tree method"""
+        pass
 
 
 class RenderStackNodeGroup(bpy.types.NodeCustomGroup):

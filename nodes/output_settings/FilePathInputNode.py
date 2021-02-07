@@ -4,6 +4,7 @@ from bpy.props import BoolProperty, StringProperty
 from ...nodes.BASE.node_tree import RenderStackNode
 from ...preferences import get_pref
 
+
 def update_node(self, context):
     self.update_parms()
 
@@ -36,7 +37,15 @@ class RSNodeFilePathInputNode(RenderStackNode):
 
         pref = get_pref()
         if not pref.node_viewer.update_path:
-            layout.label(text='Update is disable in viewer node',icon = 'ERROR')
+            layout.label(text='Update is disable in viewer node', icon='ERROR')
+
+    def get_data(self):
+        task_data = {}
+        task_data['use_blend_file_path'] = self.use_blend_file_path
+        task_data['path_format'] = self.path_format
+        task_data['path'] = self.path
+        return task_data
+
 
 def register():
     bpy.utils.register_class(RSNodeFilePathInputNode)

@@ -43,6 +43,12 @@ class RSNodeResolutionInputNode(RenderStackNode):
         row.prop(self, 'res_y', text="Y")
         col.prop(self, 'res_scale', text="%", slider=1)
 
+    def get_data(self):
+        task_data = {}
+        task_data["res_x"] = self.res_x
+        task_data['res_y'] = self.res_y
+        task_data['res_scale'] = self.res_scale
+        return task_data
 
 class RSN_MT_ResolutionPresetsMenu(Menu):
     bl_label = 'My Presets'

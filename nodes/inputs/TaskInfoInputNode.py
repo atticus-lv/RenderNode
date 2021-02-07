@@ -1,4 +1,5 @@
 import bpy
+import json
 from bpy.props import PointerProperty
 from ...nodes.BASE.node_tree import RenderStackNode
 
@@ -21,6 +22,15 @@ class RSNodeTaskInfoInputsNode(RenderStackNode):
     def draw_buttons(self, context, layout):
         layout.prop(self, "file", text="")
 
+    def get_data(self):
+        task_data = {}
+        try:
+            data = json.loads(self.file.as_string())
+            task_data.update(data)
+        except Exception:
+            self.use_custom_color = 1
+            self.color = (1, 0, 0)
+        return task_data
 
 def register():
     bpy.utils.register_class(RSNodeTaskInfoInputsNode)
