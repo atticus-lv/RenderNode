@@ -74,6 +74,9 @@ class RSNodeSettingsMergeNode(RenderStackNode):
                         node.mute = 1
 
 
+    def get_data(self):
+        pass
+
 def register():
     bpy.utils.register_class(RSNodeSettingsMergeNode)
 

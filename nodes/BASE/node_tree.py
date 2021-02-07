@@ -5,6 +5,23 @@ from bpy.props import *
 from ...utility import *
 from ...preferences import get_pref
 
+import logging
+from functools import wraps
+
+LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
+logging.basicConfig(format=LOG_FORMAT)
+logger = logging.getLogger('mylogger')
+
+
+def get_data_log(fn):
+    @wraps(fn)
+    def print_arg(*args, **kwargs):
+        logger.debug(f'pass "{args[0].name}"')
+        result = fn(*args, **kwargs)
+        return result
+
+    return print_arg
+
 
 class RenderStackNodeTree(bpy.types.NodeTree):
     """RenderStackNodeTree Node Tree"""
@@ -49,6 +66,11 @@ class RenderStackNode(bpy.types.Node):
 
     def update(self):
         """Only the viewer node have this method"""
+        pass
+
+    @get_data_log
+    def debug(self):
+        """"""
         pass
 
     def get_data(self):

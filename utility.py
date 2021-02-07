@@ -142,7 +142,7 @@ class RSN_Task:
         task_data = {}
         for node_name in task_dict[task_name]:
             node = self.nt.nodes[node_name]
-
+            node.debug()
             # label
             task_data['label'] = self.nt.nodes[task_name].label
 
@@ -188,6 +188,9 @@ class RSN_Task:
                     task_data['scripts_file'].update(node.get_data())
             # Single node
             else:
-                task_data.update(node.get_data())
+                try:
+                    task_data.update(node.get_data())
+                except TypeError:
+                    pass
 
         return task_data
