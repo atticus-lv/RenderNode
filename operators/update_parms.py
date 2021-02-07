@@ -21,7 +21,7 @@ def timefn(fn):
         t2 = time.time()
         s = f'{(t2 - t1) * 1000: .4f} ms'
         bpy.context.window_manager.rsn_tree_time = s
-        logger.info(f"@timefn: {fn.__name__} took {s}")
+        logger.info(f"RSN Tree: update took{s}")
         return result
 
     return measure_time
@@ -74,7 +74,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             self.task_data = rsn_task.get_task_data(task_name=self.view_mode_handler,
                                                     task_dict=node_list_dict)
         if self.task_data:
-            logger.debug(f'Get Task"{self.view_mode_handler}"')
+            logger.debug(f'Get Task "{self.view_mode_handler}"')
         else:
             logger.debug(f'Not task is linked to the viewer')
 
@@ -374,7 +374,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
 
     def execute(self, context):
         @timefn
-        def get_and_apply():
+        def data_changes():
             pref = get_pref()
             logger.setLevel(int(pref.log_level))
 
@@ -409,7 +409,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                 if self.use_render_mode:
                     self.send_email()
 
-        get_and_apply()
+        data_changes()
 
         return {'FINISHED'}
 
