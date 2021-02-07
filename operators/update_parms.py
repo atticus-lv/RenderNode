@@ -27,9 +27,6 @@ def timefn(fn):
     return measure_time
 
 
-
-
-
 class RSN_OT_UpdateParms(bpy.types.Operator):
     """Update RSN parameters"""
     bl_idname = "rsn.update_parms"
@@ -237,7 +234,6 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                 if ob:
                     value = dict['value']
                     obj, attr = source_attr(ob.data, dict['data_path'])
-                    print(obj, attr, value)
                     setattr(obj, attr, value)
 
     def update_slots(self):
