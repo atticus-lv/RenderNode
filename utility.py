@@ -11,6 +11,19 @@ from mathutils import Color, Vector
 # logger = logging.getLogger('mylogger')
 
 
+def source_attr(src_obj, scr_data_path):
+    def get_obj_and_attr(obj, data_path):
+        path = data_path.split('.')
+        if len(path) == 1:
+            return obj, path[0]
+        else:
+            back_obj = getattr(obj, path[0])
+            back_path = '.'.join(path[1:])
+            return get_obj_and_attr(back_obj, back_path)
+
+    return get_obj_and_attr(src_obj, scr_data_path)
+
+
 class RSN_NodeTree:
     """To store context node tree for getting data in renderstack"""
 
@@ -238,30 +251,33 @@ class RSN_Task:
             elif node.bl_idname == 'RSNodeObjectDataNode':
                 value = None
                 if node.object:
-                    if node.data_path != '' and hasattr(node.object.data, node.data_path):
-                        d_type = type(getattr(node.object.data, node.data_path, None))
-                        if d_type == int:
-                            value = node.int_value
-                        elif d_type == float:
-                            value = node.float_value
-                        elif d_type == str:
-                            value = node.string_value
-                        elif d_type == bool:
-                            value = node.bool_value
-                        elif d_type == Color:
-                            value = node.color_value
-                        elif d_type == Vector:
-                            value = node.vector_value
-                    if value != None:
-                        if 'object_data' in task_data:
+                    if node.data_path != '':
+                        obj, data_path = source_attr(node.object.data, node.data_path)
+                        if hasattr(obj, data_path):
+                            d_type = type(getattr(obj, data_path, None))
+                            if d_type == int:
+                                value = node.int_value
+                            elif d_type == float:
+                                value = node.float_value
+                            elif d_type == str:
+                                value = node.string_value
+                            elif d_type == bool:
+                                value = node.bool_value
+                            elif d_type == Color:
+                                value = list(node.color_value)
+                            elif d_type == Vector:
+                                value = list(node.vector_value)
 
-                            task_data['object_data'][node.name] = {'object'   : node.object.name,
-                                                                   'data_path': node.data_path,
-                                                                   'value'    : value}
-                        else:
-                            task_data['object_data'] = {node.name: {'object'   : node.object.name,
-                                                                    'data_path': node.data_path,
-                                                                    'value'    : value}}
+                        if value != None:
+                            if 'object_data' in task_data:
+                                task_data['object_data'][node.name] = {'object'   : node.object.name,
+                                                                       'data_path': node.data_path,
+                                                                       'value'    : value}
+                            else:
+                                task_data['object_data'] = {node.name: {'object'   : node.object.name,
+                                                                        'data_path': node.data_path,
+                                                                        'value'    : value}}
+
 
             elif node.bl_idname == 'RSNodeObjectDisplayNode':
                 if 'object_display' in task_data:

@@ -12,25 +12,36 @@ class RSNodeEeveeRenderSettingsNode(RenderStackNode):
     bl_idname = 'RSNodeEeveeRenderSettingsNode'
     bl_label = 'Eevee Settings'
 
-    samples: IntProperty(default=64, min=1, name="Eevee Samples",update=update_node)
+    samples: IntProperty(default=64, min=1, name="Eevee Samples", update=update_node)
+
+    # data_path: StringProperty(name='Data Path', default='')
+    #
+    # float_value: FloatProperty(name='Value', update=update_node)
+    # string_value: StringProperty(name='Value', update=update_node)
+    # bool_value: BoolProperty(name='On', update=update_node)
+    # int_value: FloatProperty(name='Value', update=update_node)
 
     def init(self, context):
         self.outputs.new('RSNodeSocketRenderSettings', "Render Settings")
+        self.width = 175
 
     def draw_buttons(self, context, layout):
-        layout.prop(self, "samples", text='Samples')
+        layout.use_property_split = 1
+        layout.use_property_decorate = 0
 
-    def draw_buttons_ext(self, context, layout):
         layout.prop(self, "samples", text='Samples')
-        layout.scale_y = 1.25
-        row = layout.row(align=True)
-        add = row.operator("rsnode.edit_input", text="Option", icon='ADD')
-        add.remove = False
-        add.socket_type = "RSNodeSocketRenderSettings"
-        add.socket_name = "Option"
-
-        remove = row.operator("rsnode.edit_input", text="Unused", icon='REMOVE')
-        remove.remove = True
+        # layout.prop(self, 'data_path')
+        #
+        # if self.data_path != '' and hasattr(context.scene.eevee, self.data_path.split('.')[1]):
+        #     d_type = type(getattr(context.scene.eevee, self.data_path.split('.')[1], None))
+        #     if d_type == int:
+        #         layout.prop(self, 'int_value')
+        #     elif d_type == float:
+        #         layout.prop(self, 'float_value')
+        #     elif d_type == str:
+        #         layout.prop(self, 'string_value')
+        #     elif d_type == bool:
+        #         layout.prop(self, 'bool_value', toggle=1)
 
 
 def register():

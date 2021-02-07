@@ -1,6 +1,7 @@
 import bpy
 from bpy.props import *
 from ...nodes.BASE.node_tree import RenderStackNode
+from ...utility import source_attr
 from mathutils import Color, Vector
 
 
@@ -40,20 +41,35 @@ class RSNodeObjectDataNode(RenderStackNode):
 
         if self.object:
             row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.object.name
-            if self.data_path != '' and hasattr(self.object.data, self.data_path):
-                d_type = type(getattr(self.object.data, self.data_path, None))
-                if d_type == int:
-                    layout.prop(self, 'int_value')
-                elif d_type == float:
-                    layout.prop(self, 'float_value')
-                elif d_type == str:
-                    layout.prop(self, 'string_value')
-                elif d_type == bool:
-                    layout.prop(self, 'bool_value', toggle=1)
-                elif d_type == Color:
-                    layout.prop(self, 'color_value')
-                elif d_type == Vector:
-                    layout.prop(self, 'vector_value')
+            if self.data_path != '':
+                obj, data_path = source_attr(self.object.data, self.data_path)
+                if hasattr(obj, data_path):
+                    d_type = type(getattr(obj, data_path, None))
+                    if d_type == int:
+                        layout.prop(self, 'int_value')
+                    elif d_type == float:
+                        layout.prop(self, 'float_value')
+                    elif d_type == str:
+                        layout.prop(self, 'string_value')
+                    elif d_type == bool:
+                        layout.prop(self, 'bool_value', toggle=1)
+                    elif d_type == Color:
+                        layout.prop(self, 'color_value')
+                    elif d_type == Vector:
+                        layout.prop(self, 'vector_value')
+
+
+def source_attr(src_obj, scr_data_path):
+    def get_obj_and_attr(obj, data_path):
+        path = data_path.split('.')
+        if len(path) == 1:
+            return obj, path[0]
+        else:
+            back_obj = getattr(obj, path[0])
+            back_path = '.'.join(path[1:])
+            return get_obj_and_attr(back_obj, back_path)
+
+    return get_obj_and_attr(src_obj, scr_data_path)
 
 
 def register():
