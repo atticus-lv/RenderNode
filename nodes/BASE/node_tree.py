@@ -55,6 +55,11 @@ class RenderStackNode(bpy.types.Node):
         """Remove Node"""
         print("RSN removed node", self.name)
 
+    def update(self):
+        """Only the viewer node have this method"""
+        pass
+
+    # RSN method
     def update_parms(self):
         if bpy.context.window_manager.rsn_node_list != '':
             node_list = bpy.context.window_manager.rsn_node_list.split(',')
@@ -64,17 +69,17 @@ class RenderStackNode(bpy.types.Node):
                                          update_scripts=pref.node_viewer.update_scripts,
                                          use_render_mode=False)
 
-    def update(self):
-        """Only the viewer node have this method"""
-        pass
-
     @get_data_log
     def debug(self):
-        """"""
+        """Debug Log"""
         pass
 
     def get_data(self):
         """For get self date into rsn tree method"""
+        pass
+
+    def apply_data(self):
+        """apply self data with update parm ops"""
         pass
 
 

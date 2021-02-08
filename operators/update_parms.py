@@ -27,6 +27,16 @@ def timefn(fn):
     return measure_time
 
 
+def compare(obj: object, attr: str, val):
+    """Use for compare and apply attribute since some properties change may cause depsgraph changes"""
+    try:
+        if getattr(obj, attr) != val:
+            setattr(obj, attr, val)
+            logger.debug(f'"{obj}" Attribute "{attr}" SET “{val}”')
+    except AttributeError:
+        pass
+
+
 class RSN_OT_UpdateParms(bpy.types.Operator):
     """Update RSN parameters"""
     bl_idname = "rsn.update_parms"
@@ -78,31 +88,22 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         else:
             logger.debug(f'Not task is linked to the viewer')
 
-    def update_ev(self):
+    def update_color_management(self):
         if 'ev' in self.task_data:
-            if bpy.context.scene.view_settings.exposure != self.task_data['ev']:
-                bpy.context.scene.view_settings.exposure = self.task_data['ev']
-            if bpy.context.scene.view_settings.view_transform != self.task_data['view_transform']:
-                try:
-                    bpy.context.scene.view_settings.view_transform = self.task_data['view_transform']
-                except:
-                    pass
-            if bpy.context.scene.view_settings.look != self.task_data['look']:
-                try:
-                    bpy.context.scene.view_settings.look = self.task_data['look']
-                except:
-                    pass
-            if bpy.context.scene.view_settings.gamma != self.task_data['gamma']:
-                bpy.context.scene.view_settings.gamma = self.task_data['gamma']
+            vs = bpy.context.scene.view_settings
+            compare(vs, 'exposure', self.task_data['ev'])
+            compare(vs, 'view_transform', self.task_data['view_transform'])
+            compare(vs, 'look', self.task_data['look'])
+            compare(vs, 'gamma', self.task_data['gamma'])
 
     def update_path(self):
         dir = self.make_path()
         postfix = self.get_postfix()
-        if bpy.context.scene.render.use_file_extension != 1:
-            bpy.context.scene.render.use_file_extension = 1
 
-        if bpy.context.scene.render.filepath != os.path.join(dir, postfix):
-            bpy.context.scene.render.filepath = os.path.join(dir, postfix)
+        rn = bpy.context.scene.render
+
+        compare(rn, 'use_file_extension', 1)
+        compare(rn, 'filepath', os.path.join(dir, postfix))
 
     def make_path(self):
         task = self.task_data
@@ -187,10 +188,8 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                 except:
                     ob = None
                 if ob:
-                    if ob.hide_viewport != dict['hide_viewport']:
-                        ob.hide_viewport = dict['hide_viewport']
-                    if ob.hide_render != dict['hide_render']:
-                        ob.hide_render = dict['hide_render']
+                    compare(ob, 'hide_viewport', dict['hide_viewport'])
+                    compare(ob, 'hide_render', dict['hide_render'])
 
     def update_object_psr(self):
         if 'object_psr' in self.task_data:
@@ -201,14 +200,11 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                     ob = None
                 if ob:
                     if 'location' in dict:
-                        if ob.location != dict['location']:
-                            ob.location = dict['location']
+                        compare(ob, 'location', dict['location'])
                     if 'scale' in dict:
-                        if ob.scale != dict['scale']:
-                            ob.scale = dict['scale']
+                        compare(ob, 'scale', dict['scale'])
                     if 'rotation' in dict:
-                        if ob.rotation_euler != dict['rotation']:
-                            ob.rotation_euler = dict['rotation']
+                        compare(ob, 'rotation_euler', dict['rotation'])
 
     def update_object_material(self):
         if 'object_material' in self.task_data:
@@ -234,12 +230,11 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                 if ob:
                     value = dict['value']
                     obj, attr = source_attr(ob.data, dict['data_path'])
-                    setattr(obj, attr, value)
+                    compare(obj, attr, value)
 
     def update_slots(self):
         if 'render_slot' in self.task_data:
-            if bpy.data.images['Render Result'].render_slots.active_index != self.task_data['render_slot']:
-                bpy.data.images['Render Result'].render_slots.active_index = self.task_data['render_slot']
+            compare(bpy.data.images['Render Result'].render_slots, 'active_index', self.task_data['render_slot'])
 
     def update_world(self):
         if 'world' in self.task_data:
@@ -250,8 +245,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         if 'ssm_light_studio' in self.task_data:
             index = self.task_data['ssm_light_studio']
             try:
-                if bpy.context.scene.ssm.light_studio_index != index:
-                    bpy.context.scene.ssm.light_studio_index = index
+                compare(bpy.context.scene.ssm, 'light_studio_index', index)
             except Exception as e:
                 logger.warning(f'SSM LightStudio node error', exc_info=e)
 
@@ -292,23 +286,18 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
 
     def update_image_format(self):
         if 'color_mode' in self.task_data:
-            if bpy.context.scene.render.image_settings.color_mode != self.task_data['color_mode']:
-                bpy.context.scene.render.image_settings.color_mode = self.task_data['color_mode']
-            if bpy.context.scene.render.image_settings.color_depth != self.task_data['color_depth']:
-                bpy.context.scene.render.image_settings.color_depth = self.task_data['color_depth']
-            if bpy.context.scene.render.image_settings.file_format != self.task_data['file_format']:
-                bpy.context.scene.render.image_settings.file_format = self.task_data['file_format']
-            if bpy.context.scene.render.film_transparent != self.task_data['transparent']:
-                bpy.context.scene.render.film_transparent = self.task_data['transparent']
+            rn = bpy.context.scene.render
+            compare(rn.image_settings, 'color_mode', self.task_data['color_mode'])
+            compare(rn.image_settings, 'color_depth', self.task_data['color_depth'])
+            compare(rn.image_settings, 'file_format', self.task_data['file_format'])
+            compare(rn, film_transparent, self.task_data['transparent'])
 
     def update_frame_range(self):
         if "frame_start" in self.task_data:
-            if bpy.context.scene.frame_start != self.task_data['frame_start']:
-                bpy.context.scene.frame_start = self.task_data['frame_start']
-            if bpy.context.scene.frame_end != self.task_data['frame_end']:
-                bpy.context.scene.frame_end = self.task_data['frame_end']
-            if bpy.context.scene.frame_step != self.task_data['frame_step']:
-                bpy.context.scene.frame_step = self.task_data['frame_step']
+            scn = bpy.context.scene
+            compare(scn, 'frame_start', self.task_data['frame_start'])
+            compare(scn, 'frame_start', self.task_data['frame_end'])
+            compare(scn, 'frame_start', self.task_data['frame_step'])
 
     def update_render_engine(self):
         if 'engine' in self.task_data and bpy.context.scene.render.engine != self.task_data['engine']:
@@ -318,11 +307,9 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
 
         if 'samples' in self.task_data:
             if self.task_data['engine'] == "BLENDER_EEVEE":
-                if bpy.context.scene.eevee.taa_render_samples != self.task_data['samples']:
-                    bpy.context.scene.eevee.taa_render_samples = self.task_data['samples']
+                compare(bpy.context.scene.eevee, 'taa_render_samples', self.task_data['samples'])
             elif self.task_data['engine'] == "CYCLES":
-                if bpy.context.scene.cycles.samples != self.task_data['samples']:
-                    bpy.context.scene.cycles.samples = self.task_data['samples']
+                compare(bpy.context.scene.cycles, 'samples', self.task_data['samples'])
 
         if 'luxcore_half' in self.task_data:
             if not bpy.context.scene.luxcore.halt.enable:
@@ -338,8 +325,8 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                     bpy.context.scene.luxcore.halt.use_samples = True
                 if bpy.context.scene.luxcore.halt.use_time:
                     bpy.context.scene.luxcore.halt.use_time = False
-                if bpy.context.scene.luxcore.halt.samples != self.task_data['luxcore_half']['samples']:
-                    bpy.context.scene.luxcore.halt.samples = self.task_data['luxcore_half']['samples']
+
+                compare(bpy.context.scene.luxcore.halt, 'samples', self.task_data['luxcore_half']['samples'])
 
             elif self.task_data['luxcore_half']['use_samples'] is False and self.task_data['luxcore_half'][
                 'use_time'] is True:
@@ -347,30 +334,20 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                     bpy.context.scene.luxcore.halt.use_samples = False
                 if not bpy.context.scene.luxcore.halt.use_time:
                     bpy.context.scene.luxcore.halt.use_time = True
-                if bpy.context.scene.luxcore.halt.time != self.task_data['luxcore_half']['time']:
-                    bpy.context.scene.luxcore.halt.time = self.task_data['luxcore_half']['time']
+
+                compare(bpy.context.scene.luxcore.halt, 'time', self.task_data['luxcore_half']['time'])
 
     def update_res(self):
         if 'res_x' in self.task_data:
-            if bpy.context.scene.render.resolution_x != self.task_data['res_x']:
-                bpy.context.scene.render.resolution_x = self.task_data['res_x']
-            if bpy.context.scene.render.resolution_y != self.task_data['res_y']:
-                bpy.context.scene.render.resolution_y = self.task_data['res_y']
-            if bpy.context.scene.render.resolution_percentage != self.task_data['res_scale']:
-                bpy.context.scene.render.resolution_percentage = self.task_data['res_scale']
+            rn = bpy.context.scene.render
+            compare(rn, 'resolution_x', self.task_data['res_x'])
+            compare(rn, 'resolution_y', self.task_data['res_y'])
+            compare(rn, 'resolution_percentage', self.task_data['res_scale'])
 
     def update_camera(self):
-        if 'camera' in self.task_data:
-            cam_name = self.task_data['camera']
-            if cam_name and bpy.context.scene.camera and bpy.context.scene.camera.name != cam_name:
-                bpy.context.scene.camera = bpy.data.objects[cam_name]
-                for area in bpy.context.screen.areas:
-                    if area.type == 'VIEW_3D':
-                        for region in area.regions:
-                            if region.type == 'WINDOW':
-                                area.spaces[0].region_3d.view_perspective = 'CAMERA'
-                                break
-                        break
+        if 'camera' in self.task_data and self.task_data['camera']:
+            cam = bpy.data.objects[self.task_data['camera']]
+            compare(bpy.context.scene, 'camera', cam)
 
     def execute(self, context):
         @timefn
@@ -382,7 +359,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
 
             if self.task_data:
                 self.update_camera()
-                self.update_ev()
+                self.update_color_management()
                 self.update_res()
                 self.update_render_engine()
 
