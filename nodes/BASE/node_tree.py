@@ -90,7 +90,6 @@ classes = [
     RenderStackNode,
     RenderStackNodeGroup,
 
-    RSN_OT_SetColor
 ]
 
 
