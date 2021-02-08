@@ -7,6 +7,7 @@ import logging
 import time
 import os
 from functools import wraps
+import re
 
 LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
 logging.basicConfig(format=LOG_FORMAT)
@@ -64,7 +65,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
 
     def warning_node_color(self, node_name):
         try:
-            self.nt.nodes[node_name].warning = 1
+            self.nt.nodes[node_name].set_warning()
         except Exception:
             pass
 
@@ -232,6 +233,22 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                     obj, attr = source_attr(ob.data, dict['data_path'])
                     compare(obj, attr, value)
 
+    def update_object_modifier(self):
+        if 'object_modifier' in self.task_data:
+            for node_name, dict in self.task_data['object_modifier'].items():
+                try:
+                    ob = bpy.data.objects[dict['object']]
+                except:
+                    ob = None
+                if ob:
+                    value = dict['value']
+                    match = re.match(r"modifiers[[](.*?)[]]", dict['data_path'])
+                    name = match.group(1)
+                    if name:
+                        data_path = dict['data_path'].split('.')[-1]
+                        modifier = ob.modifiers[name[1:-1]]
+                        compare(modifier, data_path, value)
+
     def update_slots(self):
         if 'render_slot' in self.task_data:
             compare(bpy.data.images['Render Result'].render_slots, 'active_index', self.task_data['render_slot'])
@@ -364,9 +381,10 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                 self.update_render_engine()
 
                 self.update_object_display()
+                self.update_object_psr()
                 self.update_object_data()
                 self.update_object_material()
-                self.update_object_psr()
+                self.update_object_modifier()
 
                 self.update_frame_range()
                 self.updata_view_layer()

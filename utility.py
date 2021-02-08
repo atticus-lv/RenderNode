@@ -152,6 +152,11 @@ class RSN_Task:
                     task_data['object_data'] = {}
                 task_data['object_data'].update(node.get_data())
 
+            if node.bl_idname == 'RSNodeObjectModifierNode':
+                if 'object_modifier' not in task_data:
+                    task_data['object_modifier'] = {}
+                task_data['object_modifier'].update(node.get_data())
+
             elif node.bl_idname == 'RSNodeObjectDisplayNode':
                 if 'object_display' not in task_data:
                     task_data['object_display'] = {}

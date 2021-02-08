@@ -30,19 +30,8 @@ class RenderStackNodeTree(bpy.types.NodeTree):
     bl_icon = 'CAMERA_DATA'
 
 
-def node_warning(self, context):
-    if self.warning:
-        try:
-            self.use_custom_color = 1
-            self.color = (1, 0, 0)
-        except:
-            pass
-
-
 class RenderStackNode(bpy.types.Node):
     bl_label = "RenderStack Node"
-
-    warning: BoolProperty(default=False, update=node_warning)
 
     @classmethod
     def poll(cls, ntree):
@@ -74,6 +63,11 @@ class RenderStackNode(bpy.types.Node):
         """Debug Log"""
         pass
 
+    def set_warning(self):
+        self.use_custom_color = 1
+        self.color = (1, 0, 0)
+        logger.warning(f'{self.name}')
+
     def get_data(self):
         """For get self date into rsn tree method"""
         pass
@@ -95,6 +89,8 @@ classes = [
     RenderStackNodeTree,
     RenderStackNode,
     RenderStackNodeGroup,
+
+    RSN_OT_SetColor
 ]
 
 
