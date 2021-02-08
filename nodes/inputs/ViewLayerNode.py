@@ -27,6 +27,11 @@ class RSNodeViewLayerInputNode(RenderStackNode):
         layout.label(text="Just Check Out View Layer")
         layout.label(text="You should set its details in property panel")
 
+    def get_data(self):
+        task_data = {}
+        task_data['view_layer'] = self.view_layer
+        return task_data
+
 
 def register():
     bpy.utils.register_class(RSNodeViewLayerInputNode)

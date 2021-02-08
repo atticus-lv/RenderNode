@@ -19,7 +19,7 @@ class RSNodeColorManagementNode(RenderStackNode):
                                      ('Filmic Log', 'Filmic Log', ''),
                                      ('Filmic', 'Filmic', ''),
                                      ('Standard', 'Standard', '')],
-                                 default='Filmic',update=update_node)
+                                 default='Filmic', update=update_node)
 
     look: EnumProperty(name='Look',
                        items=[
@@ -31,10 +31,10 @@ class RSNodeColorManagementNode(RenderStackNode):
                            ('High Contrast', 'High Contrast', ''),
                            ('Very High Contrast', 'Very High Contrast', ''),
                            ('None', 'None', '')],
-                       default='None',update=update_node)
+                       default='None', update=update_node)
 
-    ev: FloatProperty(name="Exposure Value", default=0, soft_min=-3, soft_max=3,update=update_node)
-    gamma: FloatProperty(name="Gamma", default=1.0,update=update_node)
+    ev: FloatProperty(name="Exposure Value", default=0, soft_min=-3, soft_max=3, update=update_node)
+    gamma: FloatProperty(name="Gamma", default=1.0, update=update_node)
 
     def init(self, context):
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
@@ -49,6 +49,14 @@ class RSNodeColorManagementNode(RenderStackNode):
 
         col.prop(self, 'ev', slider=1)
         col.prop(self, 'gamma')
+
+    def get_data(self):
+        task_data = {}
+        task_data['view_transform'] = self.view_transform
+        task_data['look'] = self.look
+        task_data['ev'] = self.ev
+        task_data['gamma'] = self.gamma
+        return task_data
 
 
 def register():

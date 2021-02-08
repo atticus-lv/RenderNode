@@ -43,6 +43,20 @@ class RSNodeResolutionInputNode(RenderStackNode):
         row.prop(self, 'res_y', text="Y")
         col.prop(self, 'res_scale', text="%", slider=1)
 
+    def get_data(self):
+        task_data = {}
+        task_data["res_x"] = self.res_x
+        task_data['res_y'] = self.res_y
+        task_data['res_scale'] = self.res_scale
+        return task_data
+
+    def apply_data(self, task_data):
+        if 'res_x' in task_data:
+            rn = bpy.context.scene.render
+            self.compare(rn, 'resolution_x', task_data['res_x'])
+            self.compare(rn, 'resolution_y', task_data['res_y'])
+            self.compare(rn, 'resolution_percentage', task_data['res_scale'])
+
 
 class RSN_MT_ResolutionPresetsMenu(Menu):
     bl_label = 'My Presets'

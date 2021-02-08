@@ -142,197 +142,60 @@ class RSN_Task:
         task_data = {}
         for node_name in task_dict[task_name]:
             node = self.nt.nodes[node_name]
+            node.debug()
+            # label
             task_data['label'] = self.nt.nodes[task_name].label
-            if node.bl_idname == "RSNodeCamInputNode":
-                task_data["camera"] = node.camera.name if node.camera else None
 
-            elif node.bl_idname == "RSNodeResolutionInputNode":
-                task_data["res_x"] = node.res_x
-                task_data['res_y'] = node.res_y
-                task_data['res_scale'] = node.res_scale
+            # Object select Nodes
+            if node.bl_idname == 'RSNodeObjectDataNode':
+                if 'object_data' not in task_data:
+                    task_data['object_data'] = {}
+                task_data['object_data'].update(node.get_data())
 
-            elif node.bl_idname == "RSNodeCyclesRenderSettingsNode":
-                task_data['engine'] = "CYCLES"
-                task_data['samples'] = node.samples
+            if node.bl_idname == 'RSNodeObjectModifierNode':
+                if 'object_modifier' not in task_data:
+                    task_data['object_modifier'] = {}
+                task_data['object_modifier'].update(node.get_data())
 
-            elif node.bl_idname == "RSNodeEeveeRenderSettingsNode":
-                task_data['engine'] = "BLENDER_EEVEE"
-                task_data['samples'] = node.samples
+            elif node.bl_idname == 'RSNodeObjectDisplayNode':
+                if 'object_display' not in task_data:
+                    task_data['object_display'] = {}
+                task_data['object_display'].update(node.get_data())
 
-            elif node.bl_idname == "RSNodeWorkBenchRenderSettingsNode":
-                task_data['engine'] = 'BLENDER_WORKBENCH'
+            elif node.bl_idname == 'RSNodeObjectMaterialNode':
+                if 'object_material' not in task_data:
+                    task_data['object_material'] = {}
+                task_data['object_material'].update(node.get_data())
 
-            elif node.bl_idname == 'RSNodeLuxcoreRenderSettingsNode':
-                task_data['engine'] = 'LUXCORE'
-                task_data['luxcore_half'] = {'use_samples': node.use_samples,
-                                             'samples'    : node.samples,
-                                             'use_time'   : node.use_time,
-                                             'time'       : node.time}
+            elif node.bl_idname == 'RSNodeObjectPSRNode':
+                if 'object_psr' not in task_data:
+                    task_data['object_psr'] = {}
+                task_data['object_psr'].update(node.get_data())
 
-            elif node.bl_idname == "RSNodeFrameRangeInputNode":
-                if node.frame_end < node.frame_start:
-                    node.frame_end = node.frame_start
-                task_data["frame_start"] = node.frame_start
-                task_data["frame_end"] = node.frame_end
-                task_data["frame_step"] = node.frame_step
+            elif node.bl_idname == 'RSNodeViewLayerPassesNode':
+                if 'view_layer_passes' not in task_data:
+                    task_data['view_layer_passes'] = {}
+                task_data['view_layer_passes'].update(node.get_data())
 
-            elif node.bl_idname == "RSNodeImageFormatInputNode":
-                if node.file_format == "JPEG":
-                    if node.color_mode == "RGBA":
-                        node.color_mode = "RGB"
-                    if node.color_depth in ("16", "32"):
-                        node.color_depth = "8"
-
-                elif node.file_format == "PNG":
-                    if node.color_depth == '32':
-                        node.color_depth = "16"
-
-                elif node.file_format == "OPEN_EXR_MULTILAYER":
-                    if node.color_depth == "8":
-                        node.color_depth = "16"
-
-                task_data['color_mode'] = node.color_mode
-                task_data['color_depth'] = node.color_depth
-                task_data['file_format'] = node.file_format
-                task_data['transparent'] = node.transparent
-
-            elif node.bl_idname == 'RSNodeFilePathInputNode':
-                task_data['use_blend_file_path'] = node.use_blend_file_path
-                task_data['path_format'] = node.path_format
-                task_data['path'] = node.path
+            elif node.bl_idname == 'RSNodeSmtpEmailNode':
+                if 'email' not in task_data:
+                    task_data['email'] = {}
+                task_data['email'].update(node.get_data())
 
             elif node.bl_idname == 'RSNodeScriptsNode':
                 if node.type == 'SINGLE':
-                    if 'scripts' in task_data:
-                        task_data['scripts'][node.name] = node.code
-                    else:
-                        task_data['scripts'] = {node.name: node.code}
+                    if 'scripts' not in task_data:
+                        task_data['scripts'] = {}
+                    task_data['scripts'].update(node.get_data())
                 else:
-                    if 'scripts_file' in task_data:
-                        task_data['scripts_file'][node.name] = node.file.name
-                    else:
-                        task_data['scripts_file'] = {node.name: node.file.name}
-
-            elif node.bl_idname == 'RSNodeSmtpEmailNode':
-                if 'email' in task_data:
-                    task_data['email'][node.name] = {'subject'    : node.subject,
-                                                     'content'    : node.content,
-                                                     'sender_name': node.sender_name,
-                                                     'email'      : node.email}
-                else:
-                    task_data['email'] = {node.name: {'subject'    : node.subject,
-                                                      'content'    : node.content,
-                                                      'sender_name': node.sender_name,
-                                                      'email'      : node.email}}
-
-            elif node.bl_idname == "RSNodeViewLayerInputNode":
-                task_data['view_layer'] = node.view_layer
-
-            elif node.bl_idname == "RSNodeLightStudioNode":
-                task_data['ssm_light_studio'] = node.light_studio_index
-
-            elif node.bl_idname == "RSNodeWorldInputNode":
-                task_data['world'] = node.world.name
-
-            elif node.bl_idname == "RSNodeActiveRenderSlotNode":
-                task_data['render_slot'] = node.active_slot_index
-
-            elif node.bl_idname == 'RSNodeObjectMaterialNode':
-                if node.object and node.new_material:
-                    if 'object_material' in task_data:
-                        task_data['object_material'][node.name] = {'object'      : node.object.name,
-                                                                   'slot_index'  : node.slot_index,
-                                                                   'new_material': node.new_material.name}
-                    else:
-                        task_data['object_material'] = {node.name: {'object'      : node.object.name,
-                                                                    'slot_index'  : node.slot_index,
-                                                                    'new_material': node.new_material.name}}
-
-            elif node.bl_idname == 'RSNodeObjectDataNode':
-                value = None
-                if node.object:
-                    if node.data_path != '':
-                        obj, data_path = source_attr(node.object.data, node.data_path)
-                        if hasattr(obj, data_path):
-                            d_type = type(getattr(obj, data_path, None))
-                            if d_type == int:
-                                value = node.int_value
-                            elif d_type == float:
-                                value = node.float_value
-                            elif d_type == str:
-                                value = node.string_value
-                            elif d_type == bool:
-                                value = node.bool_value
-                            elif d_type == Color:
-                                value = list(node.color_value)
-                            elif d_type == Vector:
-                                value = list(node.vector_value)
-
-                        if value != None:
-                            if 'object_data' in task_data:
-                                task_data['object_data'][node.name] = {'object'   : node.object.name,
-                                                                       'data_path': node.data_path,
-                                                                       'value'    : value}
-                            else:
-                                task_data['object_data'] = {node.name: {'object'   : node.object.name,
-                                                                        'data_path': node.data_path,
-                                                                        'value'    : value}}
-
-
-            elif node.bl_idname == 'RSNodeObjectDisplayNode':
-                if 'object_display' in task_data:
-                    task_data['object_display'][node.name] = {'object'       : node.object.name,
-                                                              'hide_viewport': node.hide_viewport,
-                                                              'hide_render'  : node.hide_render}
-                else:
-                    task_data['object_display'] = {node.name: {'object'       : node.object.name,
-                                                               'hide_viewport': node.hide_viewport,
-                                                               'hide_render'  : node.hide_render}}
-
-            elif node.bl_idname == 'RSNodeObjectPSRNode':
-                if node.object and True in {node.use_p, node.use_s, node.use_r}:
-                    d = {'object': node.object.name,
-                         'use_p' : node.use_p,
-                         'use_s' : node.use_s,
-                         'use_r' : node.use_r, }
-
-                    if 'object_psr' in task_data:
-                        if node.use_p:
-                            d['location'] = list(node.p)
-                        if node.use_s:
-                            d['scale'] = list(node.s)
-                        if node.use_r:
-                            d['rotation'] = list(node.r)
-                        task_data['object_psr'][node.name] = d
-                    else:
-                        if node.use_p:
-                            d['location'] = list(node.p)
-                        if node.use_s:
-                            d['scale'] = list(node.s)
-                        if node.use_r:
-                            d['rotation'] = list(node.r)
-                        task_data['object_psr'] = {node.name: d}
-
-            elif node.bl_idname == 'RSNodeViewLayerPassesNode':
-                if 'view_layer_passes' in task_data:
-                    task_data['view_layer_passes'][node.name] = {'view_layer': node.view_layer,
-                                                                 'use_passes': node.use_passes}
-                else:
-                    task_data['view_layer_passes'] = {node.name: {'view_layer': node.view_layer,
-                                                                  'use_passes': node.use_passes}}
-
-            elif node.bl_idname == 'RSNodeColorManagementNode':
-                task_data['view_transform'] = node.view_transform
-                task_data['look'] = node.look
-                task_data['ev'] = node.ev
-                task_data['gamma'] = node.gamma
-
-            elif node.bl_idname == 'RSNodeTaskInfoInputsNode':
+                    if 'scripts_file' not in task_data:
+                        task_data['scripts_file'] = {}
+                    task_data['scripts_file'].update(node.get_data())
+            # Single node
+            else:
                 try:
-                    data = json.loads(node.file.as_string())
-                    task_data.update(data)
-                except Exception:
-                    node.use_custom_color = 1
-                    node.color = (1, 0, 0)
+                    task_data.update(node.get_data())
+                except TypeError:
+                    pass
 
         return task_data

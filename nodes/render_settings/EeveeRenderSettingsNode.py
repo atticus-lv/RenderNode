@@ -30,18 +30,12 @@ class RSNodeEeveeRenderSettingsNode(RenderStackNode):
         layout.use_property_decorate = 0
 
         layout.prop(self, "samples", text='Samples')
-        # layout.prop(self, 'data_path')
-        #
-        # if self.data_path != '' and hasattr(context.scene.eevee, self.data_path.split('.')[1]):
-        #     d_type = type(getattr(context.scene.eevee, self.data_path.split('.')[1], None))
-        #     if d_type == int:
-        #         layout.prop(self, 'int_value')
-        #     elif d_type == float:
-        #         layout.prop(self, 'float_value')
-        #     elif d_type == str:
-        #         layout.prop(self, 'string_value')
-        #     elif d_type == bool:
-        #         layout.prop(self, 'bool_value', toggle=1)
+
+    def get_data(self):
+        task_data = {}
+        task_data['engine'] = "BLENDER_EEVEE"
+        task_data['samples'] = self.samples
+        return task_data
 
 
 def register():

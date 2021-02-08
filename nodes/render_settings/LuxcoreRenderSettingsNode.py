@@ -32,6 +32,15 @@ class RSNodeLuxcoreRenderSettingsNode(RenderStackNode):
         row.prop(self, 'use_time')
         row.prop(self, 'time')
 
+    def get_data(self):
+        task_data = {}
+        task_data['engine'] = 'LUXCORE'
+        task_data['luxcore_half'] = {'use_samples': self.use_samples,
+                                     'samples'    : self.samples,
+                                     'use_time'   : self.use_time,
+                                     'time'       : self.time}
+        return task_data
+
 
 def register():
     bpy.utils.register_class(RSNodeLuxcoreRenderSettingsNode)

@@ -5,6 +5,23 @@ from bpy.props import *
 from ...utility import *
 from ...preferences import get_pref
 
+import logging
+from functools import wraps
+
+LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
+logging.basicConfig(format=LOG_FORMAT)
+logger = logging.getLogger('mylogger')
+
+
+def get_data_log(fn):
+    @wraps(fn)
+    def print_arg(*args, **kwargs):
+        logger.debug(f'pass "{args[0].name}"')
+        result = fn(*args, **kwargs)
+        return result
+
+    return print_arg
+
 
 class RenderStackNodeTree(bpy.types.NodeTree):
     """RenderStackNodeTree Node Tree"""
@@ -13,19 +30,8 @@ class RenderStackNodeTree(bpy.types.NodeTree):
     bl_icon = 'CAMERA_DATA'
 
 
-def node_warning(self, context):
-    if self.warning:
-        try:
-            self.use_custom_color = 1
-            self.color = (1, 0, 0)
-        except:
-            pass
-
-
 class RenderStackNode(bpy.types.Node):
     bl_label = "RenderStack Node"
-
-    warning: BoolProperty(default=False, update=node_warning)
 
     @classmethod
     def poll(cls, ntree):
@@ -35,11 +41,14 @@ class RenderStackNode(bpy.types.Node):
         print("RSN Copied node", node.name)
 
     def free(self):
+        """Remove Node"""
         print("RSN removed node", self.name)
 
     def update(self):
+        """Only the viewer node have this method"""
         pass
 
+    # RSN method
     def update_parms(self):
         if bpy.context.window_manager.rsn_node_list != '':
             node_list = bpy.context.window_manager.rsn_node_list.split(',')
@@ -48,6 +57,24 @@ class RenderStackNode(bpy.types.Node):
                 bpy.ops.rsn.update_parms(view_mode_handler=bpy.context.window_manager.rsn_viewer_node,
                                          update_scripts=pref.node_viewer.update_scripts,
                                          use_render_mode=False)
+
+    @get_data_log
+    def debug(self):
+        """Debug Log"""
+        pass
+
+    def set_warning(self):
+        self.use_custom_color = 1
+        self.color = (1, 0, 0)
+        logger.warning(f'{self.name}')
+
+    def get_data(self):
+        """For get self date into rsn tree method"""
+        pass
+
+    def apply_data(self):
+        """apply self data with update parm ops"""
+        pass
 
 
 class RenderStackNodeGroup(bpy.types.NodeCustomGroup):
@@ -62,6 +89,8 @@ classes = [
     RenderStackNodeTree,
     RenderStackNode,
     RenderStackNodeGroup,
+
+    RSN_OT_SetColor
 ]
 
 

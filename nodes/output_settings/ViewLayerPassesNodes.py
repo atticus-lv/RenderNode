@@ -27,6 +27,12 @@ class RSNodeViewLayerPassesNode(RenderStackNode):
         if not pref.node_viewer.update_view_layer_passes:
             layout.label(text='Update is disable in viewer node', icon='ERROR')
 
+    def get_data(self):
+        task_data_obj = {}
+        task_data_obj[self.name] = {'view_layer': self.view_layer,
+                                    'use_passes': self.use_passes}
+        return task_data_obj
+
 
 def register():
     bpy.utils.register_class(RSNodeViewLayerPassesNode)

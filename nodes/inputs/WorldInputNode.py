@@ -21,6 +21,11 @@ class RSNodeWorldInputNode(RenderStackNode):
     def draw_buttons(self, context, layout):
         layout.prop(self, 'world', text="")
 
+    def get_data(self):
+        task_data = {}
+        task_data['world'] = self.world.name
+        return task_data
+
 
 def register():
     bpy.utils.register_class(RSNodeWorldInputNode)

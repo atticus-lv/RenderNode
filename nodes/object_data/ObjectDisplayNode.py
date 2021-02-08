@@ -30,6 +30,15 @@ class RSNodeObjectDisplayNode(RenderStackNode):
         row.prop(self, 'hide_viewport', icon='HIDE_OFF' if not self.hide_viewport else 'HIDE_ON')
         row.prop(self, 'hide_render', icon='RESTRICT_RENDER_OFF' if not self.hide_render else 'RESTRICT_RENDER_ON')
 
+    def get_data(self):
+        task_data_obj = {}
+
+        task_data_obj[self.name] = {'object'       : self.object.name,
+                                    'hide_viewport': self.hide_viewport,
+                                    'hide_render'  : self.hide_render}
+
+        return task_data_obj
+
 
 def register():
     bpy.utils.register_class(RSNodeObjectDisplayNode)

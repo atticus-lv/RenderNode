@@ -26,7 +26,12 @@ class RSNodeCamInputNode(RenderStackNode):
         row = layout.row(align=1)
         row.prop(self, 'camera', text="")
         if self.camera:
-            row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF',text='').name = self.camera.name
+            row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.camera.name
+
+    def get_data(self):
+        task_data = {}
+        task_data["camera"] = self.camera.name if self.camera else None
+        return task_data
 
 
 def register():

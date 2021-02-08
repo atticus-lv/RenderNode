@@ -20,8 +20,11 @@ class RSNodeCyclesRenderSettingsNode(RenderStackNode):
     def draw_buttons(self, context, layout):
         layout.prop(self, "samples", text='Samples')
 
-    def draw_buttons_ext(self, context, layout):
-        pass
+    def get_data(self):
+        task_data = {}
+        task_data['engine'] = "CYCLES"
+        task_data['samples'] = self.samples
+        return task_data
 
 
 def register():
