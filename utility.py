@@ -50,7 +50,7 @@ class RSN_NodeTree:
             self.set_wm_node_tree(tree_name)
 
 
-class RSN_Task:
+class RSN_Nodes:
     """Tree method"""
 
     def __init__(self, node_tree, root_node_name):

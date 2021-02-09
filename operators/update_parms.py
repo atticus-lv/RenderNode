@@ -33,7 +33,7 @@ def compare(obj: object, attr: str, val):
     try:
         if getattr(obj, attr) != val:
             setattr(obj, attr, val)
-            logger.debug(f'"{obj}" Attribute "{attr}" SET “{val}”')
+            logger.debug(f'Attribute "{attr}" SET “{val}”')
     except AttributeError:
         pass
 
@@ -77,8 +77,8 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             rsn_tree = RSN_NodeTree()
             self.nt = rsn_tree.get_wm_node_tree()
 
-        rsn_task = RSN_Task(node_tree=self.nt,
-                            root_node_name=self.view_mode_handler)
+        rsn_task = RSN_Nodes(node_tree=self.nt,
+                             root_node_name=self.view_mode_handler)
         node_list_dict = rsn_task.get_sub_node_from_task(task_name=self.view_mode_handler,
                                                          return_dict=True)
         if node_list_dict:

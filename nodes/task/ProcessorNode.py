@@ -18,6 +18,7 @@ class RSNodeProcessorNode(RenderStackNode):
 
     all_tasks: StringProperty()
     curr_task: StringProperty()
+    task_label: StringProperty(default = '')
     task_data: StringProperty(default='{}')
 
     frame_start: IntProperty()
@@ -74,7 +75,7 @@ class RSNodeProcessorNode(RenderStackNode):
                             box = layout.box().column(align=1)
                             col = box.row().column(align=1)
                             # title
-                            label = json.loads(self.task_data)['label']
+                            label = self.task_label
                             col.label(icon="RECOVER_LAST",
                                       text=f'{name} | {label}')
                             # process bar

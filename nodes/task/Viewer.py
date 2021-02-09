@@ -59,8 +59,8 @@ class RSNodeViewerNode(RenderStackNode):
         self.width = 175
 
     def update(self):
-        rsn_task = RSN_Task(node_tree=bpy.context.space_data.edit_tree,
-                            root_node_name=self.name)
+        rsn_task = RSN_Nodes(node_tree=bpy.context.space_data.edit_tree,
+                             root_node_name=self.name)
         node_list = rsn_task.get_sub_node_from_node(self)
         if len(node_list) > 0:
             node_list_str = ','.join(node_list)

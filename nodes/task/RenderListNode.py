@@ -14,14 +14,14 @@ shift:get overwrite details """
         rsn_tree.set_context_tree_as_wm_tree()
 
         nt = rsn_tree.get_wm_node_tree()
-        rsn_task = RSN_Task(node_tree=self.nt,
-                            root_node_name=self.render_list_node_name)
+        rsn_task = RSN_Nodes(node_tree=self.nt,
+                             root_node_name=self.render_list_node_name)
 
         if event.shift:
-            for k in nt.node_list_dict.keys():
+            for k in nt.task_list_dict.keys():
                 print(json.dumps(nt.get_task_data(k), indent=4, ensure_ascii=False))
         else:
-            print(json.dumps(nt.node_list_dict, indent=4, ensure_ascii=False))
+            print(json.dumps(nt.task_list_dict, indent=4, ensure_ascii=False))
 
         return {"FINISHED"}
 
