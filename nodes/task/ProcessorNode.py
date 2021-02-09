@@ -4,10 +4,6 @@ from bpy.props import *
 from ...nodes.BASE.node_tree import RenderStackNode
 
 
-# import os
-# import bpy.utils.previews
-
-
 class RSNodeProcessorNode(RenderStackNode):
     """A simple input node"""
     bl_idname = 'RSNodeProcessorNode'
@@ -18,8 +14,7 @@ class RSNodeProcessorNode(RenderStackNode):
 
     all_tasks: StringProperty()
     curr_task: StringProperty()
-    task_label: StringProperty(default = '')
-    task_data: StringProperty(default='{}')
+    task_label: StringProperty(default='')
 
     frame_start: IntProperty()
     frame_end: IntProperty()

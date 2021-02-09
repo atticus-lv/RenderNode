@@ -94,12 +94,12 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         default='WINDOW')
 
     ori_render_display_type = None
-    nt = None
+
     # render state
     _timer = None
     stop = None
     rendering = None
-
+    # get and apply from rsn queue
     rsn_queue = None
     # frame check
     frame_current = 1
@@ -113,8 +113,6 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         self.frame_check()
         # set state (for switch task)
         self.rendering = False
-        # show in nodes
-        self.update_process_node()
 
     def cancelled(self, dummy, thrd=None):
         self.stop = True
@@ -140,7 +138,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
             node.count_frames = self.rsn_queue.get_length()
             node.done_frames = 0
             node.all_tasks = ''
-            node.all_tasks = ','.join(self.rsn_queue.task_name)
+            node.all_tasks = ','.join(self.rsn_queue.task_queue)
             logger.info(node.all_tasks)
         except Exception as e:
             logger.debug(f'Processor {e}')
@@ -218,6 +216,8 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
                 self.frame_current = self.rsn_queue.frame_start
         else:
             self.frame_current += self.rsn_queue.frame_step
+        # show in nodes
+        self.update_process_node()
 
     def switch2task(self):
         scn = bpy.context.scene
@@ -320,10 +320,8 @@ class RSN_OT_RenderButton(bpy.types.Operator):
         default='WINDOW',
         name='Render Display Type')
 
-    nt = None
-    task_data = []
-    mark_task_names = []
-    frame_list = []
+    # task_data
+    rsn_queue = None
 
     @classmethod
     def poll(self, context):
@@ -342,38 +340,24 @@ class RSN_OT_RenderButton(bpy.types.Operator):
         rsn_tree.set_context_tree_as_wm_tree()
         self.nt = rsn_tree.get_wm_node_tree()
 
-        rsn_task = RSN_Nodes(node_tree=self.nt, root_node_name=self.render_list_node_name)
-        node_list_dict = rsn_task.get_sub_node_from_render_list(return_dict=1)
-
-        for task in node_list_dict:
-            task_data = rsn_task.get_task_data(task_name=task, task_dict=node_list_dict)
-            self.task_data.append(task_data)
-            self.mark_task_names.append(task)
-            # get frame Range
-            render_list = {}
-            if "frame_start" in task_data:
-                render_list["frame_start"] = task_data["frame_start"]
-                render_list["frame_end"] = task_data["frame_end"]
-                render_list["frame_step"] = task_data["frame_step"]
-            else:
-                render_list["frame_start"] = bpy.context.scene.frame_current
-                render_list["frame_end"] = bpy.context.scene.frame_current
-                render_list["frame_step"] = 1
-            self.frame_list.append(render_list)
+        self.rsn_queue = RSN_Queue(nodetree=rsn_tree.get_wm_node_tree(), render_list_node=self.render_list_node_name)
 
     def render_options(self, context):
         layout = self.layout.box()
-        row = layout.row(align=0)
-        sub = row.row(align=1)
-        sub.label(text='Open folder after render', icon='FILEBROWSER')
-        sub.prop(self, 'open_dir', text='')
-        sub = row.row(align=1)
-        sub.label(text='Empty filepath after render', icon_value=empty_icon.get_image_icon_id())
-        sub.prop(self, 'clean_path', text='')
+        col = layout.column(align=0)
 
-        row = layout.row(align=0)
-        row.prop(self, 'render_display_type')
-        row.prop(context.scene.render, 'use_lock_interface', icon_only=1)
+        sub = col.row(align=1)
+        sub.prop(self, 'open_dir', text='')
+        sub.label(text='Open folder after render', icon='FILEBROWSER')
+
+        sub = col.row(align=1)
+        sub.prop(self, 'clean_path', text='')
+        sub.label(text='Empty filepath after render', icon_value=empty_icon.get_image_icon_id())
+
+        split = layout.split(align=0, factor=0.5)
+        split.prop(self, 'render_display_type', text='')
+        split.separator()
+        # split.prop(context.scene.render, 'use_lock_interface', icon_only=1)
 
     def draw(self, context):
         layout = self.layout
@@ -394,20 +378,20 @@ class RSN_OT_RenderButton(bpy.types.Operator):
         col4.label(text='Frame Range')
         col5.label(text='Info')
 
-        for i, task_node in enumerate(self.mark_task_names):
+        for i, task_node in enumerate(self.rsn_queue.task_queue):
             # Index
             col1.label(text=f'{i}')
             # node and mute
             node = bpy.context.space_data.edit_tree.nodes[task_node]
             col2.prop(node, 'mute', text=task_node, icon='PANEL_CLOSE' if node.mute else 'CHECKMARK')
             # label
-            col3.label(text=self.task_data[i]['label'])
+            col3.label(text=self.rsn_queue.task_data_queue[i]['label'])
             # Range
-            fs = self.frame_list[i]["frame_start"]
-            fe = self.frame_list[i]["frame_end"]
+            fs = self.rsn_queue.task_data_queue[i]["frame_start"]
+            fe = self.rsn_queue.task_data_queue[i]["frame_end"]
             col4.label(text=f'{fs} → {fe} ({fs - fe + 1})')
             # task_data_list
-            d = json.dumps(self.task_data[i], indent=4)
+            d = json.dumps(self.rsn_queue.task_data_queue[i], indent=2)
             col5.operator('rsn.show_task_details', icon='INFO', text='').task_data = d
 
         self.render_options(context)
@@ -432,10 +416,6 @@ class RSN_OT_RenderButton(bpy.types.Operator):
         return {'FINISHED'}
 
     def invoke(self, context, event):
-        self.nt = None
-        self.task_data = []
-        self.mark_task_names = []
-        self.frame_list = []
         self.get_render_data()
         return context.window_manager.invoke_props_dialog(self, width=500)
 
