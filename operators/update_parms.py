@@ -318,9 +318,10 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
 
     def update_render_engine(self):
         if 'engine' in self.task_data and bpy.context.scene.render.engine != self.task_data['engine']:
-            if True in (self.task_data['engine'] == 'LUXCORE' and 'BlendLuxCore' in bpy.context.preferences.addons,
-                        self.task_data['engine'] != 'LUXCORE'):
-                bpy.context.scene.render.engine = self.task_data['engine']
+            if True in [(self.task_data['engine'] not in {'octane', 'LUXCORE'}),
+                        (self.task_data['engine'] == 'octane' and 'octane' in bpy.context.preferences.addons),
+                        (self.task_data['engine'] == 'LUXCORE' and 'BlendLuxCore' in bpy.context.preferences.addons), ]:
+                compare(bpy.context.scene.render, 'engine', self.task_data['engine'])
 
         if 'samples' in self.task_data:
             if self.task_data['engine'] == "BLENDER_EEVEE":
@@ -353,6 +354,10 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                     bpy.context.scene.luxcore.halt.use_time = True
 
                 compare(bpy.context.scene.luxcore.halt, 'time', self.task_data['luxcore_half']['time'])
+
+        elif 'octane' in self.task_data:
+            for key, value in self.task_data['octane'].items():
+                compare(bpy.context.scene.octane, key, value)
 
     def update_res(self):
         if 'res_x' in self.task_data:

@@ -35,7 +35,6 @@ class RSNodeOctaneRenderSettingsNode(RenderStackNode):
     #                         default='None')
     # info_channel_type: StringProperty()
 
-    show_adaptive_sampling: BoolProperty(name='Adaptive', default=False)
     show_sampling: BoolProperty(name='Samples', default=False)
     # quality
     max_samples: IntProperty(name='Max. samples', default=500, min=1, update=update_node)
@@ -56,36 +55,34 @@ class RSNodeOctaneRenderSettingsNode(RenderStackNode):
     adaptive_expected_exposure: FloatProperty(name='Expected exposure', default=0, precision=4)
 
     # sampling
-    path_term_power: FloatProperty(name='Path term. power', min=0.0, update=update_node)
-    coherent_ratio: FloatProperty(name='Coherent ratio', min=0.0, update=update_node)
+    path_term_power: FloatProperty(name='Path term. power', min=0.0, default=0.3, update=update_node)
+    coherent_ratio: FloatProperty(name='Coherent ratio', min=0.0, default=0, update=update_node)
     static_noise: BoolProperty(name='Static noise', default=False)
-    parallel_samples: IntProperty(name='Parallel samples', default=32, min=1, update=update_node)
-    max_tile_samples: IntProperty(name='Max. tile samples', default=64, min=1, update=update_node)
+    parallel_samples: IntProperty(name='Parallel samples', default=32, min=1, max=32, update=update_node)
+    max_tile_samples: IntProperty(name='Max. tile samples', default=64, min=1, max=64, update=update_node)
 
     def init(self, context):
         self.outputs.new('RSNodeSocketRenderSettings', "Render Settings")
-        self.width = 225
+        self.width = 200
 
     def draw_buttons(self, context, layout):
-        layout.use_property_split = 1
-        layout.use_property_decorate = 0
+        col = layout.column(align=1)
 
-        box = layout.column(align=1).split().box()
-        box.prop(self, 'max_samples')
-        box.prop(self, 'max_diffuse_depth')
-        box.prop(self, 'max_glossy_depth')
-        box.prop(self, 'max_scatter_depth')
+        col.prop(self, 'max_samples')
+        col.prop(self, 'max_diffuse_depth')
+        col.prop(self, 'max_glossy_depth')
+        col.prop(self, 'max_scatter_depth')
 
-        box = layout.column(align=1).split().box()
-
-        box.prop(self, 'show_adaptive_sampling')
-        if self.show_adaptive_sampling:
-            box.prop(self, 'adaptive_sampling')
+        col.separator()
+        box = col.box().split().column(align=1)
+        box.prop(self, 'adaptive_sampling')
+        if self.adaptive_sampling:
             box.prop(self, 'adaptive_noise_threshold')
             box.prop(self, 'adaptive_min_samples')
 
-        box = layout.column(align=1).split().box()
-        box.prop(self, 'show_sampling')
+        col.separator()
+        box = col.box().split().column(align=1)
+        box.prop(self, 'show_sampling', icon='TRIA_DOWN' if self.show_sampling else 'TRIA_RIGHT', emboss=False)
         if self.show_sampling:
             box.prop(self, 'path_term_power')
             box.prop(self, 'coherent_ratio')
