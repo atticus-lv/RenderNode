@@ -139,7 +139,6 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
             node.done_frames = 0
             node.all_tasks = ''
             node.all_tasks = ','.join(self.rsn_queue.task_queue)
-            logger.info(node.all_tasks)
         except Exception as e:
             logger.debug(f'Processor {e}')
 
@@ -171,10 +170,8 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     def init_logger(self, node_list_dict):
         pref = get_pref()
         logger.setLevel(int(pref.log_level))
-        logger.info(f'Get all data:\n\n{node_list_dict}\n')
+        logger.info(f'Get all data:\n{json.dumps(node_list_dict, indent=2)}\n')
 
-    def init(self):
-        pass
 
     def execute(self, context):
         context.window_manager.rsn_running_modal = True

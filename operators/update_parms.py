@@ -22,7 +22,7 @@ def timefn(fn):
         t2 = time.time()
         s = f'{(t2 - t1) * 1000: .4f} ms'
         bpy.context.window_manager.rsn_tree_time = s
-        logger.info(f"RSN Tree: update took{s}")
+        logger.info(f"RSN Tree: update took{s}\n")
         return result
 
     return measure_time
