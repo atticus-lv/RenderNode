@@ -317,11 +317,15 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             compare(scn, 'frame_start', self.task_data['frame_step'])
 
     def update_render_engine(self):
-        if 'engine' in self.task_data and bpy.context.scene.render.engine != self.task_data['engine']:
-            if True in [(self.task_data['engine'] not in {'octane', 'LUXCORE'}),
-                        (self.task_data['engine'] == 'octane' and 'octane' in bpy.context.preferences.addons),
-                        (self.task_data['engine'] == 'LUXCORE' and 'BlendLuxCore' in bpy.context.preferences.addons), ]:
+        if 'engine' in self.task_data:
+            if self.task_data['engine'] in {'CYCLES', 'BLENDER_EEVEE', 'BLENDER_WORKBENCH'}:
                 compare(bpy.context.scene.render, 'engine', self.task_data['engine'])
+            elif self.task_data['engine'] == 'octane':
+                if 'octane' in bpy.context.preferences.addons:
+                    compare(bpy.context.scene.render, 'engine', self.task_data['engine'])
+            elif self.task_data['engine'] == 'LUXCORE':
+                if 'BlendLuxCore' in bpy.context.preferences.addons:
+                    compare(bpy.context.scene.render, 'engine', self.task_data['engine'])
 
         if 'samples' in self.task_data:
             if self.task_data['engine'] == "BLENDER_EEVEE":
@@ -329,7 +333,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             elif self.task_data['engine'] == "CYCLES":
                 compare(bpy.context.scene.cycles, 'samples', self.task_data['samples'])
 
-        if 'luxcore_half' in self.task_data:
+        if 'luxcore_half' in self.task_data and 'BlendLuxCore' in bpy.context.preferences.addons:
             if not bpy.context.scene.luxcore.halt.enable:
                 bpy.context.scene.luxcore.halt.enable = True
 
@@ -355,7 +359,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
 
                 compare(bpy.context.scene.luxcore.halt, 'time', self.task_data['luxcore_half']['time'])
 
-        elif 'octane' in self.task_data:
+        elif 'octane' in self.task_data and 'octane' in bpy.context.preferences.addons:
             for key, value in self.task_data['octane'].items():
                 compare(bpy.context.scene.octane, key, value)
 
