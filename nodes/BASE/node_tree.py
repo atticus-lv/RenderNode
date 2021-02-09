@@ -72,7 +72,7 @@ class RenderStackNode(bpy.types.Node):
         """For get self date into rsn tree method"""
         pass
 
-    def apply_data(self):
+    def apply_data(self,task_data):
         """apply self data with update parm ops"""
         pass
 

@@ -23,9 +23,6 @@ class RSNodeCyclesLightPathNode(RenderStackNode):
         self.outputs.new('RSNodeSocketRenderSettings', "Render Settings")
 
     def draw_buttons(self, context, layout):
-        pass
-
-    def draw_buttons_ext(self, context, layout):
         col = layout.column(align=True)
         col.prop(self, "max_bounces", text="Total")
 

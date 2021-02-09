@@ -34,6 +34,9 @@ class RSNodeObjectModifierNode(RenderStackNode):
         self.width = 250
 
     def draw_buttons(self, context, layout):
+        layout.use_property_split = 1
+        layout.use_property_decorate = 0
+
         row = layout.row(align=1)
         row.prop(self, 'object')
         layout.prop(self, 'data_path')

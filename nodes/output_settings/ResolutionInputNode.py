@@ -24,24 +24,33 @@ class RSNodeResolutionInputNode(RenderStackNode):
     res_scale: IntProperty(name="Resolution Scale", default=100, min=1, subtype='PERCENTAGE', soft_min=1, soft_max=100,
                            update=update_node)
 
+    preset_mode: BoolProperty(name='Preset Mode', default=False)
+
     def init(self, context):
         self.outputs.new('RSNodeSocketOutputSettings', "Output Settings")
         self.width = 200
 
     def draw_buttons(self, context, layout):
-        try:
-            if hasattr(bpy.context.space_data, 'edit_tree'):
-                if bpy.context.space_data.edit_tree.nodes.active.name == self.name:
-                    layout.popover(panel="RSN_PT_ResolutionPresetPanel", text="Resolution Preset",
-                                   icon="FULLSCREEN_EXIT")
-        except Exception:
-            pass
-
         col = layout.column(align=1)
         row = col.row(align=1)
         row.prop(self, 'res_x', text="X")
         row.prop(self, 'res_y', text="Y")
         col.prop(self, 'res_scale', text="%", slider=1)
+
+        try:
+            if hasattr(bpy.context.space_data, 'edit_tree'):
+                if bpy.context.space_data.edit_tree.nodes.active.name == self.name:
+                    row = layout.row(align=1)
+                    if self.preset_mode:
+                        row.popover(panel="RSN_PT_ResolutionPresetPanel", text="Resolution Preset",
+                                    icon="PRESET")
+                    else:
+                        row.menu('RSN_MT_ResolutionPresetsMenu',icon = 'FULLSCREEN_EXIT')
+
+                    row.prop(self, 'preset_mode',text='',icon='PRESET_NEW')
+
+        except Exception:
+            pass
 
     def get_data(self):
         task_data = {}
@@ -59,7 +68,7 @@ class RSNodeResolutionInputNode(RenderStackNode):
 
 
 class RSN_MT_ResolutionPresetsMenu(Menu):
-    bl_label = 'My Presets'
+    bl_label = 'Resolution Preset'
     preset_subdir = 'RSN/resolution_preset'
     preset_operator = 'script.execute_preset'
     draw = Menu.draw_preset
