@@ -47,6 +47,7 @@ node_categorys = [
         nodeitems_utils.NodeItem("RSNodeEeveeRenderSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeCyclesRenderSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeCyclesLightPathNode"),
+        nodeitems_utils.NodeItem("RSNodeOctaneRenderSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeLuxcoreRenderSettingsNode"),
     ]),
 
