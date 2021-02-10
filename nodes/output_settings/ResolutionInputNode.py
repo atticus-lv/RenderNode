@@ -142,7 +142,10 @@ def add_res_preset_to_user():
 
 
 classes = (
-    RSNodeResolutionInputNode, RSN_MT_ResolutionPresetsMenu, RSN_PT_ResolutionPresetPanel, RSN_OT_AddResolutionPreset
+    RSNodeResolutionInputNode,
+    RSN_MT_ResolutionPresetsMenu,
+    RSN_PT_ResolutionPresetPanel,
+    RSN_OT_AddResolutionPreset
 )
 
 

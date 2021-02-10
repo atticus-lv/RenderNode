@@ -94,7 +94,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         rsn_task = RSN_Nodes(node_tree=self.nt,
                              root_node_name=self.view_mode_handler)
         #get the task node and the sub node, return dict
-        node_list_dict = rsn_task.get_sub_node_from_task(task_name=self.view_mode_handler,
+        node_list_dict = rsn_task.get_children_from_task(task_name=self.view_mode_handler,
                                                          return_dict=True)
         #if the task have sub node, get the data of them
         if node_list_dict:

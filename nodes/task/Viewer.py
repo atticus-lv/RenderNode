@@ -61,7 +61,7 @@ class RSNodeViewerNode(RenderStackNode):
     def update(self):
         rsn_task = RSN_Nodes(node_tree=bpy.context.space_data.edit_tree,
                              root_node_name=self.name)
-        node_list = rsn_task.get_sub_node_from_node(self)
+        node_list = rsn_task.get_children_from_node(self)
         if len(node_list) > 0:
             node_list_str = ','.join(node_list)
 
@@ -71,11 +71,17 @@ class RSNodeViewerNode(RenderStackNode):
                 pref = get_pref()
 
                 if self.inputs[0].is_linked:
-                    node = reroute(self.inputs[0].links[0].from_node)
-                    bpy.context.window_manager.rsn_viewer_node = node.name
-                    bpy.ops.rsn.update_parms(view_mode_handler=node.name,
-                                             update_scripts=pref.node_viewer.update_scripts,
-                                             use_render_mode=False)
+                    try:
+                        node = reroute(self.inputs[0].links[0].from_node)
+                        bpy.context.window_manager.rsn_viewer_node = node.name
+                        bpy.ops.rsn.update_parms(view_mode_handler=node.name,
+                                                 update_scripts=pref.node_viewer.update_scripts,
+                                                 use_render_mode=False)
+                        # This error shows when the dragging the link off viewer node(Works well with knife tool)
+                        # this seems to be a blender error
+                    except IndexError:
+                        pass
+
                 else:
                     bpy.context.window_manager.rsn_viewer_node = ''
 

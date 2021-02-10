@@ -56,13 +56,13 @@ class RSNodeSocketRenderList(bpy.types.NodeSocket):
         return 0.95, 0.95, 0.95, 1.0
 
 
-classes = [
+classes = (
     RSNodeSocketCamera,
     RSNodeSocketRenderSettings,
     RSNodeSocketOutputSettings,
     RSNodeSocketTaskSettings,
     RSNodeSocketRenderList,
-]
+)
 
 
 def register():

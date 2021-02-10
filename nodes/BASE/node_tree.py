@@ -85,12 +85,12 @@ class RenderStackNodeGroup(bpy.types.NodeCustomGroup):
         return ntree.bl_idname == 'RenderStackNodeTree'
 
 
-classes = [
+classes = (
     RenderStackNodeTree,
     RenderStackNode,
     RenderStackNodeGroup,
 
-]
+)
 
 
 def register():

@@ -3,79 +3,19 @@ import time
 import logging
 import json
 
-from collections import deque
 from bpy.props import *
 
 from ..utility import *
 from ..preferences import get_pref
 from ..ui.icon_utils import RSN_Preview
 
+# set logger
 LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
 logging.basicConfig(format=LOG_FORMAT)
 logger = logging.getLogger('mylogger')
 
+# set custom icon
 empty_icon = RSN_Preview(image='empty.png', name='empty_icon')
-
-
-class RSN_Queue():
-    def __init__(self, nodetree, render_list_node: str):
-        self.nt = nodetree
-        self.root_node = render_list_node
-        self.task_queue = deque()
-        self.task_data_queue = deque()
-
-        self.init_rsn_task()
-        self.init_queue()
-
-    def init_rsn_task(self):
-        self.rsn = RSN_Nodes(node_tree=self.nt, root_node_name=self.root_node)
-        self.task_list_dict = self.rsn.get_sub_node_from_render_list(return_dict=1)
-
-    def init_queue(self):
-        for task in self.task_list_dict:
-            task_data = self.rsn.get_task_data(task_name=task, task_dict=self.task_list_dict)
-
-            if "frame_start" not in task_data:
-                task_data["frame_start"] = bpy.context.scene.frame_current
-                task_data["frame_end"] = bpy.context.scene.frame_current
-                task_data["frame_step"] = bpy.context.scene.frame_step
-
-            self.task_queue.append(task)
-            self.task_data_queue.append(task_data)
-
-    def is_empty(self):
-        return len(self.task_queue) == 0
-
-    def get_length(self):
-        return len(self.task_queue)
-
-    def update_task_data(self):
-        if not self.is_empty():
-            self.task_name = self.task_queue[0]
-            self.task_data = self.task_data_queue[0]
-            self.frame_start = self.task_data_queue[0]["frame_start"]
-            self.frame_end = self.task_data_queue[0]["frame_end"]
-            self.frame_step = self.task_data_queue[0]["frame_step"]
-
-    def get_frame_length(self):
-        length = 0
-        for task_data in self.task_data_queue:
-            length += (task_data['frame_end'] + 1 - task_data['frame_start']) // task_data['frame_step']
-        return length
-
-    def pop(self):
-        if not self.is_empty():
-            return self.task_queue.popleft(), self.task_data_queue.popleft()
-
-    def clear_queue(self):
-        self.task_queue.clear()
-        self.task_data_queue.clear()
-
-        self.task_name = None
-        self.task_data = None
-        self.frame_start = None
-        self.frame_end = None
-        self.frame_step = None
 
 
 class RSN_OT_RenderStackTask(bpy.types.Operator):
@@ -154,8 +94,8 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
             node.frame_start = self.rsn_queue.frame_start
             node.frame_end = self.rsn_queue.frame_end
             node.frame_current = bpy.context.scene.frame_current
-        except Exception as e:
-            logger.debug(f'Processor {e}')
+        except:
+            pass
 
     def finish_process_node(self):
         try:
@@ -165,8 +105,8 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
                 node.curr_task = 'RENDER_FINISHED'
             else:
                 node.all_tasks += ',RENDER_STOPED'
-        except Exception as e:
-            logger.debug(f'Processor {e}')
+        except:
+            pass
 
     # init
     def init_logger(self, node_list_dict):
@@ -192,7 +132,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         # info log
         self.init_logger(self.rsn_queue.task_list_dict)
         self.init_process_node()
-
+        # update for the first render (if there is a viewer node)
         self.rsn_queue.update_task_data()
         self.frame_current = self.rsn_queue.frame_start
         self.append_handles()
@@ -218,15 +158,15 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         self.update_process_node()
 
     def switch2task(self):
-        # update task
+        # update task again
         self.rsn_queue.update_task_data()
 
         scn = bpy.context.scene
         scn.render.use_file_extension = 1
-
+        # update
         task = self.rsn_queue.task_name
         bpy.ops.rsn.update_parms(view_mode_handler=task, use_render_mode=True)
-
+        # set frame complement
         pref = get_pref()
         frame_style = pref.node_file_path.frame_complement
         if frame_style != 'None':
@@ -239,7 +179,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         # clear_queue/log
         self.finish_process_node()
         self.rsn_queue.clear_queue()
-        # open folder
+        # open folder after render
         if self.open_dir:
             try:
                 output_dir = os.path.dirname(bpy.context.scene.render.filepath)
@@ -261,7 +201,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
 
                 return {"FINISHED"}
 
-            elif self.rendering is False:  # 进行渲染
+            elif self.rendering is False:
                 self.switch2task()
                 bpy.context.scene.frame_current = self.frame_current
                 bpy.ops.render.render("INVOKE_DEFAULT", write_still=True)
@@ -332,6 +272,7 @@ class RSN_OT_RenderButton(bpy.types.Operator):
         if not context.window_manager.rsn_running_modal:
             return context.scene.camera is not None
 
+    # stop the unnecessary viewport rendering
     def change_shading(self):
         for area in bpy.context.screen.areas:
             if area.type == 'VIEW_3D':
@@ -424,30 +365,30 @@ class RSN_OT_RenderButton(bpy.types.Operator):
         return context.window_manager.invoke_props_dialog(self, width=500)
 
 
-def update_rsn_viewer_node(self, context):
-    pass
+classes = (
+    RSN_OT_RenderStackTask,
+    RSN_OT_ShowTaskDetails,
+    RSN_OT_ClipBoard,
+    RSN_OT_RenderButton
+)
 
 
 def register():
     empty_icon.register()
 
-    bpy.utils.register_class(RSN_OT_RenderStackTask)
-    bpy.utils.register_class(RSN_OT_ShowTaskDetails)
-    bpy.utils.register_class(RSN_OT_ClipBoard)
-    bpy.utils.register_class(RSN_OT_RenderButton)
+    for cls in classes:
+        bpy.utils.register_class(cls)
 
     bpy.types.WindowManager.rsn_running_modal = BoolProperty(default=False, description='poll for the button')
     bpy.types.WindowManager.rsn_cur_tree_name = StringProperty(name='current rendering tree', default='')
-    bpy.types.WindowManager.rsn_viewer_node = StringProperty(name='Viewer task name', update=update_rsn_viewer_node)
+    bpy.types.WindowManager.rsn_viewer_node = StringProperty(name='Viewer task name')
 
 
 def unregister():
     empty_icon.unregister()
 
-    bpy.utils.unregister_class(RSN_OT_RenderStackTask)
-    bpy.utils.unregister_class(RSN_OT_ClipBoard)
-    bpy.utils.unregister_class(RSN_OT_ShowTaskDetails)
-    bpy.utils.unregister_class(RSN_OT_RenderButton)
+    for cls in classes:
+        bpy.utils.unregister_class(cls)
 
     del bpy.types.WindowManager.rsn_running_modal
     del bpy.types.WindowManager.rsn_cur_tree_name

@@ -105,14 +105,15 @@ class RSNodeClientNode(RenderStackNode):
         except:
             pass
 
+# not ready yet
 
-def register():
-    bpy.utils.register_class(RSNodeServerNode)
-    bpy.utils.register_class(RSNodeClientNode)
-    bpy.types.WindowManager.rsn_serve_modal = bpy.props.BoolProperty(name='Running rsn server', default=False)
-
-
-def unregister():
-    bpy.utils.unregister_class(RSNodeServerNode)
-    bpy.utils.unregister_class(RSNodeClientNode)
-    del bpy.types.WindowManager.rsn_serve_modal
+# def register():
+#     bpy.utils.register_class(RSNodeServerNode)
+#     bpy.utils.register_class(RSNodeClientNode)
+#     bpy.types.WindowManager.rsn_serve_modal = bpy.props.BoolProperty(name='Running rsn server', default=False)
+#
+#
+# def unregister():
+#     bpy.utils.unregister_class(RSNodeServerNode)
+#     bpy.utils.unregister_class(RSNodeClientNode)
+#     del bpy.types.WindowManager.rsn_serve_modal

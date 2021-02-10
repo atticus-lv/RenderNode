@@ -1,14 +1,8 @@
 import bpy
 import json
-import logging
 from itertools import groupby
-
+from collections import deque
 from mathutils import Color, Vector
-
-
-# LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
-# logging.basicConfig(format=LOG_FORMAT)
-# logger = logging.getLogger('mylogger')
 
 
 def source_attr(src_obj, scr_data_path):
@@ -67,7 +61,7 @@ class RSN_Nodes:
     def get_root_node(self):
         return self.root_node
 
-    def get_sub_node_from_node(self, root_node):
+    def get_children_from_node(self, root_node):
         """Depth first search"""
         node_list = []
 
@@ -78,16 +72,22 @@ class RSN_Nodes:
                     node_list.append(node.name)
 
         def get_sub_node(node):
-            """Skip the mute node"""
+            """Recursion"""
             for input in node.inputs:
                 if input.is_linked:
-                    sub_node = input.links[0].from_node
-                    if sub_node.mute:
-                        continue
-                    else:
-                        get_sub_node(sub_node)
+                    try:
+                        sub_node = input.links[0].from_node
+                        if sub_node.mute:
+                            continue
+                        else:
+                            get_sub_node(sub_node)
+                    # This error shows when the dragging the link off viewer node(Works well with knife tool)
+                    # this seems to be a blender error
+                    except IndexError:
+                        pass
                 else:
                     continue
+            # nodes append from left to right, from top to bottom
             append_node_to_list(node)
 
         get_sub_node(root_node)
@@ -101,11 +101,13 @@ class RSN_Nodes:
 
         node_list[:] = [node for node in node_list if
                         self.nt.nodes[node].bl_idname not in black_list]
+        # separate nodes with the node type input
         children_node_list = [list(g) for k, g in
                               groupby(node_list, lambda name: self.nt.nodes[name].bl_idname == parent_node_type) if
                               not k]
+        # get the node type input
         parent_node_list = [node for node in node_list if self.nt.nodes[node].bl_idname == parent_node_type]
-
+        # make a dict {parent name:[children list]}
         for i in range(len(parent_node_list)):
             try:
                 node_list_dict[parent_node_list[i]] = children_node_list[i]
@@ -114,11 +116,11 @@ class RSN_Nodes:
                 pass
         return node_list_dict
 
-    def get_sub_node_from_task(self, task_name, return_dict=False, type='RSNodeTaskNode'):
+    def get_children_from_task(self, task_name, return_dict=False, type='RSNodeTaskNode'):
         """pack method for task node"""
         task = self.get_node_from_name(task_name)
         try:
-            node_list = self.get_sub_node_from_node(task)
+            node_list = self.get_children_from_node(task)
             if not return_dict:
                 return node_list
             else:
@@ -127,10 +129,10 @@ class RSN_Nodes:
         except AttributeError:
             pass
 
-    def get_sub_node_from_render_list(self, return_dict=False, type='RSNodeTaskNode'):
+    def get_children_from_render_list(self, return_dict=False, type='RSNodeTaskNode'):
         """pack method for render list node(get all task)"""
         render_list = self.get_node_from_name(self.root_node.name)
-        node_list = self.get_sub_node_from_node(render_list)
+        node_list = self.get_children_from_node(render_list)
         if not return_dict:
             return node_list
         else:
@@ -201,3 +203,62 @@ class RSN_Nodes:
         return task_data
 
 
+class RSN_Queue():
+    def __init__(self, nodetree, render_list_node: str):
+        self.nt = nodetree
+        self.root_node = render_list_node
+        self.task_queue = deque()
+        self.task_data_queue = deque()
+
+        self.init_rsn_task()
+        self.init_queue()
+
+    def init_rsn_task(self):
+        self.rsn = RSN_Nodes(node_tree=self.nt, root_node_name=self.root_node)
+        self.task_list_dict = self.rsn.get_children_from_render_list(return_dict=1)
+
+    def init_queue(self):
+        for task in self.task_list_dict:
+            task_data = self.rsn.get_task_data(task_name=task, task_dict=self.task_list_dict)
+
+            if "frame_start" not in task_data:
+                task_data["frame_start"] = bpy.context.scene.frame_current
+                task_data["frame_end"] = bpy.context.scene.frame_current
+                task_data["frame_step"] = bpy.context.scene.frame_step
+
+            self.task_queue.append(task)
+            self.task_data_queue.append(task_data)
+
+    def is_empty(self):
+        return len(self.task_queue) == 0
+
+    def get_length(self):
+        return len(self.task_queue)
+
+    def update_task_data(self):
+        if not self.is_empty():
+            self.task_name = self.task_queue[0]
+            self.task_data = self.task_data_queue[0]
+            self.frame_start = self.task_data_queue[0]["frame_start"]
+            self.frame_end = self.task_data_queue[0]["frame_end"]
+            self.frame_step = self.task_data_queue[0]["frame_step"]
+
+    def get_frame_length(self):
+        length = 0
+        for task_data in self.task_data_queue:
+            length += (task_data['frame_end'] + 1 - task_data['frame_start']) // task_data['frame_step']
+        return length
+
+    def pop(self):
+        if not self.is_empty():
+            return self.task_queue.popleft(), self.task_data_queue.popleft()
+
+    def clear_queue(self):
+        self.task_queue.clear()
+        self.task_data_queue.clear()
+
+        self.task_name = None
+        self.task_data = None
+        self.frame_start = None
+        self.frame_end = None
+        self.frame_step = None

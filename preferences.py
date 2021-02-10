@@ -177,13 +177,13 @@ class RSN_Preference(bpy.types.AddonPreferences):
 
 addon_keymaps = []
 
-classes = [
+classes = (
     NodeSmtpProps,
     NodeFilePathProps,
     NodeViewerProps,
     # pref
     RSN_Preference,
-]
+)
 
 
 def add_keybind():

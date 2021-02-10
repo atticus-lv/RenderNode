@@ -29,6 +29,10 @@ class RSN_MT_PieMenu(Menu):
     bl_label = "RSN Helper"
     bl_idname = "RSN_MT_PieMenu"
 
+    @classmethod
+    def poll(cls, ntree):
+        return ntree.bl_idname == 'RenderStackNodeTree'
+
     def draw(self, context):
         layout = self.layout
         layout.scale_y = 1.25
@@ -79,11 +83,13 @@ def unregister_icon():
 
 def register():
     register_icon()
+
     bpy.utils.register_class(RSN_MT_PieMenu)
     bpy.utils.register_class(RSN_OT_SwitchTree)
 
 
 def unregister():
     unregister_icon()
+
     bpy.utils.unregister_class(RSN_MT_PieMenu)
     bpy.utils.unregister_class(RSN_OT_SwitchTree)
