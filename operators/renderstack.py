@@ -219,6 +219,9 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         self.update_process_node()
 
     def switch2task(self):
+        # update task
+        self.rsn_queue.update_task_data()
+
         scn = bpy.context.scene
         scn.render.use_file_extension = 1
 
