@@ -49,7 +49,7 @@ class RSNodeProcessorNode(RenderStackNode):
             sub.prop(self, 'green', text="")
             sub.prop(self, 'red', text="")
         # tasks
-        curr_done = (self.frame_current - self.frame_start) / (self.frame_end + 1 - self.frame_start)
+        curr_done = (self.frame_current + 1 - self.frame_start) / (self.frame_end + 1 - self.frame_start)
         task_list = self.all_tasks.split(",")
 
         layout.separator(factor=0.5)
@@ -79,7 +79,7 @@ class RSNodeProcessorNode(RenderStackNode):
                             col.separator(factor=0.5)
                             row = col.row()
                             row.scale_y = 0.3
-                            if 1 - curr_done == 0:
+                            if curr_done == 0:
                                 row.prop(self, 'red', text="")
                             else:
                                 sub = row.split(factor=curr_done, align=1)

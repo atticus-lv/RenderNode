@@ -135,7 +135,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     def init_process_node(self):
         try:
             node = self.rsn_queue.nt.nodes['Processor']
-            node.count_frames = self.rsn_queue.get_length()
+            node.count_frames = self.rsn_queue.get_frame_length()
             node.done_frames = 0
             node.all_tasks = ''
             node.all_tasks = ','.join(self.rsn_queue.task_queue)
