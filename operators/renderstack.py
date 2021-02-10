@@ -174,7 +174,6 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         logger.setLevel(int(pref.log_level))
         logger.info(f'Get all data:\n{json.dumps(node_list_dict, indent=2)}\n')
 
-
     def execute(self, context):
         context.window_manager.rsn_running_modal = True
         # set state
@@ -394,7 +393,7 @@ class RSN_OT_RenderButton(bpy.types.Operator):
             # Range
             fs = self.rsn_queue.task_data_queue[i]["frame_start"]
             fe = self.rsn_queue.task_data_queue[i]["frame_end"]
-            col4.label(text=f'{fs} → {fe} ({fs - fe + 1})')
+            col4.label(text=f'{fs} → {fe} ({fe - fs + 1})')
             # task_data_list
             d = json.dumps(self.rsn_queue.task_data_queue[i], indent=2)
             col5.operator('rsn.show_task_details', icon='INFO', text='').task_data = d
