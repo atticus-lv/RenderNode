@@ -50,8 +50,11 @@ class RSNodeObjectModifierNode(RenderStackNode):
                     data_path = self.data_path.split('.')[-1]
                     try:
                         modifier = self.object.modifiers[name[1:-1]]
-                        if isinstance(modifier, bpy.types.NodesModifier):
-                            layout.label(text='Not support Geometry Node Modify yet')
+                        try:
+                            if isinstance(modifier, bpy.types.NodesModifier):
+                                layout.label(text='Not support Geometry Node Modify yet')
+                        except:
+                            pass
                         if hasattr(modifier, data_path):
                             d_type = type(getattr(modifier, data_path, None))
                             if d_type == int:

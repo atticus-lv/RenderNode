@@ -83,7 +83,10 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     bl_idname = "rsn.render_stack_task"
     bl_label = "Render Stack"
 
+    # get date from root
     render_list_node_name: StringProperty()
+
+    # action after render
     open_dir: BoolProperty(name='Open folder after render', default=True)
     clean_path: BoolProperty(name='clean path after rendering', default=True)
     render_display_type: EnumProperty(items=[
@@ -92,7 +95,6 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         ('AREA', 'Image Editor', ''),
         ('WINDOW', 'New Window', '')],
         default='WINDOW')
-
     ori_render_display_type = None
 
     # render state
@@ -306,7 +308,10 @@ class RSN_OT_RenderButton(bpy.types.Operator):
     bl_idname = "rsn.render_button"
     bl_label = "Render"
 
+    # get date from root
     render_list_node_name: StringProperty()
+
+    # action after render
     open_dir: BoolProperty(name='Open folder after render', default=True)
     clean_path: BoolProperty(name='Empty filepath after render', default=True)
     render_display_type: EnumProperty(items=[

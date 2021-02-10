@@ -9,11 +9,13 @@ import os
 from functools import wraps
 import re
 
+# init logger
 LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
 logging.basicConfig(format=LOG_FORMAT)
 logger = logging.getLogger('mylogger')
 
 
+# get the update time
 def timefn(fn):
     @wraps(fn)
     def measure_time(*args, **kwargs):
@@ -51,8 +53,15 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
     nt: None
     task_data = None
 
+    def execute(self, context):
+        """update_parm method"""
+        self.data_changes()
+        return {'FINISHED'}
+
     def reroute(self, node):
+        """help to ignore the reroute node"""
         def is_task_node(node):
+            """return the task_node only"""
             if node.bl_idname == "RSNodeTaskNode":
                 return node.name
 
@@ -69,18 +78,25 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         except Exception:
             pass
 
+    # first get task data
     def get_data(self):
+        """Viewer mode and render mode.Prevent the python state error"""
+
         if not self.use_render_mode:
+            # read the node tree from context space_data
             rsn_tree = RSN_NodeTree()
             self.nt = rsn_tree.get_context_tree()
         else:
+            #read the node tree from window_manager
             rsn_tree = RSN_NodeTree()
             self.nt = rsn_tree.get_wm_node_tree()
 
         rsn_task = RSN_Nodes(node_tree=self.nt,
                              root_node_name=self.view_mode_handler)
+        #get the task node and the sub node, return dict
         node_list_dict = rsn_task.get_sub_node_from_task(task_name=self.view_mode_handler,
                                                          return_dict=True)
+        #if the task have sub node, get the data of them
         if node_list_dict:
             self.task_data = rsn_task.get_task_data(task_name=self.view_mode_handler,
                                                     task_dict=node_list_dict)
@@ -90,6 +106,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             logger.debug(f'Not task is linked to the viewer')
 
     def update_color_management(self):
+        """may change in 2.93 version"""
         if 'ev' in self.task_data:
             vs = bpy.context.scene.view_settings
             compare(vs, 'exposure', self.task_data['ev'])
@@ -107,6 +124,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         compare(rn, 'filepath', os.path.join(dir, postfix))
 
     def make_path(self):
+        """only save files will work"""
         task = self.task_data
         if 'path' in task and task['path'] != '':
             if not task['use_blend_file_path']:
@@ -125,6 +143,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             return os.path.dirname(bpy.data.filepath) + "\\"
 
     def get_postfix(self):
+        """path expression"""
         scn = bpy.context.scene
         cam = scn.camera
         pref = get_pref()
@@ -170,6 +189,9 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         return postfix
 
     def update_view_layer_passes(self):
+        """each view layer will get a file output node
+        but I recommend to save an Multilayer exr file instead of use this node
+        """
         if 'view_layer_passes' in self.task_data:
             for node_name, dict in self.task_data['view_layer_passes'].items():
                 try:
@@ -375,47 +397,42 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             cam = bpy.data.objects[self.task_data['camera']]
             compare(bpy.context.scene, 'camera', cam)
 
-    def execute(self, context):
-        @timefn
-        def data_changes():
-            pref = get_pref()
-            logger.setLevel(int(pref.log_level))
+    @timefn
+    def data_changes(self):
+        pref = get_pref()
+        logger.setLevel(int(pref.log_level))
 
-            self.get_data()
+        self.get_data()
 
-            if self.task_data:
-                self.update_camera()
-                self.update_color_management()
-                self.update_res()
-                self.update_render_engine()
+        if self.task_data:
+            self.update_camera()
+            self.update_color_management()
+            self.update_res()
+            self.update_render_engine()
 
-                self.update_object_display()
-                self.update_object_psr()
-                self.update_object_data()
-                self.update_object_material()
-                self.update_object_modifier()
+            self.update_object_display()
+            self.update_object_psr()
+            self.update_object_data()
+            self.update_object_material()
+            self.update_object_modifier()
 
-                self.update_frame_range()
-                self.updata_view_layer()
+            self.update_frame_range()
+            self.updata_view_layer()
 
-                self.update_image_format()
-                self.update_slots()
+            self.update_image_format()
+            self.update_slots()
 
-                self.update_world()
-                self.ssm_light_studio()
+            self.update_world()
+            self.ssm_light_studio()
 
-                if pref.node_viewer.update_scripts or self.use_render_mode:
-                    self.updata_scripts()
-                if pref.node_viewer.update_path or self.use_render_mode:
-                    self.update_path()
-                if pref.node_viewer.update_view_layer_passes or self.use_render_mode:
-                    self.update_view_layer_passes()
-                if self.use_render_mode:
-                    self.send_email()
-
-        data_changes()
-
-        return {'FINISHED'}
+            if pref.node_viewer.update_scripts or self.use_render_mode:
+                self.updata_scripts()
+            if pref.node_viewer.update_path or self.use_render_mode:
+                self.update_path()
+            if pref.node_viewer.update_view_layer_passes or self.use_render_mode:
+                self.update_view_layer_passes()
+            if self.use_render_mode:
+                self.send_email()
 
 
 def register():
