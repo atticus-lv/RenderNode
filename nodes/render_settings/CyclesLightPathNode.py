@@ -33,6 +33,19 @@ class RSNodeCyclesLightPathNode(RenderStackNode):
         col.prop(self, "transmission_bounces", text="Transmission")
         col.prop(self, "volume_bounces", text="Volume")
 
+    def get_data(self):
+        task_data = {}
+        task_data['cycles_light_path'] = {
+            "max_bounces"            : self.max_bounces,
+            "diffuse_bounces"        : self.diffuse_bounces,
+            "glossy_bounces"         : self.glossy_bounces,
+            "transparent_max_bounces": self.transparent_max_bounces,
+            "transmission_bounces"   : self.transmission_bounces,
+            "volume_bounces"         : self.volume_bounces,
+        }
+
+        return task_data
+
 
 def register():
     bpy.utils.register_class(RSNodeCyclesLightPathNode)

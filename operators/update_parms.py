@@ -60,6 +60,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
 
     def reroute(self, node):
         """help to ignore the reroute node"""
+
         def is_task_node(node):
             """return the task_node only"""
             if node.bl_idname == "RSNodeTaskNode":
@@ -87,16 +88,16 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             rsn_tree = RSN_NodeTree()
             self.nt = rsn_tree.get_context_tree()
         else:
-            #read the node tree from window_manager
+            # read the node tree from window_manager
             rsn_tree = RSN_NodeTree()
             self.nt = rsn_tree.get_wm_node_tree()
 
         rsn_task = RSN_Nodes(node_tree=self.nt,
                              root_node_name=self.view_mode_handler)
-        #get the task node and the sub node, return dict
+        # get the task node and the sub node, return dict
         node_list_dict = rsn_task.get_children_from_task(task_name=self.view_mode_handler,
                                                          return_dict=True)
-        #if the task have sub node, get the data of them
+        # if the task have sub node, get the data of them
         if node_list_dict:
             self.task_data = rsn_task.get_task_data(task_name=self.view_mode_handler,
                                                     task_dict=node_list_dict)
@@ -339,6 +340,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             compare(scn, 'frame_start', self.task_data['frame_step'])
 
     def update_render_engine(self):
+        # engine settings
         if 'engine' in self.task_data:
             if self.task_data['engine'] in {'CYCLES', 'BLENDER_EEVEE', 'BLENDER_WORKBENCH'}:
                 compare(bpy.context.scene.render, 'engine', self.task_data['engine'])
@@ -348,13 +350,13 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             elif self.task_data['engine'] == 'LUXCORE':
                 if 'BlendLuxCore' in bpy.context.preferences.addons:
                     compare(bpy.context.scene.render, 'engine', self.task_data['engine'])
-
+        # samples
         if 'samples' in self.task_data:
             if self.task_data['engine'] == "BLENDER_EEVEE":
                 compare(bpy.context.scene.eevee, 'taa_render_samples', self.task_data['samples'])
             elif self.task_data['engine'] == "CYCLES":
                 compare(bpy.context.scene.cycles, 'samples', self.task_data['samples'])
-
+        # luxcore
         if 'luxcore_half' in self.task_data and 'BlendLuxCore' in bpy.context.preferences.addons:
             if not bpy.context.scene.luxcore.halt.enable:
                 bpy.context.scene.luxcore.halt.enable = True
@@ -380,10 +382,14 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                     bpy.context.scene.luxcore.halt.use_time = True
 
                 compare(bpy.context.scene.luxcore.halt, 'time', self.task_data['luxcore_half']['time'])
-
+        # octane
         elif 'octane' in self.task_data and 'octane' in bpy.context.preferences.addons:
             for key, value in self.task_data['octane'].items():
                 compare(bpy.context.scene.octane, key, value)
+        # CYCLES
+        if 'cycles_light_path' in self.task_data:
+            for key, value in self.task_data['cycles_light_path'].items():
+                compare(bpy.context.scene.cycles, key, value)
 
     def update_res(self):
         if 'res_x' in self.task_data:
