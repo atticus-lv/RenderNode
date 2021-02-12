@@ -46,12 +46,12 @@ class RSNodeOctaneRenderSettingsNode(RenderStackNode):
     adaptive_sampling: BoolProperty(name='Adaptive sampling', default=False, update=update_node)
     adaptive_noise_threshold: FloatProperty(name='Noise threshold', default=0.03, min=0, update=update_node)
     adaptive_min_samples: IntProperty(name='Min. adaptive samples', default=256, min=2, update=update_node)
-    adaptive_group_pixels: EnumProperty(name='GImode',
+    adaptive_group_pixels: EnumProperty(name='Group pixels',
                                         items=[
                                             ('1', 'None', ''),
                                             ('2', '2x2', ''),
                                             ('4', '4x4', ''), ],
-                                        default='2')
+                                        default='2', update=update_node)
     adaptive_expected_exposure: FloatProperty(name='Expected exposure', default=0, precision=4, update=update_node)
 
     # sampling
