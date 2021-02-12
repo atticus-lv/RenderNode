@@ -80,6 +80,7 @@ class RSNodeOctaneRenderSettingsNode(RenderStackNode):
             box.prop(self, 'adaptive_noise_threshold')
             box.prop(self, 'adaptive_min_samples')
             box.prop(self, 'adaptive_group_pixels')
+            box.prop(self, 'adaptive_expected_exposure')
 
         col.separator()
         box = col.box().split().column(align=1)
