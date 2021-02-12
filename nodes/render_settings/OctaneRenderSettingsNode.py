@@ -52,12 +52,12 @@ class RSNodeOctaneRenderSettingsNode(RenderStackNode):
                                             ('2', '2x2', ''),
                                             ('4', '4x4', ''), ],
                                         default='2')
-    adaptive_expected_exposure: FloatProperty(name='Expected exposure', default=0, precision=4)
+    adaptive_expected_exposure: FloatProperty(name='Expected exposure', default=0, precision=4, update=update_node)
 
     # sampling
     path_term_power: FloatProperty(name='Path term. power', min=0.0, default=0.3, update=update_node)
     coherent_ratio: FloatProperty(name='Coherent ratio', min=0.0, default=0, update=update_node)
-    static_noise: BoolProperty(name='Static noise', default=False)
+    static_noise: BoolProperty(name='Static noise', default=False, update=update_node)
     parallel_samples: IntProperty(name='Parallel samples', default=32, min=1, max=32, update=update_node)
     max_tile_samples: IntProperty(name='Max. tile samples', default=64, min=1, max=64, update=update_node)
 
@@ -105,7 +105,7 @@ class RSNodeOctaneRenderSettingsNode(RenderStackNode):
                 'adaptive_sampling'         : self.adaptive_sampling,
                 'adaptive_noise_threshold'  : self.adaptive_noise_threshold,
                 'adaptive_group_pixels'     : self.adaptive_group_pixels,
-                'adaptive_expected_exposure': self.adaptive_min_samples,
+                'adaptive_expected_exposure': self.adaptive_expected_exposure,
                 # sampling
                 'path_term_power'           : self.path_term_power,
                 'coherent_ratio'            : self.coherent_ratio,
