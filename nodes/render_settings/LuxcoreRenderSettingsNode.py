@@ -34,11 +34,13 @@ class RSNodeLuxcoreRenderSettingsNode(RenderStackNode):
 
     def get_data(self):
         task_data = {}
-        task_data['engine'] = 'LUXCORE'
-        task_data['luxcore_half'] = {'use_samples': self.use_samples,
-                                     'samples'    : self.samples,
-                                     'use_time'   : self.use_time,
-                                     'time'       : self.time}
+        if 'BlendLuxCore' in bpy.context.preferences.addons:
+            task_data['engine'] = 'LUXCORE'
+            task_data['luxcore_half'] = {'use_samples': self.use_samples,
+                                         'samples'    : self.samples,
+                                         'use_time'   : self.use_time,
+                                         'time'       : self.time}
+        self.set_warning()
         return task_data
 
 

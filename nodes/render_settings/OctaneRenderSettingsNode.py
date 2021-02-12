@@ -92,26 +92,28 @@ class RSNodeOctaneRenderSettingsNode(RenderStackNode):
 
     def get_data(self):
         task_data = {}
-        task_data['engine'] = "octane"
-        task_data['octane'] = {
-            # quality
-            'max_samples'               : self.max_samples,
-            'max_diffuse_depth'         : self.max_diffuse_depth,
-            'max_glossy_depth'          : self.max_glossy_depth,
-            'max_scatter_depth'         : self.max_scatter_depth,
-            # adaptive_sampling
-            'adaptive_sampling'         : self.adaptive_sampling,
-            'adaptive_noise_threshold'  : self.adaptive_noise_threshold,
-            'adaptive_group_pixels'     : self.adaptive_min_samples,
-            'adaptive_expected_exposure': self.adaptive_min_samples,
-            # sampling
-            'path_term_power'           : self.path_term_power,
-            'coherent_ratio'            : self.coherent_ratio,
-            'static_noise'              : self.static_noise,
-            'parallel_samples'          : self.parallel_samples,
-            'max_tile_samples'          : self.max_tile_samples,
-        }
-
+        if 'octane' in bpy.context.preferences.addons:
+            task_data['engine'] = "octane"
+            task_data['octane'] = {
+                # quality
+                'max_samples'               : self.max_samples,
+                'max_diffuse_depth'         : self.max_diffuse_depth,
+                'max_glossy_depth'          : self.max_glossy_depth,
+                'max_scatter_depth'         : self.max_scatter_depth,
+                # adaptive_sampling
+                'adaptive_sampling'         : self.adaptive_sampling,
+                'adaptive_noise_threshold'  : self.adaptive_noise_threshold,
+                'adaptive_group_pixels'     : self.adaptive_min_samples,
+                'adaptive_expected_exposure': self.adaptive_min_samples,
+                # sampling
+                'path_term_power'           : self.path_term_power,
+                'coherent_ratio'            : self.coherent_ratio,
+                'static_noise'              : self.static_noise,
+                'parallel_samples'          : self.parallel_samples,
+                'max_tile_samples'          : self.max_tile_samples,
+            }
+        else:
+            self.set_warning()
         return task_data
 
 

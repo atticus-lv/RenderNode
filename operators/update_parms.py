@@ -345,11 +345,9 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             if self.task_data['engine'] in {'CYCLES', 'BLENDER_EEVEE', 'BLENDER_WORKBENCH'}:
                 compare(bpy.context.scene.render, 'engine', self.task_data['engine'])
             elif self.task_data['engine'] == 'octane':
-                if 'octane' in bpy.context.preferences.addons:
-                    compare(bpy.context.scene.render, 'engine', self.task_data['engine'])
+                compare(bpy.context.scene.render, 'engine', self.task_data['engine'])
             elif self.task_data['engine'] == 'LUXCORE':
-                if 'BlendLuxCore' in bpy.context.preferences.addons:
-                    compare(bpy.context.scene.render, 'engine', self.task_data['engine'])
+                compare(bpy.context.scene.render, 'engine', self.task_data['engine'])
         # samples
         if 'samples' in self.task_data:
             if self.task_data['engine'] == "BLENDER_EEVEE":
