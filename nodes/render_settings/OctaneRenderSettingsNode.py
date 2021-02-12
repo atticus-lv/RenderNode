@@ -79,6 +79,7 @@ class RSNodeOctaneRenderSettingsNode(RenderStackNode):
         if self.adaptive_sampling:
             box.prop(self, 'adaptive_noise_threshold')
             box.prop(self, 'adaptive_min_samples')
+            box.prop(self, 'adaptive_group_pixels')
 
         col.separator()
         box = col.box().split().column(align=1)
@@ -103,7 +104,7 @@ class RSNodeOctaneRenderSettingsNode(RenderStackNode):
                 # adaptive_sampling
                 'adaptive_sampling'         : self.adaptive_sampling,
                 'adaptive_noise_threshold'  : self.adaptive_noise_threshold,
-                'adaptive_group_pixels'     : self.adaptive_min_samples,
+                'adaptive_group_pixels'     : self.adaptive_group_pixels,
                 'adaptive_expected_exposure': self.adaptive_min_samples,
                 # sampling
                 'path_term_power'           : self.path_term_power,
