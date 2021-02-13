@@ -22,7 +22,7 @@ class RSNodeImageFormatInputNode(RenderStackNode):
         default='OPEN_EXR', update=update_node)
 
     color_mode: EnumProperty(
-        name='Color Mode',
+        name='Color',
         items=[('BW', 'BW', ''), ('RGB', 'RGB', ''), ('RGBA', 'RGBA', '')],
         default='RGBA', update=update_node)
 
@@ -30,24 +30,38 @@ class RSNodeImageFormatInputNode(RenderStackNode):
         name='Color Depth',
         items=[('8', '8', ''), ('16', '16', ''), ('32', '32', '')],
         default='16', update=update_node)
-
+    # exr file
     use_preview: BoolProperty(name='Save Preview', default=False)
-    transparent: BoolProperty(default=False, name="Transparent(Built in Engines Only)", update=update_node)
+    # jpg file
+    quality: IntProperty(name='Quality', default=90, min=0, max=100,subtype='PERCENTAGE')
+    # png file
+    compression: IntProperty(name="Compression", default=15, min=0, max=100,subtype='PERCENTAGE')
+
+    transparent: BoolProperty(default=False, name="Transparent", update=update_node)
 
     def init(self, context):
         self.outputs.new('RSNodeSocketOutputSettings', "Output Settings")
+        self.width = 200
 
     def draw_buttons(self, context, layout):
+        layout.use_property_decorate = 0
+        layout.use_property_split = 1
         col = layout.column(align=1)
-        col.prop(self, 'file_format', text='')
-        col.prop(self, 'color_mode', text='')
-        col.prop(self, 'color_depth', text='')
-        col.prop(self, 'transparent')
-        if self.file_format in {"OPEN_EXR_MULTILAYER,OPEN_EXR"}:
+        col.prop(self, 'file_format')
+        col.prop(self, 'color_mode')
+        col.prop(self, 'color_depth')
+
+        if self.file_format in {'OPEN_EXR_MULTILAYER', 'OPEN_EXR'}:
             col.prop(self, 'use_preview')
+        if self.file_format == "PNG":
+            col.prop(self, 'compression',slider= 1)
+        if self.file_format == "JPEG":
+            col.prop(self, 'quality',slider= 1)
+
+        col.prop(self, 'transparent')
 
     def get_data(self):
-        task_data = {}
+        task_data_obj = {}
         if self.file_format == "JPEG":
             if self.color_mode == "RGBA":
                 self.color_mode = "RGB"
@@ -62,12 +76,17 @@ class RSNodeImageFormatInputNode(RenderStackNode):
             if self.color_depth == "8":
                 self.color_depth = "16"
 
+        task_data = {}
         task_data['color_mode'] = self.color_mode
         task_data['color_depth'] = self.color_depth
         task_data['file_format'] = self.file_format
+        task_data['compression'] = self.compression
+        task_data['quality'] = self.quality
         task_data['use_preview'] = self.use_preview
         task_data['transparent'] = self.transparent
-        return task_data
+
+        task_data_obj['image_settings'] = task_data
+        return task_data_obj
 
 
 def register():

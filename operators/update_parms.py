@@ -325,13 +325,16 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                     self.warning_node_color(node_name)
 
     def update_image_format(self):
-        if 'color_mode' in self.task_data:
+        if 'image_settings' in self.task_data:
             rn = bpy.context.scene.render
-            compare(rn.image_settings, 'file_format', self.task_data['file_format'])
-            compare(rn.image_settings, 'color_mode', self.task_data['color_mode'])
-            compare(rn.image_settings, 'color_depth', self.task_data['color_depth'])
-            compare(rn.image_settings, 'use_preview', self.task_data['use_preview'])
-            compare(rn, 'film_transparent', self.task_data['transparent'])
+            image_settings = self.task_data['image_settings']
+            compare(rn.image_settings, 'file_format', image_settings['file_format'])
+            compare(rn.image_settings, 'color_mode', image_settings['color_mode'])
+            compare(rn.image_settings, 'color_depth', image_settings['color_depth'])
+            compare(rn.image_settings, 'use_preview', image_settings['use_preview'])
+            compare(rn.image_settings, 'compression', image_settings['compression'])
+            compare(rn.image_settings, 'quality', image_settings['quality'])
+            compare(rn, 'film_transparent', image_settings['transparent'])
 
     def update_frame_range(self):
         if "frame_start" in self.task_data:
