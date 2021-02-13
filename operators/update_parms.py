@@ -36,8 +36,8 @@ def compare(obj: object, attr: str, val):
         if getattr(obj, attr) != val:
             setattr(obj, attr, val)
             logger.debug(f'Attribute "{attr}" SET “{val}”')
-    except AttributeError:
-        pass
+    except AttributeError as e:
+        logger.info(e)
 
 
 class RSN_OT_UpdateParms(bpy.types.Operator):
@@ -327,10 +327,11 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
     def update_image_format(self):
         if 'color_mode' in self.task_data:
             rn = bpy.context.scene.render
+            compare(rn.image_settings, 'file_format', self.task_data['file_format'])
             compare(rn.image_settings, 'color_mode', self.task_data['color_mode'])
             compare(rn.image_settings, 'color_depth', self.task_data['color_depth'])
-            compare(rn.image_settings, 'file_format', self.task_data['file_format'])
-            compare(rn, film_transparent, self.task_data['transparent'])
+            compare(rn.image_settings, 'use_preview', self.task_data['use_preview'])
+            compare(rn, 'film_transparent', self.task_data['transparent'])
 
     def update_frame_range(self):
         if "frame_start" in self.task_data:
