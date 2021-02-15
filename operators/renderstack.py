@@ -89,7 +89,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
             node = self.rsn_queue.nt.nodes['Processor']
             node.done_frames += 1
             node.curr_task = self.rsn_queue.task_name
-            node.task_data = json.dumps(self.rsn_queue.task_data, indent=2)
+            node.task_data = json.dumps(self.rsn_queue.task_data, indent=2,ensure_ascii=False)
 
             node.frame_start = self.rsn_queue.frame_start
             node.frame_end = self.rsn_queue.frame_end
@@ -112,7 +112,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     def init_logger(self, node_list_dict):
         pref = get_pref()
         logger.setLevel(int(pref.log_level))
-        logger.info(f'Get all data:\n{json.dumps(node_list_dict, indent=2)}\n')
+        logger.info(f'Get all data:\n{json.dumps(node_list_dict, indent=2,ensure_ascii=False)}\n')
 
     def execute(self, context):
         context.window_manager.rsn_running_modal = True
@@ -336,7 +336,7 @@ class RSN_OT_RenderButton(bpy.types.Operator):
             fe = self.rsn_queue.task_data_queue[i]["frame_end"]
             col4.label(text=f'{fs} → {fe} ({fe - fs + 1})')
             # task_data_list
-            d = json.dumps(self.rsn_queue.task_data_queue[i], indent=2)
+            d = json.dumps(self.rsn_queue.task_data_queue[i], indent=2,ensure_ascii=False)
             col5.operator('rsn.show_task_details', icon='INFO', text='').task_data = d
 
         self.render_options(context)
