@@ -13,8 +13,8 @@ class RSNodeFilePathInputNode(RenderStackNode):
     bl_idname = "RSNodeFilePathInputNode"
     bl_label = "File Path"
 
-    use_blend_file_path: BoolProperty(name="Save in file addon_dir",
-                                      description='Save in blend file addon_dir',
+    use_blend_file_path: BoolProperty(name="Save in file folder",
+                                      description='Save in blend file folder',
                                       default=True, update=update_node)
     path: StringProperty(default='', update=update_node)
     path_format: StringProperty(default="$blend_render/$label$camera",
