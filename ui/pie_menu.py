@@ -30,8 +30,9 @@ class RSN_MT_PieMenu(Menu):
     bl_idname = "RSN_MT_PieMenu"
 
     @classmethod
-    def poll(cls, ntree):
-        return ntree.bl_idname == 'RenderStackNodeTree'
+    def poll(cls, context):
+        if context.space_data.node_tree:
+            return context.space_data.node_tree.bl_idname == 'RenderStackNodeTree'
 
     def draw(self, context):
         layout = self.layout
