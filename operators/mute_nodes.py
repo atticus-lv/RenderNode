@@ -15,20 +15,12 @@ class RSN_OT_MuteNodes(bpy.types.Operator):
     def execute(self, context):
         if self.node_name == '':
             nodes = context.selected_nodes
-            if len(nodes) > 0 and nodes[0].mute is False:
-                for node in nodes:
-                    if node.type != "rsn.mute_nodes": node.mute = 1
+            for node in nodes:
+                node.mute = 0 if node.mute else 1
 
-            elif len(nodes) > 0 and nodes[0].mute is True:
-                for node in nodes:
-                    if node.type != "rsn.mute_nodes": node.mute = 0
         else:
             node = bpy.context.space_data.edit_tree.nodes[self.node_name]
             node.mute = 0 if node.mute else 1
-
-        # context.space_data.node_tree.update_tag()
-        # dg = context.evaluated_depsgraph_get()
-        # dg.update()
 
         return {'FINISHED'}
 
