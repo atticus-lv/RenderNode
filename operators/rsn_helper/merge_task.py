@@ -2,6 +2,9 @@ import bpy
 import numpy
 from bpy.props import IntProperty
 
+import time
+
+
 class RSN_OT_MergeSelectedNodes(bpy.types.Operator):
     """Merge selected settings or tasks"""
     bl_idname = 'rsn.merge_selected_nodes'
@@ -15,7 +18,7 @@ class RSN_OT_MergeSelectedNodes(bpy.types.Operator):
         nt = context.space_data.edit_tree
 
         tasks = [{'node': node, 'loc_y': int(node.location[1])} for node in context.selected_nodes if
-                 node.bl_idname in {'RSNodeTaskNode','RSNodeSettingsMergeNode'}]
+                 node.bl_idname in {'RSNodeTaskNode', 'RSNodeSettingsMergeNode'}]
 
         nodes = [{'node': node, 'loc_y': int(node.location[1])} for node in context.selected_nodes if
                  node.bl_idname not in {'RSNodeTaskNode', 'RSNodeProcessorNode', 'RSNodeRenderListNode',
@@ -32,17 +35,14 @@ class RSN_OT_MergeSelectedNodes(bpy.types.Operator):
         else:
             need_to_sort = tasks
 
-        list_node = nt.nodes.new('RSNodeSettingsMergeNode')
         loc_x = numpy.mean([node.location[0] for node in need_to_sort])
         loc_y = numpy.mean([node.location[1] for node in need_to_sort])
-        list_node.location = loc_x + 200, loc_y
+
+        list_node = nt.nodes.new('RSNodeSettingsMergeNode')
+        list_node.location = loc_x + 250, loc_y
 
         for i, node in enumerate(need_to_sort):
-            if i < 2:
-                nt.links.new(node.outputs[0], list_node.inputs[i])
-            else:
-                list_node.inputs.new('RSNodeSocketTaskSettings', "Input")
-                nt.links.new(node.outputs[0], list_node.inputs[i])
+            nt.links.new(node.outputs[0], list_node.inputs[i])
 
         return {"FINISHED"}
 

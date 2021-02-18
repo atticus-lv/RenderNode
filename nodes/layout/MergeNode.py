@@ -9,17 +9,10 @@ def active_version(self, context):
     elif self.active < 1:
         self.active = 1
 
-    for input in self.inputs:
+    for i, input in enumerate(self.inputs):
         if input.is_linked:
             node = input.links[0].from_node
-            node.mute = 1
-
-    if self.inputs[self.active - 1].is_linked:
-        node = self.inputs[self.active - 1].links[0].from_node
-        node.mute = 0
-        nt = context.space_data.edit_tree
-        nt.links.remove(self.inputs[self.active - 1].links[0])
-        nt.links.new(node.outputs[0], self.inputs[self.active - 1])
+            node.mute = 0 if self.active == i + 1 else 1
 
     dg = context.evaluated_depsgraph_get()
     dg.update()
@@ -40,42 +33,32 @@ class RSNodeSettingsMergeNode(RenderStackNode):
 
     def init(self, context):
         self.inputs.new('RSNodeSocketTaskSettings', "Input")
-        self.inputs.new('RSNodeSocketTaskSettings', "Input")
         self.outputs.new('RSNodeSocketTaskSettings', "Output")
 
     def draw_buttons(self, context, layout):
         if self.node_type in {'MERGE', 'VERSION'}:
             if self.node_type == 'VERSION':
                 layout.prop(self, 'active')
-            try:
-                if hasattr(bpy.context.space_data, 'edit_tree'):
-                    if bpy.context.space_data.edit_tree.nodes.active.name == self.name:
-                        row = layout.row(align=1)
-                        a = row.operator("rsnode.edit_input", icon='ADD', text='Add')
-                        a.socket_type = 'RSNodeSocketTaskSettings'
-                        a.socket_name = "Input"
-                        r = row.operator("rsnode.edit_input", icon='REMOVE', text='Del')
-                        r.remove = 1
-
-            except Exception:
-                pass
-
         else:
             layout.operator('rsn.switch_setting').node = self.name
 
     def update(self):
-        if self.node_type == 'VERSION' and self.name in bpy.context.window_manager.rsn_node_list.split(','):
-            for i, input in enumerate(self.inputs):
-                if input.is_linked:
-                    node = input.links[0].from_node
-                    if i == self.active - 1:
-                        node.mute = 0
+        self.auto_update_inputs()
+
+    def auto_update_inputs(self):
+        if self.node_type != 'SWITCH':
+            i = 0
+            for input in self.inputs:
+                if not input.is_linked:
+                    # keep one input for links with py commands
+                    if i == 0:
+                        i += 1
                     else:
-                        node.mute = 1
+                        self.inputs.remove(input)
+            # auto add inputs
+            if i != 1:
+                self.inputs.new('RSNodeSocketTaskSettings', "Input")
 
-
-    def get_data(self):
-        pass
 
 def register():
     bpy.utils.register_class(RSNodeSettingsMergeNode)

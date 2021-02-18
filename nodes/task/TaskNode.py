@@ -9,28 +9,29 @@ class RSNodeTaskNode(RenderStackNode):
 
     def init(self, context):
         self.inputs.new('RSNodeSocketTaskSettings', "Settings")
-        self.inputs.new('RSNodeSocketTaskSettings', "Settings")
-        self.inputs.new('RSNodeSocketTaskSettings', "Settings")
         self.outputs.new('RSNodeSocketRenderList', "Task")
-        self.label = 'task1'
+        self.label = self.name
 
     def draw_buttons(self, context, layout):
         layout.use_property_split = 1
         layout.use_property_decorate = 0
         layout.prop(self, 'label', text="Label")
 
-        try:
-            if hasattr(bpy.context.space_data, 'edit_tree'):
-                if bpy.context.space_data.edit_tree.nodes.active.name == self.name:
-                    row = layout.row(align=1)
-                    a = row.operator("rsnode.edit_input", icon='ADD', text='Add')
-                    a.socket_type = 'RSNodeSocketTaskSettings'
-                    a.socket_name = "Settings"
-                    r = row.operator("rsnode.edit_input", icon='REMOVE', text='Del')
-                    r.remove = 1
+    def update(self):
+        self.auto_update_inputs()
 
-        except Exception:
-            pass
+    def auto_update_inputs(self):
+        i = 0
+        for input in self.inputs:
+            if not input.is_linked:
+                # keep one input for links with py commands
+                if i == 0:
+                    i += 1
+                else:
+                    self.inputs.remove(input)
+        # auto add inputs
+        if i != 1:
+            self.inputs.new('RSNodeSocketTaskSettings', "Settings")
 
 
 def register():

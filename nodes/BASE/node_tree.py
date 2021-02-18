@@ -45,10 +45,20 @@ class RenderStackNode(bpy.types.Node):
         print("RSN removed node", self.name)
 
     def update(self):
-        """Only the viewer node have this method"""
+        """
+        The viewer node have this method
+        Nodes that need add/remove inputs with have this method
+        """
         pass
 
     # RSN method
+    def auto_update_inputs(self):
+        """add or remove inputs"""
+        if self.bl_idname == 'RSNodeTaskNode':
+            pass
+        elif self.bl_idname == 'RSNodeRenderListNode':
+            pass
+
     def update_parms(self):
         if bpy.context.window_manager.rsn_node_list != '':
             node_list = bpy.context.window_manager.rsn_node_list.split(',')
@@ -72,7 +82,7 @@ class RenderStackNode(bpy.types.Node):
         """For get self date into rsn tree method"""
         pass
 
-    def apply_data(self,task_data):
+    def apply_data(self, task_data):
         """apply self data with update parm ops"""
         pass
 

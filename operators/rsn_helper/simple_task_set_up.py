@@ -24,13 +24,13 @@ class RSN_OT_SimpleTask(bpy.types.Operator):
         # range = nt.nodes.new('RSNodeFrameRangeInputNode')
         merge_output = nt.nodes.new('RSNodeSettingsMergeNode')
 
-        task.location = (x, y)
-        cam.location = (x - 200, y)
-        eevee.location = (x - 200, y - 100)
-        path.location = (x - 450, y - 150)
-        res.location = (x - 450, y - 300)
+        task.location = (x + 10, y)
+        cam.location = (x - 200, y + 50)
+        eevee.location = (x - 200, y - 50)
+        path.location = (x - 500, y - 100)
+        res.location = (x - 450, y - 250)
         # range.location = (x - 450, y - 380)
-        merge_output.location = (x - 200, y - 200)
+        merge_output.location = (x - 200, y - 150)
 
         for node in nt.nodes:
             node.select = 0
