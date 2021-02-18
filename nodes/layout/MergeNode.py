@@ -58,6 +58,9 @@ class RSNodeSettingsMergeNode(RenderStackNode):
             # auto add inputs
             if i != 1:
                 self.inputs.new('RSNodeSocketTaskSettings', "Input")
+        else:
+            if len(self.inputs) < 2:
+                self.inputs.new('RSNodeSocketTaskSettings', "Input")
 
 
 def register():
