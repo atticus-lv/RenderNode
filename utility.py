@@ -3,6 +3,7 @@ import json
 from itertools import groupby
 from collections import deque
 from mathutils import Color, Vector
+from functools import lru_cache
 
 
 def source_attr(src_obj, scr_data_path):
@@ -71,6 +72,7 @@ class RSN_Nodes:
                 if len(node_list) == 0 or (len(node_list) != 0 and node.name != node_list[-1]):
                     node_list.append(node.name)
 
+        @lru_cache(maxsize=None)
         def get_sub_node(node):
             """Recursion"""
             for input in node.inputs:
