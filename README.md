@@ -11,7 +11,7 @@
 | Render queue     | render animation and still frame in one queue                |
 | Render sheet     | give a render confirm sheet before the final render          |
 | Processor bar    | detail processor bar through the whole render                |
-| Viewport update  | apply all the changes to viewport in 2ms                     |
+| Viewport update  | apply all the changes to viewport                            |
 | Custom Overwrite | scripts node and object node (data path)                     |
 | Path Expression  | use $ to generate formated name                              |
 | Version Control  | with version node you can have mutiple version setting in one task |
@@ -37,3 +37,7 @@ Then clone the repository
 
 `git clone https://github.com/atticus-lv/RenderStackNode.git`
 
+#### Support me
+blendermarket: https://blendermarket.com/products/renderstacknode
+
+alipay: 1029910278@qq.com
