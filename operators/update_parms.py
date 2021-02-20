@@ -111,9 +111,12 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         if 'ev' in self.task_data:
             vs = bpy.context.scene.view_settings
             compare(vs, 'exposure', self.task_data['ev'])
-            compare(vs, 'view_transform', self.task_data['view_transform'])
-            compare(vs, 'look', self.task_data['look'])
             compare(vs, 'gamma', self.task_data['gamma'])
+            try:
+                compare(vs, 'view_transform', self.task_data['view_transform'])
+                compare(vs, 'look', self.task_data['look'])
+            except: # ocio change in 2.93
+                pass
 
     def update_path(self):
         dir = self.make_path()
