@@ -134,6 +134,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             if not task['use_blend_file_path']:
                 directory_path = os.path.dirname(task['path'])
             else:
+                # not fill in the custom path
                 directory_path = os.path.dirname(bpy.data.filepath)
             try:
                 if not os.path.exists(directory_path):
@@ -144,7 +145,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                 self.report({'ERROR'}, f'File Path: No Such a Path')
                 print(directory_path, e)
         else:
-            return os.path.dirname(bpy.data.filepath) + "\\"
+            return os.path.dirname(bpy.data.filepath) + "/"
 
     def get_postfix(self):
         """path expression"""
