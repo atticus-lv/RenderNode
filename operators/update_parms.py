@@ -115,7 +115,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             try:
                 compare(vs, 'view_transform', self.task_data['view_transform'])
                 compare(vs, 'look', self.task_data['look'])
-            except: # ocio change in 2.93
+            except:  # ocio change in 2.93
                 pass
 
     def update_path(self):
@@ -166,7 +166,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                         postfix += date_now + separator
                     elif r.startswith("time"):
                         postfix += time_now + separator
-                    elif r.startswith("camera"):
+                    elif r.startswith("camera") and cam:
                         postfix += cam.name + separator
                     elif r.startswith("engine"):
                         postfix += bpy.context.scene.render.engine + separator
