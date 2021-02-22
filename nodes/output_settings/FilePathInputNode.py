@@ -4,6 +4,9 @@ from bpy.props import BoolProperty, StringProperty
 from ...nodes.BASE.node_tree import RenderStackNode
 from ...preferences import get_pref
 
+import os
+import time
+
 
 def update_node(self, context):
     self.update_parms()
@@ -16,7 +19,10 @@ class RSNodeFilePathInputNode(RenderStackNode):
     use_blend_file_path: BoolProperty(name="Save in file folder",
                                       description='Save in blend file folder',
                                       default=True, update=update_node)
-    path: StringProperty(default='', update=update_node)
+
+    custom_path: StringProperty(name='Path',
+                                default='', update=update_node)
+
     path_format: StringProperty(default="$blend_render/$label$camera",
                                 name="Formatted Name",
                                 description='Formatted Name,View sidebar usage',
@@ -28,32 +34,40 @@ class RSNodeFilePathInputNode(RenderStackNode):
         self.width = 250
 
     def draw_buttons(self, context, layout):
-        # custom path
-        layout.prop(self, 'use_blend_file_path')
-        if not self.use_blend_file_path:
+        if bpy.data.filepath == '':
+            layout.label(text='Save your file first', icon='ERROR')
+        else:
+            # custom path
+            layout.prop(self, 'use_blend_file_path')
+            if not self.use_blend_file_path:
+                row = layout.row(align=1)
+                row.prop(self, 'custom_path')
+                row.operator('buttons.directory_browse', icon='FILEBROWSER', text='')
+            # format_name
             row = layout.row(align=1)
-            row.prop(self, 'path')
-            row.operator('buttons.directory_browse', icon='FILEBROWSER', text='')
-        # format_name
-        row = layout.row(align=1)
-        row.prop(self, 'path_format', text='')
-        # format_name selector
-        try:
-            if hasattr(bpy.context.space_data, 'edit_tree'):
-                if bpy.context.space_data.edit_tree.nodes.active.name == self.name:
-                    row.menu(menu='RSN_MT_FormatNameMenu', text='', icon='EYEDROPPER')
-        except Exception:
-            pass
-        # viewer node tips
-        pref = get_pref()
-        if not pref.node_viewer.update_path:
-            layout.label(text='Update is disable in viewer node', icon='ERROR')
+            row.prop(self, 'path_format', text='')
+            # format_name selector
+            try:
+                if hasattr(bpy.context.space_data, 'edit_tree'):
+                    if bpy.context.space_data.edit_tree.nodes.active.name == self.name:
+                        row.menu(menu='RSN_MT_FormatNameMenu', text='', icon='EYEDROPPER')
+            except Exception:
+                pass
+            # viewer node tips
+            pref = get_pref()
+            if not pref.node_viewer.update_path:
+                layout.label(text='Update is disable in viewer node', icon='ERROR')
 
     def get_data(self):
         task_data = {}
-        task_data['use_blend_file_path'] = self.use_blend_file_path
+        # get the save location of the images
+        if self.use_blend_file_path:
+            task_data['path'] = os.path.dirname(bpy.data.filepath) + "/"
+        else:
+            task_data['path'] = self.custom_path
+        # path expression
         task_data['path_format'] = self.path_format
-        task_data['path'] = self.path
+
         return task_data
 
 

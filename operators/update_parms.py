@@ -130,20 +130,15 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
     def make_path(self):
         """only save files will work"""
         task = self.task_data
-        if 'path' in task and task['path'] != '':
-            if not task['use_blend_file_path']:
+        if 'path' in task:
+            if task['path'] != '':
                 directory_path = os.path.dirname(task['path'])
-            else:
-                # not fill in the custom path
-                directory_path = os.path.dirname(bpy.data.filepath)
-            try:
-                if not os.path.exists(directory_path):
-                    os.makedirs(directory_path)
-                return directory_path
-
-            except Exception as e:
-                self.report({'ERROR'}, f'File Path: No Such a Path')
-                print(directory_path, e)
+                try:
+                    if not os.path.exists(directory_path):
+                        os.makedirs(directory_path)
+                    return directory_path
+                except Exception as e:
+                    self.report({'ERROR'}, f'File Path: No Such a Path')
         else:
             return os.path.dirname(bpy.data.filepath) + "/"
 
@@ -158,7 +153,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         date_now = str(time.strftime("%m-%d", time.localtime()))
         time_now = str(time.strftime("%H_%M", time.localtime()))
 
-        if 'path_format' in self.task_data:
+        if 'path' in self.task_data:
             shot_export_name = self.task_data["path_format"]
             for string in shot_export_name.split("/"):
                 for r in string.split('$'):
@@ -191,7 +186,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                 postfix += "/"
 
             if postfix.endswith("/"): postfix = postfix[:-1]
-        return postfix
+        return postfix if postfix != '' else 'untitled'
 
     def update_view_layer_passes(self):
         """each view layer will get a file output node
