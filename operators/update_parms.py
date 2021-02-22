@@ -151,7 +151,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
 
         postfix = ""
         date_now = str(time.strftime("%m-%d", time.localtime()))
-        time_now = str(time.strftime("%H_%M", time.localtime()))
+        time_now = str(time.strftime("%H-%M", time.localtime()))
 
         if 'path' in self.task_data:
             shot_export_name = self.task_data["path_format"]
