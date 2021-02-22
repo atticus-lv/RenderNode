@@ -147,7 +147,6 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         scn = bpy.context.scene
         cam = scn.camera
         pref = get_pref()
-        separator = pref.node_file_path.file_path_separator
 
         blend_name = ''
         rp_blend = ''
