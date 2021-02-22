@@ -149,44 +149,43 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         pref = get_pref()
         separator = pref.node_file_path.file_path_separator
 
-        postfix = ""
+        blend_name = ''
+        rp_blend = ''
+
         date_now = str(time.strftime("%m-%d", time.localtime()))
         time_now = str(time.strftime("%H-%M", time.localtime()))
 
         if 'path' in self.task_data:
             shot_export_name = self.task_data["path_format"]
-            for string in shot_export_name.split("/"):
-                for r in string.split('$'):
-                    if r.startswith("date"):
-                        postfix += date_now + separator
-                    elif r.startswith("time"):
-                        postfix += time_now + separator
-                    elif r.startswith("camera") and cam:
-                        postfix += cam.name + separator
-                    elif r.startswith("engine"):
-                        postfix += bpy.context.scene.render.engine + separator
-                    elif r.startswith("res"):
-                        postfix += f"{scn.render.resolution_x}x{scn.render.resolution_y}" + separator
-                    elif r.startswith("ev"):
-                        postfix += scn.view_settings.exposure + separator
-                    elif r.startswith("label"):
-                        postfix += self.task_data["label"] + separator
-                    elif r.startswith("vl"):
-                        postfix += bpy.context.view_layer.name + separator
-                    elif r.startswith("blend"):
-                        try:
-                            blend_name = bpy.path.basename(bpy.data.filepath)[:-6]
-                            postfix += blend_name + r[5:] + separator
-                        except Exception:
-                            pass
-                    else:
-                        postfix += r
 
-                if postfix.endswith(separator): postfix = postfix[:-1]
-                postfix += "/"
+            rp_date = shot_export_name.replace('$date', date_now)
+            rp_time = rp_date.replace('$time', time_now)
 
-            if postfix.endswith("/"): postfix = postfix[:-1]
-        return postfix if postfix != '' else 'untitled'
+            if cam:
+                rp_cam = rp_time.replace('$camera', cam.name)
+            else:
+                rp_cam = rp_time
+
+            rp_eng = rp_cam.replace('$engine', bpy.context.scene.render.engine)
+            rp_res = rp_eng.replace('res', f"{scn.render.resolution_x}x{scn.render.resolution_y}")
+
+            rp_label = rp_res.replace('$label', self.task_data["label"])
+            rp_vl = rp_label.replace('$vl', bpy.context.view_layer.name)
+
+            # replace filename
+            try:
+                blend_name = bpy.path.basename(bpy.data.filepath)[:-6]
+            except Exception:
+                pass
+            rp_blend = rp_vl.replace('$blend', blend_name)
+
+            STYLE = re.search(r'([$]F\d)', rp_blend)
+            if STYLE:
+                c_frame = bpy.context.scene.frame_current
+                format = f'0{STYLE.group(0)[-1:]}d'
+                rp_blend = rp_blend.replace(STYLE.group(0), f'{c_frame:{format}}')
+
+        return rp_blend if blend_name != '' else 'untitled'
 
     def update_view_layer_passes(self):
         """each view layer will get a file output node
