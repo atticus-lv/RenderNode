@@ -89,7 +89,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
             node = self.rsn_queue.nt.nodes['Processor']
             node.done_frames += 1
             node.curr_task = self.rsn_queue.task_name
-            node.task_data = json.dumps(self.rsn_queue.task_data, indent=2,ensure_ascii=False)
+            node.task_data = json.dumps(self.rsn_queue.task_data, indent=2, ensure_ascii=False)
 
             node.frame_start = self.rsn_queue.frame_start
             node.frame_end = self.rsn_queue.frame_end
@@ -112,7 +112,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     def init_logger(self, node_list_dict):
         pref = get_pref()
         logger.setLevel(int(pref.log_level))
-        logger.info(f'Get all data:\n{json.dumps(node_list_dict, indent=2,ensure_ascii=False)}\n')
+        logger.info(f'Get all data:\n{json.dumps(node_list_dict, indent=2, ensure_ascii=False)}\n')
 
     def execute(self, context):
         context.window_manager.rsn_running_modal = True
@@ -225,6 +225,7 @@ class RSN_OT_ShowTaskDetails(bpy.types.Operator):
     bl_label = 'Show Details'
 
     task_data: StringProperty(name='task data (json)')
+    width: IntProperty(name='Width', default=300)
 
     def execute(self, context):
         return {'FINISHED'}
@@ -242,7 +243,7 @@ class RSN_OT_ShowTaskDetails(bpy.types.Operator):
                 col.label(text=s)
 
     def invoke(self, context, event):
-        return context.window_manager.invoke_popup(self, width=300)
+        return context.window_manager.invoke_popup(self, width=self.width)
 
 
 class RSN_OT_RenderButton(bpy.types.Operator):
@@ -315,29 +316,60 @@ class RSN_OT_RenderButton(bpy.types.Operator):
         col3 = row.column(align=1).box()
         col4 = row.column(align=1).box()
         col5 = row.column(align=1).box()
+        col6 = row.column(align=1).box()
+        col7 = row.column(align=1).box()
+
         col1.scale_x = 0.5
-        col5.scale_x = 0.5
+        # col2.scale_x = 1.5
+        # col5.scale_x = 2.5
+        # col6.scale_x = 2
+        col7.scale_x = 0.5
+
         col1.label(text='Index')
-        col2.label(text='Task Node')
-        col3.label(text='Task Label')
+        col2.label(text='Node')
+        col3.label(text='Label')
         col4.label(text='Frame Range')
-        col5.label(text='Info')
+        col5.label(text='File Path')
+        col6.label(text='File Name')
+        col7.label(text='Info')
 
         for i, task_node in enumerate(self.rsn_queue.task_queue):
             # Index
             col1.label(text=f'{i}')
+
             # node and mute
             node = bpy.context.space_data.edit_tree.nodes[task_node]
             col2.prop(node, 'mute', text=task_node, icon='PANEL_CLOSE' if node.mute else 'CHECKMARK')
+
             # label
             col3.label(text=self.rsn_queue.task_data_queue[i]['label'])
+
             # Range
             fs = self.rsn_queue.task_data_queue[i]["frame_start"]
             fe = self.rsn_queue.task_data_queue[i]["frame_end"]
             col4.label(text=f'{fs} → {fe} ({fe - fs + 1})')
+
+            # filepath
+            if 'path' in self.rsn_queue.task_data_queue[i]:
+                dir = self.rsn_queue.task_data_queue[i]["path"]
+                show = col5.operator('rsn.show_task_details', icon='VIEWZOOM', text='Show')
+                show.task_data = dir
+                show.width = 500
+            else:
+                col5.label(text='Not Defined')
+
+            # file name
+            if 'path_format' in self.rsn_queue.task_data_queue[i]:
+                format = self.rsn_queue.task_data_queue[i]["path_format"]
+                show = col6.operator('rsn.show_task_details', icon='VIEWZOOM', text='Show')
+                show.task_data = format
+                show.width = 500
+            else:
+                col6.label(text='Not Defined')
+
             # task_data_list
-            d = json.dumps(self.rsn_queue.task_data_queue[i], indent=2,ensure_ascii=False)
-            col5.operator('rsn.show_task_details', icon='INFO', text='').task_data = d
+            d = json.dumps(self.rsn_queue.task_data_queue[i], indent=2, ensure_ascii=False)
+            col7.operator('rsn.show_task_details', icon='INFO', text='').task_data = d
 
         self.render_options(context)
         layout.separator(factor=0.25)
@@ -362,7 +394,7 @@ class RSN_OT_RenderButton(bpy.types.Operator):
 
     def invoke(self, context, event):
         self.get_render_data()
-        return context.window_manager.invoke_props_dialog(self, width=500)
+        return context.window_manager.invoke_props_dialog(self, width=600)
 
 
 classes = (
