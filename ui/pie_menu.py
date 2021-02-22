@@ -31,8 +31,8 @@ class RSN_MT_PieMenu(Menu):
 
     @classmethod
     def poll(cls, context):
-        if context.space_data.node_tree:
-            return context.space_data.node_tree.bl_idname == 'RenderStackNodeTree'
+        return context.area.ui_type == 'RenderStackNodeTree'
+
 
     def draw(self, context):
         layout = self.layout
@@ -53,23 +53,21 @@ class RSN_MT_PieMenu(Menu):
         col.operator("rsn.merge_selected_nodes", icon_value=merge_icon.get_image_icon_id())
 
         # bottom
-        if context.space_data.edit_tree and context.space_data.edit_tree.bl_idname == 'RenderStackNodeTree':
-            col = pie.column(align=1)
-            box = col.box()
+        col = pie.column(align=1)
+        box = col.box()
 
-            for g in bpy.data.node_groups:
-                if g.bl_idname == 'RenderStackNodeTree':
-                    row = box.row(align=1)
-                    row.prop(bpy.data.node_groups[g.name], 'name', text='')
-                    row.prop(bpy.data.node_groups[g.name], 'use_fake_user', icon_only=1)
-                    if context.space_data.edit_tree != bpy.data.node_groups[g.name]:
-                        row.operator('rsn.switch_tree', icon='SCREEN_BACK', text='').tree_name = g.name
-                    else:
-                        row.label(icon='HIDE_OFF', text='')
+        for g in bpy.data.node_groups:
+            if g.bl_idname == 'RenderStackNodeTree':
+                row = box.row(align=1)
+                if context.space_data.edit_tree != bpy.data.node_groups[g.name]:
+                    row.operator('rsn.switch_tree', icon='SCREEN_BACK', text=g.name).tree_name = g.name
+                else:
+                    row.label(icon='HIDE_OFF', text=g.name)
+                row.prop(bpy.data.node_groups[g.name], 'use_fake_user', icon_only=1)
 
-            box.operator("node.new_node_tree", text='New Tree', icon='ADD')
-        else:
-            pie.operator("node.new_node_tree")
+
+        box.operator("node.new_node_tree", text='New Tree', icon='ADD')
+
 
 
 def register_icon():
