@@ -154,12 +154,6 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         time_now = str(time.strftime("%H-%M", time.localtime()))
 
         if 'path' in self.task_data:
-            # replace filename
-            try:
-                blend_name = bpy.path.basename(bpy.data.filepath)[:-6]
-                postfix = postfix.replace('$blend', blend_name)
-            except Exception:
-                return 'untitled'
 
             shot_export_name = self.task_data["path_format"]
             # replace time
@@ -185,6 +179,13 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                 c_frame = bpy.context.scene.frame_current
                 format = f'0{STYLE.group(0)[-1:]}d'
                 postfix = postfix.replace(STYLE.group(0), f'{c_frame:{format}}')
+
+            # replace filename
+            try:
+                blend_name = bpy.path.basename(bpy.data.filepath)[:-6]
+                postfix = postfix.replace('$blend', blend_name)
+            except Exception:
+                return 'untitled'
 
         return postfix
 
