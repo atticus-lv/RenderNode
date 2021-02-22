@@ -146,45 +146,47 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         """path expression"""
         scn = bpy.context.scene
         cam = scn.camera
-        pref = get_pref()
 
         blend_name = ''
-        rp_blend = ''
+        postfix = ''
 
         date_now = str(time.strftime("%m-%d", time.localtime()))
         time_now = str(time.strftime("%H-%M", time.localtime()))
 
         if 'path' in self.task_data:
-            shot_export_name = self.task_data["path_format"]
-
-            rp_date = shot_export_name.replace('$date', date_now)
-            rp_time = rp_date.replace('$time', time_now)
-
-            if cam:
-                rp_cam = rp_time.replace('$camera', cam.name)
-            else:
-                rp_cam = rp_time
-
-            rp_eng = rp_cam.replace('$engine', bpy.context.scene.render.engine)
-            rp_res = rp_eng.replace('res', f"{scn.render.resolution_x}x{scn.render.resolution_y}")
-
-            rp_label = rp_res.replace('$label', self.task_data["label"])
-            rp_vl = rp_label.replace('$vl', bpy.context.view_layer.name)
-
             # replace filename
             try:
                 blend_name = bpy.path.basename(bpy.data.filepath)[:-6]
+                postfix = postfix.replace('$blend', blend_name)
             except Exception:
-                pass
-            rp_blend = rp_vl.replace('$blend', blend_name)
+                return 'untitled'
 
-            STYLE = re.search(r'([$]F\d)', rp_blend)
+            shot_export_name = self.task_data["path_format"]
+            # replace time
+            postfix = shot_export_name.replace('$date', date_now)
+            postfix = postfix.replace('$time', time_now)
+            # replace camera name
+            if cam:
+                postfix = postfix.replace('$camera', cam.name)
+            else:
+                postfix = postfix
+            # replace engine
+            postfix = postfix.replace('$engine', bpy.context.scene.render.engine)
+            # replace res
+            postfix = postfix.replace('res', f"{scn.render.resolution_x}x{scn.render.resolution_y}")
+            # replace label
+            postfix = postfix.replace('$label', self.task_data["label"])
+            # replace view_layer
+            postfix = postfix.replace('$vl', bpy.context.view_layer.name)
+
+            # frame completion
+            STYLE = re.search(r'([$]F\d)', postfix)
             if STYLE:
                 c_frame = bpy.context.scene.frame_current
                 format = f'0{STYLE.group(0)[-1:]}d'
-                rp_blend = rp_blend.replace(STYLE.group(0), f'{c_frame:{format}}')
+                postfix = postfix.replace(STYLE.group(0), f'{c_frame:{format}}')
 
-        return rp_blend if blend_name != '' else 'untitled'
+        return postfix
 
     def update_view_layer_passes(self):
         """each view layer will get a file output node

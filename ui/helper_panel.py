@@ -18,7 +18,7 @@ class HELPER_PT_Panel(bpy.types.Panel):
         layout.scale_y = 1.25
         layout.label(text='Call out helper menu', icon="EVENT_F")
 
-        layout.label(text=f'Update:{context.window_manager.rsn_tree_time}',icon = 'MOD_TIME')
+        layout.label(text=f'Update:{context.window_manager.rsn_tree_time}', icon='MOD_TIME')
 
         try:
             if hasattr(bpy.context.space_data, 'edit_tree'):
@@ -27,6 +27,7 @@ class HELPER_PT_Panel(bpy.types.Panel):
                     col = box.column(align=1)
                     col.label(text="USAGE:")
                     col.label(text='$blend: name of your file (save first!)')
+                    col.label(text='$F4: frame format:0001 ("4" can be any number)')
                     col.label(text='$label: Task label')
                     col.label(text='$camera: name of scene camera')
                     col.label(text='$res: resolution (XxY)')
