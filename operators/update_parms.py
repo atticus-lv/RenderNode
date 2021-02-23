@@ -168,17 +168,19 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             postfix = postfix.replace('$vl', bpy.context.view_layer.name)
 
             # frame completion
-            STYLE = re.search(r'([$]F\d)', postfix)
-            if STYLE:
+            STYLE = re.findall(r'([$]F\d)', postfix)
+            if len(STYLE) > 0:
                 c_frame = bpy.context.scene.frame_current
-                format = f'0{STYLE.group(0)[-1:]}d'
-                postfix = postfix.replace(STYLE.group(0), f'{c_frame:{format}}')
+                for i, string in enumerate(STYLE):
+                    format = f'0{STYLE[i][-1:]}d'
+                    postfix = postfix.replace(STYLE[i], f'{c_frame:{format}}')
+
             # time format
-            TIME = re.search(r'[$]T{(.*?)}', postfix)
-            print(TIME)
-            if TIME:
-                format = time.strftime(TIME.group(0)[3:-1], time.localtime())
-                postfix = postfix.replace(TIME.group(0), format)
+            TIME = re.findall(r'([$]T{.*?})', postfix)
+            if len(TIME) > 0:
+                for i, string in enumerate(TIME):
+                    format = time.strftime(TIME[i][3:-1], time.localtime())
+                    postfix = postfix.replace(TIME[i], format)
 
             # replace filename
             try:

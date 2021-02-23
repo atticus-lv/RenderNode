@@ -90,15 +90,15 @@ class RSN_OT_AddFormatName(bpy.types.Operator):
 
 
 format_names = {
-    'File Name'          : '$blend',
-    'Task Label'         : '$label',
-    'Render Engine'      : '$engine',
-    'Camera Name'        : '$camera',
-    'Resolution: XxY'    : '$res',
-    'Exposure Value'     : '$ev',
-    'View Layer'         : '$vl',
-    'Date: month-day'    : '$data',
-    'Time: minute-second': '$time',
+    'File Name'        : '$blend',
+    'Task Label'       : '$label',
+    'Render Engine'    : '$engine',
+    'Camera Name'      : '$camera',
+    'Resolution: XxY'  : '$res',
+    'Exposure Value'   : '$ev',
+    'View Layer'       : '$vl',
+    'Date: month-day'  : '$T{%m-%d}',
+    'Time: Hour-Minute': '$T{%H-%M}',
 }
 
 
