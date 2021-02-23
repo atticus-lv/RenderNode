@@ -21,21 +21,20 @@ class HELPER_PT_Panel(bpy.types.Panel):
         layout.label(text=f'Update:{context.window_manager.rsn_tree_time}', icon='MOD_TIME')
 
         try:
-            if hasattr(bpy.context.space_data, 'edit_tree'):
-                if bpy.context.space_data.edit_tree.nodes.active.bl_idname == 'RSNodeFilePathInputNode':
-                    box = layout.box()
-                    col = box.column(align=1)
-                    col.label(text="USAGE:")
-                    col.label(text='$blend: name of your file (save first!)')
-                    col.label(text='$F4: frame format:0001 ("4" can be any number)')
-                    col.label(text='$label: Task label')
-                    col.label(text='$camera: name of scene camera')
-                    col.label(text='$res: resolution (XxY)')
-                    col.label(text='$engine: render engine')
-                    col.label(text='$vl: name of scene view layer')
-                    col.label(text='$date: month-day')
-                    col.label(text='$time: hour-min')
-                    col.label(text='/: create folder,should be dict_input folder name in front of "/"')
+            if bpy.context.space_data.edit_tree.nodes.active.bl_idname == 'RSNodeFilePathInputNode':
+                box = layout.box()
+                col = box.column(align=1)
+                col.label(text="USAGE:")
+                col.label(text='$blend: name of your file (save first!)')
+                col.label(text='$F4: frame format:0001 ("4" can be any number)')
+                col.label(text='$label: Task label')
+                col.label(text='$camera: name of scene camera')
+                col.label(text='$res: resolution (XxY)')
+                col.label(text='$engine: render engine')
+                col.label(text='$vl: name of scene view layer')
+                col.label(text="$T{}: %Y%m%d %H-%M-%S → 20210223 17-47-35")
+                col.label(text="↑ (Reference python's time in '{}')")
+                col.label(text='/: create folder,should be dict_input folder name in front of "/"')
         except Exception:
             pass
 

@@ -150,15 +150,9 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         blend_name = ''
         postfix = ''
 
-        date_now = str(time.strftime("%m-%d", time.localtime()))
-        time_now = str(time.strftime("%H-%M", time.localtime()))
-
         if 'path' in self.task_data:
 
-            shot_export_name = self.task_data["path_format"]
-            # replace time
-            postfix = shot_export_name.replace('$date', date_now)
-            postfix = postfix.replace('$time', time_now)
+            postfix = self.task_data["path_format"]
             # replace camera name
             if cam:
                 postfix = postfix.replace('$camera', cam.name)
@@ -179,6 +173,12 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                 c_frame = bpy.context.scene.frame_current
                 format = f'0{STYLE.group(0)[-1:]}d'
                 postfix = postfix.replace(STYLE.group(0), f'{c_frame:{format}}')
+            # time format
+            TIME = re.search(r'[$]T{(.*?)}', postfix)
+            print(TIME)
+            if TIME:
+                format = time.strftime(TIME.group(0)[3:-1], time.localtime())
+                postfix = postfix.replace(TIME.group(0), format)
 
             # replace filename
             try:
