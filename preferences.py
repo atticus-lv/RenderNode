@@ -25,7 +25,7 @@ class NodeSmtpProps(bpy.types.PropertyGroup):
 class NodeViewerProps(bpy.types.PropertyGroup):
     show: BoolProperty(name="Dropdown")
 
-    update_scripts: BoolProperty(name='Update Scripts ',
+    update_scripts: BoolProperty(name='Update Scripts',
                                  description="Update scripts node when using viewer node",
                                  default=False)
     update_path: BoolProperty(name='Update File Path',
@@ -41,14 +41,6 @@ class NodeFilePathProps(bpy.types.PropertyGroup):
 
     path_format: StringProperty(name='Default Path Format',
                                 default='$blend_render/$camera.$F4')
-
-    file_path_separator: EnumProperty(items=[
-        ('.', 'Dot', ''),
-        ('_', 'Underscore', ''),
-        (' ', 'Space', ''), ],
-        default='.',
-        name='File Path Separator',
-        description='Character between $')
 
 
 class RSN_Preference(bpy.types.AddonPreferences):

@@ -1,29 +1,10 @@
 from bpy.props import *
 from ...utility import *
 from ...nodes.BASE.node_tree import RenderStackNode
+from ...ui.icon_utils import RSN_Preview
 
-
-class RSNode_OT_GetInfo(bpy.types.Operator):
-    """left click: get node name
-shift:get overwrite details """
-    bl_idname = 'rsn.get_info'
-    bl_label = 'get info'
-
-    def invoke(self, context, event):
-        rsn_tree = RSN_NodeTree()
-        rsn_tree.set_context_tree_as_wm_tree()
-
-        nt = rsn_tree.get_wm_node_tree()
-        rsn_task = RSN_Nodes(node_tree=self.nt,
-                             root_node_name=self.render_list_node_name)
-
-        if event.shift:
-            for k in nt.task_list_dict.keys():
-                print(json.dumps(nt.get_task_data(k), indent=4, ensure_ascii=False))
-        else:
-            print(json.dumps(nt.task_list_dict, indent=4, ensure_ascii=False))
-
-        return {"FINISHED"}
+# set custom icon
+empty_icon = RSN_Preview(image='empty.png', name='empty_icon')
 
 
 class RSNodeRenderListNode(RenderStackNode):
@@ -31,21 +12,37 @@ class RSNodeRenderListNode(RenderStackNode):
     bl_idname = 'RSNodeRenderListNode'
     bl_label = 'Render List'
 
-    show_process: BoolProperty(name='Show Processor Node')
+    # action after render
+    open_dir: BoolProperty(name='Open folder after render', default=True)
+    clean_path: BoolProperty(name='Clean filepath after render', default=True)
+    render_display_type: EnumProperty(items=[
+        ('NONE', 'Keep User Interface', ''),
+        ('SCREEN', 'Maximized Area', ''),
+        ('AREA', 'Image Editor', ''),
+        ('WINDOW', 'New Window', '')],
+        default='WINDOW',
+        name='Display')
 
     def init(self, context):
         self.inputs.new('RSNodeSocketRenderList', "Task")
+        self.width = 200
 
     def draw_buttons(self, context, layout):
-        try:
-            if bpy.context.space_data.edit_tree.nodes.active.name == self.name:
-                # render
-                col = layout.column(align=1)
-                col.scale_y = 1.5
-                col.operator("rsn.render_button",
-                             text=f'Render Confirm').render_list_node_name = self.name
-        except Exception:
-            pass
+        col = layout.column(align=1)
+        # call render button when selected
+
+        col = layout.column()
+        col.scale_y = 1.5
+        sheet = col.operator("rsn.render_button", text=f'Render Confirm')
+        sheet.render_list_node_name = self.name
+        sheet.open_dir = self.open_dir
+        sheet.clean_path = self.clean_path
+        sheet.render_display_type = self.render_display_type
+
+        col = layout.column(align=0)
+        col.prop(self, 'open_dir')
+        col.prop(self, 'clean_path')
+        col.prop(self, 'render_display_type')
 
     def update(self):
         self.auto_update_inputs()
@@ -66,9 +63,7 @@ class RSNodeRenderListNode(RenderStackNode):
 
 def register():
     bpy.utils.register_class(RSNodeRenderListNode)
-    bpy.utils.register_class(RSNode_OT_GetInfo)
 
 
 def unregister():
     bpy.utils.unregister_class(RSNodeRenderListNode)
-    bpy.utils.unregister_class(RSNode_OT_GetInfo)
