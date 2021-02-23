@@ -35,7 +35,7 @@ class RSNodeRenderListNode(RenderStackNode):
         # call render button when selected
 
         col = layout.column()
-        col.scale_y = 1.5
+        col.scale_y = 1.75
         sheet = col.operator("rsn.render_button", text=f'Render Confirm')
         sheet.render_list_node_name = self.name
         sheet.open_dir = self.open_dir
@@ -56,6 +56,8 @@ class RSNodeRenderListNode(RenderStackNode):
             if self.outputs[0].is_linked:
                 p_node = self.outputs[0].links[0].to_node
                 if p_node: self.processor_node = p_node.name
+            else:
+                self.processor_node = ''
         except Exception as e:  # This error shows when the dragging the link off viewer node(Works well with knife tool)
             print(e)  # this seems to be a blender error
 
