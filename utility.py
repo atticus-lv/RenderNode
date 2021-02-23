@@ -63,7 +63,11 @@ class RSN_Nodes:
         return self.root_node
 
     def get_children_from_node(self, root_node):
-        """Depth first search"""
+        """Depth first search
+        :parm root_node: a blender node
+
+        """
+
         node_list = []
 
         def append_node_to_list(node):
@@ -74,7 +78,11 @@ class RSN_Nodes:
 
         # @lru_cache(maxsize=None)
         def get_sub_node(node):
-            """Recursion"""
+            """Recursion
+            :parm node: a blender node
+
+            """
+
             for input in node.inputs:
                 if input.is_linked:
                     try:
@@ -97,7 +105,13 @@ class RSN_Nodes:
         return node_list
 
     def get_sub_node_dict_from_node_list(self, node_list, parent_node_type, black_list=None):
-        """Use Task node as separator to get sub nodes in this task"""
+        """Use Task node as separator to get sub nodes in this task
+        :parm node_list:
+        :parm parent_node_type: node.bl_idname: str
+        :parm black_list: list node.bl_idname that you want to skip
+
+        """
+
         node_list_dict = {}
         if not black_list: black_list = ['RSNodeTaskListNode', 'RSNodeRenderListNode']
 
@@ -119,7 +133,17 @@ class RSN_Nodes:
         return node_list_dict
 
     def get_children_from_task(self, task_name, return_dict=False, type='RSNodeTaskNode'):
-        """pack method for task node"""
+        """pack method for task node
+        :parm task_name: name of the task node
+        :parm return_dict: return dict instead of node list
+            {'task node name':[
+                                children node name1,
+                                children node name2]
+            }
+        :parm type: the bl_idname of the node (key for the dict)
+
+        """
+
         task = self.get_node_from_name(task_name)
         try:
             node_list = self.get_children_from_node(task)
@@ -132,7 +156,10 @@ class RSN_Nodes:
             pass
 
     def get_children_from_render_list(self, return_dict=False, type='RSNodeTaskNode'):
-        """pack method for render list node(get all task)"""
+        """pack method for render list node(get all task)
+
+        """
+
         render_list = self.get_node_from_name(self.root_node.name)
         node_list = self.get_children_from_node(render_list)
         if not return_dict:
@@ -142,7 +169,16 @@ class RSN_Nodes:
                                                          parent_node_type=type)
 
     def get_task_data(self, task_name, task_dict):
-        """transfer nodes to data"""
+        """transfer nodes to data
+        :parm task_name: name of the task node
+        :parm task_dict: parse dict
+            {'task node name':[
+                                children node name1,
+                                children node name2]
+            }
+
+        """
+
         task_data = {}
         for node_name in task_dict[task_name]:
             node = self.nt.nodes[node_name]
@@ -207,6 +243,12 @@ class RSN_Nodes:
 
 class RSN_Queue():
     def __init__(self, nodetree, render_list_node: str):
+        """init a rsn queue
+        :parm nodetree: a blender node tree(rsn node tree)
+        :parm render_list_node: name of the render_list_node
+
+        """
+
         self.nt = nodetree
         self.root_node = render_list_node
         self.task_queue = deque()
@@ -220,6 +262,10 @@ class RSN_Queue():
         self.task_list_dict = self.rsn.get_children_from_render_list(return_dict=1)
 
     def init_queue(self):
+        """get all the task_data
+        fill the key 'frame' for the latter render
+        """
+
         for task in self.task_list_dict:
             task_data = self.rsn.get_task_data(task_name=task, task_dict=self.task_list_dict)
 
