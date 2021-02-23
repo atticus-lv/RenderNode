@@ -31,8 +31,11 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         ('SCREEN', 'Maximized Area', ''),
         ('AREA', 'Image Editor', ''),
         ('WINDOW', 'New Window', '')],
-        default='WINDOW')
+        default='WINDOW',
+        name='Display')
     ori_render_display_type = None
+
+    processor_node: StringProperty(name='Processor', default='')
 
     # render state
     _timer = None
@@ -73,17 +76,17 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     # Processor node
     def init_process_node(self):
         try:
-            node = self.rsn_queue.nt.nodes['Processor']
+            node = self.rsn_queue.nt.nodes[self.processor_node]
             node.count_frames = self.rsn_queue.get_frame_length()
             node.done_frames = 0
             node.all_tasks = ''
             node.all_tasks = ','.join(self.rsn_queue.task_queue)
         except Exception as e:
-            logger.debug(f'Processor {e}')
+            logger.debug(f'Processor {self.processor_node} not found')
 
     def update_process_node(self):
         try:
-            node = self.rsn_queue.nt.nodes['Processor']
+            node = self.rsn_queue.nt.nodes[self.processor_node]
             node.done_frames += 1
             node.curr_task = self.rsn_queue.task_name
             node.task_data = json.dumps(self.rsn_queue.task_data, indent=2, ensure_ascii=False)
@@ -96,7 +99,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
 
     def finish_process_node(self):
         try:
-            node = self.rsn_queue.nt.nodes['Processor']
+            node = self.rsn_queue.nt.nodes[self.processor_node]
             if self.rsn_queue.is_empty():
                 node.all_tasks += ',RENDER_FINISHED'
                 node.curr_task = 'RENDER_FINISHED'

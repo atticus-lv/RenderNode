@@ -3,9 +3,9 @@ from ...utility import *
 from ...nodes.BASE.node_tree import RenderStackNode
 from ...ui.icon_utils import RSN_Preview
 
-# set custom icon
-empty_icon = RSN_Preview(image='empty.png', name='empty_icon')
 
+# set custom icon
+# empty_icon = RSN_Preview(image='empty.png', name='empty_icon')
 
 class RSNodeRenderListNode(RenderStackNode):
     """Render List Node"""
@@ -23,8 +23,11 @@ class RSNodeRenderListNode(RenderStackNode):
         default='WINDOW',
         name='Display')
 
+    processor_node: StringProperty(name='Processor', default='')
+
     def init(self, context):
         self.inputs.new('RSNodeSocketRenderList', "Task")
+        self.outputs.new('RSNodeSocketRenderList', 'Processor')
         self.width = 200
 
     def draw_buttons(self, context, layout):
@@ -38,6 +41,9 @@ class RSNodeRenderListNode(RenderStackNode):
         sheet.open_dir = self.open_dir
         sheet.clean_path = self.clean_path
         sheet.render_display_type = self.render_display_type
+        sheet.processor_node = self.processor_node
+
+        layout.separator(factor=0.2)
 
         col = layout.column(align=0)
         col.prop(self, 'open_dir')
@@ -46,6 +52,12 @@ class RSNodeRenderListNode(RenderStackNode):
 
     def update(self):
         self.auto_update_inputs()
+        try:
+            if self.outputs[0].is_linked:
+                p_node = self.outputs[0].links[0].to_node
+                if p_node: self.processor_node = p_node.name
+        except Exception as e:  # This error shows when the dragging the link off viewer node(Works well with knife tool)
+            print(e)  # this seems to be a blender error
 
     def auto_update_inputs(self):
         i = 0

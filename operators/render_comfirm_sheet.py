@@ -20,7 +20,15 @@ class RSN_OT_RenderButton(bpy.types.Operator):
     # action after render (from the render_list node)
     open_dir: BoolProperty()
     clean_path: BoolProperty()
-    render_display_type: StringProperty()
+    render_display_type: EnumProperty(items=[
+        ('NONE', 'Keep User Interface', ''),
+        ('SCREEN', 'Maximized Area', ''),
+        ('AREA', 'Image Editor', ''),
+        ('WINDOW', 'New Window', '')],
+        default='WINDOW',
+        name='Display')
+
+    processor_node: StringProperty(name='Processor Node', default='')
 
     # task_data
     rsn_queue = None
@@ -51,6 +59,8 @@ class RSN_OT_RenderButton(bpy.types.Operator):
 
     def draw(self, context):
         layout = self.layout
+        layout.prop(self, 'processor_node', icon='TIME')
+
         box = layout.split().box()
         row = box.row(align=1)
 
@@ -135,7 +145,8 @@ class RSN_OT_RenderButton(bpy.types.Operator):
         bpy.ops.rsn.render_stack_task(render_list_node_name=self.render_list_node_name,
                                       open_dir=self.open_dir,
                                       clean_path=self.clean_path,
-                                      render_display_type=self.render_display_type)
+                                      render_display_type=self.render_display_type,
+                                      processor_node=self.processor_node)
 
         return {'FINISHED'}
 
