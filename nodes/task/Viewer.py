@@ -98,6 +98,7 @@ class RSNodeViewerNode(RenderStackNode):
         else:
             row.label(text='', icon='NODE')
 
+        layout.label(text=f'Update:{context.window_manager.rsn_tree_time}', icon='MOD_TIME')
         # preferences.
         pref = get_pref()
         row.prop(self, 'show_pref', icon_only=1, icon='TRIA_DOWN' if self.show_pref else "TRIA_LEFT")

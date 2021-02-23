@@ -64,7 +64,10 @@ class RSNodeFilePathInputNode(RenderStackNode):
         if self.use_blend_file_path:
             task_data['path'] = os.path.dirname(bpy.data.filepath) + "/"
         else:
-            task_data['path'] = self.custom_path
+            if self.custom_path == '':
+                task_data['path'] = os.path.dirname(bpy.data.filepath) + "/"
+            else:
+                task_data['path'] = self.custom_path
         # path expression
         task_data['path_format'] = self.path_format
 
