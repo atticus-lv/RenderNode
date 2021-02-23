@@ -18,6 +18,8 @@ class RSNodeCyclesRenderSettingsNode(RenderStackNode):
         self.outputs.new('RSNodeSocketRenderSettings', "Render Settings")
 
     def draw_buttons(self, context, layout):
+        layout.use_property_split = 1
+        layout.use_property_decorate = 0
         layout.prop(self, "samples", text='Samples')
 
     def get_data(self):
