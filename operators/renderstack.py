@@ -166,13 +166,6 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         # update
         task = self.rsn_queue.task_name
         bpy.ops.rsn.update_parms(view_mode_handler=task, use_render_mode=True)
-        # set frame complement
-        pref = get_pref()
-        frame_style = pref.node_file_path.frame_complement
-        if frame_style != 'None':
-            scn.render.filepath += f"{pref.node_file_path.file_path_separator}{self.frame_current:{frame_style}}"
-        else:
-            scn.render.filepath += f"{pref.node_file_path.file_path_separator}"
 
     # finish
     def finish(self):

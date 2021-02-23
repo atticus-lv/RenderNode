@@ -62,12 +62,9 @@ class RSN_OT_CreatCompositorNode(bpy.types.Operator):
 
             nt = context.scene.node_tree
 
-            pref = get_pref()
-            separator = pref.node_file_path.file_path_separator
-
             for i, output in enumerate(render_layer_node.outputs):
                 name = output.name
-                output_name = f"{self.view_layer}{separator}{name}{separator}"
+                output_name = f"{self.view_layer}.{name}"
                 if output_name not in file_output_node.file_slots:
                     file_output_node.file_slots.new(name=output_name)
                 nt.links.new(render_layer_node.outputs[name], file_output_node.inputs[output_name])

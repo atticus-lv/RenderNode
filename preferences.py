@@ -40,7 +40,7 @@ class NodeFilePathProps(bpy.types.PropertyGroup):
     show: BoolProperty(name="Dropdown")
 
     path_format: StringProperty(name='Default Path Format',
-                                   default='$blend_render/$label$camera')
+                                default='$blend_render/$camera.$F4')
 
     file_path_separator: EnumProperty(items=[
         ('.', 'Dot', ''),
@@ -49,14 +49,6 @@ class NodeFilePathProps(bpy.types.PropertyGroup):
         default='.',
         name='File Path Separator',
         description='Character between $')
-
-    frame_complement: EnumProperty(items=[
-        ('None', 'No Complement', ''),
-        ('04d', '0001', ''),
-        ('_>4d', '___1', '')],
-        default='04d',
-        name='Frame Complement',
-        description='Frame complement(frame 1 for example)')
 
 
 class RSN_Preference(bpy.types.AddonPreferences):
@@ -124,8 +116,6 @@ class RSN_Preference(bpy.types.AddonPreferences):
         if self.node_file_path.show:
             box.use_property_split = True
             box.prop(self.node_file_path, "path_format")
-            box.prop(self.node_file_path, "file_path_separator")
-            box.prop(self.node_file_path, "frame_complement")
 
     def smtp_node(self, box):
         box.prop(self.node_smtp, 'show', text="SMTP Email Node", emboss=False,
