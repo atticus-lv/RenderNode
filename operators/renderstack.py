@@ -89,7 +89,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
             node = self.rsn_queue.nt.nodes[self.processor_node]
             node.done_frames += 1
             node.curr_task = self.rsn_queue.task_name
-            node.task_data = json.dumps(self.rsn_queue.task_data, indent=2, ensure_ascii=False)
+            node.task_label = self.rsn_queue.task_data['label']
 
             node.frame_start = self.rsn_queue.frame_start
             node.frame_end = self.rsn_queue.frame_end
