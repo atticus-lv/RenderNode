@@ -1,12 +1,25 @@
 import bpy
 from bpy.props import *
 from ...nodes.BASE.node_tree import RenderStackNode
-from ...utility import source_attr
+# from ...utility import source_attr
 from mathutils import Color, Vector
 
 
 def update_node(self, context):
     self.update_parms()
+
+
+def source_attr(src_obj, scr_data_path):
+    def get_obj_and_attr(obj, data_path):
+        path = data_path.split('.')
+        if len(path) == 1:
+            return obj, path[0]
+        else:
+            back_obj = getattr(obj, path[0])
+            back_path = '.'.join(path[1:])
+            return get_obj_and_attr(back_obj, back_path)
+
+    return get_obj_and_attr(src_obj, scr_data_path)
 
 
 class RSNodeObjectDataNode(RenderStackNode):
