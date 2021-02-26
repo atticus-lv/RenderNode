@@ -24,6 +24,7 @@ class RSNodeProcessorNode(RenderStackNode):
     red: FloatVectorProperty(subtype='COLOR', default=(0, 0, 0), min=1, max=1)
 
     def init(self, context):
+        self.inputs.new('RSNodeSocketRenderList', 'Render List')
         self.width = 225
 
     def draw_buttons_ext(self, context, layout):

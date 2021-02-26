@@ -14,9 +14,6 @@ LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
 logging.basicConfig(format=LOG_FORMAT)
 logger = logging.getLogger('mylogger')
 
-# set custom icon
-empty_icon = RSN_Preview(image='empty.png', name='empty_icon')
-
 
 class RSN_OT_RenderStackTask(bpy.types.Operator):
     """Render Tasks"""
@@ -34,8 +31,11 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         ('SCREEN', 'Maximized Area', ''),
         ('AREA', 'Image Editor', ''),
         ('WINDOW', 'New Window', '')],
-        default='WINDOW')
+        default='WINDOW',
+        name='Display')
     ori_render_display_type = None
+
+    processor_node: StringProperty(name='Processor', default='')
 
     # render state
     _timer = None
@@ -76,20 +76,20 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     # Processor node
     def init_process_node(self):
         try:
-            node = self.rsn_queue.nt.nodes['Processor']
+            node = self.rsn_queue.nt.nodes[self.processor_node]
             node.count_frames = self.rsn_queue.get_frame_length()
             node.done_frames = 0
             node.all_tasks = ''
             node.all_tasks = ','.join(self.rsn_queue.task_queue)
         except Exception as e:
-            logger.debug(f'Processor {e}')
+            logger.debug(f'Processor {self.processor_node} not found')
 
     def update_process_node(self):
         try:
-            node = self.rsn_queue.nt.nodes['Processor']
+            node = self.rsn_queue.nt.nodes[self.processor_node]
             node.done_frames += 1
             node.curr_task = self.rsn_queue.task_name
-            node.task_data = json.dumps(self.rsn_queue.task_data, indent=2, ensure_ascii=False)
+            node.task_label = self.rsn_queue.task_data['label']
 
             node.frame_start = self.rsn_queue.frame_start
             node.frame_end = self.rsn_queue.frame_end
@@ -99,7 +99,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
 
     def finish_process_node(self):
         try:
-            node = self.rsn_queue.nt.nodes['Processor']
+            node = self.rsn_queue.nt.nodes[self.processor_node]
             if self.rsn_queue.is_empty():
                 node.all_tasks += ',RENDER_FINISHED'
                 node.curr_task = 'RENDER_FINISHED'
@@ -203,6 +203,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
 
 
 class RSN_OT_ClipBoard(bpy.types.Operator):
+    """Copy"""
     bl_idname = 'rsn.clip_board'
     bl_label = 'Copy'
 
@@ -214,6 +215,7 @@ class RSN_OT_ClipBoard(bpy.types.Operator):
 
 
 class RSN_OT_ShowTaskDetails(bpy.types.Operator):
+    """Show Details"""
     bl_idname = 'rsn.show_task_details'
     bl_label = 'Show Details'
 
@@ -239,168 +241,14 @@ class RSN_OT_ShowTaskDetails(bpy.types.Operator):
         return context.window_manager.invoke_popup(self, width=self.width)
 
 
-class RSN_OT_RenderButton(bpy.types.Operator):
-    """Need Scene Camera"""
-    bl_idname = "rsn.render_button"
-    bl_label = "Render"
-
-    # get date from root
-    render_list_node_name: StringProperty()
-
-    # action after render
-    open_dir: BoolProperty(name='Open folder after render', default=True)
-    clean_path: BoolProperty(name='Empty filepath after render', default=True)
-    render_display_type: EnumProperty(items=[
-        ('NONE', 'Keep User Interface', ''),
-        ('SCREEN', 'Maximized Area', ''),
-        ('AREA', 'Image Editor', ''),
-        ('WINDOW', 'New Window', '')],
-        default='WINDOW',
-        name='Render Display Type')
-
-    # task_data
-    rsn_queue = None
-
-    @classmethod
-    def poll(self, context):
-        if not context.window_manager.rsn_running_modal:
-            return context.scene.camera is not None
-
-    # stop the unnecessary viewport rendering
-    def change_shading(self):
-        for area in bpy.context.screen.areas:
-            if area.type == 'VIEW_3D':
-                for space in area.spaces:
-                    if space.type == 'VIEW_3D' and space.shading.type == "RENDERED":
-                        space.shading.type = 'SOLID'
-
-    def get_render_data(self):
-        rsn_tree = RSN_NodeTree()
-        rsn_tree.set_context_tree_as_wm_tree()
-        self.nt = rsn_tree.get_wm_node_tree()
-
-        self.rsn_queue = RSN_Queue(nodetree=rsn_tree.get_wm_node_tree(), render_list_node=self.render_list_node_name)
-
-    def render_options(self, context):
-        layout = self.layout.box()
-        col = layout.column(align=0)
-
-        sub = col.row(align=1)
-        sub.prop(self, 'open_dir', text='')
-        sub.label(text='Open folder after render', icon='FILEBROWSER')
-
-        sub = col.row(align=1)
-        sub.prop(self, 'clean_path', text='')
-        sub.label(text='Empty filepath after render', icon_value=empty_icon.get_image_icon_id())
-
-        split = layout.split(align=0, factor=0.5)
-        split.prop(self, 'render_display_type', text='')
-        split.separator()
-        # split.prop(context.scene.render, 'use_lock_interface', icon_only=1)
-
-    def draw(self, context):
-        layout = self.layout
-
-        box = layout.split().box()
-        row = box.row(align=1)
-
-        col1 = row.column(align=1).box()
-        col2 = row.column(align=1).box()
-        col3 = row.column(align=1).box()
-        col4 = row.column(align=1).box()
-        col5 = row.column(align=1).box()
-        col6 = row.column(align=1).box()
-        col7 = row.column(align=1).box()
-
-        col1.scale_x = 0.5
-        # col2.scale_x = 1.5
-        # col5.scale_x = 2.5
-        # col6.scale_x = 2
-        col7.scale_x = 0.5
-
-        col1.label(text='Index')
-        col2.label(text='Node')
-        col3.label(text='Label')
-        col4.label(text='Frame Range')
-        col5.label(text='File Path')
-        col6.label(text='File Name')
-        col7.label(text='Info')
-
-        for i, task_node in enumerate(self.rsn_queue.task_queue):
-            # Index
-            col1.label(text=f'{i}')
-
-            # node and mute
-            node = bpy.context.space_data.edit_tree.nodes[task_node]
-            col2.prop(node, 'mute', text=task_node, icon='PANEL_CLOSE' if node.mute else 'CHECKMARK')
-
-            # label
-            col3.label(text=self.rsn_queue.task_data_queue[i]['label'])
-
-            # Range
-            fs = self.rsn_queue.task_data_queue[i]["frame_start"]
-            fe = self.rsn_queue.task_data_queue[i]["frame_end"]
-            col4.label(text=f'{fs} → {fe} ({fe - fs + 1})')
-
-            # filepath
-            if 'path' in self.rsn_queue.task_data_queue[i]:
-                dir = self.rsn_queue.task_data_queue[i]["path"]
-                show = col5.operator('rsn.show_task_details', icon='VIEWZOOM', text='Show')
-                show.task_data = dir
-                show.width = 500
-            else:
-                col5.label(text='Not Defined')
-
-            # file name
-            if 'path_format' in self.rsn_queue.task_data_queue[i]:
-                format = self.rsn_queue.task_data_queue[i]["path_format"]
-                show = col6.operator('rsn.show_task_details', icon='VIEWZOOM', text='Show')
-                show.task_data = format
-                show.width = 500
-            else:
-                col6.label(text='Not Defined')
-
-            # task_data_list
-            d = json.dumps(self.rsn_queue.task_data_queue[i], indent=2, ensure_ascii=False)
-            col7.operator('rsn.show_task_details', icon='INFO', text='').task_data = d
-
-        self.render_options(context)
-        layout.separator(factor=0.25)
-
-    def execute(self, context):
-        blend_path = context.blend_data.filepath
-
-        if blend_path == "":
-            self.report({"ERROR"}, "Save your file first!")
-            return {"FINISHED"}
-        elif context.scene.render.image_settings.file_format in {'AVI_JPEG', 'AVI_RAW', 'FFMPEG'}:
-            self.report({"ERROR"}, "Not Support Anunimation Format")
-            return {"FINISHED"}
-
-        self.change_shading()
-        bpy.ops.rsn.render_stack_task(render_list_node_name=self.render_list_node_name,
-                                      open_dir=self.open_dir,
-                                      clean_path=self.clean_path,
-                                      render_display_type=self.render_display_type)
-
-        return {'FINISHED'}
-
-    def invoke(self, context, event):
-        self.get_render_data()
-        return context.window_manager.invoke_props_dialog(self, width=600)
-
-
 classes = (
     RSN_OT_RenderStackTask,
     RSN_OT_ShowTaskDetails,
     RSN_OT_ClipBoard,
-    RSN_OT_RenderButton
 )
 
 
 def register():
-    empty_icon.register()
-
     for cls in classes:
         bpy.utils.register_class(cls)
 
@@ -410,8 +258,6 @@ def register():
 
 
 def unregister():
-    empty_icon.unregister()
-
     for cls in classes:
         bpy.utils.unregister_class(cls)
 

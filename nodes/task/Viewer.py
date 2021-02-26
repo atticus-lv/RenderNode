@@ -1,4 +1,5 @@
 from bpy.props import *
+
 from ...nodes.BASE.node_tree import RenderStackNode
 from ...utility import *
 from ...preferences import get_pref
@@ -51,12 +52,16 @@ class RSN_OT_AddViewerNode(bpy.types.Operator):
 class RSNodeViewerNode(RenderStackNode):
     bl_idname = 'RSNodeViewerNode'
     bl_label = 'Viewer'
+    bl_icon = 'HIDE_OFF'
 
     show_pref: BoolProperty(default=False)
 
     def init(self, context):
         self.inputs.new('RSNodeSocketRenderList', "Task")
         self.width = 175
+
+    def draw_label(self):
+        return f'Update:{bpy.context.window_manager.rsn_tree_time}'
 
     def update(self):
         rsn_task = RSN_Nodes(node_tree=bpy.context.space_data.edit_tree,

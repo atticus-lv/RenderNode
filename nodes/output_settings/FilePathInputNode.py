@@ -64,7 +64,10 @@ class RSNodeFilePathInputNode(RenderStackNode):
         if self.use_blend_file_path:
             task_data['path'] = os.path.dirname(bpy.data.filepath) + "/"
         else:
-            task_data['path'] = self.custom_path
+            if self.custom_path == '':
+                task_data['path'] = os.path.dirname(bpy.data.filepath) + "/"
+            else:
+                task_data['path'] = self.custom_path
         # path expression
         task_data['path_format'] = self.path_format
 
@@ -90,15 +93,15 @@ class RSN_OT_AddFormatName(bpy.types.Operator):
 
 
 format_names = {
-    'File Name'          : '$blend',
-    'Task Label'         : '$label',
-    'Render Engine'      : '$engine',
-    'Camera Name'        : '$camera',
-    'Resolution: XxY'    : '$res',
-    'Exposure Value'     : '$ev',
-    'View Layer'         : '$vl',
-    'Date: month-day'    : '$data',
-    'Time: minute-second': '$time',
+    'File Name'        : '$blend',
+    'Task Label'       : '$label',
+    'Render Engine'    : '$engine',
+    'Camera Name'      : '$camera',
+    'Resolution: XxY'  : '$res',
+    'Exposure Value'   : '$ev',
+    'View Layer'       : '$vl',
+    'Date: month-day'  : '$T{%m-%d}',
+    'Time: Hour-Minute': '$T{%H-%M}',
 }
 
 

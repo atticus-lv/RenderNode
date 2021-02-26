@@ -150,15 +150,9 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         blend_name = ''
         postfix = ''
 
-        date_now = str(time.strftime("%m-%d", time.localtime()))
-        time_now = str(time.strftime("%H-%M", time.localtime()))
-
         if 'path' in self.task_data:
 
-            shot_export_name = self.task_data["path_format"]
-            # replace time
-            postfix = shot_export_name.replace('$date', date_now)
-            postfix = postfix.replace('$time', time_now)
+            postfix = self.task_data["path_format"]
             # replace camera name
             if cam:
                 postfix = postfix.replace('$camera', cam.name)
@@ -174,11 +168,19 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             postfix = postfix.replace('$vl', bpy.context.view_layer.name)
 
             # frame completion
-            STYLE = re.search(r'([$]F\d)', postfix)
-            if STYLE:
+            STYLE = re.findall(r'([$]F\d)', postfix)
+            if len(STYLE) > 0:
                 c_frame = bpy.context.scene.frame_current
-                format = f'0{STYLE.group(0)[-1:]}d'
-                postfix = postfix.replace(STYLE.group(0), f'{c_frame:{format}}')
+                for i, string in enumerate(STYLE):
+                    format = f'0{STYLE[i][-1:]}d'
+                    postfix = postfix.replace(STYLE[i], f'{c_frame:{format}}')
+
+            # time format
+            TIME = re.findall(r'([$]T{.*?})', postfix)
+            if len(TIME) > 0:
+                for i, string in enumerate(TIME):
+                    format = time.strftime(TIME[i][3:-1], time.localtime())
+                    postfix = postfix.replace(TIME[i], format)
 
             # replace filename
             try:

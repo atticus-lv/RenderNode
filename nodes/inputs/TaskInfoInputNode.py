@@ -11,7 +11,7 @@ def update_node(self, context):
 class RSNodeTaskInfoInputsNode(RenderStackNode):
     '''A simple input node'''
     bl_idname = 'RSNodeTaskInfoInputsNode'
-    bl_label = 'Task Info'
+    bl_label = 'Task Info(Experiment)'
 
     file: PointerProperty(type=bpy.types.Text, name="Task Info File", update=update_node)
 
@@ -31,6 +31,7 @@ class RSNodeTaskInfoInputsNode(RenderStackNode):
             self.use_custom_color = 1
             self.color = (1, 0, 0)
         return task_data
+
 
 def register():
     bpy.utils.register_class(RSNodeTaskInfoInputsNode)

@@ -1,6 +1,6 @@
 import bpy
 import numpy
-from bpy.props import IntProperty
+from bpy.props import IntProperty, BoolProperty
 
 import time
 
@@ -9,6 +9,8 @@ class RSN_OT_MergeSelectedNodes(bpy.types.Operator):
     """Merge selected settings or tasks"""
     bl_idname = 'rsn.merge_selected_nodes'
     bl_label = 'Merge Selection'
+
+    make_version: BoolProperty(default=False)
 
     @classmethod
     def poll(self, context):
@@ -38,11 +40,18 @@ class RSN_OT_MergeSelectedNodes(bpy.types.Operator):
         loc_x = numpy.mean([node.location[0] for node in need_to_sort])
         loc_y = numpy.mean([node.location[1] for node in need_to_sort])
 
+        width = numpy.mean([node.width for node in need_to_sort])
+
         list_node = nt.nodes.new('RSNodeSettingsMergeNode')
-        list_node.location = loc_x + 250, loc_y
+        list_node.location = loc_x + width * 1.2, loc_y
 
         for i, node in enumerate(need_to_sort):
             nt.links.new(node.outputs[0], list_node.inputs[i])
+
+        if self.make_version:
+            list_node.node_type = 'VERSION'
+            list_node.label = 'Version'
+            list_node.active = 1
 
         return {"FINISHED"}
 
