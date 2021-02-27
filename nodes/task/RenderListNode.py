@@ -42,10 +42,12 @@ class RSNodeRenderListNode(RenderStackNode):
         sheet.clean_path = self.clean_path
         sheet.render_display_type = self.render_display_type
         sheet.processor_node = self.processor_node
-        col.separator(factor=5)
-        col.prop(context.scene.render, "use_lock_interface")
-        layout.separator(factor=0.2)
 
+        layout.separator(factor=0.2)
+        col = layout.column(align=0)
+        col.prop(context.scene.render, "use_lock_interface")
+
+        layout.separator(factor=0.2)
         col = layout.column(align=0)
         col.prop(self, 'open_dir')
         col.prop(self, 'clean_path')
