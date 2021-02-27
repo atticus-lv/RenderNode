@@ -43,8 +43,6 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     rendering = None
     # get and apply from rsn queue
     rsn_queue = None
-    # frame check
-    frame_current = 1
 
     # set render state
     def pre(self, dummy, thrd=None):
@@ -134,7 +132,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         self.init_process_node()
         # update for the first render (if there is a viewer node)
         self.rsn_queue.update_task_data()
-        self.frame_current = self.rsn_queue.frame_start
+        bpy.context.scene.frame_current = self.rsn_queue.frame_start
         self.append_handles()
 
         # set render in background
@@ -147,16 +145,16 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     def frame_check(self):
         # update task
         self.rsn_queue.update_task_data()
+        if not self.rsn_queue.is_empty():
 
-        if self.frame_current >= self.rsn_queue.frame_end:
-            self.rsn_queue.pop()
-            if not self.rsn_queue.is_empty():  # 如果帧数列表未空，则继续读取下一个
+            if bpy.context.scene.frame_current >= self.rsn_queue.frame_end:
+                self.rsn_queue.pop()
                 self.rsn_queue.update_task_data()
-                self.frame_current = self.rsn_queue.frame_start
-        else:
-            self.frame_current += self.rsn_queue.frame_step
-        # show in nodes
-        self.update_process_node()
+                bpy.context.scene.frame_current = self.rsn_queue.frame_start
+            else:
+                bpy.context.scene.frame_current += self.rsn_queue.frame_step
+            # show in nodes
+            self.update_process_node()
 
     def switch2task(self):
         # update task again
@@ -197,7 +195,6 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
 
             elif self.rendering is False:
                 self.switch2task()
-                bpy.context.scene.frame_current = self.frame_current
                 bpy.ops.render.render("INVOKE_DEFAULT", write_still=True)
 
         return {"PASS_THROUGH"}
