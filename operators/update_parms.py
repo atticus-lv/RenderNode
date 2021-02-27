@@ -340,8 +340,8 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         if "frame_start" in self.task_data:
             scn = bpy.context.scene
             compare(scn, 'frame_start', self.task_data['frame_start'])
-            compare(scn, 'frame_start', self.task_data['frame_end'])
-            compare(scn, 'frame_start', self.task_data['frame_step'])
+            compare(scn, 'frame_end', self.task_data['frame_end'])
+            compare(scn, 'frame_step', self.task_data['frame_step'])
 
     def update_render_engine(self):
         # engine settings
