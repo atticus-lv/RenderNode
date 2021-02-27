@@ -1,12 +1,14 @@
-
-
 # RenderStackNode [Blender Addon]
-> ##### v1.1.8
+
+> ##### v1.1.9
+
 #### Feature
+
+1.1.6~1.1.8 have serious bug with render mutiple animation, update it!!
 
 > Provide blender node based look-dev and render workflow
 
-| Features 1.18    | Description                                                  |
+| Features 1.19    | Description                                                  |
 | ---------------- | ------------------------------------------------------------ |
 | Render queue     | render animation and still frame in one queue                |
 | Render sheet     | give a render confirm sheet before the final render          |
@@ -19,13 +21,14 @@
 
 #### Document
 
-Check [**Wiki**](https://github.com/atticus-lv/RenderStackNode/wiki) 
+Check [**Wiki**](https://github.com/atticus-lv/RenderStackNode/wiki)
 
 #### Install
 
 **Common User**
 
-Click [here](https://github.com/atticus-lv/RenderStackNode/archive/main.zip) to down the zip file, then install as usual addon
+Click [here](https://github.com/atticus-lv/RenderStackNode/archive/main.zip) to down the zip file, then install as usual
+addon
 
 **Familiar with git**
 
@@ -38,6 +41,7 @@ Then clone the repository
 `git clone https://github.com/atticus-lv/RenderStackNode.git`
 
 #### Support me
+
 blendermarket: https://blendermarket.com/products/renderstacknode
 
 alipay: 1029910278@qq.com
