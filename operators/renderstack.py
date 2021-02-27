@@ -152,6 +152,8 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
             self.rsn_queue.pop()
             if not self.rsn_queue.is_empty():  # 如果帧数列表未空，则继续读取下一个
                 self.frame_current = self.rsn_queue.frame_start
+        elif self.frame_current < self.rsn_queue.frame_start:
+            self.frame_current = self.rsn_queue.frame_start
         else:
             self.frame_current += self.rsn_queue.frame_step
         # show in nodes
