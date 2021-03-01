@@ -43,24 +43,13 @@ class RSNodeSettingsMergeNode(RenderStackNode):
             layout.operator('rsn.switch_setting').node = self.name
 
     def update(self):
-        self.auto_update_inputs()
+        self.auto_update_inputs('RSNodeSocketTaskSettings', "Input")
 
-    def auto_update_inputs(self):
+    def auto_update_inputs(self, socket_type, socket_name):
         if self.node_type != 'SWITCH':
-            i = 0
-            for input in self.inputs:
-                if not input.is_linked:
-                    # keep one input for links with py commands
-                    if i == 0:
-                        i += 1
-                    else:
-                        self.inputs.remove(input)
-            # auto add inputs
-            if i != 1:
-                self.inputs.new('RSNodeSocketTaskSettings', "Input")
+            super().auto_update_inputs(socket_type, socket_name)
         else:
-            if len(self.inputs) < 2:
-                self.inputs.new('RSNodeSocketTaskSettings', "Input")
+            if len(self.inputs) < 2: self.inputs.new(socket_type, socket_name)
 
 
 def register():

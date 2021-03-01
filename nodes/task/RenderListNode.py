@@ -54,7 +54,7 @@ class RSNodeRenderListNode(RenderStackNode):
         col.prop(self, 'render_display_type')
 
     def update(self):
-        self.auto_update_inputs()
+        self.auto_update_inputs('RSNodeSocketRenderList', "Task")
         try:
             if self.outputs[0].is_linked:
                 p_node = self.outputs[0].links[0].to_node
@@ -63,19 +63,6 @@ class RSNodeRenderListNode(RenderStackNode):
                 self.processor_node = ''
         except Exception as e:  # This error shows when the dragging the link off viewer node(Works well with knife tool)
             print(e)  # this seems to be a blender error
-
-    def auto_update_inputs(self):
-        i = 0
-        for input in self.inputs:
-            if not input.is_linked:
-                # keep one input for links with py commands
-                if i == 0:
-                    i += 1
-                else:
-                    self.inputs.remove(input)
-        # auto add inputs
-        if i != 1:
-            self.inputs.new('RSNodeSocketRenderList', "Task")
 
 
 def register():

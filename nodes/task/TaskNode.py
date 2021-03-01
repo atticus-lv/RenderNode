@@ -18,20 +18,7 @@ class RSNodeTaskNode(RenderStackNode):
         layout.prop(self, 'label', text="Label")
 
     def update(self):
-        self.auto_update_inputs()
-
-    def auto_update_inputs(self):
-        i = 0
-        for input in self.inputs:
-            if not input.is_linked:
-                # keep one input for links with py commands
-                if i == 0:
-                    i += 1
-                else:
-                    self.inputs.remove(input)
-        # auto add inputs
-        if i != 1:
-            self.inputs.new('RSNodeSocketTaskSettings', "Settings")
+        self.auto_update_inputs('RSNodeSocketTaskSettings', "Settings")
 
 
 def register():

@@ -6,21 +6,10 @@ from ...utility import *
 from ...preferences import get_pref
 
 import logging
-from functools import wraps
 
 LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
 logging.basicConfig(format=LOG_FORMAT)
 logger = logging.getLogger('mylogger')
-
-
-def get_data_log(fn):
-    @wraps(fn)
-    def print_arg(*args, **kwargs):
-        logger.debug(f'pass "{args[0].name}"')
-        result = fn(*args, **kwargs)
-        return result
-
-    return print_arg
 
 
 class RenderStackNodeTree(bpy.types.NodeTree):
@@ -37,12 +26,30 @@ class RenderStackNode(bpy.types.Node):
     def poll(cls, ntree):
         return ntree.bl_idname == 'RenderStackNodeTree'
 
+    ## BASE METHOD
+    #########################################
+
     def copy(self, node):
-        print("RSN Copied node", node.name)
+        self.label = self.name
+        print(f"RSN Copied {self.name} from {node.name}")
 
     def free(self):
         """Remove Node"""
         print("RSN removed node", self.name)
+
+    ## STATE METHOD
+    #########################################
+
+    def debug(self):
+        logger.debug(f'pass "{self.name}"')
+
+    def set_warning(self):
+        self.use_custom_color = 1
+        self.color = (1, 0, 0)
+        logger.warning(f'{self.name}')
+
+    ## UPDATE METHOD
+    #########################################
 
     def update(self):
         """
@@ -51,13 +58,25 @@ class RenderStackNode(bpy.types.Node):
         """
         pass
 
-    # RSN method
-    def auto_update_inputs(self):
-        """add or remove inputs"""
-        if self.bl_idname == 'RSNodeTaskNode':
-            pass
-        elif self.bl_idname == 'RSNodeRenderListNode':
-            pass
+    def auto_update_inputs(self, socket_type='RSNodeSocketTaskSettings', socket_name='Input'):
+        """add or remove inputs automatically
+        :parm socket_type: any socket type that is registered in blender
+        :parm socket_name: custom name for the socket
+        """
+
+        i = 0
+        for input in self.inputs:
+            if not input.is_linked:
+                # keep at least one input for links with py commands
+                if i == 0:
+                    i += 1
+                else:
+                    self.inputs.remove(input)
+        # auto add inputs
+        if i != 1: self.inputs.new(socket_type, socket_name)
+
+    ## RSN DATA MANAGE
+    #########################################
 
     def update_parms(self):
         if bpy.context.window_manager.rsn_node_list != '':
@@ -67,16 +86,6 @@ class RenderStackNode(bpy.types.Node):
                 bpy.ops.rsn.update_parms(view_mode_handler=bpy.context.window_manager.rsn_viewer_node,
                                          update_scripts=pref.node_viewer.update_scripts,
                                          use_render_mode=False)
-
-    @get_data_log
-    def debug(self):
-        """Debug Log"""
-        pass
-
-    def set_warning(self):
-        self.use_custom_color = 1
-        self.color = (1, 0, 0)
-        logger.warning(f'{self.name}')
 
     def get_data(self):
         """For get self date into rsn tree method"""
