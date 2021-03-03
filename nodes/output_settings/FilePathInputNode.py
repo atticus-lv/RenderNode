@@ -1,5 +1,5 @@
 import bpy
-from bpy.props import BoolProperty, StringProperty
+from bpy.props import *
 
 from ...nodes.BASE.node_tree import RenderStackNode
 from ...preferences import get_pref
@@ -23,10 +23,12 @@ class RSNodeFilePathInputNode(RenderStackNode):
     custom_path: StringProperty(name='Path',
                                 default='', update=update_node)
 
-    path_format: StringProperty(default="$blend_render/$label$camera",
+    path_format: StringProperty(default="$blend_render/$V/$label.$camera.$F4",
                                 name="Formatted Name",
                                 description='Formatted Name,View sidebar usage',
                                 update=update_node)
+
+    version: IntProperty(name='Version', default=1, min=1, soft_max=5, update=update_node)
 
     def init(self, context):
         self.outputs.new('RSNodeSocketOutputSettings', "Output Settings")
@@ -43,6 +45,9 @@ class RSNodeFilePathInputNode(RenderStackNode):
                 row = layout.row(align=1)
                 row.prop(self, 'custom_path')
                 row.operator('buttons.directory_browse', icon='FILEBROWSER', text='')
+
+            layout.prop(self, "version", slider=1)
+
             # format_name
             row = layout.row(align=1)
             row.prop(self, 'path_format', text='')
@@ -70,7 +75,7 @@ class RSNodeFilePathInputNode(RenderStackNode):
                 task_data['path'] = self.custom_path
         # path expression
         task_data['path_format'] = self.path_format
-
+        task_data['version'] = str(self.version)
         return task_data
 
 
@@ -94,6 +99,7 @@ class RSN_OT_AddFormatName(bpy.types.Operator):
 
 format_names = {
     'File Name'        : '$blend',
+    'Version'          : '$V',
     'Task Label'       : '$label',
     'Render Engine'    : '$engine',
     'Camera Name'      : '$camera',

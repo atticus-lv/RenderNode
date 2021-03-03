@@ -166,6 +166,8 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             postfix = postfix.replace('$label', self.task_data["label"])
             # replace view_layer
             postfix = postfix.replace('$vl', bpy.context.view_layer.name)
+            # version_
+            postfix = postfix.replace('$V', self.task_data["version"])
 
             # frame completion
             STYLE = re.findall(r'([$]F\d)', postfix)
