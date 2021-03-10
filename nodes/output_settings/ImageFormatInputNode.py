@@ -61,7 +61,7 @@ class RSNodeImageFormatInputNode(RenderStackNode):
         col.prop(self, 'transparent')
 
     def get_data(self):
-        task_data_obj = {}
+        task_data = {}
         if self.file_format == "JPEG":
             if self.color_mode == "RGBA":
                 self.color_mode = "RGB"
@@ -76,17 +76,17 @@ class RSNodeImageFormatInputNode(RenderStackNode):
             if self.color_depth == "8":
                 self.color_depth = "16"
 
-        task_data = {}
-        task_data['color_mode'] = self.color_mode
-        task_data['color_depth'] = self.color_depth
-        task_data['file_format'] = self.file_format
-        task_data['compression'] = self.compression
-        task_data['quality'] = self.quality
-        task_data['use_preview'] = self.use_preview
-        task_data['transparent'] = self.transparent
+        task_data_obj = {}
+        task_data_obj['color_mode'] = self.color_mode
+        task_data_obj['color_depth'] = self.color_depth
+        task_data_obj['file_format'] = self.file_format
+        task_data_obj['compression'] = self.compression
+        task_data_obj['quality'] = self.quality
+        task_data_obj['use_preview'] = self.use_preview
+        task_data_obj['transparent'] = self.transparent
 
-        task_data_obj['image_settings'] = task_data
-        return task_data_obj
+        task_data['image_settings'] = task_data_obj
+        return task_data
 
 
 def register():
