@@ -1,6 +1,6 @@
 # RenderStackNode [Blender Addon]
 
-> ##### v1.1.9
+> ##### v1.2.0
 
 #### Feature
 
@@ -8,7 +8,7 @@
 
 > Provide blender node based look-dev and render workflow
 
-| Features 1.19    | Description                                                  |
+| Features 1.20    | Description                                                  |
 | ---------------- | ------------------------------------------------------------ |
 | Render queue     | render animation and still frame in one queue                |
 | Render sheet     | give a render confirm sheet before the final render          |
