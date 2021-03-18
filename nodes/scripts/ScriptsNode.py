@@ -30,6 +30,8 @@ class RSNodeScriptsNode(RenderStackNode):
         self.width = 200
 
     def draw_buttons(self, context, layout):
+        super().draw_buttons(context, layout)
+
         layout.prop(self, "type", expand=1)
         if self.type == 'SINGLE':
             layout.prop(self, "code", text="")

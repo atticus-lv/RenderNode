@@ -44,6 +44,7 @@ class RSN_OT_SendEmail(bpy.types.Operator):
         self.receivers = self.email
 
     def send(self):
+
         message = MIMEText(self.content, 'plain', 'utf-8')
 
         message['From'] = Header(f"{self.sender_name}<{self.email}>", 'utf-8')
@@ -94,6 +95,8 @@ class RSNodeSmtpEmailNode(RenderStackNode):
         pass
 
     def draw_buttons_ext(self, context, layout):
+        super().draw_buttons(context, layout)
+
         layout.use_property_split = True
         layout.prop(self, "sender_name")
         layout.prop(self, "email")

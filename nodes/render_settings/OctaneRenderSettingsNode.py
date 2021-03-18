@@ -66,6 +66,8 @@ class RSNodeOctaneRenderSettingsNode(RenderStackNode):
         self.width = 200
 
     def draw_buttons(self, context, layout):
+        super().draw_buttons(context, layout)
+
         col = layout.column(align=1)
 
         col.prop(self, 'max_samples')
@@ -116,6 +118,7 @@ class RSNodeOctaneRenderSettingsNode(RenderStackNode):
             }
         else:
             self.set_warning()
+            self.warning_msg = 'Octane Engine is not enable!'
         return task_data
 
 

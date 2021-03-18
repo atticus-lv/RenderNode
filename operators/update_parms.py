@@ -73,11 +73,17 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         task_node_name = is_task_node(node)
         return task_node_name
 
-    def warning_node_color(self, node_name):
+    def warning_node_color(self, node_name, msg=''):
+        """
+        :parm e: error message
+        use try to catch error because user may use task info node to input settings
+
+        """
         try:
-            self.nt.nodes[node_name].set_warning()
-        except Exception:
-            pass
+            node = self.nt.nodes[node_name]
+            node.set_warning(msg=msg)
+        except Exception as e:
+            print(e)
 
     # first get task data
     def get_data(self):
@@ -302,8 +308,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                                            sender_name=email_dict['sender_name'],
                                            email=email_dict['email'])
                 except Exception as e:
-                    logger.warning(f'SMTP Email {node_name} error', exc_info=e)
-                    self.warning_node_color(node_name)
+                    self.warning_node_color(node_name, str(e))
 
     def updata_view_layer(self):
         if 'view_layer' in self.task_data and bpy.context.window.view_layer.name != self.task_data['view_layer']:
@@ -315,8 +320,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                 try:
                     exec(value)
                 except Exception as e:
-                    logger.warning(f'Scripts node {node_name} error', exc_info=e)
-                    self.warning_node_color(node_name)
+                    self.warning_node_color(node_name, str(e))
 
         if 'scripts_file' in self.task_data:
             for node_name, file_name in self.task_data['scripts_file'].items():
@@ -324,9 +328,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                     c = bpy.data.texts[file_name].as_string()
                     exec(c)
                 except Exception as e:
-                    print(f"RSN ERROR: scripts node > {node_name} < error: {e}")
-                    logger.warning(f'scripts node {node_name} error', exc_info=e)
-                    self.warning_node_color(node_name)
+                    self.warning_node_color(node_name, str(e))
 
     def update_image_format(self):
         if 'image_settings' in self.task_data:

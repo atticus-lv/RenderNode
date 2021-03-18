@@ -22,6 +22,9 @@ class RenderStackNodeTree(bpy.types.NodeTree):
 class RenderStackNode(bpy.types.Node):
     bl_label = "RenderStack Node"
 
+    warning: BoolProperty(name='Is warning', default=False)
+    warning_msg: StringProperty(name='warning message', default='')
+
     @classmethod
     def poll(cls, ntree):
         return ntree.bl_idname == 'RenderStackNodeTree'
@@ -40,12 +43,21 @@ class RenderStackNode(bpy.types.Node):
     ## STATE METHOD
     #########################################
 
+    def draw_buttons(self, context, layout):
+        if self.warning is True:
+            msg = layout.operator('rsn.show_task_details', icon='ERROR', text='Show Waring Message')
+            msg.task_data = self.warning_msg
+
     def debug(self):
         logger.debug(f'pass "{self.name}"')
 
-    def set_warning(self):
+    def set_warning(self, msg=''):
+        self.warning_msg = msg
+
         self.use_custom_color = 1
         self.color = (1, 0, 0)
+        self.warning = True
+
         logger.warning(f'{self.name}')
 
     ## UPDATE METHOD
