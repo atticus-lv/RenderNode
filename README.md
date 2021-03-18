@@ -16,7 +16,7 @@
 | Viewport update  | apply all the changes to viewport in 2ms                     |
 | Custom Overwrite | scripts node and object node (data path)                     |
 | Path Expression  | use $ to generate formated name                              |
-| Version Control  | with version node you can have mutiple version setting in one task |
+| Version Control  | with version node you can have multiple version setting in one task |
 | Third Party      | Octane, Luxcore, SSM(an other addon of mine)                 |
 
 #### Document

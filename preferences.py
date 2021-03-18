@@ -42,6 +42,13 @@ class NodeFilePathProps(bpy.types.PropertyGroup):
     path_format: StringProperty(name='Default Path Format',
                                 default='$blend_render/$V/$label.$camera.$F4')
 
+    time_behaviour: EnumProperty(
+        name='Time behaviour($T)',
+        items=[
+            ('TASK', 'By Task', ''),
+            ('FRAME', 'By Frame', '')],
+        default='TASK')
+
 
 class RSN_Preference(bpy.types.AddonPreferences):
     bl_idname = __package__
@@ -108,6 +115,7 @@ class RSN_Preference(bpy.types.AddonPreferences):
         if self.node_file_path.show:
             box.use_property_split = True
             box.prop(self.node_file_path, "path_format")
+            # box.prop(self.node_file_path, "time_behaviour")
 
     def smtp_node(self, box):
         box.prop(self.node_smtp, 'show', text="SMTP Email Node", emboss=False,
