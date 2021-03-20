@@ -17,6 +17,7 @@ def active_version(self, context):
     dg = context.evaluated_depsgraph_get()
     dg.update()
 
+    self.update_parms()
 
 class RSNodeSettingsMergeNode(RenderStackNode):
     """A simple input node"""
