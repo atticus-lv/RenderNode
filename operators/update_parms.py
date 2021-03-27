@@ -214,6 +214,17 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         else:
             bpy.ops.rsn.creat_compositor_node(use_passes=0, view_layer=bpy.context.window.view_layer.name)
 
+    def update_property(self):
+        if 'property' in self.task_data:
+            for node_name, dict in self.task_data['property'].items():
+                try:
+                    obj = eval(dict['full_data_path'])
+                    value = dict['value']
+                    if obj != value:
+                        exec(f"{dict['full_data_path']}={value}")
+                except Exception:
+                    self.warning_node_color(node_name, 'Full data path error!')
+
     def update_object_display(self):
         if 'object_display' in self.task_data:
             for node_name, dict in self.task_data['object_display'].items():
@@ -423,6 +434,8 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             self.update_color_management()
             self.update_res()
             self.update_render_engine()
+
+            self.update_property()
 
             self.update_object_display()
             self.update_object_psr()

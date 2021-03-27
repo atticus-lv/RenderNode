@@ -187,12 +187,17 @@ class RSN_Nodes:
             task_data['label'] = self.nt.nodes[task_name].label
 
             # Object select Nodes
-            if node.bl_idname == 'RSNodeObjectDataNode':
+            if node.bl_idname == 'RSNodePropertyInputNode':
+                if 'property' not in task_data:
+                    task_data['property'] = {}
+                task_data['property'].update(node.get_data())
+
+            elif node.bl_idname == 'RSNodeObjectDataNode':
                 if 'object_data' not in task_data:
                     task_data['object_data'] = {}
                 task_data['object_data'].update(node.get_data())
 
-            if node.bl_idname == 'RSNodeObjectModifierNode':
+            elif node.bl_idname == 'RSNodeObjectModifierNode':
                 if 'object_modifier' not in task_data:
                     task_data['object_modifier'] = {}
                 task_data['object_modifier'].update(node.get_data())

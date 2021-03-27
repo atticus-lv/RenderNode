@@ -32,7 +32,7 @@ class RSNodeObjectDataNode(RenderStackNode):
 
     float_value: FloatProperty(name='Value', update=update_node)
     string_value: StringProperty(name='Value', update=update_node)
-    bool_value: BoolProperty(name='On', update=update_node)
+    bool_value: BoolProperty(name='Check', update=update_node)
     int_value: IntProperty(name='Value', update=update_node)
 
     color_value: FloatVectorProperty(name='Color', update=update_node, subtype='COLOR',
