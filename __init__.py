@@ -48,8 +48,9 @@ for name in __dict__.values():
 def register():
     for name in __dict__.values():
         if name in sys.modules and hasattr(sys.modules[name], 'register'):
-            sys.modules[name].register()
-
+            try:
+                sys.modules[name].register()
+            except ValueError:pass # open template file may cause this problem
 
 def unregister():
     for name in __dict__.values():
