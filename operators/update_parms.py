@@ -222,8 +222,8 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                     value = dict['value']
                     if obj != value:
                         exec(f"{dict['full_data_path']}={value}")
-                except Exception:
-                    self.warning_node_color(node_name, 'Full data path error!')
+                except Exception as e:
+                    self.warning_node_color(node_name, f'Full data path error!\n{e}')
 
     def update_object_display(self):
         if 'object_display' in self.task_data:
