@@ -228,70 +228,50 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
     def update_object_display(self):
         if 'object_display' in self.task_data:
             for node_name, dict in self.task_data['object_display'].items():
-                try:
-                    ob = bpy.data.objects[dict['object']]
-                except:
-                    ob = None
-                if ob:
-                    compare(ob, 'hide_viewport', dict['hide_viewport'])
-                    compare(ob, 'hide_render', dict['hide_render'])
+                ob = eval(dict['object'])
+                compare(ob, 'hide_viewport', dict['hide_viewport'])
+                compare(ob, 'hide_render', dict['hide_render'])
 
     def update_object_psr(self):
         if 'object_psr' in self.task_data:
             for node_name, dict in self.task_data['object_psr'].items():
-                try:
-                    ob = bpy.data.objects[dict['object']]
-                except:
-                    ob = None
-                if ob:
-                    if 'location' in dict:
-                        compare(ob, 'location', dict['location'])
-                    if 'scale' in dict:
-                        compare(ob, 'scale', dict['scale'])
-                    if 'rotation' in dict:
-                        compare(ob, 'rotation_euler', dict['rotation'])
+                ob = eval(dict['object'])
+                if 'location' in dict:
+                    compare(ob, 'location', dict['location'])
+                if 'scale' in dict:
+                    compare(ob, 'scale', dict['scale'])
+                if 'rotation' in dict:
+                    compare(ob, 'rotation_euler', dict['rotation'])
 
     def update_object_material(self):
         if 'object_material' in self.task_data:
             for node_name, dict in self.task_data['object_material'].items():
+                ob = eval(dict['object'])
                 try:
-                    ob = bpy.data.objects[dict['object']]
-                except:
-                    ob = None
-                if ob:
-                    try:
-                        if ob.material_slots[dict['slot_index']].material.name != dict['new_material']:
-                            ob.material_slots[dict['slot_index']].material = bpy.data.materials[dict['new_material']]
-                    except Exception as e:
-                        pass
+                    if ob.material_slots[dict['slot_index']].material.name != dict['new_material']:
+                        ob.material_slots[dict['slot_index']].material = bpy.data.materials[dict['new_material']]
+                except Exception as e:
+                    pass
 
     def update_object_data(self):
         if 'object_data' in self.task_data:
             for node_name, dict in self.task_data['object_data'].items():
-                try:
-                    ob = bpy.data.objects[dict['object']]
-                except:
-                    ob = None
-                if ob:
-                    value = dict['value']
-                    obj, attr = source_attr(ob.data, dict['data_path'])
-                    compare(obj, attr, value)
+                ob = eval(dict['object'])
+                value = dict['value']
+                obj, attr = source_attr(ob.data, dict['data_path'])
+                compare(obj, attr, value)
 
     def update_object_modifier(self):
         if 'object_modifier' in self.task_data:
             for node_name, dict in self.task_data['object_modifier'].items():
-                try:
-                    ob = bpy.data.objects[dict['object']]
-                except:
-                    ob = None
-                if ob:
-                    value = dict['value']
-                    match = re.match(r"modifiers[[](.*?)[]]", dict['data_path'])
-                    name = match.group(1)
-                    if name:
-                        data_path = dict['data_path'].split('.')[-1]
-                        modifier = ob.modifiers[name[1:-1]]
-                        compare(modifier, data_path, value)
+                ob = eval(dict['object'])
+                value = dict['value']
+                match = re.match(r"modifiers[[](.*?)[]]", dict['data_path'])
+                name = match.group(1)
+                if name:
+                    data_path = dict['data_path'].split('.')[-1]
+                    modifier = ob.modifiers[name[1:-1]]
+                    compare(modifier, data_path, value)
 
     def update_slots(self):
         if 'render_slot' in self.task_data:
@@ -419,8 +399,8 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
 
     def update_camera(self):
         if 'camera' in self.task_data and self.task_data['camera']:
-            cam = bpy.data.objects[self.task_data['camera']]
-            compare(bpy.context.scene, 'camera', cam)
+            cam = eval(self.task_data['camera'])
+            if cam: compare(bpy.context.scene, 'camera', cam)
 
     @timefn
     def data_changes(self):

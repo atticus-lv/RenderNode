@@ -99,7 +99,7 @@ class RSNodeObjectModifierNode(RenderStackNode):
                             value = list(self.vector_value)
 
                     if value != None:
-                        task_data_obj[self.name] = {'object'   : self.object.name,
+                        task_data_obj[self.name] = {'object'   : f"bpy.data.objects['{self.object.name}']",
                                                     'data_path': self.data_path,
                                                     'value'    : value}
                 except KeyError:

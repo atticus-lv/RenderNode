@@ -29,9 +29,10 @@ class RSNodeCamInputNode(RenderStackNode):
             row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.camera.name
 
     def get_data(self):
-        task_data = {}
-        task_data["camera"] = self.camera.name if self.camera else None
-        return task_data
+        if self.camera:
+            task_data = {}
+            task_data["camera"] = f"bpy.data.objects['{self.camera.name}']"
+            return task_data
 
 
 def register():

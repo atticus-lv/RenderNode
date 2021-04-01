@@ -79,7 +79,7 @@ class RSNodeObjectPSRNode(RenderStackNode):
     def get_data(self):
         task_data_obj = {}
         if self.object and True in {self.use_p, self.use_s, self.use_r}:
-            d = {'object': self.object.name}
+            d = {'object': f"bpy.data.objects['{self.object.name}']"}
             if self.use_p:
                 d['location'] = list(self.p)
             if self.use_s:
