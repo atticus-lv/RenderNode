@@ -45,7 +45,6 @@ class RSNodeSetVariousNode(RenderStackNode):
     bl_label = 'Set Various'
 
     refresh: BoolProperty(default=False, update=update_refresh)
-    node_list: StringProperty(default='')
 
     def init(self, context):
         self.inputs.new('RSNodeSocketTaskSettings', "Input")
@@ -53,27 +52,8 @@ class RSNodeSetVariousNode(RenderStackNode):
         self.width = 220
 
     def draw_buttons(self, context, layout):
-        layout.prop(self, "refresh", icon="FILE_REFRESH")
-        layout.separator(factor=0.5)
-        col = layout.column()
-        if self.node_list != '':
-            nodes = self.node_list.split(',')
-            for node_name in nodes:
-                node = context.space_data.edit_tree.nodes[node_name]
-                row = col.row()
-                row.prop(node, "name")
-                # row.prop(node, 'active', text='Various')
-                row.operator("rsn.set_various", text="", icon="SETTINGS").node_name = node.name
+        pass
 
-    def update(self):
-        self.get_var_nodes()
-
-    def get_var_nodes(self):
-        nt = bpy.context.space_data.edit_tree
-        RSN = RSN_Nodes(node_tree=nt, root_node_name=self.name)
-        nodes = RSN.get_children_from_node(root_node=self)
-        self.node_list = ','.join(
-            [node_name for node_name in nodes if nt.nodes[node_name].bl_idname == "RSNodeVariousNode"])
 
 
 def register():

@@ -62,7 +62,7 @@ class RSN_Nodes:
     def get_root_node(self):
         return self.root_node
 
-    def get_children_from_node(self, root_node):
+    def get_children_from_node(self, root_node, pass_mute=True):
         """Depth first search
         :parm root_node: a blender node
 
@@ -77,7 +77,7 @@ class RSN_Nodes:
                     node_list.append(node.name)
 
         # @lru_cache(maxsize=None)
-        def get_sub_node(node):
+        def get_sub_node(node, pass_mute_node=True):
             """Recursion
             :parm node: a blender node
 
@@ -87,7 +87,7 @@ class RSN_Nodes:
                 if input.is_linked:
                     try:
                         sub_node = input.links[0].from_node
-                        if sub_node.mute:
+                        if sub_node.mute and pass_mute_node:
                             continue
                         else:
                             get_sub_node(sub_node)
@@ -100,7 +100,7 @@ class RSN_Nodes:
             # nodes append from left to right, from top to bottom
             append_node_to_list(node)
 
-        get_sub_node(root_node)
+        get_sub_node(root_node, pass_mute)
 
         return node_list
 
