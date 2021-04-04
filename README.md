@@ -14,12 +14,12 @@
 | Render sheet     | give a render confirm sheet before the final render          |
 | Processor bar    | detail processor bar through the whole render                |
 | Viewport update  | apply all the changes to viewport in 2ms                     |
-| Custom Overwrite | scripts node and object node (data path)                     |
-| Path Expression  | use $ to generate formated name                              |
-| Version Control  | with version node you can have multiple version setting in one task |
+| Custom Overwrite | all propertise can be overwrite                    |
+| Path Expression  | use $ to generate formatted name                              |
+| Version Control  | various sth and set various in one task |
 | Third Party      | Octane, Luxcore, SSM(an other addon of mine)                 |
 
-#### Document
+#### Document (WIP)
 
 Check [**Wiki**](https://github.com/atticus-lv/RenderStackNode/wiki)
 
