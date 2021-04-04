@@ -53,12 +53,13 @@ class RSN_OT_GetTaskInfo(bpy.types.Operator):
     def invoke(self, context, event):
         nt = context.space_data.edit_tree
         RSN = RSN_Nodes(node_tree=nt, root_node_name=self.task_name)
-
-        task_dict = RSN.get_children_from_task(task_name=self.task_name, return_dict=True)
-        data = RSN.get_task_data(task_name=self.task_name, task_dict=task_dict)
-        self.task_data = json.dumps(data, indent=2, ensure_ascii=False)
-        return context.window_manager.invoke_popup(self, width=300)
-
+        try:
+            task_dict = RSN.get_children_from_task(task_name=self.task_name, return_dict=True)
+            data = RSN.get_task_data(task_name=self.task_name, task_dict=task_dict)
+            self.task_data = json.dumps(data, indent=2, ensure_ascii=False)
+            return context.window_manager.invoke_popup(self, width=300)
+        except:
+            return {"CANCELLED"}
 
 def register():
     bpy.utils.register_class(RSNodeTaskNode)
