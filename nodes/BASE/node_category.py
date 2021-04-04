@@ -61,6 +61,10 @@ node_categorys = [
         # nodeitems_utils.NodeItem("RSNodeClientNode"),
     ]),
     RSNCategory("LAYOUT", "Layout", items=[
+        nodeitems_utils.NodeItem("RSNodeNullNode"),
+        nodeitems_utils.NodeItem("RSNodeVariousNode"),
+        nodeitems_utils.NodeItem("RSNodeSetVariousNode"),
+
         nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Merge", settings={
             "node_type": repr("MERGE"),
         }),
