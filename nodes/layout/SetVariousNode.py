@@ -8,9 +8,8 @@ class RSN_OT_SetVarious(bpy.types.Operator):
     bl_idname = 'rsn.set_various'
     bl_label = 'Set Various'
 
-
     node_name: StringProperty(default='')
-    active: IntProperty(name = 'Active Var',default=1)
+    active: IntProperty(name='Active Var', default=1)
 
     def draw(self, context):
         layout = self.layout
@@ -24,7 +23,7 @@ class RSN_OT_SetVarious(bpy.types.Operator):
         for i, input in enumerate(node.inputs):
             if input.is_linked == 1:
                 var = input.links[0].from_node
-                col.label(text=f"{i + 1} : {var.name}")
+                col.label(text=f"{i + 1} : {var.label if var.label != '' else var.name}")
 
     def execute(self, context):
         node = context.space_data.edit_tree.nodes[self.node_name]
@@ -34,16 +33,18 @@ class RSN_OT_SetVarious(bpy.types.Operator):
     def invoke(self, context, event):
         return context.window_manager.invoke_props_dialog(self, width=300)
 
-def update_refresh(self,context):
+
+def update_refresh(self, context):
     self.refresh = 0
     self.update()
+
 
 class RSNodeSetVariousNode(RenderStackNode):
     """A simple input node"""
     bl_idname = 'RSNodeSetVariousNode'
     bl_label = 'Set Various'
 
-    refresh:BoolProperty(default=False,update=update_refresh)
+    refresh: BoolProperty(default=False, update=update_refresh)
     node_list: StringProperty(default='')
 
     def init(self, context):
@@ -53,16 +54,16 @@ class RSNodeSetVariousNode(RenderStackNode):
 
     def draw_buttons(self, context, layout):
         layout.prop(self, "refresh", icon="FILE_REFRESH")
-        layout.separator(factor = 0.5)
+        layout.separator(factor=0.5)
         col = layout.column()
         if self.node_list != '':
             nodes = self.node_list.split(',')
             for node_name in nodes:
                 node = context.space_data.edit_tree.nodes[node_name]
                 row = col.row()
-                row.prop(node,"name")
+                row.prop(node, "name")
                 # row.prop(node, 'active', text='Various')
-                row.operator("rsn.set_various",text="",icon="SETTINGS").node_name = node.name
+                row.operator("rsn.set_various", text="", icon="SETTINGS").node_name = node.name
 
     def update(self):
         self.get_var_nodes()

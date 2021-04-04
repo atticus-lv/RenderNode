@@ -42,16 +42,17 @@ class RSN_OT_MergeSelectedNodes(bpy.types.Operator):
 
         width = numpy.mean([node.width for node in need_to_sort])
 
-        list_node = nt.nodes.new('RSNodeSettingsMergeNode')
+        if self.make_version:
+            list_node = nt.nodes.new('RSNodeVariousNode')
+        else:
+            list_node = nt.nodes.new('RSNodeSettingsMergeNode')
+
         list_node.location = loc_x + width * 1.2, loc_y
 
         for i, node in enumerate(need_to_sort):
             nt.links.new(node.outputs[0], list_node.inputs[i])
 
-        if self.make_version:
-            list_node.node_type = 'VERSION'
-            list_node.label = 'Version'
-            list_node.active = 1
+        if self.make_version:list_node.active = 1
 
         return {"FINISHED"}
 

@@ -52,7 +52,7 @@ class RSN_MT_PieMenu(Menu):
         # merge_icon = preview_collections["rsn_icon"]["merge_icon"]
         col.operator("rsn.merge_selected_nodes", icon_value=merge_icon.get_image_icon_id()).make_version = 0
         col.operator("rsn.merge_selected_nodes", icon_value=version_icon.get_image_icon_id(),
-                     text='Make Version').make_version = 1
+                     text='Make Various').make_version = 1
         col.operator("rsn.link_muti_task")
 
         # bottom
