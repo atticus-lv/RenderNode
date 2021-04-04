@@ -17,6 +17,13 @@ node_categorys = [
         nodeitems_utils.NodeItem("RSNodeViewerNode"),
 
     ]),
+    RSNCategory("VARIOUS", "Various", items=[
+        nodeitems_utils.NodeItem("RSNodeNullNode"),
+        nodeitems_utils.NodeItem("RSNodeVariousNode"),
+        nodeitems_utils.NodeItem("RSNodeSetVariousNode"),
+
+    ]),
+
     RSNCategory("INPUT", "Input", items=[
         nodeitems_utils.NodeItem("RSNodeCommonSettingsNode"),
         nodeitems_utils.NodeItem("RSNodePropertyInputNode"),
@@ -61,10 +68,6 @@ node_categorys = [
         # nodeitems_utils.NodeItem("RSNodeClientNode"),
     ]),
     RSNCategory("LAYOUT", "Layout", items=[
-        nodeitems_utils.NodeItem("RSNodeNullNode"),
-        nodeitems_utils.NodeItem("RSNodeVariousNode"),
-        nodeitems_utils.NodeItem("RSNodeSetVariousNode"),
-
         nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Merge", settings={
             "node_type": repr("MERGE"),
         }),
@@ -72,10 +75,10 @@ node_categorys = [
             "node_type": repr("SWITCH"),
             "label"    : repr("Switch"),
         }),
-        nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Version", settings={
-            "node_type": repr("VERSION"),
-            "label"    : repr("Version"),
-        }),
+        # nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Version", settings={
+        #     "node_type": repr("VERSION"),
+        #     "label"    : repr("Version"),
+        # }),
 
     ]),
 ]
