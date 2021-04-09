@@ -73,6 +73,7 @@ class RSN_OT_RemoveVarCollect(bpy.types.Operator):
 def update_node(self, context):
     if len(self.var_collect_list) != 0:
         self.update_parms()
+    self.update_parms()
 
 
 class RSNodeTaskNode(RenderStackNode):
