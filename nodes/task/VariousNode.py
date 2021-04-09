@@ -1,6 +1,6 @@
 import bpy
 from bpy.props import *
-from nodes.BASE.node_tree import RenderStackNode
+from ..BASE.node_tree import RenderStackNode
 
 
 class RSNodeVariousNode(RenderStackNode):
@@ -13,9 +13,9 @@ class RSNodeVariousNode(RenderStackNode):
         self.outputs.new('RSNodeSocketTaskSettings', "Output")
 
     def draw_buttons(self, context, layout):
-        layout.prop(self,'name')
+        layout.prop(self, 'name')
 
-    def set_active(self,active):
+    def set_active(self, active):
         """:parm active: start from 1
 
         """
@@ -31,8 +31,6 @@ class RSNodeVariousNode(RenderStackNode):
 
         dg = bpy.context.evaluated_depsgraph_get()
         dg.update()
-
-        self.update_parms()
 
     def update(self):
         self.auto_update_inputs('RSNodeSocketTaskSettings', "Input")

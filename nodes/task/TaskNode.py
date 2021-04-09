@@ -11,7 +11,7 @@ class VariousNodeProperty(bpy.types.PropertyGroup):
 
 class VariousCollectList(bpy.types.PropertyGroup):
     name: StringProperty(default='Collect 1')
-    use_for_render: BoolProperty(default=False)
+    use_for_render: BoolProperty(default=True)
     node_properties: CollectionProperty(name="Node Property", type=VariousNodeProperty)
 
 
@@ -24,7 +24,7 @@ class RSN_UL_TaskVarCollectList(bpy.types.UIList):
 
         row = layout.row(align=True)
         row.prop(item, "name", text="", emboss=False, icon_value=icon)
-        row.prop(item, "use_for_render", text="Render")
+        row.prop(item, "use_for_render", text="", icon="CHECKMARK")
 
 
 class RSN_OT_AddVarCollect(bpy.types.Operator):
@@ -66,8 +66,13 @@ class RSN_OT_RemoveVarCollect(bpy.types.Operator):
     def execute(self, context):
         node = context.space_data.edit_tree.nodes[self.task_node_name]
         node.var_collect_list.remove(node.var_collect_list_index)
-
+        node.var_collect_list_index -= 1 if node.var_collect_list_index != 0 else 0
         return {"FINISHED"}
+
+
+def update_node(self, context):
+    if len(self.var_collect_list) != 0:
+        self.update_parms()
 
 
 class RSNodeTaskNode(RenderStackNode):
@@ -78,7 +83,7 @@ class RSNodeTaskNode(RenderStackNode):
     node_list = None
 
     var_collect_list: CollectionProperty(name="Var Collect", type=VariousCollectList)
-    var_collect_list_index: IntProperty(default=0, min=0)
+    var_collect_list_index: IntProperty(default=0, min=0, update=update_node)
 
     def init(self, context):
         self.inputs.new('RSNodeSocketTaskSettings', "Settings")
@@ -94,6 +99,7 @@ class RSNodeTaskNode(RenderStackNode):
         row.operator("rsn.get_task_info", text="", icon="INFO").task_name = self.name
 
     def draw_buttons_ext(self, context, layout):
+        layout.label(text="Various Collect:")
         row = layout.row()
         row.template_list(
             "RSN_UL_TaskVarCollectList", "The list",
@@ -104,15 +110,28 @@ class RSNodeTaskNode(RenderStackNode):
         col.operator("rsn.add_var_collect", text="", icon="ADD").task_node_name = self.name
         col.operator("rsn.remove_var_collect", text="", icon="REMOVE").task_node_name = self.name
 
-        layout.label(text="Various Node:")
-        curr_var_collect = self.var_collect_list[self.var_collect_list_index]
-        col = layout.column(align=1)
-        for item in curr_var_collect.node_properties:
-            col.prop(item, 'active', text=item.name)
+        layout.label(text="Current Various Node:")
+        col = layout.column(align=0)
+        if len(self.var_collect_list) != 0:
+            curr_var_collect = self.var_collect_list[self.var_collect_list_index]
+            for item in curr_var_collect.node_properties:
+                col.prop(item, 'active', text=item.name)
 
     def update(self):
         self.auto_update_inputs('RSNodeSocketTaskSettings', "Settings")
-        # self.get_var_nodes()
+
+    def get_data(self):
+        var_collect_data = {}
+        # var_collect_data['active_index'] = self.var_collect_list_index
+
+        for i, collect in enumerate(self.var_collect_list):
+            var_nodes = {}
+            for item in collect.node_properties:
+                var_nodes[item.name] = item.active
+
+            var_collect_data[i] = var_nodes
+
+        return var_collect_data
 
 
 class RSN_OT_GetTaskInfo(bpy.types.Operator):

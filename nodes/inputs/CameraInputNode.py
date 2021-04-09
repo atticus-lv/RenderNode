@@ -21,8 +21,11 @@ class RSNodeCamInputNode(RenderStackNode):
     def init(self, context):
         self.outputs.new('RSNodeSocketCamera', "Camera")
         self.width = 180
-        # inherit the scene camera
-        if context.scene.camera: self.camera = context.scene.camera
+        # inherit the scene camera\
+        try:
+            if context.scene.camera: self.camera = context.scene.camera
+        except:
+            pass
 
     def draw_buttons(self, context, layout):
         row = layout.row(align=1)

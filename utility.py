@@ -180,12 +180,15 @@ class RSN_Nodes:
         """
 
         task_data = {}
+
         for node_name in task_dict[task_name]:
             node = self.nt.nodes[node_name]
             node.debug()
-            # label
-            task_data['label'] = self.nt.nodes[task_name].label
-
+            # task node
+            task_node = self.nt.nodes[task_name]
+            task_data['name'] = task_name
+            task_data['label'] = task_node.label
+            task_data['various'] = task_node.get_data()
             # Object select Nodes
             if node.bl_idname == 'RSNodePropertyInputNode':
                 if 'property' not in task_data:
