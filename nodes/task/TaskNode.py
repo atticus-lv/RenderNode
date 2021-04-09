@@ -1,14 +1,84 @@
 import bpy
-import json
 from bpy.props import *
 from ...nodes.BASE.node_tree import RenderStackNode
 from ...utility import *
+
+
+class VariousNodeProperty(bpy.types.PropertyGroup):
+    name: StringProperty()
+    active: IntProperty(default=1, min=1)
+
+
+class VariousCollectList(bpy.types.PropertyGroup):
+    name: StringProperty(default='Collect 1')
+    use_for_render: BoolProperty(default=False)
+    node_properties: CollectionProperty(name="Node Property", type=VariousNodeProperty)
+
+
+class RSN_UL_TaskVarCollectList(bpy.types.UIList):
+    def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
+        if self.layout_type in {'DEFAULT', 'COMPACT'}:
+            pass
+        elif self.layout_type in {'GRID'}:
+            pass
+
+        row = layout.row(align=True)
+        row.prop(item, "name", text="", emboss=False, icon_value=icon)
+        row.prop(item, "use_for_render", text="Render")
+
+
+class RSN_OT_AddVarCollect(bpy.types.Operator):
+    bl_idname = "rsn.add_var_collect"
+    bl_label = "Add Var Collect"
+
+    task_node_name: StringProperty(default='')
+    node = None
+
+    def execute(self, context):
+        self.node = context.space_data.edit_tree.nodes[self.task_node_name]
+        self.node.var_collect_list.add()
+        self.node.var_collect_list_index = len(self.node.var_collect_list) - 1
+        self.get_var_nodes()
+        return {"FINISHED"}
+
+    def get_var_nodes(self):
+        nt = bpy.context.space_data.edit_tree
+        current_item = self.node.var_collect_list[self.node.var_collect_list_index]
+
+        RSN = RSN_Nodes(node_tree=nt, root_node_name=self.node.name)
+        nodes = RSN.get_children_from_node(root_node=self.node)
+        node_list = ','.join(
+            [node_name for node_name in nodes if nt.nodes[node_name].bl_idname == "RSNodeVariousNode"])
+
+        for node_name in node_list.split(','):
+            if node_name != '' and node_name not in current_item.node_properties.keys():
+                prop = current_item.node_properties.add()
+                prop.name = node_name
+                prop.active = 1
+
+
+class RSN_OT_RemoveVarCollect(bpy.types.Operator):
+    bl_idname = "rsn.remove_var_collect"
+    bl_label = "Remove Var Collect"
+
+    task_node_name: StringProperty(default='')
+
+    def execute(self, context):
+        node = context.space_data.edit_tree.nodes[self.task_node_name]
+        node.var_collect_list.remove(node.var_collect_list_index)
+
+        return {"FINISHED"}
 
 
 class RSNodeTaskNode(RenderStackNode):
     """A simple Task node"""
     bl_idname = "RSNodeTaskNode"
     bl_label = 'Task'
+
+    node_list = None
+
+    var_collect_list: CollectionProperty(name="Var Collect", type=VariousCollectList)
+    var_collect_list_index: IntProperty(default=0, min=0)
 
     def init(self, context):
         self.inputs.new('RSNodeSocketTaskSettings', "Settings")
@@ -23,8 +93,26 @@ class RSNodeTaskNode(RenderStackNode):
         row.prop(self, 'label', text='')
         row.operator("rsn.get_task_info", text="", icon="INFO").task_name = self.name
 
+    def draw_buttons_ext(self, context, layout):
+        row = layout.row()
+        row.template_list(
+            "RSN_UL_TaskVarCollectList", "The list",
+            self, "var_collect_list",
+            self, "var_collect_list_index", )
+
+        col = row.column(align=1)
+        col.operator("rsn.add_var_collect", text="", icon="ADD").task_node_name = self.name
+        col.operator("rsn.remove_var_collect", text="", icon="REMOVE").task_node_name = self.name
+
+        layout.label(text="Various Node:")
+        curr_var_collect = self.var_collect_list[self.var_collect_list_index]
+        col = layout.column(align=1)
+        for item in curr_var_collect.node_properties:
+            col.prop(item, 'active', text=item.name)
+
     def update(self):
         self.auto_update_inputs('RSNodeSocketTaskSettings', "Settings")
+        # self.get_var_nodes()
 
 
 class RSN_OT_GetTaskInfo(bpy.types.Operator):
@@ -61,11 +149,26 @@ class RSN_OT_GetTaskInfo(bpy.types.Operator):
         except:
             return {"CANCELLED"}
 
+
 def register():
-    bpy.utils.register_class(RSNodeTaskNode)
+    bpy.utils.register_class(VariousNodeProperty)
+    bpy.utils.register_class(VariousCollectList)
+    bpy.utils.register_class(RSN_UL_TaskVarCollectList)
+
+    bpy.utils.register_class(RSN_OT_AddVarCollect)
+    bpy.utils.register_class(RSN_OT_RemoveVarCollect)
+
     bpy.utils.register_class(RSN_OT_GetTaskInfo)
+    bpy.utils.register_class(RSNodeTaskNode)
 
 
 def unregister():
-    bpy.utils.unregister_class(RSNodeTaskNode)
+    bpy.utils.unregister_class(VariousNodeProperty)
+    bpy.utils.unregister_class(VariousCollectList)
+    bpy.utils.unregister_class(RSN_UL_TaskVarCollectList)
+
+    bpy.utils.unregister_class(RSN_OT_AddVarCollect)
+    bpy.utils.unregister_class(RSN_OT_RemoveVarCollect)
+
     bpy.utils.unregister_class(RSN_OT_GetTaskInfo)
+    bpy.utils.unregister_class(RSNodeTaskNode)

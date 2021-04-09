@@ -20,7 +20,7 @@ node_categorys = [
     RSNCategory("VARIOUS", "Various", items=[
         nodeitems_utils.NodeItem("RSNodeNullNode"),
         nodeitems_utils.NodeItem("RSNodeVariousNode"),
-        # nodeitems_utils.NodeItem("RSNodeSetVariousNode"),
+        nodeitems_utils.NodeItem("RSNodeSetVariousNode"),
 
     ]),
 
