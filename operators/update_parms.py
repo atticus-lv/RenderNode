@@ -418,9 +418,9 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         logger.setLevel(int(pref.log_level))
 
         self.get_data()
-
+        if self.task_data: self.update_various()
+        self.get_data()
         if self.task_data:
-            self.update_various()
 
             self.update_camera()
             self.update_color_management()

@@ -277,6 +277,7 @@ class RSN_Queue():
         for task in self.task_list_dict:
             task_data = self.rsn.get_task_data(task_name=task, task_dict=self.task_list_dict)
 
+
             if "frame_start" not in task_data:
                 task_data["frame_start"] = bpy.context.scene.frame_current
                 task_data["frame_end"] = bpy.context.scene.frame_current

@@ -1,5 +1,4 @@
 import bpy
-import json
 from bpy.props import *
 from ...nodes.BASE.node_tree import RenderStackNode
 

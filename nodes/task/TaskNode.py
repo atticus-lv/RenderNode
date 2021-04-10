@@ -10,35 +10,47 @@ class VariousNodeProperty(bpy.types.PropertyGroup):
 
 
 class VariousCollectList(bpy.types.PropertyGroup):
-    name: StringProperty(default='Collect 1')
+    name: StringProperty(default='Var Collect')
     use_for_render: BoolProperty(default=True)
     node_properties: CollectionProperty(name="Node Property", type=VariousNodeProperty)
+    node_properties_index: IntProperty(default=0)
 
 
 class RSN_UL_TaskVarCollectList(bpy.types.UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
-        if self.layout_type in {'DEFAULT', 'COMPACT'}:
-            pass
-        elif self.layout_type in {'GRID'}:
-            pass
-
         row = layout.row(align=True)
         row.prop(item, "name", text="", emboss=False, icon_value=icon)
         row.prop(item, "use_for_render", text="", icon="CHECKMARK")
 
 
-class RSN_OT_AddVarCollect(bpy.types.Operator):
-    bl_idname = "rsn.add_var_collect"
-    bl_label = "Add Var Collect"
+class RSN_UL_VarCollectNodeList(bpy.types.UIList):
+    def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
+        row = layout.row(align=True)
+        row.label(text=item.name)
+        row.prop(item, "active", text="Active")
+
+
+class RSN_OT_EditVarCollect(bpy.types.Operator):
+    """ADD/REMOVE List item"""
+    bl_idname = "rsn.Edit_var_collect"
+    bl_label = "Edit Var Collect"
+
+    action: EnumProperty(name="Edit", items=[('ADD', 'Add', ''), ('REMOVE', 'Remove', '')])
 
     task_node_name: StringProperty(default='')
     node = None
 
     def execute(self, context):
         self.node = context.space_data.edit_tree.nodes[self.task_node_name]
-        self.node.var_collect_list.add()
-        self.node.var_collect_list_index = len(self.node.var_collect_list) - 1
-        self.get_var_nodes()
+        if self.action == "ADD":
+
+            self.node.var_collect_list.add()
+            self.node.var_collect_list_index = len(self.node.var_collect_list) - 1
+            self.get_var_nodes()
+        else:
+
+            self.node.var_collect_list.remove(self.node.var_collect_list_index)
+            self.node.var_collect_list_index -= 1 if self.node.var_collect_list_index != 0 else 0
         return {"FINISHED"}
 
     def get_var_nodes(self):
@@ -57,27 +69,15 @@ class RSN_OT_AddVarCollect(bpy.types.Operator):
                 prop.active = 1
 
 
-class RSN_OT_RemoveVarCollect(bpy.types.Operator):
-    bl_idname = "rsn.remove_var_collect"
-    bl_label = "Remove Var Collect"
-
-    task_node_name: StringProperty(default='')
-
-    def execute(self, context):
-        node = context.space_data.edit_tree.nodes[self.task_node_name]
-        node.var_collect_list.remove(node.var_collect_list_index)
-        node.var_collect_list_index -= 1 if node.var_collect_list_index != 0 else 0
-        return {"FINISHED"}
-
-
 def update_node(self, context):
     if len(self.var_collect_list) != 0:
         self.update_parms()
-    self.update_parms()
 
 
 class RSNodeTaskNode(RenderStackNode):
-    """A simple Task node"""
+    """A simple Task node
+    :parm node_list: for checking update of various nodes
+    """
     bl_idname = "RSNodeTaskNode"
     bl_label = 'Task'
 
@@ -100,23 +100,34 @@ class RSNodeTaskNode(RenderStackNode):
         row.operator("rsn.get_task_info", text="", icon="INFO").task_name = self.name
 
     def draw_buttons_ext(self, context, layout):
+        # Various Collect List
         layout.label(text="Various Collect:")
-        row = layout.row()
+        row = layout.row(align=1)
         row.template_list(
             "RSN_UL_TaskVarCollectList", "The list",
             self, "var_collect_list",
             self, "var_collect_list_index", )
 
+        # edit items bUtton
         col = row.column(align=1)
-        col.operator("rsn.add_var_collect", text="", icon="ADD").task_node_name = self.name
-        col.operator("rsn.remove_var_collect", text="", icon="REMOVE").task_node_name = self.name
+        # Add item
+        ADD = col.operator("rsn.edit_var_collect", text="", icon="ADD")
+        ADD.task_node_name = self.name
+        ADD.action = "ADD"
+        # Remove item
+        REMOVE = col.operator("rsn.edit_var_collect", text="", icon="REMOVE")
+        REMOVE.task_node_name = self.name
+        REMOVE.action = "REMOVE"
 
-        layout.label(text="Current Various Node:")
-        col = layout.column(align=0)
+        # Current Various Collect
+        layout.label(text="Current Various Collect:")
         if len(self.var_collect_list) != 0:
             curr_var_collect = self.var_collect_list[self.var_collect_list_index]
-            for item in curr_var_collect.node_properties:
-                col.prop(item, 'active', text=item.name)
+            row = layout.row(align=1)
+            row.template_list(
+                "RSN_UL_VarCollectNodeList", "The list",
+                curr_var_collect, "node_properties",
+                curr_var_collect, "node_properties_index", )
 
     def update(self):
         self.auto_update_inputs('RSNodeSocketTaskSettings', "Settings")
@@ -166,17 +177,18 @@ class RSN_OT_GetTaskInfo(bpy.types.Operator):
             data = RSN.get_task_data(task_name=self.task_name, task_dict=task_dict)
             self.task_data = json.dumps(data, indent=2, ensure_ascii=False)
             return context.window_manager.invoke_popup(self, width=300)
-        except:
+        except Exception:
             return {"CANCELLED"}
 
 
 def register():
     bpy.utils.register_class(VariousNodeProperty)
     bpy.utils.register_class(VariousCollectList)
-    bpy.utils.register_class(RSN_UL_TaskVarCollectList)
 
-    bpy.utils.register_class(RSN_OT_AddVarCollect)
-    bpy.utils.register_class(RSN_OT_RemoveVarCollect)
+    bpy.utils.register_class(RSN_UL_TaskVarCollectList)
+    bpy.utils.register_class(RSN_UL_VarCollectNodeList)
+
+    bpy.utils.register_class(RSN_OT_EditVarCollect)
 
     bpy.utils.register_class(RSN_OT_GetTaskInfo)
     bpy.utils.register_class(RSNodeTaskNode)
@@ -185,10 +197,11 @@ def register():
 def unregister():
     bpy.utils.unregister_class(VariousNodeProperty)
     bpy.utils.unregister_class(VariousCollectList)
-    bpy.utils.unregister_class(RSN_UL_TaskVarCollectList)
 
-    bpy.utils.unregister_class(RSN_OT_AddVarCollect)
-    bpy.utils.unregister_class(RSN_OT_RemoveVarCollect)
+    bpy.utils.unregister_class(RSN_UL_TaskVarCollectList)
+    bpy.utils.unregister_class(RSN_UL_VarCollectNodeList)
+
+    bpy.utils.unregister_class(RSN_OT_EditVarCollect)
 
     bpy.utils.unregister_class(RSN_OT_GetTaskInfo)
     bpy.utils.unregister_class(RSNodeTaskNode)
