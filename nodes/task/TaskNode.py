@@ -32,7 +32,7 @@ class RSN_UL_VarCollectNodeList(bpy.types.UIList):
 
 class RSN_OT_EditVarCollect(bpy.types.Operator):
     """ADD/REMOVE List item"""
-    bl_idname = "rsn.Edit_var_collect"
+    bl_idname = "rsn.edit_var_collect"
     bl_label = "Edit Var Collect"
 
     action: EnumProperty(name="Edit", items=[('ADD', 'Add', ''), ('REMOVE', 'Remove', '')])

@@ -11,16 +11,11 @@ class RSNCategory(nodeitems_utils.NodeCategory):
 node_categorys = [
     RSNCategory("TASK", "Task", items=[
         nodeitems_utils.NodeItem("RSNodeTaskNode"),
+        nodeitems_utils.NodeItem("RSNodeNullNode"),
         # nodeitems_utils.NodeItem("RSNodeTaskListNode"),
         nodeitems_utils.NodeItem("RSNodeRenderListNode"),
         nodeitems_utils.NodeItem("RSNodeProcessorNode"),
         nodeitems_utils.NodeItem("RSNodeViewerNode"),
-
-    ]),
-    RSNCategory("VARIOUS", "Various", items=[
-        nodeitems_utils.NodeItem("RSNodeNullNode"),
-        nodeitems_utils.NodeItem("RSNodeVariousNode"),
-        nodeitems_utils.NodeItem("RSNodeSetVariousNode"),
 
     ]),
 
@@ -68,6 +63,7 @@ node_categorys = [
         # nodeitems_utils.NodeItem("RSNodeClientNode"),
     ]),
     RSNCategory("LAYOUT", "Layout", items=[
+        nodeitems_utils.NodeItem("RSNodeVariousNode"),
         nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Merge", settings={
             "node_type": repr("MERGE"),
         }),
