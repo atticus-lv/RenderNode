@@ -91,6 +91,8 @@ class RSNodeTaskNode(RenderStackNode):
         self.outputs.new('RSNodeSocketRenderList', "Task")
         self.label = self.name
 
+        bpy.ops.rsn.edit_var_collect(action = "ADD",task_node_name = self.name)
+
     def draw_buttons(self, context, layout):
         layout.use_property_split = 1
         layout.use_property_decorate = 0
