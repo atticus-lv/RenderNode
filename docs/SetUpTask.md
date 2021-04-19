@@ -1,0 +1,13 @@
+### Set up a task
+
+
+
+### Workflow
+
+1. Drop down a task node
+2. Link some settings node that you want to overwrite
+3. Use viewer node to apply settings to the scene(also check your settings)
+4. Drop a file path node, renderlist node and render(save your file first)
+
+
+
