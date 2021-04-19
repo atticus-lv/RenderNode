@@ -1,6 +1,6 @@
 <!-- _coverpage.md -->
 
-![logo](_media/icon.svg) 
+<img src="media/logo/blender logo.png" style="zoom:10%;" />
 
 # RenderStackNode
 
