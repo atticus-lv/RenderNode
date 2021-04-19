@@ -1,5 +1,3 @@
-<!-- _navbar.md -->
-
 + Get Start
     + [Home](/)
     + [How it works](HowItWorks.md)
