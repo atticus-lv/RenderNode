@@ -22,7 +22,8 @@
 #### Document (WIP)
 
 [**Wiki**](https://github.com/atticus-lv/RenderStackNode/wiki)
-[**Document**](https://atticus-lv.github.io/RenderStackNode/#/)
+
+[**Document Website**](https://atticus-lv.github.io/RenderStackNode/#/)
 
 #### Install
 

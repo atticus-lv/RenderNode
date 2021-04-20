@@ -1,9 +1,8 @@
-+ Get Start
++ **Get Start**
     + [Home](/Home.md)
     + [How it works](HowItWorks.md)
-    + [Interfaces](Interface.md)
     + [Set up a simple task](SetUpTask.md)
-+ Nodes
++ **Nodes**
     + [Task](NodeTask)	
     + [Input](NodeInput)
     + [Obejct](NodeObject)
@@ -11,3 +10,5 @@
     + [Render Settings](NodeRender)
     + [Scripts](NodeScripts)
     + [Layout](NodeLayout)
+
++ [**FAQ**](FAQ.md)
