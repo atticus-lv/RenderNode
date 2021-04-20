@@ -31,7 +31,10 @@
 
         search: {
             maxAge: 43200000,
-            paths: [],
+            paths: 'auto',
+            hideOtherSidebarContent: true, // 隐藏其他侧边栏内容
+            namespace: 'website-1',
+            pathNamespaces: ['/zh-cn',],
             placeholder: {
                 '/zh-cn/': '搜索',
                 '/': 'Search'

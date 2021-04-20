@@ -1,19 +1,23 @@
 ### WorkBench Settings
 
-Change the render engine to WorkBench
+将渲染引擎切换为工作台（workbench）
 
 ### Eevee Settings
 
-Change the render engine to Eevee
+将渲染引擎切换为eevee
 
 ### Cycles Settings
 
-Change the render engine to Cycles
+将渲染引擎切换为cycles
 
 ### Cycles Light Path
 
-Change Cycles' light path property
+设置cycles引擎下的光程
 
 ### Luxcore Settings
 
-Change the render engine to Luxcore
+切换渲染引擎为luxcore
+
+### Octane Settings
+
+切换渲染引擎为Octane
