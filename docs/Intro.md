@@ -1,3 +1,11 @@
+RenderStackNode is an addon that provide users with node-based, flexible rendering output workflow. It can be also use in look-dev or design.
+> Actually it is a simple but node version of take system(for example in houdini) in principle.
+
+## Install
+
+
+## How it works
+
 <!-- panels:start -->
 
 <!-- div:left-panel -->
@@ -28,15 +36,21 @@
 
 ```json
 {
-    "label": "task1",
-    "camera": "Camera",
-    "engine": "BLENDER_EEVEE",
-    "samples": 64,
-    "use_blend_file_path": true,
-    "path_format": "$blend_render/$label$camera",
-    "path": "",
-    "res_x": 1920,
-    "res_y": 1080,
-    "res_scale": 100
+  "name": "Task",
+  "label": "Task",
+  "various": {
+    "0": {}
+  },
+  "camera": "bpy.data.objects['Camera']",
+  "engine": "BLENDER_EEVEE",
+  "samples": 64,
+  "path": "/",
+  "path_format": "$blend_render/$V/$label.$camera.$F4",
+  "version": "1",
+  "res_x": 1920,
+  "res_y": 1080,
+  "res_scale": 100
 }
 ```
+
+

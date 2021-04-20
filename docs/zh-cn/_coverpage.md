@@ -12,4 +12,9 @@
 + 路径表达式
 
 [GitHub](https://github.com/atticus-lv/RenderStackNode)
-[快速开始](/Home)
+[快速开始](/zh-cn/Intro.md)
+
+
+
+<!-- 背景色 --> 
+

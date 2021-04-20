@@ -1,13 +1,3 @@
-## 简介
-
-RenderStackNode is an addon that provide users with node-based, flexible rendering output workflow. It can be also use
-in look-dev or design.
-> Actually it is a simple but node version of take system(for example in houdini) in principle.
-
-## 安装
-
-## 界面
-
 > 你可以在这些地方找到RSN
 
 <!-- panels:start -->
@@ -80,7 +70,6 @@ in look-dev or design.
 ### 渲染确认表
 
 > 点击 *RenderList* 节点上的渲染按钮后出现
-
 
 
 渲染确认表，用于最终渲染的时候确认信息

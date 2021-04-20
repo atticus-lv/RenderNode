@@ -1,6 +1,6 @@
 + **快速开始**
-    + [Home](/zh-cn/Home.md)
-    + [工作原理](/zh-cn/HowItWorks.md)
+    + [简介](/zh-cn/Intro.md)
+    + [界面](/zh-cn/Interface.md)
     + [设置一个渲染任务](/zh-cn/SetUpTask.md)
     
 + **节点介绍**
@@ -12,4 +12,4 @@
     + [脚本节点](/zh-cn/NodeScripts)
     + [整理节点](/zh-cn/NodeLayout)
 
-+ [**常见问题**](FAQ.md)
++ [**常见问题**](/zh-cn/FAQ.md)

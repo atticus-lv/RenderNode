@@ -1,12 +1,3 @@
-## Intro
-
-RenderStackNode is an addon that provide users with node-based, flexible rendering output workflow. It can be also use in look-dev or design.
-> Actually it is a simple but node version of take system(for example in houdini) in principle.
-
-## Install
-
-## Interface
-
 > You can find RSN at these place
 
 <!-- panels:start -->
@@ -29,13 +20,26 @@ RenderStackNode is an addon that provide users with node-based, flexible renderi
 
 set your log level
 
+warning is default. It only show the user's error
+
 ### **Nodes**
 
 set the default behavior of some nodes
 
++ Viewer
+    + viewport update parms
++ FilePath
+    + the default path expression of the file path node, check for more details
++ SMTP
+    + you can fill in your smtp server and password here, so that you are able to use the SMTP node
+
 ### **Keymaps**
 
-change your shortcuts 
+change your shortcuts
+
++ Add Viewer node : select a task node and press the shortcut
++ Mute node : mute the selected nodes 
++ Helper menu : pie menu in the node editor
 
 <!-- tabs:end -->
 
@@ -69,7 +73,12 @@ change your shortcuts
 
 <!-- div:right-panel -->
 
-> A help menu for productivity
+> A help menu for productivity in the node editor
+>
+> + Simple Task : add a task with some basic node
+> + Merge Selection : merge selected nodes (task node or settings nodes) to a merge node
+> + Make Various : make various version with selected nodes
+> + Link to Muti Task : Link active node to selected task node
 
 <!-- panels:end -->
 
