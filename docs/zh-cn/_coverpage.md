@@ -1,6 +1,6 @@
 <!-- _coverpage.md -->
 
-![logo](_media/icon.svg) 
+<img src="media/logo/blender logo.png" style="zoom:10%;" />
 
 # RSN插件
 
@@ -10,3 +10,6 @@
 + 自定义覆写
 + 版本控制
 + 路径表达式
+
+[GitHub](https://github.com/atticus-lv/RenderStackNode)
+[快速开始](/Home)

@@ -1,5 +1,5 @@
 + Get Start
-    + [Home](/)
+    + [Home](/Home.md)
     + [How it works](HowItWorks.md)
     + [Interfaces](Interface.md)
     + [Set up a simple task](SetUpTask.md)

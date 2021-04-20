@@ -1,5 +1,5 @@
 + 快速开始
-    + [Home](/zh-cn/)
+    + [Home](/zh-cn/Home.md)
     + [工作原理](/zh-cn/HowItWorks.md)
     + [界面](/zh-cn/Interface.md)
     + [设置一个渲染任务](/zh-cn/SetUpTask.md)

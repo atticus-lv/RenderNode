@@ -15,23 +15,60 @@
 </nav>
 
 <div id="app"></div>
+
 <script>
-    window.$docsify = {
-        name: '',
-        repo: '',
-    }
-
 
     window.$docsify = {
+        name: 'RSN Document',
+        repo: 'https://github.com/atticus-lv/RenderStackNode/',
+        logo:'media/logo/logo.svg height="150px"',
+
         coverpage: ['/', '/zh-cn/'],
         loadSidebar: true,
-        subMaxLevel: 3
-        // loadNavbar: true
-    }
+        subMaxLevel: 3,
+        loadNavbar: true,
+        autoHeader: true,
 
+        search: {
+            maxAge: 43200000,
+            paths: [],
+            placeholder: {
+                '/zh-cn/': '搜索',
+                '/': 'Search'
+            },
+            noData: {
+                '/zh-cn/': '找不到结果',
+                '/': 'No Results'
+            }
+        },
+        // 插件
+        plugins: [
+            function (hook) {
+                var footer = [
+                    '<hr/>',
+                    '<footer>',
+                    '<span><a href="https://github.com/atticus-lv">Atticus</a> &copy;2021.</span>',
+                    '<span>Published with <a href="https://github.com/atticus-lv/RenderStackNode" target="_blank">RenderStackNode</a>.</span>',
+                    '</footer>'
+                ].join('');
+
+                hook.afterEach(function (html) {
+                    return html + footer;
+                });
+            }
+        ]
+    }
 
 
 </script>
+<!--插件-->
+<script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/emoji.min.js"></script>
+
+<!--语法声明-->
+<script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-json.min.js"></script>
+
 <!-- Docsify v4 -->
 <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
 </body>
