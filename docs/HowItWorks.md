@@ -2,7 +2,7 @@
 
 <!-- div:left-panel -->
 
-<img src="media/img/1.0.png" width=960px;  alt=""/>
+<img src="media/img/howitwork.png" width=960px;  alt=""/>
 
 <!-- div:right-panel -->
 > RSN takes the node settings, and use it to overwrite the scene

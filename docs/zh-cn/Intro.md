@@ -22,7 +22,7 @@ RSN插件是一款基于节点的，为用户提供灵活渲染输出流程的�
 
 <!-- div:left-panel -->
 
-<img src="../media/img/1.0.png" width=960px />
+<img src="../media/img/howitwork.png" width=960px />
 
 <!-- div:right-panel -->
 > RSN接受设置节点，并使用它来修改场景，例如：
