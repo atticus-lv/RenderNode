@@ -5,6 +5,7 @@
 <img src="media/img/howitwork.png" width=960px;  alt=""/>
 
 <!-- div:right-panel -->
+
 > RSN takes the node settings, and use it to overwrite the scene
 
 1. Settings Node to overwirte your render settings,such as:

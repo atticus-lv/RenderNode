@@ -58,7 +58,7 @@ Take a simple example
 
 <!-- div:left-panel -->
 
-<img src="../media/img/1.0.png" width=960px />
+<img src="media/img/howitwork.png" width=960px />
 
 <!-- div:right-panel -->
 

@@ -12,7 +12,30 @@ RSN插件是一款基于节点的，为用户提供灵活渲染输出流程的�
 + 假如不确定一个镜头要渲染多久，可以在渲染后向指定邮箱发送报告邮件
 + 只需要按一下按钮，就能将以上所有需要的镜头**队列渲染**，无需在电脑面前等待操作
 
-## 安装
+<!-- panels:start -->
+
+<!-- div:title-panel -->
+
+## 下载
+
+<!-- div:left-panel -->
+
+**Latest** *New features and fixes*:
+
+[https://github.com/atticus-lv/RenderStackNode/archive/main.zip](https://github.com/atticus-lv/RenderStackNode/archive/main.zip)
+
+**Stable** *Ready for work*
+
+[https://github.com/atticus-lv/RenderStackNode/releases/latest]
+
+<!-- div:right-panel -->
+
+> [!TIP]
+> 如果你熟悉git的话
+>
+> `cd C:\Users\{YourUserName}\AppData\Roaming\Blender Foundation\Blender\2.93\scripts\addons`(Windows)
+>
+> `git clone https://github.com/atticus-lv/RenderStackNode.git`
 
 <!-- panels:start -->
 
@@ -25,6 +48,8 @@ RSN插件是一款基于节点的，为用户提供灵活渲染输出流程的�
 <img src="../media/img/howitwork.png" width=960px />
 
 <!-- div:right-panel -->
+
+> [!NOTE]
 > RSN接受设置节点，并使用它来修改场景，例如：
 
 1. 图中的设置节点有
@@ -43,21 +68,3 @@ RSN插件是一款基于节点的，为用户提供灵活渲染输出流程的�
 
 <!-- panels:end -->
 
-```json
-{
-  "name": "Task",
-  "label": "Task",
-  "various": {
-    "0": {}
-  },
-  "camera": "bpy.data.objects['Camera']",
-  "engine": "BLENDER_EEVEE",
-  "samples": 64,
-  "path": "/",
-  "path_format": "$blend_render/$V/$label.$camera.$F4",
-  "version": "1",
-  "res_x": 1920,
-  "res_y": 1080,
-  "res_scale": 100
-}
-```
