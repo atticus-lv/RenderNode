@@ -1,15 +1,17 @@
 ### Merge
 
-This node allow you to merge different settings into one task.
+此节点允许您将不同的设置合并到一个任务中。
 
-And you can merge different tasks into the render list node, too.
+也可以将不同的任务合并到**render list**节点中。
 
 ### Switch
 
-This node allow you to switch input order 
+此节点允许您切换输入顺序
 
-You use it on some toggle operations
+在一些切换操作中使用它
 
 ### Version
 
-This node allow you to have different versions of settings
+此节点允许您拥有不同版本的设置
+
+替代功能开发中

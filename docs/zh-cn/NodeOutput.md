@@ -1,43 +1,44 @@
 ### Resolution
 
-This node can change the output resolution
+此节点可以更改输出分辨率
 
 ### Frame Range
 
-This node can change the output frame range.
+此节点可以更改输出帧范围。
 
-You can use it for render animation. If not link to the task node, the task will inherit the context frame of the scene(only render one frame in render list)
+可以将其用于渲染动画。如果未链接到任务节点，则任务将继承场景的当前帧（在渲染列表中仅渲染一帧）
 
 ### Image Format
 
-Provide the 3 base format for output.
+为输出提供3个基本格式。
 
-Also can handle the transparent of the image(Only for blender built-in engine), make sure select RGBA to save the alpha channel
+还可以处理图像的透明性（仅适用于blender内置引擎），选择RGBA来保存alpha通道
 
 ### File Path
 
-This node use $ to get the properties of the render task,then apply it to the output file name 
+此节点使用$获取场景/task节点的属性，然后将其应用于输出文件名（格式化输出）
 
-Usage(Also show in the side pannel):
+用法（另见侧面板）
 
 ```
-$blend: name of your file (save first!)
-$label: Task label
-$camera: name of scene camera
-$res: resolution (X x Y)
-$engine: render engine
-$vl: name of scene view layer
-$date: month-day
-$time: hour-min
-/: create folder,should be dict_input folder name in front of "/"
+$blend: 文件名（先保存！）
+$F4: 帧数格式:0001 ("4"代表四位补全，可以是其他数字)'
+$label: Task节点的标签
+$camera: 场景摄影机的名字
+$res: 分辨率（X X Y）
+$engine: 渲染引擎
+$vl: 场景视图层的名称
+$T{}: %Y%m%d %H-%M-%S → 20210223 17-47-35"
+↑{}内参考 python time库的用法 
+/: 创建文件夹，/前为文件夹名字
 ```
 
 ### Render Slot
 
-This node allow you to put the render result into different render slot of the image eidtor
+此节点允许您将渲染结果放入图像编辑器的不同渲染槽中
 
 ### View Layer Passes
 
-This node allow you to output different passes of a select viewlayer 
+此节点允许您输出选定viewlayer的不同通道（拆分）
 
-If it is not linked to the task, it will inherit the current compositor tree
+如果需要取消此选项，则需要链接一个新节点以禁用它。

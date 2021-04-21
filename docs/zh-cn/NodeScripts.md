@@ -1,20 +1,21 @@
 ### Scripts
 
-This node allow you to execute a single line script or a internal python file before rendeing.
-
-You can use it to change any properties that current nodes can not access
+> 此节点允许您在渲染之前执行单行脚本或内部python文件。
+>
+> 可以使用它更改当前节点无法访问的任何属性/操作
 
 ### SMTP Email
 
-This node allow you to send smtp mail
-
-Please enter your server and password in the preference.
-
-Only execute while renderstack, but you can use the test email button for a test
+> 此节点允许您发送smtp邮件
+>
+> 请在首选项中输入服务器和密码。
+>
+> 只在renderstack时执行，但是可以使用test email按钮进行测试
 
 ### SSM LightStudio
 
-This node can work with 'smart scene manager' addon. 
+> 此节点可以与我的SSM插件一起使用。
+>
+> 它可以读取它的灯光工作室信息
 
-It can read the light studio information of it
 

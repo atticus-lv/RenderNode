@@ -1,27 +1,28 @@
 ### Task
 
-Task node is the most important node of rsn. It contains changes for a task that can be use for render
+> Task 节点是RSN中最重要的节点。它包含可用于渲染的更改
+>
 
 ### Render List
 
-Render list will get all the task that links to it. You can use a merge node to merge some task for a specified purpose.
-
-After click the render confirm button, you will get a render sheet. You can just press ok to start render.
-
-Also , you can cancel some task by pressing the marker icon. It will mute the node so that the render list won't check it later.
-
-The info icon allow you to view the changes of this task. You can copy it can paste it in the text editor. Then use it with task info node
+> Render list将获取链接到它的所有task。
+>
+> 单击“render confirm”按钮后，将获得渲染确认表。只需按“确认”即可开始渲染。
+>
+> 此外，您还可以按标记图标取消某些任务。它将禁用节点，以便渲染列表稍后不会检查它。
+>
+> 带有信息图标的小按钮允许您查看此任务的更改。你可以复制它，也可以在文本编辑器中粘贴它。然后与task info节点一起使用
 
 ### Processor
 
-Processor node provide you a process bar for each task. 
-
-You can set your own color for the done frames and the remain frames
+> Processor节点为每个任务提供一个进程条
+>
+> 您可以为完成帧和剩余帧设置自己的颜色
 
 ### Viewer
 
-When selecting a task node, you can press v to link a viewer node to view this task.
-
-If the task node is mute(by pressing M), it will check by the viewer node
-
-Make sure there is only one viewer node in your node tree.
+> 选择task节点时，可以按v键链接viewer节点以查看此任务。
+>
+> 如果task节点是禁用状态的的（按M键），它将不会检查这个task
+>
+> 确保节点树中只有一个viewer节点。

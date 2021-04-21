@@ -1,25 +1,25 @@
 ### Object Display
 
-This node control the viewport display and render display of a single object.
+此节点控制单个对象的视口显示和渲染显示。
 
-It provide a smaller changes compare to the view layer node(make new viewlayer and collection)
+它提供了与“视图图层”节点相比的更小的更改（创建新的视口和集合）
 
 ### Object Material
 
-This node allow you to change material in an obejct' material slot
+此节点允许更改物体的材质槽中的材质
 
 ### Object PSR
 
-This node can pick up and apply loacation, rotation euler, scale of the object
+此节点可以拾取并应用对象的位置，旋转，缩放
 
 ### Object Data
 
-This node can changes object's data properties ( The green icon in the properties panel ) . First select the object, then right click on the property you want to pick, then **Copy data path**,paste it in the node's data path.
+此节点可以更改对象的数据属性（属性面板中的绿色图标）。首先选择对象，然后右键单击要拾取的属性，然后**复制数据路径**，将其粘贴到节点的数据路径中。
 
-Now support Int, Float,Color,Vector,Boolean,String value.
+现在支持整数、浮点、颜色、向量、勾选框、字符串类型。
 
 ### Object Modifier
 
-This node can changes object's modifiers' properties  ( The blue spanner icon in the properties panel ) . First select the object, thenright click on the property you want to pick, then **Copy data path**,paste it in the node's data path.
+此节点可以更改对象的修改器的属性（属性面板中的蓝色扳手图标）。首先选择对象，然后右键单击要拾取的属性，然后**复制数据路径**，将其粘贴到节点的数据路径中。
 
-Now support most modifier(except for the geometry node modifier)
+现在支持大多数修改器（除了几何体节点修改器）

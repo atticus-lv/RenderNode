@@ -1,34 +1,141 @@
+<!-- panels:start -->
+
+<!-- div:title-panel -->
+
 ### Camera
 
-This node let you to set the camera as the scene camera
+<!-- div:left-panel -->
 
-It will do nothing if the camera is empty 
+image
 
+<!-- div:right-panel -->
+
+> [!NOTE]
+> This node let you to set the camera as the scene camera
+
+<!-- panels:end -->
+
+
+<!-- panels:start -->
+
+<!-- div:title-panel -->
 
 ### World
 
-This node let you to set a world as the scene world
+<!-- div:left-panel -->
 
-It will do nothing if the world  is empty
+image
+
+<!-- div:right-panel -->
+
+> [!NOTE]
+> This node let you to set a world as the scene world
+
+
+<!-- panels:end -->
+
+
+<!-- panels:start -->
+
+<!-- div:title-panel -->
 
 ### View Layer
 
-This node let you to set the context viewlayer of the scene.
+<!-- div:left-panel -->
 
-When you change the name of this viewlayer, make sure you update this node.
+image
 
-It will do nothing if the viewlayer is empty
+<!-- div:right-panel -->
+
+> [!NOTE]
+> This node let you to set the context viewlayer of the scene.
+>
+> When you change the name of this viewlayer, make sure you update this node.
+
+
+<!-- panels:end -->
+
+<!-- panels:start -->
+
+<!-- div:title-panel -->
 
 ### Color Management
 
-This node let you to set the color management of the scene.
+<!-- div:left-panel -->
 
-It may change in 2.93 (since ocioV2 is on 2.93 roadmap)
+image
 
-### Task Info
+<!-- div:right-panel -->
 
-This node allow you to write changes in json way.
+> [!NOTE]
+> This node let you to set the color management of the scene.
 
-Check out the RenderList node for more details
+
+<!-- panels:end -->
+
+
+<!-- panels:start -->
+
+<!-- div:title-panel -->
+
+### Common Settings
+
+<!-- div:left-panel -->
+
+image
+
+<!-- div:right-panel -->
+
+> [!NOTE]
+> This node contains several nodes
+> 
+> camera, render engine, file path node, resolution, frame range
+
+<!-- panels:end -->
+
+<!-- panels:start -->
+
+<!-- div:title-panel -->
+
+### Property
+
+<!-- div:left-panel -->
+
+image
+
+<!-- div:right-panel -->
+
+> [!NOTE]
+> This node allow you to asign value to any data in the scene.
+>
+> Right click on the property you want to change, then selecet copy full path (blender 2.93) or press *ctrl shift alt C*
+>
+> Then paste it to the node and input the value through the control
+
+<!-- panels:end -->
+
+<!-- panels:start -->
+
+<!-- div:title-panel -->
+
+### Task Info (Experimental)
+
+<!-- div:left-panel -->
+
+image
+
+<!-- div:right-panel -->
+
+> [!NOTE]
+> This node allow you to write changes in json way.
+> 
+> Check out the **RenderList/Task** node for more details
+
+<!-- panels:end -->
+
+
+
+
+
 
 
