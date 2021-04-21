@@ -37,6 +37,8 @@ RSN插件是一款基于节点的，为用户提供灵活渲染输出流程的�
 >
 > `git clone https://github.com/atticus-lv/RenderStackNode.git`
 
+<!-- panels:end -->
+
 <!-- panels:start -->
 
 <!-- div:title-panel -->

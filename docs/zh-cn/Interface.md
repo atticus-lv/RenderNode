@@ -10,7 +10,6 @@
 
 <img src="../media/img/pref.png" width=720px;  alt=""/>
 
-
 <!-- div:right-panel -->
 
 > 在这里，你可以设置RSN插件的偏好，这将会影响整体的使用方式
