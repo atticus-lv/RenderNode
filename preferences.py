@@ -105,9 +105,9 @@ class RSN_Preference(bpy.types.AddonPreferences):
         layout.prop(self, 'log_level', text='Debug')
 
         row = layout.split(factor=0.7)
-        row.separator()
-        row.operator('rsn.check_update', icon='URL',
-                     text='Check Update' if not self.need_update else f"New Version {''.join(str(self.latest_version).split())}!")
+        # row.separator()
+        # row.operator('rsn.check_update', icon='URL',
+        #              text='Check Update' if not self.need_update else f"New Version {''.join(str(self.latest_version).split())}!")
 
     def filepath_node(self, box):
         box.prop(self.node_file_path, 'show', text="File Path Node", emboss=False,
