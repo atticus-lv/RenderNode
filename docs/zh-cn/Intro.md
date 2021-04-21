@@ -1,35 +1,45 @@
-RenderStackNode is an addon that provide users with node-based, flexible rendering output workflow. It can be also use
-in look-dev or design.
-> Actually it is a simple but node version of take system(for example in houdini) in principle.
+RSN插件是一款基于节点的，为用户提供灵活渲染输出流程的插件。它同样适用于视觉开发和设计迭代当中。事实上，它有点像节点版本的场次系统
+
+## RSN能做什么
+
+> RSN的核心是在渲染前修改场景中的数据，这使得它有着比较好的灵活性
+
+举一个简单的例子
+
++ 渲染场景中**多个镜头**，并以相机的名字作为输出的图片名字
++ 在这个每个镜头里，物体的**摆放，材质，数据**都可以是不同的
++ 为其中的某一个镜头添加**动画**，并以另外一个渲染引擎（比如workbench）来渲染
++ 假如不确定一个镜头要渲染多久，可以在渲染后向指定邮箱发送报告邮件
++ 只需要按一下按钮，就能将以上所有需要的镜头**队列渲染**，无需在电脑面前等待操作
 
 ## 安装
 
+<!-- panels:start -->
+
+<!-- div:title-panel -->
 
 ## 工作原理
-
-<!-- panels:start -->
 
 <!-- div:left-panel -->
 
 <img src="../media/img/1.0.png" width=960px />
 
 <!-- div:right-panel -->
-> RSN takes the node settings, and use it to overwrite the scene
+> RSN接受设置节点，并使用它来修改场景，例如：
 
-1.  Settings Node to overwirte your render settings,such as:
+1. 图中的设置节点有
 
-    + **Camera Node** have the ability to change the camera
-    + **File path Node** give an format name of the render files
-    + **Eevee Setting Node** means that in this task you will render with the eevee engine
-    + **Frame Range Node** control the frame you want to render
+    + **Camera** 相机节点具有更改相机的能力
+    + **File path** 文件路径节点提供渲染文件的格式名称
+    + **Eevee Setting** 意味着在此任务中，将使用eevee引擎进行渲染
 
-2.  **Task Node** to merge your changes into one render task (so it can be use to render)
+2. **Task** 任务节点，将更改合并到一个渲染任务中（因此可用于渲染）
 
-3.  **Viewer Node**  apply and view the changes
+3. **Viewer**  查看器节点应用并查看更改
 
-4.  **Render List Node**  render all the task that you need
+4. **Render List**  渲染列表节点渲染您需要的所有任务
 
-*Once you plug a node settings to overide something into the a task,the next task will inherit it if there is not a same type Node plug input. So you may start a new render list to keep your node tree cleaner*
+*插入节点设置以将某些内容添加到任务中，如果没有相同类型的Node输入，则下一个任务将继承该场景状态。可以启动一个新的渲染列表，以使您的节点树保持整洁*
 
 <!-- panels:end -->
 

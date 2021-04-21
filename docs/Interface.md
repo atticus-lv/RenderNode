@@ -12,6 +12,7 @@
 
 <!-- div:right-panel -->
 
+> [!TIP]
 > You can modify shortcuts and default behavior of some nodes here
 
 <!-- tabs:start -->
@@ -38,7 +39,7 @@ set the default behavior of some nodes
 change your shortcuts
 
 + Add Viewer node : select a task node and press the shortcut
-+ Mute node : mute the selected nodes 
++ Mute node : mute the selected nodes
 + Helper menu : pie menu in the node editor
 
 <!-- tabs:end -->
@@ -57,6 +58,7 @@ change your shortcuts
 
 <!-- div:right-panel -->
 
+> [!TIP]
 > Most of your operations will be done here
 
 <!-- panels:end -->
@@ -73,22 +75,32 @@ change your shortcuts
 
 <!-- div:right-panel -->
 
+> [!TIP]
 > A help menu for productivity in the node editor
->
-> + Simple Task : add a task with some basic node
-> + Merge Selection : merge selected nodes (task node or settings nodes) to a merge node
-> + Make Various : make various version with selected nodes
-> + Link to Muti Task : Link active node to selected task node
+
++ Simple Task : add a task with some basic node
++ Merge Selection : merge selected nodes (task node or settings nodes) to a merge node
++ Make Various : make various version with selected nodes
++ Link to Muti Task : Link active node to selected task node
 
 <!-- panels:end -->
 
+<!-- panels:start -->
+
+<!-- div:title-panel -->
 
 ### Render Confirm Sheet
 
+<!-- div:left-panel -->
+
+<img src="media/img/rendersheet.png" width=720px;  alt=""/>
+
+<!-- div:right-panel -->
+
+> [!TIP]
 > Show when hit the render confirm button in *RenderList* node
-
-
-
 The render sheet is used to confirm the information before the final rendering
+
+<!-- panels:end -->
 
 
