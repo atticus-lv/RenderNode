@@ -8,7 +8,7 @@
 
 <!-- div:left-panel -->
 
-<img src="/media/img/pref.png" width=720px;  alt=""/>
+<img src="https://raw.githubusercontent.com/atticus-lv/RenderStackNode/main/docs/media/img/pref.png" width=720px;  alt=""/>
 
 <!-- div:right-panel -->
 
@@ -55,7 +55,7 @@
 
 <!-- div:left-panel -->
 
-<img src="../media/img/nodeEditor.png" width=720px;  alt=""/>
+<img src="https://raw.githubusercontent.com/atticus-lv/RenderStackNode/main/docs/media/img/nodeEditor.png" width=720px;  alt=""/>
 
 <!-- div:right-panel -->
 
@@ -72,7 +72,7 @@
 
 <!-- div:left-panel -->
 
-<img src="../media/img/helperMenu.png" width=720px;  alt=""/>
+<img src="https://raw.githubusercontent.com/atticus-lv/RenderStackNode/main/docs/media/img/helperMenu.png" width=720px;  alt=""/>
 
 <!-- div:right-panel -->
 
@@ -89,7 +89,7 @@
 
 <!-- div:left-panel -->
 
-<img src="../media/img/rendersheet.png" width=720px;  alt=""/>
+<img src="https://raw.githubusercontent.com/atticus-lv/RenderStackNode/main/docs/media/img/rendersheet.png" width=720px;  alt=""/>
 
 <!-- div:right-panel -->
 
