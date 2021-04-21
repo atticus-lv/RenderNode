@@ -2,7 +2,7 @@
 
 <img src="media/logo/blender logo.png" style="zoom:10%;" />
 
-# RSN插件
+# **RSN 插件**
 
 > blender中基于节点的设计与渲染工作流
 
@@ -16,5 +16,5 @@
 
 
 
-<!-- 背景色 --> 
+![title2](media/img/title2.png)
 

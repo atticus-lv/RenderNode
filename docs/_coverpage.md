@@ -2,9 +2,9 @@
 
 <img src="media/logo/blender logo.png" style="zoom:10%;" />
 
-# RenderStackNode
+# **RenderStackNode**
 
-> Node basied design and render workflow in blender
+> Node based design and render workflow in blender
 
 + Render queue
 + Custom Overwrite
@@ -13,3 +13,8 @@
 
 [GitHub](https://github.com/atticus-lv/RenderStackNode)
 [Get Started](/Intro.md)
+
+![title2](media/img/title2.png)
+
+
+
