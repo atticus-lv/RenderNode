@@ -57,7 +57,7 @@
 
 <!-- div:title-panel -->
 
-### 4. Use viewer node to apply settings to the scene(also check your settings)
+### 4. Use viewer node to apply settings to the scene
 
 <!-- div:left-panel -->
 
@@ -85,7 +85,7 @@
 <!-- div:right-panel -->
 
 > [!NOTE]
-> **save your file first!**
+> **Save your file first!**
 >
 > otherwise, you won't be able to render
 >

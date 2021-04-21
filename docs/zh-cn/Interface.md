@@ -8,7 +8,7 @@
 
 <!-- div:left-panel -->
 
-<img src="../media/img/pref.png" width=720px;  alt=""/>
+<img src="/media/img/pref.png" width=720px;  alt=""/>
 
 <!-- div:right-panel -->
 
@@ -19,6 +19,8 @@
 ### **Property**
 
 用于设置log等级
+
+默认的话是warning，只会显示用户的错误
 
 ### **Nodes**
 
