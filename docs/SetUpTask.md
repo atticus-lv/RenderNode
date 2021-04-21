@@ -10,7 +10,10 @@
 
 <!-- div:right-panel -->
 
-description
+> [!NOTE]
+> You can press shortcut F to add a new node tree
+>
+> Remember to enable the fake user
 
 <!-- panels:end -->
 
@@ -26,7 +29,8 @@ description
 
 <!-- div:right-panel -->
 
-description
+> [!NOTE]
+> Task node collect all the settings nodes
 
 <!-- panels:end -->
 
@@ -42,7 +46,10 @@ description
 
 <!-- div:right-panel -->
 
-description
+> [!NOTE]
+> In this picture, I link a camera node
+>
+> this node can help us set the scene camera
 
 <!-- panels:end -->
 
@@ -58,7 +65,10 @@ description
 
 <!-- div:right-panel -->
 
-description
+> [!NOTE]
+> select the task node, press shortcut V to add a viewer node that links to it
+>
+> There should be only one viewer node in the nodetree
 
 <!-- panels:end -->
 
@@ -66,7 +76,7 @@ description
 
 <!-- div:title-panel -->
 
-### 5. Drop a file path node, renderlist node and render(save your file first)
+### 5. Drop a file path node, renderlist node and render
 
 <!-- div:left-panel -->
 
@@ -74,7 +84,12 @@ description
 
 <!-- div:right-panel -->
 
-description
+> [!NOTE]
+> **save your file first!**
+>
+> otherwise, you won't be able to render
+>
+> FilePath node provides a formatted file name
 
 <!-- panels:end -->
 
@@ -90,7 +105,10 @@ description
 
 <!-- div:right-panel -->
 
-description
+> [!NOTE]
+> If you want to render 2 camera, you can set up 2 task
+>
+> they have the same file path node, but a different camera node
 
 <!-- panels:end -->
 
