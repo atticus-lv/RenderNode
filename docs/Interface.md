@@ -54,7 +54,7 @@ change your shortcuts
 
 <!-- div:left-panel -->
 
-<img src="../media/img/nodeEditor.png" width=720px;  alt=""/>
+<img src="media/img/nodeEditor.png" width=720px;  alt=""/>
 
 <!-- div:right-panel -->
 

@@ -6,7 +6,7 @@
 
 <!-- div:left-panel -->
 
-<img src="media/img/setTask1.png"  />
+<img src="media/img/setTask1.png" width=960px;  alt=""/>
 
 <!-- div:right-panel -->
 
@@ -25,7 +25,7 @@
 
 <!-- div:left-panel -->
 
-<img src="media/img/setTask2.png"  />
+<img src="media/img/setTask2.png" width=960px;  alt=""/>
 
 <!-- div:right-panel -->
 
@@ -42,7 +42,7 @@
 
 <!-- div:left-panel -->
 
-<img src="media/img/setTask3.png" alt="setTask3" style="zoom:60%;" />
+<img src="media/img/setTask3.png" width=960px;  alt=""/>
 
 <!-- div:right-panel -->
 
@@ -61,7 +61,7 @@
 
 <!-- div:left-panel -->
 
-<img src="media/img/setTask4.png" alt="setTask4" style="zoom:60%;" />
+<img src="media/img/setTask4.png" width=960px;  alt=""/>
 
 <!-- div:right-panel -->
 
@@ -80,7 +80,7 @@
 
 <!-- div:left-panel -->
 
-<img src="media/img/setTask5.png"  />
+<img src="media/img/setTask5.png" width=960px;  alt=""/>
 
 <!-- div:right-panel -->
 
@@ -101,7 +101,7 @@
 
 <!-- div:left-panel -->
 
-<img src="media/img/setTask6.png"  />
+<img src="media/img/setTask6.png" width=960px;  alt=""/>
 
 <!-- div:right-panel -->
 
