@@ -131,12 +131,14 @@ class RSN_Nodes:
                 pass
         return node_list_dict
 
-    def get_children_from_var_node(self, root_node, active, pass_mute=True):
-        """Depth first search
-        :parm root_node: a blender node
+    def get_children_from_var_node(self, var_node, active, pass_mute=True):
+        """Depth first search for the various children
+        :parm var_node: a blender node
+        :parm active:the active input of the various node
 
         """
-        black_list = []
+
+        black_list = []  # list of nodes to remove from the origin node list
 
         def append_node_to_list(node):
             """Skip the reroute node"""
@@ -168,7 +170,7 @@ class RSN_Nodes:
             # nodes append from left to right, from top to bottom
             append_node_to_list(node)
 
-        get_sub_node(root_node, pass_mute)
+        get_sub_node(var_node, pass_mute)
 
         return black_list
 
@@ -187,7 +189,8 @@ class RSN_Nodes:
         task = self.get_node_from_name(task_name)
         try:
             node_list = self.get_children_from_node(task)
-            # various
+            # various node in each task
+            # only one set various node will be active
             var_collect = {}
             for node_name in node_list:
                 set_var_node = self.nt.nodes[node_name]
@@ -197,16 +200,12 @@ class RSN_Nodes:
                             var_collect[item.name] = item.active
                     break
 
-            print(node_list)
-
             for node_name, active in var_collect.items():
-                print(node_name, active)
-
                 var_node = self.nt.nodes[node_name]
                 black_list = self.get_children_from_var_node(var_node, active)
-                print(black_list)
                 node_list = [i for i in node_list if i not in black_list]
 
+            # return clean node list
             if not return_dict:
                 return node_list
             else:
