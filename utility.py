@@ -131,7 +131,7 @@ class RSN_Nodes:
                 pass
         return node_list_dict
 
-    def get_children_from_var_node(self, root_node, pass_mute=True, active):
+    def get_children_from_var_node(self, root_node, active, pass_mute=True):
         """Depth first search
         :parm root_node: a blender node
 
@@ -194,13 +194,14 @@ class RSN_Nodes:
                 if set_var_node.bl_idname == 'RSNodeSetVariousNode':
                     for item in set_var_node.node_collect:
                         if item.use:
-                            var_collect[item.name] =  item.active
+                            var_collect[item.name] = item.active
                     break
 
-            for d in var_collect:
-                node_name, active
+            for node_name, active in var_collect.items():
                 var_node = self.nt.nodes[node_name]
-                black_list = self.get_children_from_var_node()
+                black_list = self.get_children_from_var_node(var_node, active)
+
+            node_list = [i for i in node_list if i not in black_list]
 
             if not return_dict:
                 return node_list
