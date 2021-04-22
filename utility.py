@@ -67,7 +67,6 @@ class RSN_Nodes:
         :parm root_node: a blender node
 
         """
-
         node_list = []
 
         def append_node_to_list(node):
@@ -83,13 +82,8 @@ class RSN_Nodes:
 
             """
 
-            active = None
-
-            if node.bl_idname == 'RSNodeVariousNode':
-                active = node.active
-
             for i, input in enumerate(node.inputs):
-                if input.is_linked and True in (active is None, active == i):
+                if input.is_linked:
                     try:
                         sub_node = input.links[0].from_node
                         if sub_node.mute and pass_mute_node:
@@ -137,6 +131,47 @@ class RSN_Nodes:
                 pass
         return node_list_dict
 
+    def get_children_from_var_node(self, root_node, pass_mute=True, active):
+        """Depth first search
+        :parm root_node: a blender node
+
+        """
+        black_list = []
+
+        def append_node_to_list(node):
+            """Skip the reroute node"""
+            if node.bl_idname != 'NodeReroute':
+                if len(black_list) == 0 or (len(black_list) != 0 and node.name != black_list[-1]):
+                    black_list.append(node.name)
+
+        # @lru_cache(maxsize=None)
+        def get_sub_node(node, pass_mute_node=True):
+            """Recursion
+            :parm node: a blender node
+
+            """
+
+            for i, input in enumerate(node.inputs):
+                if input.is_linked and i != active:
+                    try:
+                        sub_node = input.links[0].from_node
+                        if sub_node.mute and pass_mute_node:
+                            continue
+                        else:
+                            get_sub_node(sub_node)
+                    # This error shows when the dragging the link off viewer node(Works well with knife tool)
+                    # this seems to be a blender error
+                    except IndexError:
+                        pass
+                else:
+                    continue
+            # nodes append from left to right, from top to bottom
+            append_node_to_list(node)
+
+        get_sub_node(root_node, pass_mute)
+
+        return black_list
+
     def get_children_from_task(self, task_name, return_dict=False, type='RSNodeTaskNode'):
         """pack method for task node
         :parm task_name: name of the task node
@@ -153,6 +188,20 @@ class RSN_Nodes:
         try:
             node_list = self.get_children_from_node(task)
             # various
+            var_collect = {}
+            for node_name in node_list:
+                set_var_node = self.nt.nodes[node_name]
+                if set_var_node.bl_idname == 'RSNodeSetVariousNode':
+                    for item in set_var_node.node_collect:
+                        if item.use:
+                            var_collect[item.name] =  item.active
+                    break
+
+            for d in var_collect:
+                node_name, active
+                var_node = self.nt.nodes[node_name]
+                black_list = self.get_children_from_var_node()
+
             if not return_dict:
                 return node_list
             else:
@@ -186,6 +235,11 @@ class RSN_Nodes:
         """
 
         task_data = {}
+
+        # set various
+        for node_name in task_dict[task_name]:
+            node = self.nt.nodes[node_name]
+            if node.bl_idname == "RSNodeSetVariousNode": node.get_data()
 
         for node_name in task_dict[task_name]:
             node = self.nt.nodes[node_name]

@@ -112,6 +112,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         else:
             logger.debug(f'Not task is linked to the viewer')
 
+
     def update_color_management(self):
         """may change in 2.93 version"""
         if 'ev' in self.task_data:

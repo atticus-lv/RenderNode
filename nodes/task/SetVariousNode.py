@@ -92,10 +92,11 @@ class RSNodeSetVariousNode(RenderStackNode):
         edit.node_name = self.name
 
     def get_data(self):
-        for item in self.node_collect:
-            if item.use:
-                node = bpy.context.space_data.edit_tree.nodes[item.name]
-                if node.active != item.active: node.active = item.active
+        pass
+        # for item in self.node_collect:
+        #     if item.use:
+        #         node = bpy.context.space_data.edit_tree.nodes[item.name]
+        #         if node.active != item.active: node.active = item.active
 
 
 def register():

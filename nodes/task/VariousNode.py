@@ -1,18 +1,14 @@
 import bpy
 from bpy.props import *
 from ..BASE.node_tree import RenderStackNode
-
-
-def update_node(self, context):
-    self.update_parms()
-
+from ...utility import *
 
 class RSNodeVariousNode(RenderStackNode):
     """A simple input node"""
     bl_idname = 'RSNodeVariousNode'
     bl_label = 'Various'
 
-    active: IntProperty(default=0, min=0, update=update_node)
+    # active: IntProperty(default=0, min=0, update=update_node)
 
     def init(self, context):
         self.inputs.new('RSNodeSocketTaskSettings', "Input")
@@ -20,7 +16,7 @@ class RSNodeVariousNode(RenderStackNode):
 
     def draw_buttons(self, context, layout):
         layout.prop(self, 'name')
-        layout.prop(self,'active')
+        # layout.prop(self, 'active')
 
     def update(self):
         self.auto_update_inputs('RSNodeSocketTaskSettings', "Input")
@@ -28,6 +24,8 @@ class RSNodeVariousNode(RenderStackNode):
     def auto_update_inputs(self, socket_type, socket_name):
         super().auto_update_inputs(socket_type, socket_name)
 
+    def get_active(self):
+        pass
 
 def register():
     bpy.utils.register_class(RSNodeVariousNode)
