@@ -26,10 +26,10 @@ class RSN_UL_VarCollectNodeList(bpy.types.UIList):
         row.prop(item, "use", text="Use")
 
 
-class RSN_OT_EditVarCollect(bpy.types.Operator):
+class RSN_OT_UpdateVarCollect(bpy.types.Operator):
     """ADD/REMOVE List item"""
-    bl_idname = "rsn.edit_var_collect"
-    bl_label = "Edit Var Collect"
+    bl_idname = "rsn.update_var_collect"
+    bl_label = "Update Collect"
 
     action: EnumProperty(name="Edit", items=[('ADD', 'Add', ''), ('REMOVE', 'Remove', '')])
 
@@ -46,6 +46,8 @@ class RSN_OT_EditVarCollect(bpy.types.Operator):
 
             self.node.node_collect.remove(self.node.node_collect_index)
             self.node.node_collect_index -= 1 if self.node.node_collect_index != 0 else 0
+
+
         return {"FINISHED"}
 
     def get_var_nodes(self):
@@ -57,6 +59,11 @@ class RSN_OT_EditVarCollect(bpy.types.Operator):
             [node_name for node_name in nodes if nt.nodes[node_name].bl_idname == "RSNodeVariousNode"])
 
         print(node_list)
+
+        for i, src_node in enumerate(self.node.node_collect.keys()):
+            if src_node not in node_list.split(','):
+                self.node.node_collect.remove(i)
+                self.node.node_collect_index -= 1 if self.node.node_collect_index != 0 else 0
 
         for node_name in node_list.split(','):
             if node_name != '' and node_name not in self.node.node_collect.keys():
@@ -87,7 +94,7 @@ class RSNodeSetVariousNode(RenderStackNode):
             self, "node_collect",
             self, "node_collect_index", )
 
-        edit = layout.operator("rsn.edit_var_collect")
+        edit = layout.operator("rsn.update_var_collect", icon="FILE_REFRESH")
         edit.action = "ADD"
         edit.node_name = self.name
 
@@ -103,7 +110,7 @@ def register():
     bpy.utils.register_class(VariousNodeProperty)
     bpy.utils.register_class(RSN_UL_VarCollectNodeList)
 
-    bpy.utils.register_class(RSN_OT_EditVarCollect)
+    bpy.utils.register_class(RSN_OT_UpdateVarCollect)
 
     bpy.utils.register_class(RSNodeSetVariousNode)
 
@@ -112,6 +119,6 @@ def unregister():
     bpy.utils.unregister_class(VariousNodeProperty)
     bpy.utils.unregister_class(RSN_UL_VarCollectNodeList)
 
-    bpy.utils.unregister_class(RSN_OT_EditVarCollect)
+    bpy.utils.unregister_class(RSN_OT_UpdateVarCollect)
 
     bpy.utils.unregister_class(RSNodeSetVariousNode)
