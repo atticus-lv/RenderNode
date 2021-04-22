@@ -1,12 +1,12 @@
-# RenderStackNode [Blender Addon]
+# RenderStackNode ![![](docs/media/logo/blender%20logo.png)](https://img.shields.io/badge/blender-2.93%2B-red)
 
-> ##### v1.2.0
+> RSN is a blender addon that provide blender node based look-dev and render workflow
 
-#### Feature
+Check the [**Documentation**](https://atticus-lv.github.io/RenderStackNode/#/) (WIP)
 
-1.1.6~1.1.8 have serious bug with render mutiple animation, update it!!
 
-> Provide blender node based look-dev and render workflow
+
+### Feature
 
 | Features 1.20    | Description                                                  |
 | ---------------- | ------------------------------------------------------------ |
@@ -19,28 +19,17 @@
 | Version Control  | various sth and set various in one task |
 | Third Party      | Octane, Luxcore, SSM(an other addon of mine)                 |
 
-#### Document (WIP)
 
-[**Wiki**](https://github.com/atticus-lv/RenderStackNode/wiki)
 
-[**Document Website**](https://atticus-lv.github.io/RenderStackNode/#/)
+### Download
 
-#### Install
+**Latest** *New features and fixes*:
 
-**Common User**
+[https://github.com/atticus-lv/RenderStackNode/archive/main.zip](https://github.com/atticus-lv/RenderStackNode/archive/main.zip)
 
-Click [here](https://github.com/atticus-lv/RenderStackNode/archive/main.zip) to down the zip file, then install as usual
-addon
+**Stable** *Ready for work*
 
-**Familiar with git**
-
-Go to your addon folder(For example,you are using windows)
-
-`cd C:\Users\{YourUserName}\AppData\Roaming\Blender Foundation\Blender\2.92\scripts\addons`
-
-Then clone the repository
-
-`git clone https://github.com/atticus-lv/RenderStackNode.git`
+[https://github.com/atticus-lv/RenderStackNode/releases/latest]
 
 #### Support me
 
