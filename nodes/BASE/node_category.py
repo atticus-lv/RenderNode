@@ -19,6 +19,13 @@ node_categorys = [
 
     ]),
 
+    RSNCategory("VARIOUS", "Various", items=[
+        nodeitems_utils.NodeItem("RSNodeVariousNode"),
+        nodeitems_utils.NodeItem("RSNodeSetVariousNode"),
+        nodeitems_utils.NodeItem("RSNodeNullNode"),
+
+    ]),
+
     RSNCategory("INPUT", "Input", items=[
         nodeitems_utils.NodeItem("RSNodeCommonSettingsNode"),
         nodeitems_utils.NodeItem("RSNodePropertyInputNode"),
@@ -63,7 +70,6 @@ node_categorys = [
         # nodeitems_utils.NodeItem("RSNodeClientNode"),
     ]),
     RSNCategory("LAYOUT", "Layout", items=[
-        nodeitems_utils.NodeItem("RSNodeVariousNode"),
         nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Merge", settings={
             "node_type": repr("MERGE"),
         }),

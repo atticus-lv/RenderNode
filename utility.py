@@ -83,8 +83,13 @@ class RSN_Nodes:
 
             """
 
-            for input in node.inputs:
-                if input.is_linked:
+            active = None
+
+            if node.bl_idname == 'RSNodeVariousNode':
+                active = node.active
+
+            for i, input in enumerate(node.inputs):
+                if input.is_linked and True in (active is None, active == i):
                     try:
                         sub_node = input.links[0].from_node
                         if sub_node.mute and pass_mute_node:
@@ -147,6 +152,7 @@ class RSN_Nodes:
         task = self.get_node_from_name(task_name)
         try:
             node_list = self.get_children_from_node(task)
+            # various
             if not return_dict:
                 return node_list
             else:
@@ -188,7 +194,6 @@ class RSN_Nodes:
             task_node = self.nt.nodes[task_name]
             task_data['name'] = task_name
             task_data['label'] = task_node.label
-            task_data['various'] = task_node.get_data()
             # Object select Nodes
             if node.bl_idname == 'RSNodePropertyInputNode':
                 if 'property' not in task_data:

@@ -112,16 +112,6 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         else:
             logger.debug(f'Not task is linked to the viewer')
 
-    def update_various(self):
-        if 'various' in self.task_data:
-            task_node = self.nt.nodes[self.task_data['name']]
-            if not self.use_render_mode:
-                node_properties = self.task_data['various'][task_node.var_collect_list_index]
-                for node_name, active_index in node_properties.items():
-                    node = self.nt.nodes[node_name]
-                    node.set_active(active_index)
-            # for i, collect in enumerate(node.var_collect_list):
-
     def update_color_management(self):
         """may change in 2.93 version"""
         if 'ev' in self.task_data:
@@ -418,8 +408,9 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         logger.setLevel(int(pref.log_level))
 
         self.get_data()
-        if self.task_data: self.update_various()
-        self.get_data()
+
+
+
         if self.task_data:
 
             self.update_camera()
