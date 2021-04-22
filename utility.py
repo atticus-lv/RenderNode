@@ -152,7 +152,7 @@ class RSN_Nodes:
             """
 
             for i, input in enumerate(node.inputs):
-                if input.is_linked and i != active:
+                if input.is_linked and True in (i != active, node.bl_idname != 'RSNodeVariousNode'):
                     try:
                         sub_node = input.links[0].from_node
                         if sub_node.mute and pass_mute_node:
@@ -197,11 +197,15 @@ class RSN_Nodes:
                             var_collect[item.name] = item.active
                     break
 
+            print(node_list)
+
             for node_name, active in var_collect.items():
+                print(node_name, active)
+
                 var_node = self.nt.nodes[node_name]
                 black_list = self.get_children_from_var_node(var_node, active)
-
-            node_list = [i for i in node_list if i not in black_list]
+                print(black_list)
+                node_list = [i for i in node_list if i not in black_list]
 
             if not return_dict:
                 return node_list
