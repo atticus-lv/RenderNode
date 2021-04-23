@@ -132,9 +132,9 @@ class RSN_Nodes:
         return node_list_dict
 
     def get_children_from_var_node(self, var_node, active, pass_mute=True):
-        """Depth first search for the various children
+        """Depth first search for the Variants children
         :parm var_node: a blender node
-        :parm active:the active input of the various node
+        :parm active:the active input of the Variants node
 
         """
 
@@ -154,7 +154,7 @@ class RSN_Nodes:
             """
 
             for i, input in enumerate(node.inputs):
-                if input.is_linked and True in (i != active, node.bl_idname != 'RSNodeVariousNode'):
+                if input.is_linked and True in (i != active, node.bl_idname != 'RSNodeVariantsNode'):
                     try:
                         sub_node = input.links[0].from_node
                         if sub_node.mute and pass_mute_node:
@@ -189,12 +189,12 @@ class RSN_Nodes:
         task = self.get_node_from_name(task_name)
         try:
             node_list = self.get_children_from_node(task)
-            # various node in each task
-            # only one set various node will be active
+            # VariantsNodeProperty node in each task
+            # only one set VariantsNodeProperty node will be active
             var_collect = {}
             for node_name in node_list:
                 set_var_node = self.nt.nodes[node_name]
-                if set_var_node.bl_idname == 'RSNodeSetVariousNode':
+                if set_var_node.bl_idname == 'RSNodeSetVariantsNode':
                     for item in set_var_node.node_collect:
                         if item.use:
                             var_collect[item.name] = item.active
@@ -240,10 +240,10 @@ class RSN_Nodes:
 
         task_data = {}
 
-        # set various
+        # set VariantsNodeProperty
         for node_name in task_dict[task_name]:
             node = self.nt.nodes[node_name]
-            if node.bl_idname == "RSNodeSetVariousNode": node.get_data()
+            if node.bl_idname == "RSNodeSetVariantsNode": node.get_data()
 
         for node_name in task_dict[task_name]:
             node = self.nt.nodes[node_name]

@@ -19,9 +19,9 @@ node_categorys = [
 
     ]),
 
-    RSNCategory("VARIOUS", "Various", items=[
-        nodeitems_utils.NodeItem("RSNodeVariousNode"),
-        nodeitems_utils.NodeItem("RSNodeSetVariousNode"),
+    RSNCategory("VARIANTS", "Variants", items=[
+        nodeitems_utils.NodeItem("RSNodeVariantsNode"),
+        nodeitems_utils.NodeItem("RSNodeSetVariantsNode"),
         nodeitems_utils.NodeItem("RSNodeNullNode"),
 
     ]),

@@ -11,8 +11,8 @@ def update_node(self, context):
         node.active = self.active
 
 
-class VariousNodeProperty(bpy.types.PropertyGroup):
-    name: StringProperty(name="The name of the various node")
+class VariantsNodeProperty(bpy.types.PropertyGroup):
+    name: StringProperty(name="The name of the variants node")
     active: IntProperty(default=0, min=0)
     use: BoolProperty(default=True)
 
@@ -56,7 +56,7 @@ class RSN_OT_UpdateVarCollect(bpy.types.Operator):
         RSN = RSN_Nodes(node_tree=nt, root_node_name=self.node.name)
         nodes = RSN.get_children_from_node(root_node=self.node)
         node_list = ','.join(
-            [node_name for node_name in nodes if nt.nodes[node_name].bl_idname == "RSNodeVariousNode"])
+            [node_name for node_name in nodes if nt.nodes[node_name].bl_idname == "RSNodeVariantsNode"])
 
         print(node_list)
 
@@ -72,14 +72,14 @@ class RSN_OT_UpdateVarCollect(bpy.types.Operator):
                 prop.active = 0
 
 
-class RSNodeSetVariousNode(RenderStackNode):
+class RSNodeSetVariantsNode(RenderStackNode):
     """A simple input node"""
-    bl_idname = 'RSNodeSetVariousNode'
-    bl_label = 'Set Various'
+    bl_idname = 'RSNodeSetVariantsNode'
+    bl_label = 'Set Variants'
 
     node_list = None
 
-    node_collect: CollectionProperty(name="Node Property", type=VariousNodeProperty)
+    node_collect: CollectionProperty(name="Node Property", type=VariantsNodeProperty)
     node_collect_index: IntProperty(default=0)
 
     def init(self, context):
@@ -107,18 +107,18 @@ class RSNodeSetVariousNode(RenderStackNode):
 
 
 def register():
-    bpy.utils.register_class(VariousNodeProperty)
+    bpy.utils.register_class(VariantsNodeProperty)
     bpy.utils.register_class(RSN_UL_VarCollectNodeList)
 
     bpy.utils.register_class(RSN_OT_UpdateVarCollect)
 
-    bpy.utils.register_class(RSNodeSetVariousNode)
+    bpy.utils.register_class(RSNodeSetVariantsNode)
 
 
 def unregister():
-    bpy.utils.unregister_class(VariousNodeProperty)
+    bpy.utils.unregister_class(VariantsNodeProperty)
     bpy.utils.unregister_class(RSN_UL_VarCollectNodeList)
 
     bpy.utils.unregister_class(RSN_OT_UpdateVarCollect)
 
-    bpy.utils.unregister_class(RSNodeSetVariousNode)
+    bpy.utils.unregister_class(RSNodeSetVariantsNode)

@@ -3,10 +3,10 @@ from bpy.props import *
 from ..BASE.node_tree import RenderStackNode
 from ...utility import *
 
-class RSNodeVariousNode(RenderStackNode):
+class RSNodeVariantsNode(RenderStackNode):
     """A simple input node"""
-    bl_idname = 'RSNodeVariousNode'
-    bl_label = 'Various'
+    bl_idname = 'RSNodeVariantsNode'
+    bl_label = 'Variants'
 
     # active: IntProperty(default=0, min=0, update=update_node)
 
@@ -28,8 +28,8 @@ class RSNodeVariousNode(RenderStackNode):
         pass
 
 def register():
-    bpy.utils.register_class(RSNodeVariousNode)
+    bpy.utils.register_class(RSNodeVariantsNode)
 
 
 def unregister():
-    bpy.utils.unregister_class(RSNodeVariousNode)
+    bpy.utils.unregister_class(RSNodeVariantsNode)
