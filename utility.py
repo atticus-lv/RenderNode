@@ -240,11 +240,6 @@ class RSN_Nodes:
 
         task_data = {}
 
-        # set VariantsNodeProperty
-        for node_name in task_dict[task_name]:
-            node = self.nt.nodes[node_name]
-            if node.bl_idname == "RSNodeSetVariantsNode": node.get_data()
-
         for node_name in task_dict[task_name]:
             node = self.nt.nodes[node_name]
             node.debug()

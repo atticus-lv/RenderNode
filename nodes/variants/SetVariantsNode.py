@@ -17,7 +17,7 @@ class VariantsNodeProperty(bpy.types.PropertyGroup):
     use: BoolProperty(default=True)
 
 
-# for visualization add or delete
+# use uilist for visualization
 class RSN_UL_VarCollectNodeList(bpy.types.UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
         row = layout.row(align=True)
@@ -47,7 +47,6 @@ class RSN_OT_UpdateVarCollect(bpy.types.Operator):
             self.node.node_collect.remove(self.node.node_collect_index)
             self.node.node_collect_index -= 1 if self.node.node_collect_index != 0 else 0
 
-
         return {"FINISHED"}
 
     def get_var_nodes(self):
@@ -57,8 +56,6 @@ class RSN_OT_UpdateVarCollect(bpy.types.Operator):
         nodes = RSN.get_children_from_node(root_node=self.node)
         node_list = ','.join(
             [node_name for node_name in nodes if nt.nodes[node_name].bl_idname == "RSNodeVariantsNode"])
-
-        print(node_list)
 
         for i, src_node in enumerate(self.node.node_collect.keys()):
             if src_node not in node_list.split(','):
