@@ -8,7 +8,7 @@
 
 <!-- div:title-panel -->
 
-### Set Preview
+### 设置预览
 
 <!-- div:left-panel -->
 
@@ -30,7 +30,7 @@
 
 <!-- div:title-panel -->
 
-### Set File Path
+### 设置输出路径
 
 <!-- div:left-panel -->
 
