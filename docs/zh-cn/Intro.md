@@ -20,13 +20,13 @@ RSN插件是一款基于节点的，为用户提供灵活渲染输出流程的�
 
 <!-- div:left-panel -->
 
-**Latest** *New features and fixes*:
+**最新版** *新特性与修复*:
 
 [https://github.com/atticus-lv/RenderStackNode/archive/main.zip](https://github.com/atticus-lv/RenderStackNode/archive/main.zip)
 
-**Stable** *Ready for work*
+**稳定版** *开箱即用*
 
-[https://github.com/atticus-lv/RenderStackNode/releases/latest]
+[https://github.com/atticus-lv/RenderStackNode/releases/latest](https://github.com/atticus-lv/RenderStackNode/releases/latest)
 
 <!-- div:right-panel -->
 

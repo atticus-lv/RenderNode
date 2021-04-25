@@ -31,7 +31,7 @@ Check the [**Documentation**](https://atticus-lv.github.io/RenderStackNode/#/) (
 
 [https://github.com/atticus-lv/RenderStackNode/releases/latest]
 
-#### Support me
+### Support me
 
 blendermarket: https://blendermarket.com/products/renderstacknode
 
