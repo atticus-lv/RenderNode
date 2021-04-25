@@ -1,7 +1,4 @@
-RenderStackNode is an addon that provide users with node based, flexible rendering output workflow. It can be also use
-in look-dev or design.
-
-Actually it is a simple but node version of take system(for example in houdini) in principle.
+RenderStackNode is an addon that provide users with node based, flexible rendering output workflow. It can be also usein look-dev or design.<br>Actually it is a simple but node version of take system(for example in houdini) in principle.
 
 ## What can RSN do
 
@@ -41,11 +38,7 @@ Take a simple example
 <!-- div:right-panel -->
 
 > [!TIP]
-> If you are familiar with git
->
-> `cd C:\Users\{YourUserName}\AppData\Roaming\Blender Foundation\Blender\2.93\scripts\addons`(Windows for example)
->
-> `git clone https://github.com/atticus-lv/RenderStackNode.git`
+> If you are familiar with git<br>`cd C:\Users\{YourUserName}\AppData\Roaming\Blender Foundation\Blender\2.93\scripts\addons`(Windows for example)<br>`git clone https://github.com/atticus-lv/RenderStackNode.git`
 
 <!-- panels:end -->
 
@@ -77,8 +70,7 @@ Take a simple example
 
 4. **Render List Node**  render all the task that you need
 
-*Once you plug a node settings to overide something into the a task,the next task will inherit it if there is not a same
-type Node plug input. So you may start a new render list to keep your node tree cleaner*
+*Once you plug a node settings to overide something into the a task,the next task will inherit it if there is not a same type Node plug input. <br>So you may start a new render list to keep your node tree cleaner*
 
 <!-- panels:end -->
 

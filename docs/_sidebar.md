@@ -2,7 +2,9 @@
     + [Intro](/Intro.md)
     + [Interface](Interface.md)
     + [Set up a simple task](SetUpTask.md)
-  
++ **Example**
+    + [Muti Camera Shot](Example1.md)
+    + [Object Placement & Material](Example2.md)
 + **Nodes**
     + [Task](NodeTask)	
     + [Input](NodeInput)
@@ -11,6 +13,5 @@
     + [Render Settings](NodeRender)
     + [Scripts](NodeScripts)
     + [Layout](NodeLayout)
-
 + **FAQ**
     + [Frequently asked Questions](FAQ.md)

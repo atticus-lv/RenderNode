@@ -2,7 +2,9 @@
     + [简介](/zh-cn/Intro.md)
     + [界面](/zh-cn/Interface.md)
     + [设置一个渲染任务](/zh-cn/SetUpTask.md)
-    
++ **示例**
+    + [多镜头](/zh-cn/Example1.)
+    + [物体摆放与替换材质](/zh-cn/Example2.md)
 + **节点介绍**
     + [任务节点](/zh-cn/NodeTask)	
     + [输入节点](/zh-cn/NodeInput)
@@ -11,5 +13,5 @@
     + [渲染设置节点](/zh-cn/NodeRender)
     + [脚本节点](/zh-cn/NodeScripts)
     + [整理节点](/zh-cn/NodeLayout)
-
-+ [**常见问题**](/zh-cn/FAQ.md)
++ **常见问题**
+    + [常见问题](/zh-cn/FAQ.md)

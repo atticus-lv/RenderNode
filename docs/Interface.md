@@ -19,9 +19,7 @@
 
 ### **Property**
 
-set your log level
-
-warning is default. It only show the user's error
+set your log level<br>warning is default. It only show the user's error
 
 ### **Nodes**
 
@@ -98,7 +96,7 @@ change your shortcuts
 <!-- div:right-panel -->
 
 > [!TIP]
-> Show when hit the render confirm button in *RenderList* node The render sheet is used to confirm the information before the final rendering
+> Show when hit the render confirm button in *RenderList* node <br>The render sheet is used to confirm the information before the final rendering
 
 <!-- panels:end -->
 
