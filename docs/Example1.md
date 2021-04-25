@@ -23,7 +23,8 @@
 2. add 3 task nodes and 3 camera nodes ,connect them respectively,
 3. select the task node and press V to preview the camera view of the selected task
 
-
+> [!TIP]
+> so the output image will be placed in the folder where the scene file is located<br>with the version property as the sub folder and the camera name as the image name<br>This makes it easy to change multiple versions.
 
 <!-- panels:end -->
 
@@ -40,9 +41,6 @@
 <!-- div:right-panel -->
 
 add a filepath node and name the path expression `$blend_render/$V/$camera` 
-
->[!TIP]
-> so the output image will be placed in the folder where the scene file is located<br>with the version property as the sub folder and the camera name as the image name<br>This makes it easy to change multiple versions.
 
 
 
