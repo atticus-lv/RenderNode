@@ -3,7 +3,7 @@
     + [界面](/zh-cn/Interface.md)
     + [设置一个渲染任务](/zh-cn/SetUpTask.md)
 + **示例**
-    + [多镜头](/zh-cn/Example1.)
+    + [多镜头](/zh-cn/Example1.md)
     + [物体摆放与替换材质](/zh-cn/Example2.md)
 + **节点介绍**
     + [任务节点](/zh-cn/NodeTask)	
