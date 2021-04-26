@@ -203,7 +203,7 @@ class RSN_Nodes:
             for node_name, active in var_collect.items():
                 var_node = self.nt.nodes[node_name]
                 black_list = self.get_children_from_var_node(var_node, active)
-                print(black_list)
+
                 node_list = [i for i in node_list if i not in black_list]
 
             # return clean node list
