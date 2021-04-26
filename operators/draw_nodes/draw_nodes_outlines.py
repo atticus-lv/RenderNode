@@ -254,11 +254,10 @@ def draw_callback_nodeoutline(self, context):
         bgl.glEnable(bgl.GL_LINE_SMOOTH)
         bgl.glHint(bgl.GL_LINE_SMOOTH_HINT, bgl.GL_NICEST)
 
-        nodes, links = get_nodes_links(context)
-
         shader = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
 
-        col_outer = (0.2, 1.0, 0.2, self.alpha)
+
+        col_outer = (self.color[0],self.color[1],self.color[2], self.alpha)
         col_inner = (0.0, 0.0, 0.0, self.alpha + 0.1)
 
         node_list = context.window_manager.rsn_node_list.split(',')
@@ -275,34 +274,11 @@ def draw_callback_nodeoutline(self, context):
         bgl.glDisable(bgl.GL_LINE_SMOOTH)
 
 
-def get_active_tree(context):
-    tree = context.space_data.node_tree
-    path = []
-    # Get nodes from currently edited tree.
-    # If user is editing a group, space_data.node_tree is still the base level (outside group).
-    # context.active_node is in the group though, so if space_data.node_tree.nodes.active is not
-    # the same as context.active_node, the user is in a group.
-    # Check recursively until we find the real active node_tree:
-    if tree.nodes.active:
-        while tree.nodes.active != context.active_node:
-            tree = tree.nodes.active.node_tree
-            path.append(tree)
-    return tree, path
-
-
-def get_nodes_links(context):
-    tree, path = get_active_tree(context)
-    return tree.nodes, tree.links
-
-
 class RSN_OT_DrawNodes(Operator, ):
     """"""
     bl_idname = "rsn.draw_nodes"
     bl_label = "Draw Nodes"
     bl_options = {'REGISTER', 'UNDO'}
-
-    def execute(self, context):
-        return {'RUNNING_MODAL'}
 
     def modal(self, context, event):
         context.area.tag_redraw()
@@ -311,17 +287,14 @@ class RSN_OT_DrawNodes(Operator, ):
 
         start_pos = [event.mouse_region_x, event.mouse_region_y]
 
-        if event.type == 'MOUSEMOVE':
-            return {'PASS_THROUGH'}
-
-        elif event.type == 'TIMER':
+        if event.type == 'TIMER':
             if context.scene.RSNBusyDrawing:
-                if self.alpha < 0.5: self.alpha += 0.0025
+                if self.alpha < 0.5: self.alpha += 0.01
 
 
             else:
                 if self.alpha > 0:
-                    self.alpha -= 0.0025
+                    self.alpha -= 0.01
                     return {'RUNNING_MODAL'}
                 bpy.types.SpaceNodeEditor.draw_handler_remove(self._handle, 'WINDOW')
                 return {'FINISHED'}
@@ -330,12 +303,13 @@ class RSN_OT_DrawNodes(Operator, ):
 
     def invoke(self, context, event):
         self.alpha = 0
-        self.radius = get_pref().node_viewer.border_scale
+        self.radius = get_pref().node_viewer.border_radius
+        self.color = get_pref().node_viewer.border_color
 
         if context.area.type == 'NODE_EDITOR' and context.space_data.edit_tree.bl_idname == 'RenderStackNodeTree':
             context.scene.RSNBusyDrawing = True
 
-            self._timer = context.window_manager.event_timer_add(0.1, window=context.window)
+            self._timer = context.window_manager.event_timer_add(0.01, window=context.window)
             self._handle = bpy.types.SpaceNodeEditor.draw_handler_add(draw_callback_nodeoutline, (self, context),
                                                                       'WINDOW', 'POST_PIXEL')
 
@@ -354,7 +328,6 @@ classes = (
 
 def register():
     from bpy.utils import register_class
-
     # props
     bpy.types.Scene.RSNBusyDrawing = BoolProperty(default=False)
 
@@ -367,8 +340,6 @@ def unregister():
 
     # props
     del bpy.types.Scene.RSNBusyDrawing
-    del bpy.types.Scene.RSNLazySource
-    del bpy.types.Scene.RSNLazyTarget
 
     for cls in classes:
         unregister_class(cls)

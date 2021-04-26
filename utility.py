@@ -144,7 +144,7 @@ class RSN_Nodes:
             """Skip the reroute node"""
             if node.bl_idname != 'NodeReroute':
                 if len(black_list) == 0 or (len(black_list) != 0 and node.name != black_list[-1]):
-                    black_list.append(node.name)
+                    if node.bl_idname != 'RSNodeVariantsNode': black_list.append(node.name)
 
         # @lru_cache(maxsize=None)
         def get_sub_node(node, pass_mute_node=True):
@@ -203,6 +203,7 @@ class RSN_Nodes:
             for node_name, active in var_collect.items():
                 var_node = self.nt.nodes[node_name]
                 black_list = self.get_children_from_var_node(var_node, active)
+                print(black_list)
                 node_list = [i for i in node_list if i not in black_list]
 
             # return clean node list

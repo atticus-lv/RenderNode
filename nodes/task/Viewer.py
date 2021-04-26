@@ -47,8 +47,6 @@ class RSN_OT_AddViewerNode(bpy.types.Operator):
         dg = context.evaluated_depsgraph_get()
         dg.update()
 
-        bpy.ops.rsn.draw_nodes()
-
         return {"FINISHED"}
 
 
@@ -84,9 +82,8 @@ class RSNodeViewerNode(RenderStackNode):
         for node_name, active in var_collect.items():
             var_node = rsn_task.nt.nodes[node_name]
             black_list = rsn_task.get_children_from_var_node(var_node, active)
-            node_list = [i for i in node_list if i not in black_list]
 
-        print(node_list)
+            node_list = [i for i in node_list if i not in black_list]
 
         if len(node_list) > 0:
             node_list_str = ','.join(node_list)
@@ -113,7 +110,6 @@ class RSNodeViewerNode(RenderStackNode):
                     bpy.context.window_manager.rsn_viewer_node = ''
 
     def free(self):
-        print("Node removed", self)
         bpy.context.window_manager.rsn_viewer_node = ''
 
     def draw_buttons(self, context, layout):

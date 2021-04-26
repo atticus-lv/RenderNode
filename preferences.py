@@ -25,9 +25,12 @@ class NodeSmtpProps(bpy.types.PropertyGroup):
 class NodeViewerProps(bpy.types.PropertyGroup):
     show: BoolProperty(name="Dropdown")
 
-    border_scale: FloatProperty(name = 'Border Scale',
-                              description='Scale of the border when draw task nodes',
-                              default=5, min=2, soft_min=2, soft_max=8)
+    border_radius: FloatProperty(name='Border Radius',
+                                 description='Scale of the border when draw task nodes',
+                                 default=5, min=2, soft_min=2, soft_max=8)
+
+    border_color: FloatVectorProperty(name='Border Color', subtype='COLOR',
+                                      default=(0.2, 1.0, 0.2))
 
     update_scripts: BoolProperty(name='Update Scripts',
                                  description="Update scripts node when using viewer node",
@@ -134,7 +137,11 @@ class RSN_Preference(bpy.types.AddonPreferences):
                  icon='TRIA_DOWN' if self.node_viewer.show else 'TRIA_RIGHT')
         if self.node_viewer.show:
             box.use_property_split = True
-            box.prop(self.node_viewer, 'border_scale',slider=1)
+            box.prop(self.node_viewer, 'border_radius', slider=1)
+            box.prop(self.node_viewer, 'border_color')
+
+            box.separator(factor=0.5)
+
             box.prop(self.node_viewer, 'update_scripts')
             box.prop(self.node_viewer, 'update_path')
             box.prop(self.node_viewer, 'update_view_layer_passes')
