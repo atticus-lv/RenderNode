@@ -1,21 +1,17 @@
-RenderStackNode is an addon that provide users with node based, flexible rendering output workflow. It can be also usein look-dev or design.<br>Actually it is a simple but node version of take system(for example in houdini) in principle.
+RenderStackNode is an addon that provide users with node based, flexible rendering output workflow. <br>
+It can be also use in look-dev or design.<br>
 
 ## What can RSN do
 
-> The core of RSN is to modify the data in the scene before rendering, which makes it more flexible
+> [!NOTE]
+> **The core of RSN is to modify the data in the scene before rendering, which makes it more flexible** <br>
 
-Take a simple example
-
-+ Render **multiple shots** in the scene, and take the name of the camera as the name of the output image
-
-+ In each shot, objects' **placement, material and data** can be different
-
++ Render **multiple shots** in the scene, and take the name of the camera as the name of the output image   [👉Link](Example1.md)
++ In each shot, objects' **placement, material and data** can be different   [👉Link](Example2.md)
 + Add **animation** to one of the shots, and render with another rendering engine (such as workbench)
-
 + If you are not sure how long a shot will be rendered, you can send a report email to the specified email after
   rendering
-
-+ Just press the button, you can ** queue render** all the above needed shots without waiting in front of the computer
++ Just press the button, you can **queue render** all the above needed shots without waiting in front of the computer
 
 <!-- panels:start -->
 
@@ -31,7 +27,7 @@ Take a simple example
 
 **Stable** *Ready for work*
 
-[https://github.com/atticus-lv/RenderStackNode/releases/latest](https://github.com/atticus-lv/RenderStackNode/releases/latest)
+[RSN 1.2.1 📚 ](https://github.com/atticus-lv/RenderStackNode/releases/latest)
 
 
 
@@ -70,7 +66,8 @@ Take a simple example
 
 4. **Render List Node**  render all the task that you need
 
-*Once you plug a node settings to overide something into the a task,the next task will inherit it if there is not a same type Node plug input. <br>So you may start a new render list to keep your node tree cleaner*
+*Once you plug a node settings to overide something into the a task,the next task will inherit it if there is not a same
+type Node plug input. <br>So you may start a new render list to keep your node tree cleaner*
 
 <!-- panels:end -->
 
