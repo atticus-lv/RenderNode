@@ -410,8 +410,6 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
 
         self.get_data()
 
-
-
         if self.task_data:
 
             self.update_camera()

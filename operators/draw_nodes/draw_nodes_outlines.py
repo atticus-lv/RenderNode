@@ -15,10 +15,8 @@ from gpu_extras.batch import batch_for_shader
 from mathutils import Vector
 from math import cos, sin, pi, hypot
 
-
-def dpifac():
-    prefs = bpy.context.preferences.system
-    return prefs.dpi * prefs.pixel_size / 72
+from .utils import dpifac
+from ...preferences import get_pref
 
 
 def store_mouse_cursor(context, event):
@@ -101,36 +99,6 @@ def node_at_pos(nodes, context, event):
     else:
         target_node = nearest_node
     return target_node
-
-
-def draw_line(x1, y1, x2, y2, size, colour=(1.0, 1.0, 1.0, 0.7)):
-    shader = gpu.shader.from_builtin('2D_SMOOTH_COLOR')
-
-    vertices = ((x1, y1), (x2, y2))
-    vertex_colors = ((colour[0] + (1.0 - colour[0]) / 4,
-                      colour[1] + (1.0 - colour[1]) / 4,
-                      colour[2] + (1.0 - colour[2]) / 4,
-                      colour[3] + (1.0 - colour[3]) / 4),
-                     colour)
-
-    batch = batch_for_shader(shader, 'LINE_STRIP', {"pos": vertices, "color": vertex_colors})
-    bgl.glLineWidth(size * dpifac())
-
-    shader.bind()
-    batch.draw(shader)
-
-
-def draw_circle_2d_filled(shader, mx, my, radius, colour=(1.0, 1.0, 1.0, 0.7)):
-    radius = radius * dpifac()
-    sides = 12
-    vertices = [(radius * cos(i * 2 * pi / sides) + mx,
-                 radius * sin(i * 2 * pi / sides) + my)
-                for i in range(sides + 1)]
-
-    batch = batch_for_shader(shader, 'TRI_FAN', {"pos": vertices})
-    shader.bind()
-    shader.uniform_float("color", colour)
-    batch.draw(shader)
 
 
 def draw_rounded_node_border(shader, node, radius=8, colour=(1.0, 1.0, 1.0, 0.7)):
@@ -296,10 +264,12 @@ def draw_callback_nodeoutline(self, context):
         node_list = context.window_manager.rsn_node_list.split(',')
 
         for node_name in node_list:
-            node = context.space_data.edit_tree.nodes[node_name]
-
-            draw_rounded_node_border(shader, node, radius=6, colour=col_outer)  # outline
-            draw_rounded_node_border(shader, node, radius=5, colour=col_inner)  # inner
+            try:
+                node = context.space_data.edit_tree.nodes[node_name]
+                draw_rounded_node_border(shader, node, radius=self.radius, colour=col_outer)  # outline
+                draw_rounded_node_border(shader, node, radius=self.radius - 1, colour=col_inner)  # inner
+            except KeyError:
+                pass
 
         bgl.glDisable(bgl.GL_BLEND)
         bgl.glDisable(bgl.GL_LINE_SMOOTH)
@@ -325,22 +295,18 @@ def get_nodes_links(context):
     return tree.nodes, tree.links
 
 
-class RSNBase:
-    @classmethod
-    def poll(cls, context):
-        return context.space.type == 'NODE_EDITOR' and context.space.node_tree and context.space.tree_type == 'RenderStackNodeTree'
-
-
-class RSN_OT_DrawNodes(Operator, RSNBase):
-    """Add a Mix RGB/Shader node by interactively drawing lines between nodes"""
+class RSN_OT_DrawNodes(Operator, ):
+    """"""
     bl_idname = "rsn.draw_nodes"
     bl_label = "Draw Nodes"
     bl_options = {'REGISTER', 'UNDO'}
 
+    def execute(self, context):
+        return {'RUNNING_MODAL'}
+
     def modal(self, context, event):
         context.area.tag_redraw()
-        node_list = bpy.context.window_manager.rsn_node_list.split(',')
-        nodes = [context.space_data.edit_tree.nodes[name] for name in node_list]
+
         cont = True
 
         start_pos = [event.mouse_region_x, event.mouse_region_y]
@@ -348,45 +314,31 @@ class RSN_OT_DrawNodes(Operator, RSNBase):
         if event.type == 'MOUSEMOVE':
             return {'PASS_THROUGH'}
 
-        elif event.type == 'RIGHTMOUSE' and event.value == 'RELEASE':
-            bpy.types.SpaceNodeEditor.draw_handler_remove(self._handle, 'WINDOW')
-
-            return {'FINISHED'}
-
-        elif event.type == 'ESC':
-            print('cancelled')
-            bpy.types.SpaceNodeEditor.draw_handler_remove(self._handle, 'WINDOW')
-            return {'CANCELLED'}
-
         elif event.type == 'TIMER':
-            print(self.time_count)
-            if self.time_count > 0:
-                self.time_count -= 1
-                self.alpha -= 0.005
-                return {'RUNNING_MODAL'}
+            if context.scene.RSNBusyDrawing:
+                if self.alpha < 0.5: self.alpha += 0.0025
+
+
             else:
+                if self.alpha > 0:
+                    self.alpha -= 0.0025
+                    return {'RUNNING_MODAL'}
                 bpy.types.SpaceNodeEditor.draw_handler_remove(self._handle, 'WINDOW')
                 return {'FINISHED'}
 
-        else:
-            return {'PASS_THROUGH'}
-
-        return {'RUNNING_MODAL'}
+        return {'PASS_THROUGH'}
 
     def invoke(self, context, event):
-        self.time_count = 100
-        self.alpha = 0.5
-        if context.area.type == 'NODE_EDITOR':
-            # the arguments we pass the the callback
-            # Add the region OpenGL drawing callback
-            # draw in view space with 'POST_VIEW' and 'PRE_VIEW'
+        self.alpha = 0
+        self.radius = get_pref().node_viewer.border_scale
+
+        if context.area.type == 'NODE_EDITOR' and context.space_data.edit_tree.bl_idname == 'RenderStackNodeTree':
+            context.scene.RSNBusyDrawing = True
 
             self._timer = context.window_manager.event_timer_add(0.1, window=context.window)
             self._handle = bpy.types.SpaceNodeEditor.draw_handler_add(draw_callback_nodeoutline, (self, context),
-                                                                      'WINDOW',
-                                                                      'POST_PIXEL')
+                                                                      'WINDOW', 'POST_PIXEL')
 
-            print("INVOKE")
             context.window_manager.modal_handler_add(self)
             return {'RUNNING_MODAL'}
         else:
@@ -404,18 +356,7 @@ def register():
     from bpy.utils import register_class
 
     # props
-    bpy.types.Scene.RSNBusyDrawing = StringProperty(
-        name="Busy Drawing!",
-        default="",
-        description="An internal property used to store only the first mouse position")
-    bpy.types.Scene.RSNLazySource = StringProperty(
-        name="Lazy Source!",
-        default="x",
-        description="An internal property used to store the first node in a Lazy Connect operation")
-    bpy.types.Scene.RSNLazyTarget = StringProperty(
-        name="Lazy Target!",
-        default="x",
-        description="An internal property used to store the last node in a Lazy Connect operation")
+    bpy.types.Scene.RSNBusyDrawing = BoolProperty(default=False)
 
     for cls in classes:
         register_class(cls)

@@ -46,6 +46,9 @@ class RSN_OT_AddViewerNode(bpy.types.Operator):
         # force update
         dg = context.evaluated_depsgraph_get()
         dg.update()
+
+        bpy.ops.rsn.draw_nodes()
+
         return {"FINISHED"}
 
 
@@ -66,7 +69,25 @@ class RSNodeViewerNode(RenderStackNode):
     def update(self):
         rsn_task = RSN_Nodes(node_tree=bpy.context.space_data.edit_tree,
                              root_node_name=self.name)
-        node_list = rsn_task.get_children_from_node(self)
+
+        node_list = rsn_task.get_children_from_node(self)# VariantsNodeProperty node in each task
+        # only one set VariantsNodeProperty node will be active
+        var_collect = {}
+        for node_name in node_list:
+            set_var_node = rsn_task.nt.nodes[node_name]
+            if set_var_node.bl_idname == 'RSNodeSetVariantsNode':
+                for item in set_var_node.node_collect:
+                    if item.use:
+                        var_collect[item.name] = item.active
+                break
+
+        for node_name, active in var_collect.items():
+            var_node = rsn_task.nt.nodes[node_name]
+            black_list = rsn_task.get_children_from_var_node(var_node, active)
+            node_list = [i for i in node_list if i not in black_list]
+
+        print(node_list)
+
         if len(node_list) > 0:
             node_list_str = ','.join(node_list)
 
@@ -84,6 +105,7 @@ class RSNodeViewerNode(RenderStackNode):
                                                  use_render_mode=False)
                         # This error shows when the dragging the link off viewer node(Works well with knife tool)
                         # this seems to be a blender error
+
                     except IndexError:
                         pass
 
@@ -96,12 +118,11 @@ class RSNodeViewerNode(RenderStackNode):
 
     def draw_buttons(self, context, layout):
         row = layout.row(align=1)
-        if self.inputs[0].is_linked and context.window_manager.rsn_viewer_node != '':
-            node = context.space_data.edit_tree.nodes[context.window_manager.rsn_viewer_node]
-            row.label(text=f'{node.name} | {node.label}', icon='NODE_SEL')
 
+        if context.scene.RSNBusyDrawing is True:
+            row.prop(context.scene,'RSNBusyDrawing',text='Draw Nodes',toggle=1)
         else:
-            row.label(text='', icon='NODE')
+            row.operator("rsn.draw_nodes")
 
         # preferences.
         pref = get_pref()
