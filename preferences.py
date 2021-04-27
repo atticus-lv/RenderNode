@@ -29,8 +29,14 @@ class NodeViewerProps(bpy.types.PropertyGroup):
                                  description='Scale of the border when draw task nodes',
                                  default=5, min=2, soft_min=2, soft_max=8)
 
-    border_color: FloatVectorProperty(name='Border Color', subtype='COLOR',
-                                      default=(0.2, 1.0, 0.2))
+    settiings_color: FloatVectorProperty(name='Border Color', subtype='COLOR',
+                                         default=(0.2, 1.0, 0.2))
+
+    task_color: FloatVectorProperty(name='Task Color', subtype='COLOR',
+                                    default=(0, 1.0, 1.0))
+
+    file_path_color: FloatVectorProperty(name='File Path Color', subtype='COLOR',
+                                         default=(1.0, 0.8, 0))
 
     update_scripts: BoolProperty(name='Update Scripts',
                                  description="Update scripts node when using viewer node",
@@ -137,14 +143,22 @@ class RSN_Preference(bpy.types.AddonPreferences):
                  icon='TRIA_DOWN' if self.node_viewer.show else 'TRIA_RIGHT')
         if self.node_viewer.show:
             box.use_property_split = True
-            box.prop(self.node_viewer, 'border_radius', slider=1)
-            box.prop(self.node_viewer, 'border_color')
-
-            box.separator(factor=0.5)
 
             box.prop(self.node_viewer, 'update_scripts')
             box.prop(self.node_viewer, 'update_path')
             box.prop(self.node_viewer, 'update_view_layer_passes')
+
+            box.separator(factor=1)
+
+            sub = box.box().column(align=1)
+            sub.label(text='Draw Nodes')
+            sub.prop(self.node_viewer, 'border_radius', slider=1)
+            sub.separator(factor=1)
+            sub.prop(self.node_viewer, 'settiings_color')
+
+
+            sub.prop(self.node_viewer, 'task_color')
+            sub.prop(self.node_viewer, 'file_path_color')
 
     def drawKeymap(self):
         col = self.layout.box().column()

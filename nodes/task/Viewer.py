@@ -62,7 +62,7 @@ class RSNodeViewerNode(RenderStackNode):
         self.width = 175
 
     def draw_label(self):
-        return f'Update Node: {bpy.context.window_manager.rsn_viewer_node}'
+        return f'Task: {bpy.context.window_manager.rsn_viewer_node}'
 
     def update(self):
         rsn_task = RSN_Nodes(node_tree=bpy.context.space_data.edit_tree,

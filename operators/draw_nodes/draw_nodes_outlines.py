@@ -154,7 +154,10 @@ def draw_callback_nodeoutline(self, context):
 
     shader = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
 
-    col_outer = (self.color[0], self.color[1], self.color[2], self.alpha)
+    task_outer = (self.task_color[0], self.task_color[1], self.task_color[2], self.alpha)
+    file_path_outer = (self.file_path_color[0], self.file_path_color[1], self.file_path_color[2], self.alpha)
+
+    col_outer = (self.settiings_color[0], self.settiings_color[1], self.settiings_color[2], self.alpha)
     col_inner = (0.0, 0.0, 0.0, self.alpha + 0.1)
 
     node_list = context.window_manager.rsn_node_list.split(',')
@@ -162,8 +165,17 @@ def draw_callback_nodeoutline(self, context):
     for node_name in node_list:
         try:
             node = context.space_data.edit_tree.nodes[node_name]
-            draw_rounded_node_border(shader, node, radius=self.radius, colour=col_outer)  # outline
-            draw_rounded_node_border(shader, node, radius=self.radius - 1, colour=col_inner)  # inner
+            if node.bl_idname == 'RSNodeTaskNode':
+                draw_rounded_node_border(shader, node, radius=self.radius * 1.5, colour=task_outer)
+                draw_rounded_node_border(shader, node, radius=self.radius * 1.5 - 2, colour=col_inner)
+            elif node.bl_idname == 'RSNodeFilePathInputNode':
+                draw_rounded_node_border(shader, node, radius=self.radius, colour=file_path_outer)
+                draw_rounded_node_border(shader, node, radius=self.radius - 1, colour=col_inner)
+            else:
+                draw_rounded_node_border(shader, node, radius=self.radius, colour=col_outer)
+                draw_rounded_node_border(shader, node, radius=self.radius - 1, colour=col_inner)
+
+
         except KeyError:
             pass
 
@@ -201,7 +213,10 @@ class RSN_OT_DrawNodes(Operator, ):
         # init draw values
         self.alpha = 0
         self.radius = get_pref().node_viewer.border_radius
-        self.color = get_pref().node_viewer.border_color
+        # node color
+        self.settiings_color = get_pref().node_viewer.settiings_color
+        self.task_color = get_pref().node_viewer.task_color
+        self.file_path_color = get_pref().node_viewer.file_path_color
 
         if True in {context.area.type != 'NODE_EDITOR',
                     context.space_data.edit_tree is None,
