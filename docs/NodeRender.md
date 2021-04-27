@@ -10,7 +10,6 @@ image
 
 <!-- div:right-panel -->
 
-> [!NOTE]
 > Change the render engine to WorkBench
 
 <!-- panels:end -->
@@ -27,7 +26,6 @@ image
 
 <!-- div:right-panel -->
 
-> [!NOTE]
 > Change the render engine to Eevee
 
 <!-- panels:end -->
@@ -44,7 +42,6 @@ image
 
 <!-- div:right-panel -->
 
-> [!NOTE]
 > Change the render engine to Cycles
 
 <!-- panels:end -->
@@ -61,7 +58,6 @@ image
 
 <!-- div:right-panel -->
 
-> [!NOTE]
 > Change Cycles' light path property
 
 <!-- panels:end -->
@@ -78,7 +74,6 @@ image
 
 <!-- div:right-panel -->
 
-> [!NOTE]
 > Change the render engine to Luxcore
 
 <!-- panels:end -->

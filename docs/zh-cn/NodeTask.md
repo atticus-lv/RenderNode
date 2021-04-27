@@ -1,28 +1,64 @@
+<!-- panels:start -->
+
+<!-- div:title-panel -->
+
 ### Task
 
+<!-- div:left-panel -->
+
+image
+
+<!-- div:right-panel -->
+
 > Task 节点是RSN中最重要的节点。它包含可用于渲染的更改
->
+
+<!-- panels:end -->
+
+<!-- panels:start -->
+
+<!-- div:title-panel -->
 
 ### Render List
 
-> Render list将获取链接到它的所有task。
->
-> 单击“render confirm”按钮后，将获得渲染确认表。只需按“确认”即可开始渲染。
->
-> 此外，您还可以按标记图标取消某些任务。它将禁用节点，以便渲染列表稍后不会检查它。
->
-> 带有信息图标的小按钮允许您查看此任务的更改。你可以复制它，也可以在文本编辑器中粘贴它。然后与task info节点一起使用
+<!-- div:left-panel -->
+
+image
+
+<!-- div:right-panel -->
+
+> Render list将获取链接到它的所有task。<br>单击“render confirm”按钮后，将获得渲染确认表。只需按“确认”即可开始渲染。<br>此外，您还可以按标记图标取消某些任务。它将禁用节点，以便渲染列表稍后不会检查它。<br>带有信息图标的小按钮允许您查看此任务的更改。你可以复制它，也可以在文本编辑器中粘贴它。然后与task info节点一起使用
+
+<!-- panels:end -->
+
+<!-- panels:start -->
+
+<!-- div:title-panel -->
 
 ### Processor
 
-> Processor节点为每个任务提供一个进程条
->
-> 您可以为完成帧和剩余帧设置自己的颜色
+<!-- div:left-panel -->
+
+image
+
+<!-- div:right-panel -->
+
+> Processor节点为每个任务提供一个进程条<br>您可以为完成帧和剩余帧设置自己的颜色
+
+<!-- panels:end -->
+
+<!-- panels:start -->
+
+<!-- div:title-panel -->
 
 ### Viewer
 
-> 选择task节点时，可以按v键链接viewer节点以查看此任务。
+<!-- div:left-panel -->
+
+image
+
+<!-- div:right-panel -->
+
+> 选择task节点时，可以按v键链接viewer节点以查看此任务。<br>如果task节点是禁用状态的的（按M键），它将不会检查这个task<br>确保节点树中只有一个viewer节点。
 >
-> 如果task节点是禁用状态的的（按M键），它将不会检查这个task
->
-> 确保节点树中只有一个viewer节点。
+
+<!-- panels:end -->

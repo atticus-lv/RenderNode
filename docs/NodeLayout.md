@@ -10,10 +10,7 @@ image
 
 <!-- div:right-panel -->
 
-> [!NOTE]
-> This node allow you to merge different settings into one task.
->
-> And you can merge different tasks into the render list node, too.
+> This node allow you to merge different settings into one task.<br>And you can merge different tasks into the render list node, too.
 
 <!-- panels:end -->
 
@@ -29,10 +26,8 @@ image
 
 <!-- div:right-panel -->
 
-> [!NOTE]
-> This node allow you to switch input order
->
-> You use it on some toggle operations
+> 
+> This node allow you to switch input order<br>You use it on some toggle operations
 
 <!-- panels:end -->
 
@@ -48,10 +43,8 @@ image
 
 <!-- div:right-panel -->
 
-> [!NOTE]
-> This node allow you to have different versions of settings
->
-> In the development of alternative functions
+> This node allow you to have different versions of settings<br>In the development of alternative functions
+> 
 
 <!-- panels:end -->
 

@@ -10,7 +10,6 @@ image
 
 <!-- div:right-panel -->
 
-> [!NOTE]
 > This node let you to set the camera as the scene camera
 
 <!-- panels:end -->
@@ -28,7 +27,6 @@ image
 
 <!-- div:right-panel -->
 
-> [!NOTE]
 > This node let you to set a world as the scene world
 
 
@@ -47,10 +45,8 @@ image
 
 <!-- div:right-panel -->
 
-> [!NOTE]
-> This node let you to set the context viewlayer of the scene.
->
-> When you change the name of this viewlayer, make sure you update this node.
+> This node let you to set the context viewlayer of the scene.<br>When you change the name of this viewlayer, make sure you update this node.
+> 
 
 
 <!-- panels:end -->
@@ -67,7 +63,6 @@ image
 
 <!-- div:right-panel -->
 
-> [!NOTE]
 > This node let you to set the color management of the scene.
 
 
@@ -86,10 +81,8 @@ image
 
 <!-- div:right-panel -->
 
-> [!NOTE]
-> This node contains several nodes
+> This node contains several nodes<br>camera, render engine, file path node, resolution, frame range
 > 
-> camera, render engine, file path node, resolution, frame range
 
 <!-- panels:end -->
 
@@ -105,12 +98,7 @@ image
 
 <!-- div:right-panel -->
 
-> [!NOTE]
-> This node allow you to asign value to any data in the scene.
->
-> Right click on the property you want to change, then selecet copy full path (blender 2.93) or press *ctrl shift alt C*
->
-> Then paste it to the node and input the value through the control
+> This node allow you to asign value to any data in the scene.<br>Right click on the property you want to change, then selecet copy full path (blender 2.93) or press *ctrl shift alt C*<br>Then paste it to the node and input the value through the control
 
 <!-- panels:end -->
 
@@ -126,10 +114,8 @@ image
 
 <!-- div:right-panel -->
 
-> [!NOTE]
-> This node allow you to write changes in json way.
+> This node allow you to write changes in json way.<br>Check out the **RenderList/Task** node for more details
 > 
-> Check out the **RenderList/Task** node for more details
 
 <!-- panels:end -->
 
