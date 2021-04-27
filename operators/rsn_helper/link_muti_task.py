@@ -1,10 +1,10 @@
 import bpy
 
 
-class RSN_OT_LinkMutiTask(bpy.types.Operator):
+class RSN_OT_SplitToSelected(bpy.types.Operator):
     """Link the active setting node to selected task"""
-    bl_idname = 'rsn.link_muti_task'
-    bl_label = 'Link to Muti Task'
+    bl_idname = 'rsn.split_to_selected'
+    bl_label = 'Split to Selected'
 
     @classmethod
     def poll(cls, context):
@@ -26,8 +26,8 @@ class RSN_OT_LinkMutiTask(bpy.types.Operator):
 
 
 def register():
-    bpy.utils.register_class(RSN_OT_LinkMutiTask)
+    bpy.utils.register_class(RSN_OT_SplitToSelected)
 
 
 def unregister():
-    bpy.utils.unregister_class(RSN_OT_LinkMutiTask)
+    bpy.utils.unregister_class(RSN_OT_SplitToSelected)

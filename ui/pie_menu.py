@@ -9,6 +9,7 @@ from .icon_utils import RSN_Preview
 merge_icon = RSN_Preview(image='merge.png', name='merge_icon')
 simple_task_icon = RSN_Preview(image='flow.png', name='simple_task_icon')
 version_icon = RSN_Preview(image='version.png', name='version_icon')
+split_icon = RSN_Preview(image='split.png', name='split_icon')
 
 
 class RSN_OT_SwitchTree(bpy.types.Operator):
@@ -52,8 +53,8 @@ class RSN_MT_PieMenu(Menu):
         # merge_icon = preview_collections["rsn_icon"]["merge_icon"]
         col.operator("rsn.merge_selected_nodes", icon_value=merge_icon.get_image_icon_id()).make_version = 0
         col.operator("rsn.merge_selected_nodes", icon_value=version_icon.get_image_icon_id(),
-                     text='Make Various').make_version = 1
-        col.operator("rsn.link_muti_task",text = "Link active to selected")
+                     text='Make Variants').make_version = 1
+        col.operator("rsn.split_to_selected",text = "Split active to selected",icon_value=split_icon.get_image_icon_id())
 
         # bottom
         col = pie.column(align=1)
@@ -75,12 +76,14 @@ def register_icon():
     merge_icon.register()
     simple_task_icon.register()
     version_icon.register()
+    split_icon.register()
 
 
 def unregister_icon():
     merge_icon.unregister()
     simple_task_icon.unregister()
     version_icon.unregister()
+    split.unregister()
 
 
 def register():
