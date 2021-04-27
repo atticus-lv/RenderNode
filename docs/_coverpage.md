@@ -1,6 +1,6 @@
 <!-- _coverpage.md -->
 
-<img src="media/logo/blender logo.png" style="zoom:10%;" />
+## <img src="media/logo/logo.png" alt="cover" width="350px" />
 
 # **RenderStackNode**
 

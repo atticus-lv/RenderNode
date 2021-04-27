@@ -4,8 +4,8 @@ from ...nodes.BASE.node_tree import RenderStackNode
 from ...ui.icon_utils import RSN_Preview
 
 
-# set custom icon
-# empty_icon = RSN_Preview(image='empty.png', name='empty_icon')
+
+rsn_icon = RSN_Preview(image='RSN.png', name='rsn_icon')
 
 class RSNodeRenderListNode(RenderStackNode):
     """Render List Node"""
@@ -36,7 +36,7 @@ class RSNodeRenderListNode(RenderStackNode):
 
         col = layout.column()
         col.scale_y = 1.75
-        sheet = col.operator("rsn.render_button", text=f'Render Confirm')
+        sheet = col.operator("rsn.render_button", text=f'Render Confirm',icon_value=rsn_icon.get_image_icon_id())
         sheet.render_list_node_name = self.name
         sheet.open_dir = self.open_dir
         sheet.clean_path = self.clean_path
@@ -66,8 +66,10 @@ class RSNodeRenderListNode(RenderStackNode):
 
 
 def register():
+    rsn_icon.register()
     bpy.utils.register_class(RSNodeRenderListNode)
 
 
 def unregister():
+    rsn_icon.unregister()
     bpy.utils.unregister_class(RSNodeRenderListNode)

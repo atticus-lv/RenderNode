@@ -2,12 +2,13 @@ RSN插件是一款基于节点的，为用户提供灵活渲染输出流程的�
 
 ## RSN能做什么
 
+> [!NOTE]
 > RSN的核心是在渲染前修改场景中的数据，这使得它有着比较好的灵活性
 
 举一个简单的例子
 
-+ 渲染场景中**多个镜头**，并以相机的名字作为输出的图片名字
-+ 在这个每个镜头里，物体的**摆放，材质，数据**都可以是不同的
++ 渲染场景中**多个镜头**，并以相机的名字作为输出的图片名字 [👉链接](Example1.md)
++ 在这个每个镜头里，物体的**摆放，材质，数据**都可以是不同的 [👉链接](Example2.md)
 + 为其中的某一个镜头添加**动画**，并以另外一个渲染引擎（比如workbench）来渲染
 + 假如不确定一个镜头要渲染多久，可以在渲染后向指定邮箱发送报告邮件
 + 只需要按一下按钮，就能将以上所有需要的镜头**队列渲染**，无需在电脑面前等待操作
@@ -26,7 +27,9 @@ RSN插件是一款基于节点的，为用户提供灵活渲染输出流程的�
 
 **稳定版** *开箱即用*
 
-[https://github.com/atticus-lv/RenderStackNode/releases/latest](https://github.com/atticus-lv/RenderStackNode/releases/latest)
+[RSN 1.2.1 📚 ](https://github.com/atticus-lv/RenderStackNode/releases/latest)
+
+
 
 <!-- div:right-panel -->
 

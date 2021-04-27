@@ -1,6 +1,12 @@
+👇 可以先看看这个视频
+
+[test video](media/video/test.mp4 ':include :type=video controls width=960px')
+
 <!-- panels:start -->
 
 <!-- div:title-panel -->
+
+# 图文分解
 
 ### 1. 设置节点界面
 
