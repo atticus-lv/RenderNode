@@ -5,7 +5,7 @@ from bpy.props import *
 from gpu_extras.batch import batch_for_shader
 from math import cos, sin, pi, hypot
 
-from .utils import dpifac, draw_tri_fan, get_node_from_pos
+from .utils import dpifac, draw_tri_fan, get_node_from_pos, draw_text_2d
 from ...preferences import get_pref
 
 
@@ -166,21 +166,32 @@ def draw_callback_nodeoutline(self, context):
         try:
             node = context.space_data.edit_tree.nodes[node_name]
             if node.bl_idname == 'RSNodeTaskNode':
-                draw_rounded_node_border(shader, node, radius=self.radius * 1.5, colour=task_outer)
-                draw_rounded_node_border(shader, node, radius=self.radius * 1.5 - 2, colour=col_inner)
+                draw_rounded_node_border(shader, node, radius=self.radius * 1.25, colour=task_outer)
+                draw_rounded_node_border(shader, node, radius=self.radius * 1.25 - 1.25, colour=col_inner)
+
             elif node.bl_idname == 'RSNodeFilePathInputNode':
                 draw_rounded_node_border(shader, node, radius=self.radius, colour=file_path_outer)
                 draw_rounded_node_border(shader, node, radius=self.radius - 1, colour=col_inner)
+
             else:
                 draw_rounded_node_border(shader, node, radius=self.radius, colour=col_outer)
                 draw_rounded_node_border(shader, node, radius=self.radius - 1, colour=col_inner)
 
-
         except KeyError:
             pass
 
-    bgl.glDisable(bgl.GL_BLEND)
-    bgl.glDisable(bgl.GL_LINE_SMOOTH)
+    # draw text information
+    task_text = "No Active Task!" if context.window_manager.rsn_viewer_node == '' else context.window_manager.rsn_viewer_node
+    draw_text_2d((1, 1, 1, self.alpha), f"Task: {task_text}", 20, 70)
+
+    is_save = True if bpy.data.filepath != '' else False
+    file_path_text = context.scene.render.filepath if is_save else "Save your file first!"
+    draw_text_2d((1, 1, 1, self.alpha), f"FilePath: {file_path_text}", 20, 40)
+
+
+# restore
+bgl.glDisable(bgl.GL_BLEND)
+bgl.glDisable(bgl.GL_LINE_SMOOTH)
 
 
 class RSN_OT_DrawNodes(Operator, ):

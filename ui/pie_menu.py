@@ -83,7 +83,7 @@ def unregister_icon():
     merge_icon.unregister()
     simple_task_icon.unregister()
     version_icon.unregister()
-    split.unregister()
+    split_icon.unregister()
 
 
 def register():
