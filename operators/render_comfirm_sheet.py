@@ -129,7 +129,7 @@ class RSN_OT_RenderButton(bpy.types.Operator):
                     col6.label(text='Not Defined')
                 # task_data_list
                 d = json.dumps(self.rsn_queue.task_data_queue[i], indent=2, ensure_ascii=False)
-                col7.operator('rsn.show_task_details', icon='INFO', text='').task_data = d
+                col7.operator("rsn.get_task_info", text="", icon="INFO").task_name = task_node
 
     def execute(self, context):
         blend_path = context.blend_data.filepath

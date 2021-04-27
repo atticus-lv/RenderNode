@@ -183,12 +183,12 @@ class RSN_OT_DrawNodes(Operator, ):
         if event.type == 'TIMER':
             # show draw
             if context.scene.RSNBusyDrawing:
-                if self.alpha < 0.5: self.alpha += 0.01
+                if self.alpha < 0.5: self.alpha += 0.02
 
             # close draw
             else:
                 if self.alpha > 0:
-                    self.alpha -= 0.01
+                    self.alpha -= 0.02
                     return {'RUNNING_MODAL'}
                 # remove handles
                 bpy.types.SpaceNodeEditor.draw_handler_remove(self._handle, 'WINDOW')

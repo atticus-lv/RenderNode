@@ -62,7 +62,7 @@ class RSNodeViewerNode(RenderStackNode):
         self.width = 175
 
     def draw_label(self):
-        return f'Update:{bpy.context.window_manager.rsn_tree_time}'
+        return f'Update Node: {bpy.context.window_manager.rsn_viewer_node}'
 
     def update(self):
         rsn_task = RSN_Nodes(node_tree=bpy.context.space_data.edit_tree,
@@ -116,7 +116,7 @@ class RSNodeViewerNode(RenderStackNode):
         row = layout.row(align=1)
 
         if context.scene.RSNBusyDrawing is True:
-            row.prop(context.scene,'RSNBusyDrawing',text='Draw Nodes',toggle=1)
+            draw = row.prop(context.scene,'RSNBusyDrawing',text='Draw Nodes',toggle=1)
         else:
             row.operator("rsn.draw_nodes")
 
