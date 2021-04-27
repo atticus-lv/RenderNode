@@ -3,16 +3,15 @@ import nodeitems_utils
 from bpy.props import EnumProperty
 
 
-class SearchEnumOperator(bpy.types.Operator):
-    bl_idname = "object.search_enum_operator"
-    bl_label = "Search Enum Operator"
+class RSN_OT_SearchNodes(bpy.types.Operator):
+    bl_idname = "rsn.search_nodes"
+    bl_label = "Search and Add"
     bl_property = "my_search"
 
     my_search: EnumProperty(
         name="My Search",
         items=(
             ('RSNodeTaskNode', 'Task', ''),
-            ('RSNodeNullNode', 'Null', ''),
             ('RSNodeRenderListNode', 'Render List', ''),
             ('RSNodeProcessorNode', 'Processor', ''),
             ('RSNodeViewerNode', 'Viewer', ''),
@@ -85,8 +84,8 @@ class SearchEnumOperator(bpy.types.Operator):
 
 
 def register():
-    bpy.utils.register_class(SearchEnumOperator)
+    bpy.utils.register_class(RSN_OT_SearchNodes)
 
 
 def unregister():
-    bpy.utils.unregister_class(SearchEnumOperator)
+    bpy.utils.unregister_class(RSN_OT_SearchNodes)

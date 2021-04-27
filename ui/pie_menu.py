@@ -55,6 +55,7 @@ class RSN_MT_PieMenu(Menu):
         col.operator("rsn.merge_selected_nodes", icon_value=version_icon.get_image_icon_id(),
                      text='Make Variants').make_version = 1
         col.operator("rsn.split_to_selected",text = "Split active to selected",icon_value=split_icon.get_image_icon_id())
+        col.operator("rsn.search_nodes",icon="VIEWZOOM")
 
         # bottom
         col = pie.column(align=1)
