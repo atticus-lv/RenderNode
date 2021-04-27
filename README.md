@@ -1,10 +1,10 @@
-<p align="center" class="logo">
+<p align="center">
   <a href="https://atticus-lv.github.io/RenderStackNode/#/">
     <img src="docs/media/logo/logo no_text.svg" alt="logo" width="300px"/>
   </a>
 </p>
 <p align="center">
-   A blender addon that provides blender node based look-dev and render workflow
+   👆 Node based design and render workflow in blender
 </p>
 
 

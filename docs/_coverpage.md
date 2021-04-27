@@ -1,6 +1,6 @@
 <!-- _coverpage.md -->
 
-## <img src="media/logo/logo.png" alt="cover" width="350px" />
+<img src="media/logo/logo no_text.svg" alt="cover" width="200px" />
 
 # **RenderStackNode**
 
