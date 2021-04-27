@@ -12,15 +12,14 @@ class RSN_OT_LinkMutiTask(bpy.types.Operator):
 
     def execute(self, context):
         nt = context.space_data.edit_tree
-        setting_node = context.space_data.edit_tree.nodes.active
+        src_node = context.space_data.edit_tree.nodes.active
 
-        nodes = [node for node in context.selected_nodes if
-                 node.bl_idname == 'RSNodeTaskNode' and node != setting_node]
+        nodes = [node for node in context.selected_nodes if node != src_node]
 
         for node in nodes:
             for input in node.inputs:
                 if not input.is_linked:
-                    nt.links.new(setting_node.outputs[0], input)
+                    nt.links.new(src_node.outputs[0], input)
                     break
 
         return {'FINISHED'}

@@ -53,7 +53,7 @@ class RSN_MT_PieMenu(Menu):
         col.operator("rsn.merge_selected_nodes", icon_value=merge_icon.get_image_icon_id()).make_version = 0
         col.operator("rsn.merge_selected_nodes", icon_value=version_icon.get_image_icon_id(),
                      text='Make Various').make_version = 1
-        col.operator("rsn.link_muti_task")
+        col.operator("rsn.link_muti_task",text = "Link active to selected")
 
         # bottom
         col = pie.column(align=1)
