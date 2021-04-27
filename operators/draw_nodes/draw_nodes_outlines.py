@@ -191,6 +191,7 @@ class RSN_OT_DrawNodes(Operator, ):
                     self.alpha -= 0.02
                     return {'RUNNING_MODAL'}
                 # remove handles
+                context.window_manager.event_timer_remove(self._timer)
                 bpy.types.SpaceNodeEditor.draw_handler_remove(self._handle, 'WINDOW')
                 return {'FINISHED'}
 
