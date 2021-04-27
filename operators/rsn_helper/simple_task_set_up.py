@@ -67,35 +67,15 @@ class RSN_OT_MoveNode(bpy.types.Operator):
     def poll(self, context):
         return context.space_data.edit_tree and bpy.context.space_data.edit_tree.bl_idname == 'RenderStackNodeTree'
 
-    def modal(self, context, event):
-        if event.type == 'MOUSEMOVE':
-            dx = event.mouse_region_x
-            dy = event.mouse_region_y
-            self.frame.location = (dx, dy)
-
-        elif event.type in {"MIDDLEMOUSE", "WHEELUPMOUSE", "WHEELDOWNMOUSE"}:
-            return {"PASS_THROUGH"}
-
-        elif event.type in {'LEFTMOUSE'}:
-            context.space_data.edit_tree.nodes.remove(self.frame)
-            return {"FINISHED"}
-
-        elif event.type in {'RIGHTMOUSE', 'ESC'}:
-            for node in context.space_data.edit_tree.nodes:
-                if node.select == 1:
-                    context.space_data.edit_tree.nodes.remove(node)
-            return {"CANCELLED"}
-
-        return {'RUNNING_MODAL'}
-
     def invoke(self, context, event):
         bpy.ops.rsn.simple_task()
 
         nt = context.space_data.edit_tree
         self.frame = nt.nodes.active
+        self.frame.location = context.space_data.cursor_location
+        bpy.ops.node.translate_attach_remove_on_cancel('INVOKE_DEFAULT')
 
-        context.window_manager.modal_handler_add(self)
-        return {'RUNNING_MODAL'}
+        return {'FINISHED'}
 
 
 def register():
