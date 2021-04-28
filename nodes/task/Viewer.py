@@ -68,7 +68,7 @@ class RSNodeViewerNode(RenderStackNode):
         rsn_task = RSN_Nodes(node_tree=bpy.context.space_data.edit_tree,
                              root_node_name=self.name)
 
-        node_list = rsn_task.get_children_from_node(self)# VariantsNodeProperty node in each task
+        node_list = rsn_task.get_children_from_node(self)  # VariantsNodeProperty node in each task
         # only one set VariantsNodeProperty node will be active
         var_collect = {}
         for node_name in node_list:
@@ -116,9 +116,9 @@ class RSNodeViewerNode(RenderStackNode):
         row = layout.row(align=1)
 
         if context.scene.RSNBusyDrawing is True:
-            draw = row.prop(context.scene,'RSNBusyDrawing',text='Draw Nodes',toggle=1)
+            draw = row.prop(context.scene, 'RSNBusyDrawing', text='Draw Nodes', toggle=1, icon='GREASEPENCIL')
         else:
-            row.operator("rsn.draw_nodes")
+            row.operator("rsn.draw_nodes", icon='GREASEPENCIL')
 
         # preferences.
         pref = get_pref()
