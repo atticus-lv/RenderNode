@@ -27,7 +27,7 @@ RSN插件是一款基于节点的，为用户提供灵活渲染输出流程的�
 
 **稳定版** *开箱即用*
 
-[RSN 1.2.1 📚 ](https://github.com/atticus-lv/RenderStackNode/releases/latest)
+[RSN 1.2.2 📚 ](https://github.com/atticus-lv/RenderStackNode/releases/latest)
 
 
 

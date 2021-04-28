@@ -27,7 +27,7 @@ It can be also use in look-dev or design.<br>
 
 **Stable** *Ready for work*
 
-[RSN 1.2.1 📚 ](https://github.com/atticus-lv/RenderStackNode/releases/latest)
+[RSN 1.2.2 📚 ](https://github.com/atticus-lv/RenderStackNode/releases/latest)
 
 
 
