@@ -9,26 +9,20 @@
 <p align="center">
     <a href="https://atticus-lv.github.io/RenderStackNode/#/">
 	Check Document 👆 
+    </a>
 </p>
-
-
-
-
 
 ### Feature
 
 | Features 1.22    | Description                                                  |
 | ---------------- | ------------------------------------------------------------ |
 | Render queue     | render animation and still frame in one queue                |
-| UI               | render with processor bar  and update viewport with draw nodes |
-| Custom Overwrite | all propertise can be overwrite and update in viewport       |
+| UI               | processor bar,viewport gpu draw nodes,tab search |
+| Custom Overwrite | all properties can be overwrite and update in viewport       |
 | Path Expression  | use $ to generate formatted name                             |
-| Version Control  | various sth and set various in one task                      |              |
-| Path Expression  | use $ to generate formatted name                              |
-| Version Control  | various sth and set various in one task |
+| Version Control  | various sth and set various in one task                      |              
+| Path Expression  | use $ to generate formatted name                             |
 | Third Party      | Octane, Luxcore, SSM(an other addon of mine)                 |
-
-
 
 ### Download ![![](docs/media/logo/blender%20logo.png)](https://img.shields.io/badge/blender-2.93%2B-red)
 
@@ -38,7 +32,7 @@
 
 **Stable** *Ready for work*
 
-[https://github.com/atticus-lv/RenderStackNode/releases/latest]
+[RSN 1.2.1 📚 ](https://github.com/atticus-lv/RenderStackNode/releases/latest)
 
 ### Support me
 
