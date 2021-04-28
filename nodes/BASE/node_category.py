@@ -76,10 +76,10 @@ node_categorys = [
             "node_type": repr("SWITCH"),
             "label"    : repr("Switch"),
         }),
-        nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Version", settings={
-            "node_type": repr("VERSION"),
-            "label"    : repr("Version"),
-        }),
+        # nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Version", settings={
+        #     "node_type": repr("VERSION"),
+        #     "label"    : repr("Version"),
+        # }),
 
     ]),
 ]

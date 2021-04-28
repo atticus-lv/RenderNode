@@ -2,10 +2,12 @@ import bpy
 import nodeitems_utils
 from bpy.props import EnumProperty
 
+from ...preferences import get_pref
+
 
 class RSN_OT_SearchNodes(bpy.types.Operator):
     bl_idname = "rsn.search_nodes"
-    bl_label = "Search and Add"
+    bl_label = "Quick Search"
     bl_property = "my_search"
 
     my_search: EnumProperty(
@@ -50,6 +52,10 @@ class RSN_OT_SearchNodes(bpy.types.Operator):
             ('RSNodeSettingsMergeNode', 'Version', ''),
         ))
 
+    @classmethod
+    def poll(cls, context):
+        return context.area.ui_type == 'RenderStackNodeTree'
+
     def node_enum_items(self, context):
         node_items_list = []
         for index, item in enumerate(nodeitems_utils.node_items_iter(context)):
@@ -68,7 +74,8 @@ class RSN_OT_SearchNodes(bpy.types.Operator):
             node.select = True
             context.space_data.edit_tree.nodes.active = node
             node.location = context.space_data.cursor_location
-            bpy.ops.node.translate_attach_remove_on_cancel('INVOKE_DEFAULT')
+            if not get_pref().quick_place:
+                bpy.ops.node.translate_attach_remove_on_cancel('INVOKE_DEFAULT')
 
             # node.location = space.cursor_location
 

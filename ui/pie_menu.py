@@ -55,22 +55,26 @@ class RSN_MT_PieMenu(Menu):
         col.operator("rsn.merge_selected_nodes", icon_value=version_icon.get_image_icon_id(),
                      text='Make Variants').make_version = 1
         col.operator("rsn.split_to_selected",text = "Split active to selected",icon_value=split_icon.get_image_icon_id())
-        col.operator("rsn.search_nodes",icon="VIEWZOOM")
 
         # bottom
         col = pie.column(align=1)
-        box = col.box()
+
+        col.operator("rsn.search_nodes", icon="VIEWZOOM",text='Quick Search')
+
+        col.separator(factor=0.5)
+
+        # col.template_ID(context.space_data, "node_tree", new="node.new_node_tree")
 
         for g in bpy.data.node_groups:
             if g.bl_idname == 'RenderStackNodeTree':
-                row = box.row(align=1)
+                sub = col.row(align=1)
                 if context.space_data.edit_tree != bpy.data.node_groups[g.name]:
-                    row.operator('rsn.switch_tree', icon='SCREEN_BACK', text=g.name).tree_name = g.name
+                    sub.operator('rsn.switch_tree', icon='SCREEN_BACK', text=g.name).tree_name = g.name
                 else:
-                    row.label(icon='HIDE_OFF', text=g.name)
-                row.prop(bpy.data.node_groups[g.name], 'use_fake_user', icon_only=1)
+                    sub.label(icon='HIDE_OFF', text=g.name)
+                sub.prop(bpy.data.node_groups[g.name], 'use_fake_user', icon_only=1)
 
-        box.operator("node.new_node_tree", text='New Tree', icon='ADD')
+
 
 
 def register_icon():

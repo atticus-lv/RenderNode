@@ -72,6 +72,10 @@ class RSN_Preference(bpy.types.AddonPreferences):
         ('KEYMAP', 'Keymap', ''), ],
         default='NODES')
 
+    quick_place: BoolProperty(name="Quick Place for search",
+                              description="When using the quick search to add nodes,quick place without moveing it",
+                              default=False)
+
     log_level: EnumProperty(items=[
         ('10', 'Debug', ''),
         ('20', 'Info', ''),
@@ -115,6 +119,7 @@ class RSN_Preference(bpy.types.AddonPreferences):
         layout = self.layout
         layout.use_property_split = True
 
+        layout.prop(self, 'quick_place')
         layout.prop(self, 'log_level', text='Debug')
 
         row = layout.split(factor=0.7)
@@ -155,7 +160,6 @@ class RSN_Preference(bpy.types.AddonPreferences):
             sub.prop(self.node_viewer, 'border_radius', slider=1)
             sub.separator(factor=1)
             sub.prop(self.node_viewer, 'settiings_color')
-
 
             sub.prop(self.node_viewer, 'task_color')
             sub.prop(self.node_viewer, 'file_path_color')
@@ -209,6 +213,9 @@ def add_keybind():
         km = wm.keyconfigs.addon.keymaps.new(name='Node Editor', space_type='NODE_EDITOR')
         # viewer node
         kmi = km.keymap_items.new('rsn.add_viewer_node', 'V', 'PRESS')
+        addon_keymaps.append((km, kmi))
+        # tab search
+        kmi = km.keymap_items.new('rsn.search_nodes', 'TAB', 'PRESS')
         addon_keymaps.append((km, kmi))
         # mute node
         kmi = km.keymap_items.new('rsn.mute_nodes', 'M', 'PRESS')
