@@ -72,7 +72,7 @@ class RSN_Preference(bpy.types.AddonPreferences):
         ('KEYMAP', 'Keymap', ''), ],
         default='NODES')
 
-    quick_place: BoolProperty(name="Quick Place for search",
+    quick_place: BoolProperty(name="Quick Place",
                               description="When using the quick search to add nodes,quick place without moveing it",
                               default=False)
 
