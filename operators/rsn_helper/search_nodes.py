@@ -43,6 +43,8 @@ class RSN_OT_SearchNodes(bpy.types.Operator):
     def poll(self, context):
         return context.space_data and hasattr(context.space_data, 'edit_tree')
 
+    
+
     def execute(self, context):
         try:
             if not get_pref().quick_place:

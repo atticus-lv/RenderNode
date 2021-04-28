@@ -119,10 +119,28 @@ class RSN_Preference(bpy.types.AddonPreferences):
         layout = self.layout
         layout.use_property_split = True
 
-        layout.prop(self, 'quick_place')
+        layout = self.layout
+        col = layout.column()
+
+        box = col.box().split().column(align=1)
+        box.label(text="Tab Search")
+        box.prop(self, 'quick_place')
+
+
+        box = col.box().split().column(align=1)
+        box.label(text="Draw Nodes")
+        box.prop(self.node_viewer, 'border_radius', slider=1)
+        box.prop(self.node_viewer, 'settiings_color')
+        box.separator(factor=1)
+
+        box.prop(self.node_viewer, 'task_color')
+        box.prop(self.node_viewer, 'file_path_color')
+
+        layout.separator(factor=0.5)
+
         layout.prop(self, 'log_level', text='Debug')
 
-        row = layout.split(factor=0.7)
+        # row = layout.split(factor=0.7)
         # row.separator()
         # row.operator('rsn.check_update', icon='URL',
         #              text='Check Update' if not self.need_update else f"New Version {''.join(str(self.latest_version).split())}!")
@@ -152,17 +170,6 @@ class RSN_Preference(bpy.types.AddonPreferences):
             box.prop(self.node_viewer, 'update_scripts')
             box.prop(self.node_viewer, 'update_path')
             box.prop(self.node_viewer, 'update_view_layer_passes')
-
-            box.separator(factor=1)
-
-            sub = box.box().column(align=1)
-            sub.label(text='Draw Nodes')
-            sub.prop(self.node_viewer, 'border_radius', slider=1)
-            sub.separator(factor=1)
-            sub.prop(self.node_viewer, 'settiings_color')
-
-            sub.prop(self.node_viewer, 'task_color')
-            sub.prop(self.node_viewer, 'file_path_color')
 
     def drawKeymap(self):
         col = self.layout.box().column()
