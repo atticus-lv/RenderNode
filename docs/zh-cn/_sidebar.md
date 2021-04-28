@@ -1,6 +1,7 @@
 + **快速开始**
     + [简介](/zh-cn/Intro.md)
     + [界面](/zh-cn/Interface.md)
+    + [RSN Helper](/zh-cn/RSN_Helper.md)
     + [设置一个渲染任务](/zh-cn/SetUpTask.md)
 + **示例**
     + [多镜头](/zh-cn/Example1.md)
