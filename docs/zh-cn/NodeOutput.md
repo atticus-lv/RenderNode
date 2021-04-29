@@ -6,11 +6,13 @@
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeOutput/1.png" width="720px">
 
 <!-- div:right-panel -->
 
 > 此节点可以更改输出分辨率
+>
+> 当你选择这个节点为激活节点时，你可以留意到你能够使用RSN的预设了<br>你也可以启用旁边的小按钮来进入添加/移除预设模式
 
 <!-- panels:end -->
 
@@ -22,7 +24,7 @@ image
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeOutput/2.png" width="720px">
 
 <!-- div:right-panel -->
 
@@ -39,7 +41,7 @@ image
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeOutput/3.png" width="720px">
 
 <!-- div:right-panel -->
 
@@ -57,7 +59,7 @@ image
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeOutput/4.png" width="720px">
 
 <!-- div:right-panel -->
 
@@ -86,7 +88,7 @@ image
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeOutput/5.png" width="720px">
 
 <!-- div:right-panel -->
 
@@ -102,10 +104,18 @@ image
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeOutput/6.png" width="720px">
+
+<img src="media/img/nodeOutput/6.5.png" width="720px">
 
 <!-- div:right-panel -->
 
 > 此节点允许您输出选定viewlayer的不同通道（拆分）<br>如果需要取消此选项，则需要链接一个新节点以禁用它。
+>
+> 请保证你的激活的合成节点名字为"Composite"(默认)<br>否则将出现 Runtime Error 的报错<br>
+>
+> <img src="media/img/nodeOutput/6.6.png" width="360px">
+>
+> 你可以在 1.2.3版本及以上来更改默认的名字（针对想保持翻译新建数据的用户）<br><img src="media/img/nodeOutput/6.7.png" width="360px">
 
 <!-- panels:end -->

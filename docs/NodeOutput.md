@@ -6,11 +6,13 @@
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeOutput/1.png" width="720px">
 
 <!-- div:right-panel -->
 
 > This node can change the output resolution
+>
+> When this node is active, you can notice that you can use the preset of RSN<br>you can also enable the button besides, and change it to add/remove preset mode
 
 <!-- panels:end -->
 
@@ -22,7 +24,7 @@ image
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeOutput/2.png" width="720px">
 
 <!-- div:right-panel -->
 
@@ -39,7 +41,7 @@ image
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeOutput/3.png" width="720px">
 
 <!-- div:right-panel -->
 
@@ -56,7 +58,7 @@ image
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeOutput/4.png" width="720px">
 
 <!-- div:right-panel -->
 
@@ -84,7 +86,7 @@ image
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeOutput/5.png" width="720px">
 
 <!-- div:right-panel -->
 
@@ -100,11 +102,16 @@ image
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeOutput/6.png" width="720px">
+
+<img src="media/img/nodeOutput/6.5.png" width="720px">
 
 <!-- div:right-panel -->
 
 > This node allow you to output different passes of a select viewlayer <br>if you need to disble this option, you need to link a new node to disable it .
-> 
+>
+> Make Sure your composite node is name "Composite"(by default)<br>or you will get an Runtime Error<br><img src="media/img/nodeOutput/6.6.png" width="360px">
+>
+> You can also change the default after version 1.2.3(for those who wany to keep the translation for the New Data)<br><img src="media/img/nodeOutput/6.7.png" width="360px">
 
 <!-- panels:end -->

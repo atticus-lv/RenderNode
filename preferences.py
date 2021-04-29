@@ -9,6 +9,15 @@ def get_pref():
     return bpy.context.preferences.addons.get(__folder_name__).preferences
 
 
+class NodeViewLayerPassedProps(bpy.types.PropertyGroup):
+    show: BoolProperty(name="Dropdown")
+
+    comp_node_name: StringProperty(
+        name="Composite node Name",
+        description="Default Name of the Composite node",
+        default="Composite")
+
+
 class NodeSmtpProps(bpy.types.PropertyGroup):
     show: BoolProperty(name="Dropdown")
 
@@ -86,6 +95,7 @@ class RSN_Preference(bpy.types.AddonPreferences):
     need_update: BoolProperty(name='Need Update')
     latest_version: IntProperty()
 
+    node_view_layer_passes: PointerProperty(type=NodeViewLayerPassedProps)
     node_smtp: PointerProperty(type=NodeSmtpProps)
     node_viewer: PointerProperty(type=NodeViewerProps)
     node_file_path: PointerProperty(type=NodeFilePathProps)
@@ -113,6 +123,10 @@ class RSN_Preference(bpy.types.AddonPreferences):
 
         col.separator(factor=0.2)
         box = col.box().split().column(align=1)
+        self.view_layer_passes_node(box)
+
+        col.separator(factor=0.2)
+        box = col.box().split().column(align=1)
         self.smtp_node(box)
 
     def draw_properties(self):
@@ -125,7 +139,6 @@ class RSN_Preference(bpy.types.AddonPreferences):
         box = col.box().split().column(align=1)
         box.label(text="Tab Search")
         box.prop(self, 'quick_place')
-
 
         box = col.box().split().column(align=1)
         box.label(text="Draw Nodes")
@@ -144,6 +157,14 @@ class RSN_Preference(bpy.types.AddonPreferences):
         # row.separator()
         # row.operator('rsn.check_update', icon='URL',
         #              text='Check Update' if not self.need_update else f"New Version {''.join(str(self.latest_version).split())}!")
+
+    def view_layer_passes_node(self,box):
+        box.prop(self.node_view_layer_passes, 'show', text="View Layer Passes Node", emboss=False,
+                 icon='TRIA_DOWN' if self.node_view_layer_passes.show else 'TRIA_RIGHT')
+        if self.node_view_layer_passes.show:
+            box.use_property_split = True
+            box.prop(self.node_view_layer_passes, "comp_node_name")
+            # box.prop(self.node_file_path, "time_behaviour")
 
     def filepath_node(self, box):
         box.prop(self.node_file_path, 'show', text="File Path Node", emboss=False,
@@ -206,6 +227,7 @@ class RSN_Preference(bpy.types.AddonPreferences):
 addon_keymaps = []
 
 classes = (
+    NodeViewLayerPassedProps,
     NodeSmtpProps,
     NodeFilePathProps,
     NodeViewerProps,

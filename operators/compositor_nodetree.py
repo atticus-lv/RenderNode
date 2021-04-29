@@ -23,7 +23,9 @@ class RSN_OT_CreatCompositorNode(bpy.types.Operator):
             context_layer.name = f'RSN {bpy.context.window.view_layer.name} Render Layers'
 
         try:
-            com = bpy.context.scene.node_tree.nodes['Composite']
+            name = get_pref().node_view_layer_passes.comp_node_name
+
+            com = bpy.context.scene.node_tree.nodes[name]
             nt.links.new(context_layer.outputs[0], com.inputs[0])
         except Exception as e:
             for node in bpy.context.scene.node_tree.nodes:
