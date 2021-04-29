@@ -2,7 +2,7 @@
 >
 > 主要分为以下几个部分
 
-<img src="media/img/helperMenu.png" width=960px;  alt=""/>
+<img src="media/img/helperMenu.png" width=720px;  alt=""/>
 
 ### 示例
 
@@ -10,7 +10,7 @@
 
 > 点击Simple Task命令<br>即可生成一个简单完整的task
 
-<img src="media/img/rsnHelper/1.gif" width=1280px;  alt=""/>
+<img src="media/img/rsnHelper/1.gif" width=1080px;  alt=""/>
 
 ### 快速连接
 
@@ -18,19 +18,19 @@
 
 > 点击merge selection<br>可以将选中的节点合并至一个merge节点
 
-<img src="media/img/rsnHelper/2.gif" width=1280px;  alt=""/>
+<img src="media/img/rsnHelper/2.gif" width=1080px;  alt=""/>
 
 #### 设置变种
 
 > 点击make variant<br>将选中的节点合并至一个variant节点
 
-<img src="media/img/rsnHelper/3.gif" width=1280px;  alt=""/>
+<img src="media/img/rsnHelper/3.gif" width=1080px;  alt=""/>
 
 #### 一到多
 
 > 点击split active to selected<br>将激活的节点（白色边框，有且只有一个，shift点击可设置）连接到其他选中节点
 
-<img src="media/img/rsnHelper/4.gif" width=1280px;  alt=""/>
+<img src="media/img/rsnHelper/4.gif" width=1080px;  alt=""/>
 
 ### 视口节点绘制
 
@@ -38,7 +38,7 @@
 >
 > 可以在偏好设置中更改颜色
 
-<img src="media/img/rsnHelper/5.gif" width=720px;  alt=""/>
+<img src="media/img/rsnHelper/5.gif" width=1080px;  alt=""/>
 
 ### 跳转/搜索
 
@@ -46,5 +46,5 @@
 >
 > Tab 键默认为快速搜索快捷键，可以在偏好设置的键位映射处更改<br>此快捷键也作用于blender默认的所有节点面板
 
-<img src="media/img/rsnHelper/6.gif" width=720px;  alt=""/>
+<img src="media/img/rsnHelper/6.gif" width=1080px;  alt=""/>
 
