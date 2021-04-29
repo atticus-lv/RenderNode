@@ -12,7 +12,8 @@
     + [物体节点](/zh-cn/NodeObject)
     + [输出设置节点](/zh-cn/NodeOutput)
     + [渲染设置节点](/zh-cn/NodeRender)
-    + [脚本节点](/zh-cn/NodeScripts)
+    + [变种节点](/zh-cn/NodeVariants)
     + [整理节点](/zh-cn/NodeLayout)
+    + [脚本节点](/zh-cn/NodeScripts)
 + **常见问题**
     + [常见问题](/zh-cn/FAQ.md)
