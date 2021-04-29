@@ -62,19 +62,21 @@
 
 <!-- div:right-panel -->
 
-> This node use $ to get the properties of the render task,then apply it to the output file name <br>Usage(Also show in the side pannel):
-> 
->```
-> $blend: name of your file (save first!)
-> $label: Task label
-> $camera: name of scene camera
-> $res: resolution (X x Y)
-> $engine: render engine
-> $vl: name of scene view layer
-> $date: month-day
-> $time: hour-min
-> /: create folder,should be dict_input folder name in front of "/"
-> ```
+> This node use $ to get the properties of the render task,then apply it to the output file name
+
+Usage(Also show in the side pannel):
+
+```
+$blend: name of your file (save first!)
+$label: Task label
+$camera: name of scene camera
+$res: resolution (X x Y)
+$engine: render engine
+$vl: name of scene view layer
+$date: month-day
+$time: hour-min
+/: create folder,should be dict_input folder name in front of "/"
+```
 
 <!-- panels:end -->
 
@@ -110,8 +112,9 @@
 
 > This node allow you to output different passes of a select viewlayer <br>if you need to disble this option, you need to link a new node to disable it .
 >
-> Make Sure your composite node is name "Composite"(by default)<br>or you will get an Runtime Error<br><img src="media/img/nodeOutput/6.6.png" width="360px">
->
-> You can also change the default after version 1.2.3(for those who wany to keep the translation for the New Data)<br><img src="media/img/nodeOutput/6.7.png" width="360px">
+
+Make Sure your composite node is name "Composite"(by default)<br>or you will get an Runtime Error<br><img src="media/img/nodeOutput/6.6.png" width="360px">
+
+You can also change the default after version 1.2.3(for those who wany to keep the translation for the New Data)<br><img src="media/img/nodeOutput/6.7.png" width="360px">
 
 <!-- panels:end -->

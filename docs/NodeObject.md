@@ -59,7 +59,9 @@
 
 <!-- div:right-panel -->
 
-> This node can changes object's data properties ( The green icon in the properties panel )<br>First select the object<br>then right click on the property you want to pick<br>then **Copy data path**, paste it in the node's data path.<br>Now support Int, Float,Color,Vector,Boolean,String value.<br><img src="media/img/nodeObject/4.5.png" width="360px">
+> This node can changes object's data properties ( The green icon in the properties panel )
+
+First select the object<br>then right click on the property you want to pick<br>then **Copy data path**, paste it in the node's data path.<br>Now support Int, Float,Color,Vector,Boolean,String value.<br><img src="media/img/nodeObject/4.5.png" width="360px">
 
 <!-- panels:end -->
 
@@ -75,7 +77,9 @@
 
 <!-- div:right-panel -->
 
-> This node can changes object's modifiers' properties  ( The blue spanner icon in the properties panel )<br>First select the object, thenright click on the property you want to pick<br>then **Copy data path**,paste it in the node's data path.<br>Now support most modifier(except for the geometry node modifier)<br><img src="media/img/nodeObject/5.5.png" width="360px">
+> This node can changes object's modifiers' properties  ( The blue spanner icon in the properties panel 
+
+First select the object, thenright click on the property you want to pick<br>then **Copy data path**,paste it in the node's data path.<br>Now support most modifier(except for the geometry node modifier)<br><img src="media/img/nodeObject/5.5.png" width="360px">
 
 <!-- panels:end -->
 

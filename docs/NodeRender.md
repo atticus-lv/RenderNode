@@ -2,49 +2,21 @@
 
 <!-- div:title-panel -->
 
-### WorkBench Settings
+###  WorkBench / Eevee / Cycles Settings
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeRender/1.png" width="720px">
 
 <!-- div:right-panel -->
 
-> Change the render engine to WorkBench
+> Change the render engine to WorkBench / Eevee / Cycles
+
+**Half / Double buttons** and half and double you samples
 
 <!-- panels:end -->
 
-<!-- panels:start -->
 
-<!-- div:title-panel -->
-
-### Eevee Settings
-
-<!-- div:left-panel -->
-
-image
-
-<!-- div:right-panel -->
-
-> Change the render engine to Eevee
-
-<!-- panels:end -->
-
-<!-- panels:start -->
-
-<!-- div:title-panel -->
-
-### Cycles Settings
-
-<!-- div:left-panel -->
-
-image
-
-<!-- div:right-panel -->
-
-> Change the render engine to Cycles
-
-<!-- panels:end -->
 
 <!-- panels:start -->
 
@@ -54,7 +26,7 @@ image
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeRender/2.png" width="720px">
 
 <!-- div:right-panel -->
 
@@ -66,14 +38,36 @@ image
 
 <!-- div:title-panel -->
 
+### Octane Settings
+
+<!-- div:left-panel -->
+
+<img src="media/img/nodeRender/3.png" width="720px">
+
+<!-- div:right-panel -->
+
+> Change the render engine to Octane
+>
+> If you not enable or install octane,  the node will became red to warn you 
+
+<!-- panels:end -->
+
+<!-- panels:start -->
+
+<!-- div:title-panel -->
+
 ### Luxcore Settings
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeRender/4.png" width="720px">
 
 <!-- div:right-panel -->
 
 > Change the render engine to Luxcore
+>
+> If you not enable or install luxcore,  the node will became red to warn you 
+
+You need to choose **Use time** or **Use sample** to stop luxcore rendering in the end
 
 <!-- panels:end -->
