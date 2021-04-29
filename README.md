@@ -7,8 +7,12 @@
     Node based design and render workflow in blender<br>
 </h4>
 <p align="center">
+    Documentation ➡️
     <a href="https://atticus-lv.github.io/RenderStackNode/#/">
-	Check Document 👆 
+	[Github] 
+    </a>
+    <a href="https://atticus-lv.gitee.io/renderstacknode">
+    <tr>[Gitee]
     </a>
 </p>
 
@@ -20,7 +24,7 @@
 | UI               | processor bar,viewport gpu draw nodes,tab search |
 | Custom Overwrite | all properties can be overwrite and update in viewport       |
 | Path Expression  | use $ to generate formatted name                             |
-| Version Control  | various sth and set various in one task                      |              
+| Version Control  | various sth and set various in one task                      |
 | Path Expression  | use $ to generate formatted name                             |
 | Third Party      | Octane, Luxcore, SSM(an other addon of mine)                 |
 
