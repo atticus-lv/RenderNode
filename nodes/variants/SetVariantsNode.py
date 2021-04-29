@@ -21,7 +21,7 @@ class VariantsNodeProperty(bpy.types.PropertyGroup):
 # use uilist for visualization
 class RSN_UL_VarCollectNodeList(bpy.types.UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
-        sub = layout.split(align=True,factor=0.5)
+        sub = layout.split(align=True, factor=0.5)
 
         sub.label(text=item.name, icon="RADIOBUT_OFF")
         row = sub.row()
@@ -36,6 +36,8 @@ class RSN_OT_UpdateVarCollect(bpy.types.Operator):
 
     action: EnumProperty(name="Edit", items=[('ADD', 'Add', ''), ('REMOVE', 'Remove', '')])
 
+    sort: BoolProperty(name="Sort", description="Sort when update collect", default=True)
+
     node_name: StringProperty(default='')
     node = None
 
@@ -45,8 +47,10 @@ class RSN_OT_UpdateVarCollect(bpy.types.Operator):
             self.get_var_nodes()
             self.node.node_collect_index = len(self.node.node_collect) - 1
 
-        else:
+            if self.sort:
+                self.sort_items()
 
+        elif self.action == "REMOVE":
             self.node.node_collect.remove(self.node.node_collect_index)
             self.node.node_collect_index -= 1 if self.node.node_collect_index != 0 else 0
 
@@ -71,6 +75,18 @@ class RSN_OT_UpdateVarCollect(bpy.types.Operator):
                 prop.name = node_name
                 prop.active = 0
 
+    def sort_items(self):
+        item_list = [{"name": k, "value": v.active} for k, v in self.node.node_collect.items()]
+
+        sort_list = sorted(item_list, key=lambda x: x["name"])
+
+        self.node.node_collect.clear()
+
+        for i, item in enumerate(sort_list):
+            prop = self.node.node_collect.add()
+            prop.name = item_list[i]["name"]
+            prop.active = item_list[i]["value"]
+
 
 class RSNodeSetVariantsNode(RenderStackNode):
     """A simple input node"""
@@ -81,6 +97,8 @@ class RSNodeSetVariantsNode(RenderStackNode):
 
     node_collect: CollectionProperty(name="Node Property", type=VariantsNodeProperty)
     node_collect_index: IntProperty(default=0)
+
+    sort: BoolProperty(name="Sort", description="Sort when update collect", default=True)
 
     def init(self, context):
         self.width = 220
@@ -94,9 +112,13 @@ class RSNodeSetVariantsNode(RenderStackNode):
             self, "node_collect",
             self, "node_collect_index", )
 
-        edit = layout.operator("rsn.update_var_collect", icon="FILE_REFRESH")
+        row = layout.row(align=1)
+        edit = row.operator("rsn.update_var_collect", icon="FILE_REFRESH")
         edit.action = "ADD"
         edit.node_name = self.name
+        edit.sort = self.sort
+
+        row.prop(self, "sort", icon='SORTSIZE', text='')
 
     def get_data(self):
         pass
