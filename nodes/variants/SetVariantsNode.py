@@ -13,17 +13,20 @@ def update_node(self, context):
 
 class VariantsNodeProperty(bpy.types.PropertyGroup):
     name: StringProperty(name="The name of the variants node")
-    active: IntProperty(default=0, min=0)
-    use: BoolProperty(default=True)
+    active: IntProperty(default=0, min=0, name="Active Input")
+    use: BoolProperty(default=True, name="Use for render",
+                      description="If enable, the active input of the variant node will be apply to the scene,else it will apply the last input of the variant node")
 
 
 # use uilist for visualization
 class RSN_UL_VarCollectNodeList(bpy.types.UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
-        row = layout.row(align=True)
-        row.label(text=item.name)
+        sub = layout.split(align=True,factor=0.5)
+
+        sub.label(text=item.name, icon="RADIOBUT_OFF")
+        row = sub.row()
         row.prop(item, "active", text="Active")
-        row.prop(item, "use", text="Use")
+        row.prop(item, "use", text="", icon="CHECKMARK")
 
 
 class RSN_OT_UpdateVarCollect(bpy.types.Operator):
