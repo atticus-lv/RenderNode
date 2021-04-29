@@ -14,7 +14,7 @@
 
 ### Feature
 
-| Features 1.22    | Description                                                  |
+| Features 1.23    | Description                                                  |
 | ---------------- | ------------------------------------------------------------ |
 | Render queue     | render animation and still frame in one queue                |
 | UI               | processor bar,viewport gpu draw nodes,tab search |
@@ -32,7 +32,7 @@
 
 **Stable** *Ready for work*
 
-[RSN 1.2.2 📚 ](https://github.com/atticus-lv/RenderStackNode/releases/latest)
+[Stable 📚 ](https://github.com/atticus-lv/RenderStackNode/releases/latest)
 
 ### Support me
 
