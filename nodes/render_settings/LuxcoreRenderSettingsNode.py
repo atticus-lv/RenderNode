@@ -23,6 +23,8 @@ class RSNodeLuxcoreRenderSettingsNode(RenderStackNode):
         self.width = 225
 
     def draw_buttons(self, context, layout):
+        super().draw_buttons(context, layout)
+
         col = layout.column(align=1)
         row = col.row(align=True)
         row.prop(self, "use_samples")
