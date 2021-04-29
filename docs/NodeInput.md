@@ -1,3 +1,5 @@
+
+
 <!-- panels:start -->
 
 <!-- div:title-panel -->
@@ -6,14 +8,13 @@
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeInput/1.png" width="720px">
 
 <!-- div:right-panel -->
 
-> This node let you to set the camera as the scene camera
+> This node let you to set the camera object as the scene camera
 
 <!-- panels:end -->
-
 
 <!-- panels:start -->
 
@@ -23,7 +24,7 @@ image
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeInput/2.png" width="720px">
 
 <!-- div:right-panel -->
 
@@ -41,7 +42,7 @@ image
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeInput/3.png" width="720px">
 
 <!-- div:right-panel -->
 
@@ -59,15 +60,14 @@ image
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeInput/4.png" width="720px">
 
 <!-- div:right-panel -->
 
-> This node let you to set the color management of the scene.
+> This node let you to set the color management of the scene(default ocio only).
 
 
 <!-- panels:end -->
-
 
 <!-- panels:start -->
 
@@ -77,7 +77,7 @@ image
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeInput/5.png" width="720px">
 
 <!-- div:right-panel -->
 
@@ -94,11 +94,13 @@ image
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeInput/6.png" width="720px">
 
 <!-- div:right-panel -->
 
-> This node allow you to asign value to any data in the scene.<br>Right click on the property you want to change, then selecet copy full path (blender 2.93) or press *ctrl shift alt C*<br>Then paste it to the node and input the value through the control
+> This node allow you to asign value to any data in the scene.<br>
+>
+> Right click on the property you want to change, then selecet copy full path (blender 2.93) or press *ctrl shift alt C*<br>Then paste it to the node and input the value through the control<br><img src="media/img/nodeInput/6.5.png" width="360px">
 
 <!-- panels:end -->
 
@@ -110,7 +112,7 @@ image
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeInput/7.png" width="720px">
 
 <!-- div:right-panel -->
 

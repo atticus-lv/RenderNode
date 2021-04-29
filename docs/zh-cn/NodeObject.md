@@ -6,7 +6,7 @@
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeObject/1.png" width="720px">
 
 <!-- div:right-panel -->
 
@@ -22,11 +22,11 @@ image
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeObject/2.png" width="720px">
 
 <!-- div:right-panel -->
 
-> 此节点允许更改物体的材质槽中的材质
+> 此节点允许将材质赋予给物体的特定材质槽中
 
 <!-- panels:end -->
 
@@ -38,7 +38,7 @@ image
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeObject/3.png" width="720px">
 
 <!-- div:right-panel -->
 
@@ -54,11 +54,11 @@ image
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeObject/4.png" width="720px">
 
 <!-- div:right-panel -->
 
-> 此节点可以更改对象的数据属性（属性面板中的绿色图标）。首先选择对象，然后右键单击要拾取的属性，然后**复制数据路径**，将其粘贴到节点的数据路径中。<br>现在支持整数、浮点、颜色、向量、勾选框、字符串类型。
+> 此节点可以更改对象的数据属性（属性面板中的绿色图标）。首先选择对象，然后右键单击要拾取的属性，然后**复制数据路径**，将其粘贴到节点的数据路径中。<br>现在支持整数、浮点、颜色、向量、勾选框、字符串类型。<br><img src="media/img/nodeObject/4.5.png" width="360px">
 
 <!-- panels:end -->
 
@@ -70,10 +70,10 @@ image
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeObject/5.png" width="720px">
 
 <!-- div:right-panel -->
 
-> 此节点可以更改对象的修改器的属性（属性面板中的蓝色扳手图标）。首先选择对象，然后右键单击要拾取的属性，然后**复制数据路径**，将其粘贴到节点的数据路径中。<br>现在支持大多数修改器（除了几何体节点修改器）
+> 此节点可以更改对象的修改器的属性（属性面板中的蓝色扳手图标）。首先选择对象，然后右键单击要拾取的属性，然后**复制数据路径**，将其粘贴到节点的数据路径中。<br>现在支持大多数修改器（除了几何体节点修改器）<br><img src="media/img/nodeObject/5.5.png" width="360px">
 
 <!-- panels:end -->
