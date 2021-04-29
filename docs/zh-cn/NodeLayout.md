@@ -6,7 +6,7 @@
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeLayout/1.png" width="720px">
 
 <!-- div:right-panel -->
 
@@ -22,27 +22,10 @@ image
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeLayout/2.png" width="720px">
 
 <!-- div:right-panel -->
 
 > 此节点允许您切换输入顺序<br>在一些切换操作中使用它
-
-<!-- panels:end -->
-
-<!-- panels:start -->
-
-<!-- div:title-panel -->
-
-### Version
-
-<!-- div:left-panel -->
-
-image
-
-<!-- div:right-panel -->
-
-> 此节点允许您拥有不同版本的设置<br>替代功能开发中
->
 
 <!-- panels:end -->

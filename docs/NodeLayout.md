@@ -6,7 +6,7 @@
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeLayout/1.png" width="720px">
 
 <!-- div:right-panel -->
 
@@ -22,31 +22,15 @@ image
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodeLayout/2.png" width="720px">
 
 <!-- div:right-panel -->
 
-> 
+>
 > This node allow you to switch input order<br>You use it on some toggle operations
 
 <!-- panels:end -->
 
-<!-- panels:start -->
-
-<!-- div:title-panel -->
-
-### Version
-
-<!-- div:left-panel -->
-
-image
-
-<!-- div:right-panel -->
-
-> This node allow you to have different versions of settings<br>In the development of alternative functions
-> 
-
-<!-- panels:end -->
 
 
 

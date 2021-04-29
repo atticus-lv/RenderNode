@@ -6,7 +6,7 @@
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodescripts/1.png" width="720px">
 
 <!-- div:right-panel -->
 
@@ -22,7 +22,7 @@ image
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodescripts/2.png" width="720px">
 
 <!-- div:right-panel -->
 
@@ -38,7 +38,7 @@ image
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodescripts/3.png" width="720px">
 
 <!-- div:right-panel -->
 

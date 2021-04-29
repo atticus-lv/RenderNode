@@ -6,7 +6,7 @@
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodescripts/1.png" width="720px">
 
 <!-- div:right-panel -->
 
@@ -23,11 +23,11 @@ image
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodescripts/2.png" width="720px">
 
 <!-- div:right-panel -->
 
-> This node allow you to send smtp mail<br>Please enter your server and password in the preference.<br>Only execute while renderstack, but you can use the test email button for a test
+> This node allow you to send smtp mail<br>Please enter your server and password in the preference.<br>Only execute while renderstack, but you can use the **test email button** for a test
 >
 
 <!-- panels:end -->
@@ -40,7 +40,7 @@ image
 
 <!-- div:left-panel -->
 
-image
+<img src="media/img/nodescripts/3.png" width="720px">
 
 <!-- div:right-panel -->
 
