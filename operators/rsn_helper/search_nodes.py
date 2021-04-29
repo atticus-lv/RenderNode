@@ -8,8 +8,7 @@ from ...preferences import get_pref
 class RSN_OT_SearchNodes(bpy.types.Operator):
     bl_idname = "rsn.search_nodes"
     bl_label = "Quick Search"
-    bl_property = "my_search"
-
+    # bl_property = "my_search"
     bl_options = {"REGISTER", "UNDO"}
 
     # def node_enum_items(self, context):

@@ -6,7 +6,7 @@
 
 <!-- div:left-panel -->
 
-![1](media/img/nodeVariants/1.png)
+<img src="media/img/nodeVariants/1.png" width="720px">
 
 <!-- div:right-panel -->
 

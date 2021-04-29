@@ -6,7 +6,7 @@
 
 <!-- div:left-panel -->
 
-![1](../../../../../../../../Blender%2520Foundation/Blender/2.93/scripts/addons/RenderStackNode/docs/media/img/nodeVariants/1.png)
+<img src="media/img/nodeVariants/1.png" width="720px">
 
 <!-- div:right-panel -->
 
