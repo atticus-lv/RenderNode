@@ -26,6 +26,7 @@ class RSNodeScriptsNode(RenderStackNode):
     )
 
     def init(self, context):
+        self.warning = False
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
         self.width = 200
 

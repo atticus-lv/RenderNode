@@ -62,6 +62,7 @@ class RSNodeOctaneRenderSettingsNode(RenderStackNode):
     max_tile_samples: IntProperty(name='Max. tile samples', default=64, min=1, max=64, update=update_node)
 
     def init(self, context):
+        self.warning = False
         self.outputs.new('RSNodeSocketRenderSettings', "Render Settings")
         self.width = 200
 

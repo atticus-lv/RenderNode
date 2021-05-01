@@ -88,6 +88,7 @@ class RSNodeSmtpEmailNode(RenderStackNode):
         description="Your sender email as well as your receiver email")
 
     def init(self, context):
+        self.warning = False
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
         self.width = 150
 

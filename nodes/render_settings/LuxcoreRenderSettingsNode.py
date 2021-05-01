@@ -19,6 +19,7 @@ class RSNodeLuxcoreRenderSettingsNode(RenderStackNode):
     samples: IntProperty(default=64, min=1, name="Samples", update=update_node)
 
     def init(self, context):
+        self.warning = False
         self.outputs.new('RSNodeSocketRenderSettings', "Render Settings")
         self.width = 225
 
