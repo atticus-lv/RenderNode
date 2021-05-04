@@ -168,7 +168,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             # replace engine
             postfix = postfix.replace('$engine', bpy.context.scene.render.engine)
             # replace res
-            postfix = postfix.replace('res', f"{scn.render.resolution_x}x{scn.render.resolution_y}")
+            postfix = postfix.replace('$res', f"{scn.render.resolution_x}x{scn.render.resolution_y}")
             # replace label
             postfix = postfix.replace('$label', self.task_data["label"])
             # replace view_layer
