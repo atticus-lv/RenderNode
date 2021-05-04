@@ -18,6 +18,10 @@ class RSNodeLuxcoreRenderSettingsNode(RenderStackNode):
     time: IntProperty(default=300, min=1, name='Time(s)', update=update_node)
     samples: IntProperty(default=64, min=1, name="Samples", update=update_node)
 
+    # seem to be 2.92's bug
+    warning: BoolProperty(name='Is warning', default=False)
+    warning_msg: StringProperty(name='warning message', default='')
+
     def init(self, context):
         self.warning = False
         self.outputs.new('RSNodeSocketRenderSettings', "Render Settings")
@@ -43,7 +47,7 @@ class RSNodeLuxcoreRenderSettingsNode(RenderStackNode):
                                          'samples'    : self.samples,
                                          'use_time'   : self.use_time,
                                          'time'       : self.time}
-        self.set_warning()
+        self.set_warning(msg= "Luxcore is not enabled")
         return task_data
 
 

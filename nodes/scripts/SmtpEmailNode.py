@@ -87,6 +87,9 @@ class RSNodeSmtpEmailNode(RenderStackNode):
         name="Email",
         description="Your sender email as well as your receiver email")
 
+    warning: BoolProperty(name='Is warning', default=False)
+    warning_msg: StringProperty(name='warning message', default='')
+
     def init(self, context):
         self.warning = False
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")

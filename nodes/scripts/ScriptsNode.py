@@ -1,5 +1,5 @@
 import bpy
-from bpy.props import StringProperty, PointerProperty, EnumProperty
+from bpy.props import StringProperty, PointerProperty, EnumProperty, BoolProperty
 
 from ...nodes.BASE.node_tree import RenderStackNode
 from ...preferences import get_pref
@@ -24,6 +24,9 @@ class RSNodeScriptsNode(RenderStackNode):
         ],
         default='SINGLE'
     )
+
+    warning: BoolProperty(name='Is warning', default=False)
+    warning_msg: StringProperty(name='warning message', default='')
 
     def init(self, context):
         self.warning = False

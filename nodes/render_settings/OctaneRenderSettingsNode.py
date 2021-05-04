@@ -61,8 +61,11 @@ class RSNodeOctaneRenderSettingsNode(RenderStackNode):
     parallel_samples: IntProperty(name='Parallel samples', default=32, min=1, max=32, update=update_node)
     max_tile_samples: IntProperty(name='Max. tile samples', default=64, min=1, max=64, update=update_node)
 
+    # seem to be 2.92's bug
+    warning: BoolProperty(name='Is warning', default=False)
+    warning_msg: StringProperty(name='warning message', default='')
+
     def init(self, context):
-        self.warning = False
         self.outputs.new('RSNodeSocketRenderSettings', "Render Settings")
         self.width = 200
 
