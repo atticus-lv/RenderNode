@@ -5,6 +5,8 @@ from collections import deque
 from mathutils import Color, Vector
 from functools import lru_cache
 
+import numpy as np
+
 
 def source_attr(src_obj, scr_data_path):
     def get_obj_and_attr(obj, data_path):
@@ -43,6 +45,45 @@ class RSN_NodeTree:
         tree_name = self.get_context_tree(return_name=1)
         if tree_name:
             self.set_wm_node_tree(tree_name)
+
+
+# class RSN_Gpaph:
+#     def __init__(self, node_tree, root_node_name):
+#         self.nt = node_tree
+#         self.root_node = self.get_node_from_name(root_node_name)
+#
+#     def get_children_from_node(self, root_node, pass_mute=True) -> list:
+#         """Depth first search
+#         :parm root_node: a blender node
+#         nodes append from left to right, from top to bottom
+#         """
+#         node_list = []
+#
+#         # @lru_cache(maxsize=None)
+#         def get_sub_node(node, pass_mute_node=True):
+#             """Recursion
+#             :parm node: a blender node
+#
+#             """
+#             for i, input in enumerate(node.inputs):
+#                 if input.is_linked:
+#                     try:
+#                         sub_node = input.links[0].from_node
+#                         if sub_node.mute and pass_mute_node: continue
+#
+#                         get_sub_node(sub_node)
+#                     # This error shows when the dragging the link off viewer node(Works well with knife tool)
+#                     # this seems to be a blender error
+#                     except IndexError:
+#                         pass
+#                 else:
+#                     continue
+#             # Skip the reroute node
+#             if node.bl_idname != 'NodeReroute':
+#                 if len(node_list) == 0 or (len(node_list) != 0 and node.name != node_list[-1]):
+#                     node_list.append(node.name)
+#
+#         get_sub_node(root_node, pass_mute)
 
 
 class RSN_Nodes:
@@ -227,6 +268,9 @@ class RSN_Nodes:
         else:
             return self.get_sub_node_dict_from_node_list(node_list=node_list,
                                                          parent_node_type=type)
+
+    def graph(self):
+        node_list = self.get_children_from_node(self.root_node)
 
     def get_task_data(self, task_name, task_dict):
         """transfer nodes to data

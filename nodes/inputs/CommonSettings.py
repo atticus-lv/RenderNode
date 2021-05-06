@@ -174,8 +174,8 @@ class RSNodeCommonSettingsNode(RenderStackNode):
 
     def get_data(self):
         task_data = {}
+        if self.camera: task_data["camera"] = f"bpy.data.objects['{self.camera.name}']"
 
-        task_data["camera"] = self.camera.name if self.camera else None
         task_data['engine'] = self.engine
 
         ##########################
