@@ -33,7 +33,7 @@ class RenderStackNode(bpy.types.Node):
     #########################################
 
     def copy(self, node):
-        self.label = self.name
+        if self.bl_idname == 'RSNodeTaskNode': self.label = self.name
         print(f"RSN Copied {self.name} from {node.name}")
 
     def free(self):
