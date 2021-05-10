@@ -112,7 +112,6 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         else:
             logger.debug(f'Not task is linked to the viewer')
 
-
     def update_color_management(self):
         """may change in 2.93 version"""
         if 'ev' in self.task_data:
@@ -342,20 +341,28 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             compare(scn, 'frame_step', self.task_data['frame_step'])
 
     def update_render_engine(self):
+        engines = ['BLENDER_EEVEE', 'BLENDER_WORKBENCH'] + [engine.bl_idname for engine in
+                                                            bpy.types.RenderEngine.__subclasses__()]
+
+        has_engine = None
         # engine settings
         if 'engine' in self.task_data:
-            if self.task_data['engine'] in {'CYCLES', 'BLENDER_EEVEE', 'BLENDER_WORKBENCH'}:
+            if self.task_data['engine'] in engines:
                 compare(bpy.context.scene.render, 'engine', self.task_data['engine'])
-            elif self.task_data['engine'] == 'octane':
-                compare(bpy.context.scene.render, 'engine', self.task_data['engine'])
-            elif self.task_data['engine'] == 'LUXCORE':
-                compare(bpy.context.scene.render, 'engine', self.task_data['engine'])
+                has_engine = True
         # samples
         if 'samples' in self.task_data:
             if self.task_data['engine'] == "BLENDER_EEVEE":
                 compare(bpy.context.scene.eevee, 'taa_render_samples', self.task_data['samples'])
             elif self.task_data['engine'] == "CYCLES":
                 compare(bpy.context.scene.cycles, 'samples', self.task_data['samples'])
+
+        # CYCLES
+        if 'cycles_light_path' in self.task_data:
+            for key, value in self.task_data['cycles_light_path'].items():
+                compare(bpy.context.scene.cycles, key, value)
+
+        if not has_engine: return None
         # luxcore
         if 'luxcore_half' in self.task_data and 'BlendLuxCore' in bpy.context.preferences.addons:
             if not bpy.context.scene.luxcore.halt.enable:
@@ -386,10 +393,6 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         elif 'octane' in self.task_data and 'octane' in bpy.context.preferences.addons:
             for key, value in self.task_data['octane'].items():
                 compare(bpy.context.scene.octane, key, value)
-        # CYCLES
-        if 'cycles_light_path' in self.task_data:
-            for key, value in self.task_data['cycles_light_path'].items():
-                compare(bpy.context.scene.cycles, key, value)
 
     def update_res(self):
         if 'res_x' in self.task_data:
