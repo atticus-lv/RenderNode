@@ -1,6 +1,6 @@
-👇 Check this video !
+[comment]: <> "👇 Check this video !"
 
-[test video](media/video/test.mp4 ':include :type=video controls width=960px')
+[comment]: <> "[test video]&#40;media/video/test.mp4 ':include :type=video controls width=960px'&#41;"
 
 
 ---
