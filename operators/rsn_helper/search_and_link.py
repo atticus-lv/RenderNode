@@ -68,10 +68,13 @@ class RSN_OT_SearchAndLink(bpy.types.Operator):
         except Exception as e:
             print(e)
 
-
         context.space_data.edit_tree.active = new_node
-        new_node.location = context.space_data.cursor_location
-        bpy.ops.transform.translate('INVOKE_DEFAULT')
+        new_node.location = context.space_data.cursor_location[0]-new_node.width/2,context.space_data.cursor_location[1]
+        bpy.ops.node.select_all(action='DESELECT')
+        new_node.select = 1
+
+        if not get_pref().quick_place:
+            bpy.ops.transform.translate('INVOKE_DEFAULT')
         # self.node_enum_items(context)
         return {'FINISHED'}
 
