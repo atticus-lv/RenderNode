@@ -1,7 +1,7 @@
 bl_info = {
     "name"       : "RenderStack Node",
     "author"     : "Atticus",
-    "version"    : (1, 2, 4),
+    "version"    : (1, 2, 5),
     "blender"    : (2, 92, 0),
     "location"   : "Node Editor > Render Editor",
     "description": "Node based render queue workflow",
@@ -50,7 +50,9 @@ def register():
         if name in sys.modules and hasattr(sys.modules[name], 'register'):
             try:
                 sys.modules[name].register()
-            except ValueError:pass # open template file may cause this problem
+            except ValueError: # open template file may cause this problem
+                pass
+
 
 def unregister():
     for name in __dict__.values():

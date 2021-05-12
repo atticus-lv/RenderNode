@@ -36,6 +36,7 @@ node_categorys = [
     ]),
 
     RSNCategory("OBJECT", "Object", items=[
+        nodeitems_utils.NodeItem('RSNodeCollectionDisplayNode'),
         nodeitems_utils.NodeItem('RSNodeObjectDisplayNode'),
         nodeitems_utils.NodeItem('RSNodeObjectMaterialNode'),
         nodeitems_utils.NodeItem('RSNodeObjectPSRNode'),
@@ -44,10 +45,10 @@ node_categorys = [
     ]),
 
     RSNCategory("OUTPUT_SETTINGS", "Output Settings", items=[
+        nodeitems_utils.NodeItem("RSNodeFilePathInputNode"),
         nodeitems_utils.NodeItem("RSNodeResolutionInputNode"),
         nodeitems_utils.NodeItem("RSNodeFrameRangeInputNode"),
         nodeitems_utils.NodeItem("RSNodeImageFormatInputNode"),
-        nodeitems_utils.NodeItem("RSNodeFilePathInputNode"),
         nodeitems_utils.NodeItem("RSNodeActiveRenderSlotNode"),
         nodeitems_utils.NodeItem("RSNodeViewLayerPassesNode"),
     ]),

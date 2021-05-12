@@ -232,6 +232,13 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
                 compare(ob, 'hide_viewport', dict['hide_viewport'])
                 compare(ob, 'hide_render', dict['hide_render'])
 
+    def update_collection_display(self):
+        if 'collection_display' in self.task_data:
+            for node_name, dict in self.task_data['collection_display'].items():
+                ob = eval(dict['collection'])
+                compare(ob, 'hide_viewport', dict['hide_viewport'])
+                compare(ob, 'hide_render', dict['hide_render'])
+
     def update_object_psr(self):
         if 'object_psr' in self.task_data:
             for node_name, dict in self.task_data['object_psr'].items():
@@ -421,6 +428,8 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             self.update_render_engine()
 
             self.update_property()
+
+            self.update_collection_display()
 
             self.update_object_display()
             self.update_object_psr()
