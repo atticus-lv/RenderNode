@@ -47,7 +47,7 @@ class RenderNodeObjectDisplay(RenderStackNode):
         task_data_obj[self.name] = {'object'       : f"bpy.data.objects['{self.inputs['object'].object.name}']",
                                     'hide_viewport': self.inputs['hide_viewport'].bool,
                                     'hide_render'  : self.inputs['hide_render'].bool}
-        print(task_data_obj)
+        # print(task_data_obj)
         return task_data_obj
 
 

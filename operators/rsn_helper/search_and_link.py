@@ -27,7 +27,7 @@ class RSN_OT_SearchAndLink(bpy.types.Operator):
                ('RSNodeColorManagementNode', 'Color Management', ''),
                ('RSNodeTaskInfoInputsNode', 'Task Info(Experiment)', ''),
                ('RSNodeCollectionDisplayNode', 'Collection Display', ''),
-               ('RenderNodeObjectDisplay', 'Object Display', ''), ('RSNodeObjectMaterialNode', 'Object Material', ''),
+               ('RenderNodeObjectDisplay', 'Object Display', ''), ('RenderNodeObjectMaterial', 'Object Material', ''),
                ('RSNodeObjectPSRNode', 'Object PSR', ''), ('RSNodeObjectDataNode', 'Object Data', ''),
                ('RSNodeObjectModifierNode', 'Object Modifier', ''), ('RSNodeFilePathInputNode', 'File Path', ''),
                ('RSNodeResolutionInputNode', 'Resolution', ''), ('RSNodeFrameRangeInputNode', 'Frame Range', ''),

@@ -318,7 +318,7 @@ class RSN_Nodes:
                     task_data['collection_display'] = {}
                 task_data['collection_display'].update(node.get_data())
 
-            elif node.bl_idname == 'RSNodeObjectMaterialNode':
+            elif node.bl_idname in {'RenderNodeObjectMaterial','RSNodeObjectMaterialNode'} :
                 if 'object_material' not in task_data:
                     task_data['object_material'] = {}
                 task_data['object_material'].update(node.get_data())

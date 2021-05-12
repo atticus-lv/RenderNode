@@ -21,7 +21,23 @@ class RenderNodeSocketObject(bpy.types.NodeSocket):
         # row.operator('rsn.pop_editor', text='', icon='PROPERTIES')
 
     def draw_color(self, context, node):
-        return 0, 0.8, 1.0, 1.0
+        return 1, 0.6, 0.3, 1
+
+
+class RenderNodeSocketMaterial(bpy.types.NodeSocket):
+    bl_idname = 'RenderNodeSocketMaterial'
+    bl_label = 'RenderNodeSocketObject'
+
+    text: StringProperty(default='custom text')
+    material: PointerProperty(type=bpy.types.Material, update=update_node)
+
+    def draw(self, context, layout, node, text):
+        row = layout.row(align=1)
+        row.prop(self, 'material', text=self.text)
+        # row.operator('rsn.pop_editor', text='', icon='PROPERTIES')
+
+    def draw_color(self, context, node):
+        return 1, 0.6, 0.3, 1
 
 
 class RenderNodeSocketBool(bpy.types.NodeSocket):
@@ -36,7 +52,22 @@ class RenderNodeSocketBool(bpy.types.NodeSocket):
         row.prop(self, 'bool', text=self.text)
 
     def draw_color(self, context, node):
-        return 0, 0.8, 1.0, 1.0
+        return 0.9, 0.7, 1.0, 1
+
+
+class RenderNodeSocketInt(bpy.types.NodeSocket):
+    bl_idname = 'RenderNodeSocketInt'
+    bl_label = 'RenderNodeSocketInt'
+
+    text: StringProperty(default='custom text')
+    int: IntProperty(default=False, update=update_node)
+
+    def draw(self, context, layout, node, text):
+        row = layout.row(align=1)
+        row.prop(self, 'int', text=self.text)
+
+    def draw_color(self, context, node):
+        return 0, 0.9, 0.1, 1
 
 
 ### old types
@@ -113,8 +144,11 @@ classes = (
     RSNodeSocketTaskSettings,
     RSNodeSocketRenderList,
 
+    # new
     RenderNodeSocketObject,
-    RenderNodeSocketBool
+    RenderNodeSocketMaterial,
+    RenderNodeSocketBool,
+    RenderNodeSocketInt,
 )
 
 
