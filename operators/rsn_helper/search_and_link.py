@@ -52,32 +52,31 @@ class RSN_OT_SearchAndLink(bpy.types.Operator):
         return node_items_list
 
     def execute(self, context):
+        new_node = context.space_data.edit_tree.nodes.new(type=self.my_search)
 
-        #
-        # print(self.node)
-        # print(f"{self.nt}.{self.input_id}")
-        # print(self.node.outputs[0])
-        # try:
-        #     pass
-        #     # nt.links.new(new_node.outputs[0], eval(f"{nt}.{self.input_id}"))
-        # except Exception as e:
-        #     print(e)
+        try:
+            if self.input_id != 666:
+                context.space_data.edit_tree.links.new(
+                    context.space_data.edit_tree.nodes[self.node_name].inputs[self.input_id],
+                    new_node.outputs[0])
 
-        # print(self.input_id)
-        # print(self.output_id)
-        # print(self.my_search)
+            elif self.output_id != 666:
+                context.space_data.edit_tree.links.new(
+                    context.space_data.edit_tree.nodes[self.node_name].outputs[self.output_id],
+                    new_node.inputs[0])
 
-        # id = self.input_id[-2:-1]
-        # node_name = input_id[]
+        except Exception as e:
+            print(e)
 
+
+        context.space_data.edit_tree.active = new_node
+        new_node.location = context.space_data.cursor_location
+        bpy.ops.transform.translate('INVOKE_DEFAULT')
         # self.node_enum_items(context)
         return {'FINISHED'}
 
     def invoke(self, context, event):
-        self.nt = context.space_data.node_tree
-        print(self.input_id)
-        print(self.output_id)
-        print(self.node_name)
+
         context.window_manager.invoke_search_popup(self)
 
         return {'FINISHED'}

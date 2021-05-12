@@ -50,11 +50,11 @@ class RSNodeSocketTaskSettings(bpy.types.NodeSocket):
             io = layout.operator('rsn.search_and_link', text=text, icon='ADD')
             io.node_name = node.name
             if self.is_output:
-                io.input_id = int(self.path_from_id()[-2:-1])
-                io.output_id = None
-            else:
                 io.output_id = int(self.path_from_id()[-2:-1])
-                io.input_id = None
+                io.input_id = 666
+            else:
+                io.input_id = int(self.path_from_id()[-2:-1])
+                io.output_id = 666
         else:
             layout.label(text=text)
 
