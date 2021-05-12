@@ -29,7 +29,6 @@ class RSNodeObjectMaterialNode(RenderStackNode):
 
     def init(self, context):
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
-        self.width = 200
 
     def draw_buttons(self, context, layout):
         layout.use_property_split = 1
@@ -47,7 +46,7 @@ class RSNodeObjectMaterialNode(RenderStackNode):
     def get_data(self):
         task_data_obj = {}
         if self.object and self.new_material:
-            task_data_obj[self.name] = {'object'   : f"bpy.data.objects['{self.object.name}']",
+            task_data_obj[self.name] = {'object'      : f"bpy.data.objects['{self.object.name}']",
                                         'slot_index'  : self.slot_index,
                                         'new_material': self.new_material.name}
         return task_data_obj

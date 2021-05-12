@@ -17,7 +17,6 @@ class RSNodeObjectDisplayNode(RenderStackNode):
 
     def init(self, context):
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
-        self.width = 200
 
     def draw_buttons(self, context, layout):
         col = layout.column(align=1)
@@ -35,7 +34,7 @@ class RSNodeObjectDisplayNode(RenderStackNode):
     def get_data(self):
         task_data_obj = {}
         if self.object:
-            task_data_obj[self.name] = {'object'   : f"bpy.data.objects['{self.object.name}']",
+            task_data_obj[self.name] = {'object'       : f"bpy.data.objects['{self.object.name}']",
                                         'hide_viewport': self.hide_viewport,
                                         'hide_render'  : self.hide_render}
 
