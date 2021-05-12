@@ -1,4 +1,22 @@
 import bpy
+from bpy.props import *
+
+
+def update_node(self, context):
+    print(self)
+
+
+class RN_SocketObject(bpy.types.NodeSocket):
+    bl_idname = 'RN_SocketObject'
+    bl_label = 'RN_SocketObject'
+
+    object: PointerProperty(type=bpy.types.Object, name='Object', update=update_node)
+
+    def draw(self, context, layout, node, text):
+        layout.prop(self, 'object')
+
+    def draw_color(self, context, node):
+        return 0, 0.8, 1.0, 1.0
 
 
 class RSNodeSocketCamera(bpy.types.NodeSocket):
@@ -62,6 +80,8 @@ classes = (
     RSNodeSocketOutputSettings,
     RSNodeSocketTaskSettings,
     RSNodeSocketRenderList,
+
+    RN_SocketObject,
 )
 
 
