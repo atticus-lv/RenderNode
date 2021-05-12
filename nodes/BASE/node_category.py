@@ -8,7 +8,7 @@ class RSNCategory(nodeitems_utils.NodeCategory):
         return context.space_data.tree_type == 'RenderStackNodeTree'
 
 
-node_categorys = [
+node_categories = [
     RSNCategory("TASK", "Task", items=[
         nodeitems_utils.NodeItem("RSNodeTaskNode"),
         # nodeitems_utils.NodeItem("RSNodeTaskListNode"),
