@@ -308,7 +308,7 @@ class RSN_Nodes:
                     task_data['object_modifier'] = {}
                 task_data['object_modifier'].update(node.get_data())
 
-            elif node.bl_idname in{'RN_ObjectDisplayNode','RSNodeObjectDisplayNode' }:
+            elif node.bl_idname in{'RenderNodeObjectDisplay','RSNodeObjectDisplayNode' }:
                 if 'object_display' not in task_data:
                     task_data['object_display'] = {}
                 task_data['object_display'].update(node.get_data())

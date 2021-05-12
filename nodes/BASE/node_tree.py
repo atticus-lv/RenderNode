@@ -40,6 +40,13 @@ class RenderStackNode(bpy.types.Node):
         """Remove Node"""
         print("RSN removed node", self.name)
 
+    ## INITIAL METHOD
+    #########################################
+    def create_prop(self, socket_type, socket_name, socket_label):
+        self.inputs.new(socket_type, socket_name)
+        input = self.inputs[-1]
+        input.text = socket_label
+
     ## STATE METHOD
     #########################################
 

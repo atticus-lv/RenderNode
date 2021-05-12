@@ -3,20 +3,63 @@ from bpy.props import *
 
 
 def update_node(self, context):
-    print(self)
+    self.node.update_parms()
 
 
-class RN_SocketObject(bpy.types.NodeSocket):
-    bl_idname = 'RN_SocketObject'
-    bl_label = 'RN_SocketObject'
+class RenderNodeSocketObject(bpy.types.NodeSocket):
+    bl_idname = 'RenderNodeSocketObject'
+    bl_label = 'RenderNodeSocketObject'
 
-    object: PointerProperty(type=bpy.types.Object, name='Object', update=update_node)
+    text: StringProperty(default='custom text')
+    object: PointerProperty(type=bpy.types.Object, update=update_node)
 
     def draw(self, context, layout, node, text):
-        layout.prop(self, 'object')
+        row = layout.row(align=1)
+        row.prop(self, 'object', text=self.text)
+        if self.object:
+            row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.object.name
+        # row.operator('rsn.pop_editor', text='', icon='PROPERTIES')
 
     def draw_color(self, context, node):
         return 0, 0.8, 1.0, 1.0
+
+
+class RenderNodeSocketBool(bpy.types.NodeSocket):
+    bl_idname = 'RenderNodeSocketBool'
+    bl_label = 'RenderNodeSocketBool'
+
+    text: StringProperty(default='custom text')
+    bool: BoolProperty(default=False, update=update_node)
+
+    def draw(self, context, layout, node, text):
+        row = layout.row(align=1)
+        row.prop(self, 'bool', text=self.text)
+
+    def draw_color(self, context, node):
+        return 0, 0.8, 1.0, 1.0
+
+
+### old types
+################
+class RSNodeSocketTaskSettings(bpy.types.NodeSocket):
+    bl_idname = 'RSNodeSocketTaskSettings'
+    bl_label = 'RSNodeSocketTaskSettings'
+
+    def draw(self, context, layout, node, text):
+        if not self.is_linked:
+            io = layout.operator('rsn.search_and_link', text=text, icon='ADD')
+            io.node_name = node.name
+            if self.is_output:
+                io.input_id = int(self.path_from_id()[-2:-1])
+                io.output_id = None
+            else:
+                io.output_id = int(self.path_from_id()[-2:-1])
+                io.input_id = None
+        else:
+            layout.label(text=text)
+
+    def draw_color(self, context, node):
+        return 0.6, 0.6, 0.6, 1.0
 
 
 class RSNodeSocketCamera(bpy.types.NodeSocket):
@@ -28,17 +71,6 @@ class RSNodeSocketCamera(bpy.types.NodeSocket):
 
     def draw_color(self, context, node):
         return 0, 0.8, 1.0, 1.0
-
-
-class RSNodeSocketTaskSettings(bpy.types.NodeSocket):
-    bl_idname = 'RSNodeSocketTaskSettings'
-    bl_label = 'RSNodeSocketTaskSettings'
-
-    def draw(self, context, layout, node, text):
-        layout.label(text=text)
-
-    def draw_color(self, context, node):
-        return 0.6, 0.6, 0.6, 1.0
 
 
 class RSNodeSocketRenderSettings(bpy.types.NodeSocket):
@@ -81,7 +113,8 @@ classes = (
     RSNodeSocketTaskSettings,
     RSNodeSocketRenderList,
 
-    RN_SocketObject,
+    RenderNodeSocketObject,
+    RenderNodeSocketBool
 )
 
 
