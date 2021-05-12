@@ -91,7 +91,7 @@ def register():
         nodeitems_utils.unregister_node_categories("RSNCategory")
     except Exception:
         pass
-    nodeitems_utils.register_node_categories("RSNCategory", node_categorys)
+    nodeitems_utils.register_node_categories("RSNCategory", node_categories)
 
 
 def unregister():
