@@ -16,33 +16,43 @@ logger = logging.getLogger('mylogger')
 
 
 class RSN_OT_RenderStackTask(bpy.types.Operator):
-    """Render Tasks"""
+    """Render all input Tasks"""
     bl_idname = "rsn.render_stack_task"
-    bl_label = "Render Stack"
+    bl_label = "Render Queue"
 
-    # get date from root
     render_list_node_name: StringProperty()
+
+    # blender properties
+    #####################
 
     # action after render
     open_dir: BoolProperty(name='Open folder after render', default=True)
     clean_path: BoolProperty(name='clean path after rendering', default=True)
-    render_display_type: EnumProperty(items=[
-        ('NONE', 'Keep User Interface', ''),
-        ('SCREEN', 'Maximized Area', ''),
-        ('AREA', 'Image Editor', ''),
-        ('WINDOW', 'New Window', '')],
+    # display type
+    render_display_type: EnumProperty(
+        items=[
+            ('NONE', 'Keep User Interface', ''),
+            ('SCREEN', 'Maximized Area', ''),
+            ('AREA', 'Image Editor', ''),
+            ('WINDOW', 'New Window', '')],
         default='WINDOW',
         name='Display')
     ori_render_display_type = None
-
+    # UI
     processor_node: StringProperty(name='Processor', default='')
 
     # render state
+    ###############
     _timer = None
     stop = None
     rendering = None
-    # get and apply from rsn queue
-    rsn_queue = None
+
+    # render queue
+    ###############
+    queue = None
+    frame_start = None
+    frame_end = None
+    frame_step = None
 
     # set render state
     def pre(self, dummy, thrd=None):
@@ -62,7 +72,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         bpy.app.handlers.render_pre.append(self.pre)  # 检测渲染状态
         bpy.app.handlers.render_post.append(self.post)
         bpy.app.handlers.render_cancel.append(self.cancelled)
-        self._timer = bpy.context.window_manager.event_timer_add(0.2, window=bpy.context.window)  # 添加计时器检测状态
+        self._timer = bpy.context.window_manager.event_timer_add(0.1, window=bpy.context.window)  # 添加计时器检测状态
         bpy.context.window_manager.modal_handler_add(self)
 
     def remove_handles(self):
@@ -110,7 +120,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     def init_logger(self, node_list_dict):
         pref = get_pref()
         logger.setLevel(int(pref.log_level))
-        logger.info(f'Get all data:\n{json.dumps(node_list_dict, indent=2, ensure_ascii=False)}\n')
+        logger.info(f'Get all Task:\n{json.dumps(node_list_dict, indent=2, ensure_ascii=False)}\n')
 
     def execute(self, context):
         context.window_manager.rsn_running_modal = True
@@ -120,19 +130,21 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         # set and get tree
         rsn_tree = RSN_NodeTree()
         rsn_tree.set_context_tree_as_wm_tree()
+        # init RenderQueue
+        self.queue = RenderQueue(nodetree=rsn_tree.get_wm_node_tree(),
+                                 render_list_node=self.render_list_node_name)
 
-        self.rsn_queue = RSN_Queue(nodetree=rsn_tree.get_wm_node_tree(), render_list_node=self.render_list_node_name)
-
-        if self.rsn_queue.is_empty():
+        if self.queue.is_empty():
             context.window_manager.rsn_running_modal = False
             self.report({"WARNING"}, 'Nothing to render！')
             return {"FINISHED"}
+
         # info log
-        self.init_logger(self.rsn_queue.task_list_dict)
-        self.init_process_node()
+        # self.init_logger(self.rsn_queue.task_list_dict)
+        # self.init_process_node()
         # update for the first render (if there is a viewer node)
-        self.rsn_queue.update_task_data()
-        bpy.context.scene.frame_current = self.rsn_queue.frame_start
+        self.rsn_queue.force_update()
+
         self.append_handles()
 
         # set render in background
@@ -144,7 +156,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     # update
     def frame_check(self):
         # update task
-        self.rsn_queue.update_task_data()
+        self.queue.force_update()
         if not self.rsn_queue.is_empty():
 
             if bpy.context.scene.frame_current >= self.rsn_queue.frame_end:

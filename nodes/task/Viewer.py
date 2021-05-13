@@ -20,32 +20,29 @@ class RSN_OT_AddViewerNode(bpy.types.Operator):
     bl_idname = 'rsn.add_viewer_node'
     bl_label = 'Add Viewer Node'
 
-    @classmethod
-    def poll(self, context):
-        if context.space_data.edit_tree:
-            active_node = context.space_data.edit_tree.nodes.active
-            return active_node and active_node.bl_idname == 'RSNodeTaskNode'
-
     def execute(self, context):
-        nt = context.space_data.edit_tree
-        task = context.space_data.edit_tree.nodes.active
-        loc_x = task.location[0] + 200
-        loc_y = task.location[1] + 25
-        # remove viewer node
-        for node in nt.nodes:
-            if node.bl_idname == 'RSNodeViewerNode':
-                context.space_data.edit_tree.nodes.remove(node)
+        try:
+            nt = context.space_data.edit_tree
+            task = context.space_data.edit_tree.nodes.active
+            loc_x = task.location[0] + 200
+            loc_y = task.location[1] + 25
+            # remove viewer node
+            for node in nt.nodes:
+                if node.bl_idname == 'RSNodeViewerNode':
+                    context.space_data.edit_tree.nodes.remove(node)
 
-        viewer = context.space_data.edit_tree.nodes.new(type='RSNodeViewerNode')
-        viewer.location[0] = loc_x
-        viewer.location[1] = loc_y
+            viewer = context.space_data.edit_tree.nodes.new(type='RSNodeViewerNode')
+            viewer.location[0] = loc_x
+            viewer.location[1] = loc_y
 
-        nt.links.new(task.outputs[0], viewer.inputs[0])
-        viewer.update()
-        viewer.select = 0
-        # force update
-        dg = context.evaluated_depsgraph_get()
-        dg.update()
+            nt.links.new(task.outputs[0], viewer.inputs[0])
+            viewer.update()
+            viewer.select = 0
+            # force update
+            dg = context.evaluated_depsgraph_get()
+            dg.update()
+        except:
+            pass
 
         return {"FINISHED"}
 

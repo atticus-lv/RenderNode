@@ -365,72 +365,55 @@ class RSN_Nodes:
         return task_data
 
 
-class RSN_Queue():
+class RenderQueue():
     def __init__(self, nodetree, render_list_node: str):
         """init a rsn queue
         :parm nodetree: a blender node tree(rsn node tree)
         :parm render_list_node: name of the render_list_node
 
         """
-
         self.nt = nodetree
         self.root_node = render_list_node
         self.task_queue = deque()
-        self.task_data_queue = deque()
 
-        self.init_rsn_task()
         self.init_queue()
 
-    def init_rsn_task(self):
-        self.rsn = RSN_Nodes(node_tree=self.nt, root_node_name=self.root_node)
-        self.task_list_dict = self.rsn.get_children_from_render_list(return_dict=1)
-
     def init_queue(self):
-        """get all the task_data
-        fill the key 'frame' for the latter render
-        """
+        self.rsn = RSN_Nodes(node_tree=self.nt, root_node_name=self.root_node)
+        self.task_list = self.rsn.get_children_from_render_list(return_dict=0)
 
-        for task in self.task_list_dict:
-            task_data = self.rsn.get_task_data(task_name=task, task_dict=self.task_list_dict)
-
-            if "frame_start" not in task_data:
-                task_data["frame_start"] = bpy.context.scene.frame_current
-                task_data["frame_end"] = bpy.context.scene.frame_current
-                task_data["frame_step"] = bpy.context.scene.frame_step
-
+        for task in self.task_list:
             self.task_queue.append(task)
-            self.task_data_queue.append(task_data)
 
     def is_empty(self):
         return len(self.task_queue) == 0
 
-    def get_length(self):
-        return len(self.task_queue)
+    def get_frame_range(self):
+        node_list = rsn_task.get_children_from_node(self)  # VariantsNodeProperty node in each task
+        # only one set VariantsNodeProperty node will be active
+        var_collect = {}
+        for node_name in node_list:
+            set_var_node = rsn_task.nt.nodes[node_name]
+            if set_var_node.bl_idname == 'RSNodeSetVariantsNode':
+                for item in set_var_node.node_collect:
+                    if item.use:
+                        var_collect[item.name] = item.active
+                break
 
-    def update_task_data(self):
+        for node_name, active in var_collect.items():
+            var_node = rsn_task.nt.nodes[node_name]
+            black_list = rsn_task.get_children_from_var_node(var_node, active)
+
+            node_list = [i for i in node_list if i not in black_list]
+
+    def force_update(self):
         if not self.is_empty():
-            self.task_name = self.task_queue[0]
-            self.task_data = self.task_data_queue[0]
-            self.frame_start = self.task_data_queue[0]["frame_start"]
-            self.frame_end = self.task_data_queue[0]["frame_end"]
-            self.frame_step = self.task_data_queue[0]["frame_step"]
-
-    def get_frame_length(self):
-        length = 0
-        for task_data in self.task_data_queue:
-            length += (task_data['frame_end'] + 1 - task_data['frame_start']) // task_data['frame_step']
-        return length
+            self.nt.nodes.active = self.nt.nodes[self.task_queue[0]]
+            bpy.ops.rsn.add_viewer_node()
 
     def pop(self):
         if not self.is_empty():
-            return self.task_queue.popleft(), self.task_data_queue.popleft()
+            return self.task_queue.popleft()
 
     def clear_queue(self):
         self.task_queue.clear()
-        self.task_data_queue.clear()
-
-        self.task_name = None
-        self.task_data = None
-        self.frame_start = None
-        self.frame_end = None
-        self.frame_step = None
