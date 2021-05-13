@@ -73,6 +73,53 @@ class RenderNodeSocketInt(bpy.types.NodeSocket):
         return 0, 0.9, 0.1, 1
 
 
+class RenderNodeSocketString(bpy.types.NodeSocket):
+    bl_idname = 'RenderNodeSocketString'
+    bl_label = 'RenderNodeSocketString'
+
+    text: StringProperty(default='custom text')
+    value: StringProperty(default='', update=update_node)
+
+    def draw(self, context, layout, node, text):
+        row = layout.row(align=1)
+        row.prop(self, 'value', text=self.text)
+
+    def draw_color(self, context, node):
+        return 0.2, 0.5, 1.0, 1
+
+
+class RenderNodeSocketColor(bpy.types.NodeSocket):
+    bl_idname = 'RenderNodeSocketColor'
+    bl_label = 'RenderNodeSocketColor'
+
+    text: StringProperty(default='custom text')
+    value: FloatVectorProperty(update=update_node, subtype='COLOR',
+                               default=(1.0, 1.0, 1.0),
+                               min=0.0, max=1.0)
+
+    def draw(self, context, layout, node, text):
+        row = layout.row(align=1)
+        row.prop(self, 'value', text=self.text)
+
+    def draw_color(self, context, node):
+        return 0.15, 1.0, 1.0, 1
+
+
+class RenderNodeSocketVector(bpy.types.NodeSocket):
+    bl_idname = 'RenderNodeSocketVector'
+    bl_label = 'RenderNodeSocketVector'
+
+    text: StringProperty(default='custom text')
+    value: FloatVectorProperty(name='Vector', update=update_node)
+
+    def draw(self, context, layout, node, text):
+        row = layout.row(align=1)
+        row.prop(self, 'value', text=self.text)
+
+    def draw_color(self, context, node):
+        return 0.5, 0.3, 1.0, 1
+
+
 ### old types ###
 #################
 
@@ -153,6 +200,9 @@ classes = (
     RenderNodeSocketMaterial,
     RenderNodeSocketBool,
     RenderNodeSocketInt,
+    RenderNodeSocketString,
+    RenderNodeSocketColor,
+    RenderNodeSocketVector,
 )
 
 
