@@ -413,7 +413,6 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             cam = eval(self.task_data['camera'])
             if cam: compare(bpy.context.scene, 'camera', cam)
 
-    @timefn
     def data_changes(self):
         pref = get_pref()
         logger.setLevel(int(pref.log_level))

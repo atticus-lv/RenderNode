@@ -3,6 +3,9 @@ from bpy.props import *
 
 
 def update_node(self, context):
+    # transfer node socket value to node value
+    self.node.node_dict[self.name] = self.value
+    # update node tree
     self.node.update_parms()
 
 
@@ -11,13 +14,13 @@ class RenderNodeSocketObject(bpy.types.NodeSocket):
     bl_label = 'RenderNodeSocketObject'
 
     text: StringProperty(default='custom text')
-    object: PointerProperty(type=bpy.types.Object, update=update_node)
+    value: PointerProperty(type=bpy.types.Object, update=update_node)
 
     def draw(self, context, layout, node, text):
         row = layout.row(align=1)
-        row.prop(self, 'object', text=self.text)
-        if self.object:
-            row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.object.name
+        row.prop(self, 'value', text=self.text)
+        if self.value:
+            row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.value.name
         # row.operator('rsn.pop_editor', text='', icon='PROPERTIES')
 
     def draw_color(self, context, node):
@@ -29,15 +32,15 @@ class RenderNodeSocketMaterial(bpy.types.NodeSocket):
     bl_label = 'RenderNodeSocketObject'
 
     text: StringProperty(default='custom text')
-    material: PointerProperty(type=bpy.types.Material, update=update_node)
+    value: PointerProperty(type=bpy.types.Material, update=update_node)
 
     def draw(self, context, layout, node, text):
         row = layout.row(align=1)
-        row.prop(self, 'material', text=self.text)
+        row.prop(self, 'value', text=self.text)
         # row.operator('rsn.pop_editor', text='', icon='PROPERTIES')
 
     def draw_color(self, context, node):
-        return 1, 0.6, 0.3, 1
+        return 0.6, 0.2, 0.2, 1
 
 
 class RenderNodeSocketBool(bpy.types.NodeSocket):
@@ -45,11 +48,11 @@ class RenderNodeSocketBool(bpy.types.NodeSocket):
     bl_label = 'RenderNodeSocketBool'
 
     text: StringProperty(default='custom text')
-    bool: BoolProperty(default=False, update=update_node)
+    value: BoolProperty(default=False, update=update_node)
 
     def draw(self, context, layout, node, text):
         row = layout.row(align=1)
-        row.prop(self, 'bool', text=self.text)
+        row.prop(self, 'value', text=self.text)
 
     def draw_color(self, context, node):
         return 0.9, 0.7, 1.0, 1
@@ -60,18 +63,19 @@ class RenderNodeSocketInt(bpy.types.NodeSocket):
     bl_label = 'RenderNodeSocketInt'
 
     text: StringProperty(default='custom text')
-    int: IntProperty(default=False, update=update_node)
+    value: IntProperty(default=False, update=update_node)
 
     def draw(self, context, layout, node, text):
         row = layout.row(align=1)
-        row.prop(self, 'int', text=self.text)
+        row.prop(self, 'value', text=self.text)
 
     def draw_color(self, context, node):
         return 0, 0.9, 0.1, 1
 
 
-### old types
-################
+### old types ###
+#################
+
 class RSNodeSocketTaskSettings(bpy.types.NodeSocket):
     bl_idname = 'RSNodeSocketTaskSettings'
     bl_label = 'RSNodeSocketTaskSettings'

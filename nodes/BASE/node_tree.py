@@ -42,10 +42,15 @@ class RenderStackNode(bpy.types.Node):
 
     ## INITIAL METHOD
     #########################################
+
+    node_dict = {}
+
     def create_prop(self, socket_type, socket_name, socket_label):
         self.inputs.new(socket_type, socket_name)
         input = self.inputs[-1]
         input.text = socket_label
+
+        self.node_dict[socket_name] = self.inputs[socket_name].value
 
     ## STATE METHOD
     #########################################
@@ -56,7 +61,12 @@ class RenderStackNode(bpy.types.Node):
             msg.task_data = self.warning_msg
 
     def debug(self):
-        logger.debug(f'pass "{self.name}"')
+        # new method debug
+        msg = f'process "{self.name}"'
+        if hasattr(self, 'node_dict'):
+            msg += f'\n{self.node_dict}'
+
+        logger.debug(msg)
 
     def set_warning(self, msg=''):
         self.warning_msg = msg
@@ -82,7 +92,6 @@ class RenderStackNode(bpy.types.Node):
         :parm socket_type: any socket type that is registered in blender
         :parm socket_name: custom name for the socket
         """
-
         i = 0
         for input in self.inputs:
             if not input.is_linked:
@@ -98,6 +107,7 @@ class RenderStackNode(bpy.types.Node):
     #########################################
 
     def update_parms(self):
+        """compare current node list"""
         if bpy.context.window_manager.rsn_node_list != '':
             node_list = bpy.context.window_manager.rsn_node_list.split(',')
             if self.name in node_list:
@@ -106,12 +116,27 @@ class RenderStackNode(bpy.types.Node):
                                          update_scripts=pref.node_viewer.update_scripts,
                                          use_render_mode=False)
 
-    def get_data(self):
-        """For get self date into rsn tree method"""
+    @staticmethod
+    def compare(obj: object, attr: str, val):
+        """Use for compare and apply attribute since some properties change may cause depsgraph changes"""
+        try:
+            if getattr(obj, attr) != val:
+                setattr(obj, attr, val)
+                logger.debug(f'Attribute "{attr}" SET “{val}”')
+        except AttributeError as e:
+            logger.info(e)
+
+    ### new method ###
+    def process(self):
         pass
 
-    def apply_data(self, task_data):
-        """apply self data with update parm ops"""
+    def store_data(self):
+        for input in self.inputs:
+            self.node_dict[input.name] = input.value
+
+    ### old method ###
+    def get_data(self):
+        """For get self date into rsn tree method"""
         pass
 
 

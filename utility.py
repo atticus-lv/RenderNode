@@ -292,8 +292,16 @@ class RSN_Nodes:
             task_node = self.nt.nodes[task_name]
             task_data['name'] = task_name
             task_data['label'] = task_node.label
+
+            # new method
+            if node.bl_idname.startswith('RenderNode'):
+                node.process()
+
+            # old method/nodes
+            #####################
+
             # Object select Nodes
-            if node.bl_idname == 'RSNodePropertyInputNode':
+            elif node.bl_idname == 'RSNodePropertyInputNode':
                 if 'property' not in task_data:
                     task_data['property'] = {}
                 task_data['property'].update(node.get_data())
@@ -308,7 +316,7 @@ class RSN_Nodes:
                     task_data['object_modifier'] = {}
                 task_data['object_modifier'].update(node.get_data())
 
-            elif node.bl_idname in{'RenderNodeObjectDisplay','RSNodeObjectDisplayNode' }:
+            elif node.bl_idname in 'RSNodeObjectDisplayNode':
                 if 'object_display' not in task_data:
                     task_data['object_display'] = {}
                 task_data['object_display'].update(node.get_data())
@@ -318,7 +326,7 @@ class RSN_Nodes:
                     task_data['collection_display'] = {}
                 task_data['collection_display'].update(node.get_data())
 
-            elif node.bl_idname in {'RenderNodeObjectMaterial','RSNodeObjectMaterialNode'} :
+            elif node.bl_idname == 'RSNodeObjectMaterialNode':
                 if 'object_material' not in task_data:
                     task_data['object_material'] = {}
                 task_data['object_material'].update(node.get_data())
