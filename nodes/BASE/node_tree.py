@@ -12,6 +12,20 @@ logging.basicConfig(format=LOG_FORMAT)
 logger = logging.getLogger('mylogger')
 
 
+def reroute_socket_node(socket, node):
+    def get_sub_node(socket, node):
+        target_node = None
+        if socket.is_linked:
+            sub_node = socket.links[0].from_node
+            if len(sub_node.inputs) > 0:
+                get_sub_node(sub_node.inputs[0], sub_node)
+            else:
+                target_node = sub_node
+        return target_node
+
+    return get_sub_node(socket, node)
+
+
 class RenderStackNodeTree(bpy.types.NodeTree):
     """RenderStackNodeTree Node Tree"""
     bl_idname = 'RenderStackNodeTree'
@@ -116,6 +130,31 @@ class RenderStackNode(bpy.types.Node):
                                          update_scripts=pref.node_viewer.update_scripts,
                                          use_render_mode=False)
 
+    ### new method ###
+
+    def store_data(self):
+        for input in self.inputs:
+            if not input.is_linked:
+                self.node_dict[input.name] = input.value
+            else:
+                node = reroute_socket_node(input, self)
+                print(node)
+                if hasattr(node, 'value'):
+                    self.node_dict[input.name] = node.value
+                    print(node.value)
+                    self.node_dict[input.name] = node.value
+
+    def process(self):
+        pass
+
+    ### old method ###
+    def get_data(self):
+        """For get self date into rsn tree method"""
+        pass
+
+    ## Utility
+    #########################################
+
     @staticmethod
     def compare(obj: object, attr: str, val):
         """Use for compare and apply attribute since some properties change may cause depsgraph changes"""
@@ -125,19 +164,6 @@ class RenderStackNode(bpy.types.Node):
                 logger.debug(f'Attribute "{attr}" SET “{val}”')
         except AttributeError as e:
             logger.info(e)
-
-    ### new method ###
-    def process(self):
-        pass
-
-    def store_data(self):
-        for input in self.inputs:
-            self.node_dict[input.name] = input.value
-
-    ### old method ###
-    def get_data(self):
-        """For get self date into rsn tree method"""
-        pass
 
 
 class RenderStackNodeGroup(bpy.types.NodeCustomGroup):

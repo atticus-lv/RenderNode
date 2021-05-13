@@ -3,7 +3,6 @@ from bpy.props import *
 
 
 def update_node(self, context):
-    # transfer node socket value to node value
     self.node.node_dict[self.name] = self.value
     # update node tree
     self.node.update_parms()
@@ -18,10 +17,12 @@ class RenderNodeSocketObject(bpy.types.NodeSocket):
 
     def draw(self, context, layout, node, text):
         row = layout.row(align=1)
-        row.prop(self, 'value', text=self.text)
-        if self.value:
-            row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.value.name
-        # row.operator('rsn.pop_editor', text='', icon='PROPERTIES')
+        if self.is_linked:
+            row.label(text=self.text)
+        else:
+            row.prop(self, 'value', text=self.text)
+            if self.value:
+                row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.value.name
 
     def draw_color(self, context, node):
         return 1, 0.6, 0.3, 1

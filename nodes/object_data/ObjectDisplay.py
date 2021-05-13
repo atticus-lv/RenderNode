@@ -14,7 +14,6 @@ class RenderNodeObjectDisplay(RenderStackNode):
 
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
-        self.width = 200
 
     def process(self):
         self.store_data()

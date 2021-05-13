@@ -36,6 +36,7 @@ node_categories = [
     ]),
 
     RSNCategory("OBJECT", "Object", items=[
+        nodeitems_utils.NodeItem('RenderNodeObjectInput'),
         nodeitems_utils.NodeItem('RSNodeCollectionDisplayNode'),
         # nodeitems_utils.NodeItem('RSNodeObjectDisplayNode'),
         nodeitems_utils.NodeItem('RenderNodeObjectDisplay'),
