@@ -42,7 +42,9 @@ node_categories = [
         # nodeitems_utils.NodeItem('RSNodeObjectMaterialNode'),
         nodeitems_utils.NodeItem('RenderNodeObjectMaterial'),
         nodeitems_utils.NodeItem('RSNodeObjectPSRNode'),
-        nodeitems_utils.NodeItem('RSNodeObjectDataNode'),
+        # nodeitems_utils.NodeItem('RSNodeObjectDataNode'),
+        nodeitems_utils.NodeItem('RenderNodeObjectData'),
+
         nodeitems_utils.NodeItem('RSNodeObjectModifierNode'),
     ]),
 
@@ -93,7 +95,7 @@ def register():
         nodeitems_utils.unregister_node_categories("RSNCategory")
     except Exception:
         pass
-    nodeitems_utils.register_node_categories("RSNCategory", node_categorys)
+    nodeitems_utils.register_node_categories("RSNCategory", node_categories)
 
 
 def unregister():
