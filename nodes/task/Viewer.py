@@ -27,11 +27,12 @@ class RSN_OT_AddViewerNode(bpy.types.Operator):
             loc_x = task.location[0] + 200
             loc_y = task.location[1] + 25
             # remove viewer node
+            viewer = None
             for node in nt.nodes:
                 if node.bl_idname == 'RSNodeViewerNode':
-                    context.space_data.edit_tree.nodes.remove(node)
-
-            viewer = context.space_data.edit_tree.nodes.new(type='RSNodeViewerNode')
+                    viewer = node
+            if not viewer:
+                viewer = context.space_data.edit_tree.nodes.new(type='RSNodeViewerNode')
             viewer.location[0] = loc_x
             viewer.location[1] = loc_y
 
@@ -62,49 +63,7 @@ class RSNodeViewerNode(RenderStackNode):
         return f'Task: {bpy.context.window_manager.rsn_viewer_node}'
 
     def update(self):
-        rsn_task = RSN_Nodes(node_tree=bpy.context.space_data.edit_tree,
-                             root_node_name=self.name)
-
-        node_list = rsn_task.get_children_from_node(self)  # VariantsNodeProperty node in each task
-        # only one set VariantsNodeProperty node will be active
-        var_collect = {}
-        for node_name in node_list:
-            set_var_node = rsn_task.nt.nodes[node_name]
-            if set_var_node.bl_idname == 'RSNodeSetVariantsNode':
-                for item in set_var_node.node_collect:
-                    if item.use:
-                        var_collect[item.name] = item.active
-                break
-
-        for node_name, active in var_collect.items():
-            var_node = rsn_task.nt.nodes[node_name]
-            black_list = rsn_task.get_children_from_var_node(var_node, active)
-
-            node_list = [i for i in node_list if i not in black_list]
-
-        if len(node_list) > 0:
-            node_list_str = ','.join(node_list)
-
-            if bpy.context.window_manager.rsn_node_list != node_list_str:
-                bpy.context.window_manager.rsn_node_list = node_list_str
-
-                pref = get_pref()
-
-                if self.inputs[0].is_linked:
-                    try:
-                        node = reroute(self.inputs[0].links[0].from_node)
-                        bpy.context.window_manager.rsn_viewer_node = node.name
-                        bpy.ops.rsn.update_parms(view_mode_handler=node.name,
-                                                 update_scripts=pref.node_viewer.update_scripts,
-                                                 use_render_mode=False)
-                        # This error shows when the dragging the link off viewer node(Works well with knife tool)
-                        # this seems to be a blender error
-
-                    except IndexError:
-                        pass
-
-                else:
-                    bpy.context.window_manager.rsn_viewer_node = ''
+        pass
 
     def free(self):
         bpy.context.window_manager.rsn_viewer_node = ''
@@ -140,11 +99,12 @@ def draw_menu(self, context):
         layout.operator("rsn.add_viewer_node", text="View Task")
 
 
+
+
+
 def register():
     bpy.utils.register_class(RSN_OT_AddViewerNode)
     bpy.utils.register_class(RSNodeViewerNode)
-
-    bpy.types.WindowManager.rsn_node_list = StringProperty(default='')
 
     # bpy.types.NODE_MT_context_menu.prepend(draw_menu)
 
@@ -152,5 +112,4 @@ def register():
 def unregister():
     bpy.utils.unregister_class(RSNodeViewerNode)
 
-    del bpy.types.WindowManager.rsn_node_list
     # bpy.types.NODE_MT_context_menu.remove(draw_menu)

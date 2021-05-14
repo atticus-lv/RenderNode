@@ -12,20 +12,6 @@ logging.basicConfig(format=LOG_FORMAT)
 logger = logging.getLogger('mylogger')
 
 
-def reroute_socket_node(socket, node):
-    def get_sub_node(socket, node):
-        target_node = None
-        if socket.is_linked:
-            sub_node = socket.links[0].from_node
-            if len(sub_node.inputs) > 0:
-                get_sub_node(sub_node.inputs[0], sub_node)
-            else:
-                target_node = sub_node
-        return target_node
-
-    return get_sub_node(socket, node)
-
-
 class RenderStackNodeTree(bpy.types.NodeTree):
     """RenderStackNodeTree Node Tree"""
     bl_idname = 'RenderStackNodeTree'
@@ -137,7 +123,7 @@ class RenderStackNode(bpy.types.Node):
             if not input.is_linked:
                 self.node_dict[input.name] = input.value
             else:
-                node = reroute_socket_node(input, self)
+                node = self.reroute_socket_node(input, self)
                 print(node)
                 if hasattr(node, 'value'):
                     self.node_dict[input.name] = node.value
@@ -154,6 +140,19 @@ class RenderStackNode(bpy.types.Node):
 
     ## Utility
     #########################################
+    @staticmethod
+    def reroute_socket_node(socket, node, target_node_type=None):
+        def get_sub_node(socket, node):
+            target_node = None
+            if socket.is_linked:
+                sub_node = socket.links[0].from_node
+                if len(sub_node.inputs) > 0:
+                    get_sub_node(sub_node.inputs[0], sub_node)
+                else:
+                    target_node = sub_node
+            return target_node
+
+        return get_sub_node(socket, node)
 
     @staticmethod
     def compare(obj: object, attr: str, val):

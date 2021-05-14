@@ -94,11 +94,7 @@ class RSN_Nodes:
         self.root_node = self.get_node_from_name(root_node_name)
 
     def get_node_from_name(self, name):
-        try:
-            node = self.nt.nodes[name]
-            return node
-        except KeyError:
-            return None
+        return self.nt.nodes.get(name)
 
     def get_root_node(self):
         return self.root_node
@@ -385,31 +381,36 @@ class RenderQueue():
         for task in self.task_list:
             self.task_queue.append(task)
 
+        for task in self.task_queue:
+            print(f"QUEUE:{task}")
+
     def is_empty(self):
         return len(self.task_queue) == 0
 
     def get_frame_range(self):
-        node_list = rsn_task.get_children_from_node(self)  # VariantsNodeProperty node in each task
-        # only one set VariantsNodeProperty node will be active
-        var_collect = {}
-        for node_name in node_list:
-            set_var_node = rsn_task.nt.nodes[node_name]
-            if set_var_node.bl_idname == 'RSNodeSetVariantsNode':
-                for item in set_var_node.node_collect:
-                    if item.use:
-                        var_collect[item.name] = item.active
-                break
+        self.force_update()
+        # if not frame range node input, consider as render single frmae
+        frame_start = frame_end = bpy.context.scene.frame_start
+        frame_step = bpy.context.scene.frame_step
 
-        for node_name, active in var_collect.items():
-            var_node = rsn_task.nt.nodes[node_name]
-            black_list = rsn_task.get_children_from_var_node(var_node, active)
+        # search frame range node
+        node_list = bpy.context.window_manager.rsn_node_list.split(',')
+        frame_range_nodes = [self.nt.nodes[name] for name in node_list if
+                             self.nt.nodes[name].bl_idname == 'RSNodeFrameRangeInputNode']
 
-            node_list = [i for i in node_list if i not in black_list]
+        # get the last frame range node for current task
+        if len(frame_range_nodes) != 0:
+            node = frame_range_nodes[-1]
+            frame_start = node.frame_start
+            frame_end = node.frame_end
+            frame_step = node.frame_step
+
+        return frame_start, frame_end, frame_step
 
     def force_update(self):
         if not self.is_empty():
-            self.nt.nodes.active = self.nt.nodes[self.task_queue[0]]
-            bpy.ops.rsn.add_viewer_node()
+            self.nt.nodes[self.task_queue[0]].is_active_task = True
+            print("FORCE_UPDATE", self.task_queue[0])
 
     def pop(self):
         if not self.is_empty():

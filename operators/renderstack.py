@@ -25,19 +25,10 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     # blender properties
     #####################
 
-    # action after render
-    open_dir: BoolProperty(name='Open folder after render', default=True)
-    clean_path: BoolProperty(name='clean path after rendering', default=True)
-    # display type
-    render_display_type: EnumProperty(
-        items=[
-            ('NONE', 'Keep User Interface', ''),
-            ('SCREEN', 'Maximized Area', ''),
-            ('AREA', 'Image Editor', ''),
-            ('WINDOW', 'New Window', '')],
-        default='WINDOW',
-        name='Display')
-    ori_render_display_type = None
+    render_list_node_name: StringProperty()
+    render_list_node = None
+    ori_render_display_type = None  # correct display_type after render
+
     # UI
     processor_node: StringProperty(name='Processor', default='')
 
@@ -59,9 +50,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         self.rendering = True
 
     def post(self, dummy, thrd=None):
-        # check and update frame
-        self.frame_check()
-        # set state (for switch task)
+        print(f"Finished Task: {self.queue.pop()}")
         self.rendering = False
 
     def cancelled(self, dummy, thrd=None):
@@ -81,123 +70,82 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         bpy.app.handlers.render_cancel.remove(self.cancelled)
         bpy.context.window_manager.event_timer_remove(self._timer)
 
-    # Processor node
-    def init_process_node(self):
-        try:
-            node = self.rsn_queue.nt.nodes[self.processor_node]
-            node.count_frames = self.rsn_queue.get_frame_length()
-            node.done_frames = 0
-            node.all_tasks = ''
-            node.all_tasks = ','.join(self.rsn_queue.task_queue)
-        except Exception as e:
-            logger.debug(f'Processor {self.processor_node} not found')
-
-    def update_process_node(self):
-        try:
-            node = self.rsn_queue.nt.nodes[self.processor_node]
-            node.done_frames += 1
-            node.curr_task = self.rsn_queue.task_name
-            node.task_label = self.rsn_queue.task_data['label']
-
-            node.frame_start = self.rsn_queue.frame_start
-            node.frame_end = self.rsn_queue.frame_end
-            node.frame_current = bpy.context.scene.frame_current
-        except:
-            pass
-
-    def finish_process_node(self):
-        try:
-            node = self.rsn_queue.nt.nodes[self.processor_node]
-            if self.rsn_queue.is_empty():
-                node.all_tasks += ',RENDER_FINISHED'
-                node.curr_task = 'RENDER_FINISHED'
-            else:
-                node.all_tasks += ',RENDER_STOPED'
-        except:
-            pass
-
-    # init
-    def init_logger(self, node_list_dict):
-        pref = get_pref()
-        logger.setLevel(int(pref.log_level))
-        logger.info(f'Get all Task:\n{json.dumps(node_list_dict, indent=2, ensure_ascii=False)}\n')
-
     def execute(self, context):
         context.window_manager.rsn_running_modal = True
+        context.scene.render.use_file_extension = 1
         # set state
         self.stop = False
         self.rendering = False
         # set and get tree
+        self.render_list_node = context.space_data.node_tree.nodes.get(self.render_list_node_name)
+
         rsn_tree = RSN_NodeTree()
         rsn_tree.set_context_tree_as_wm_tree()
         # init RenderQueue
         self.queue = RenderQueue(nodetree=rsn_tree.get_wm_node_tree(),
                                  render_list_node=self.render_list_node_name)
 
+        print("INIT QUEUE!!!", self.queue)
+
         if self.queue.is_empty():
             context.window_manager.rsn_running_modal = False
             self.report({"WARNING"}, 'Nothing to render！')
             return {"FINISHED"}
 
-        # info log
-        # self.init_logger(self.rsn_queue.task_list_dict)
-        # self.init_process_node()
-        # update for the first render (if there is a viewer node)
-        self.rsn_queue.force_update()
+        self.queue.force_update()
 
         self.append_handles()
 
         # set render in background
         self.ori_render_display_type = context.preferences.view.render_display_type
-        context.preferences.view.render_display_type = self.render_display_type
+        context.preferences.view.render_display_type = self.render_list_node.render_display_type
 
         return {"RUNNING_MODAL"}
+        # return {"FINISHED"}
 
     # update
     def frame_check(self):
         # update task
         self.queue.force_update()
-        if not self.rsn_queue.is_empty():
+        print(self.queue)
+        self.frame_start, self.frame_end, self.frame_step = self.queue.get_frame_range()
 
-            if bpy.context.scene.frame_current >= self.rsn_queue.frame_end:
-                self.rsn_queue.pop()
-                self.rsn_queue.update_task_data()
-                bpy.context.scene.frame_current = self.rsn_queue.frame_start
+        if not self.queue.is_empty():
+            if bpy.context.scene.frame_current >= self.frame_end:
+                self.queue.pop()
+                self.queue.force_update()
+                bpy.context.scene.frame_current = self.frame_start
             else:
-                bpy.context.scene.frame_current += self.rsn_queue.frame_step
+                bpy.context.scene.frame_current += self.frame_step
             # show in nodes
-            self.update_process_node()
+            # self.update_process_node()
 
     def switch2task(self):
         # update task again
-        self.rsn_queue.update_task_data()
+        self.queue.force_update()
 
-        scn = bpy.context.scene
-        scn.render.use_file_extension = 1
-        # update
-        task = self.rsn_queue.task_name
-        bpy.ops.rsn.update_parms(view_mode_handler=task, use_render_mode=True)
+        bpy.context.scene.render.use_file_extension = 1
 
     # finish
     def finish(self):
         # clear_queue/log
-        self.finish_process_node()
-        self.rsn_queue.clear_queue()
+        # self.finish_process_node()
+        self.queue.clear_queue()
         # open folder after render
-        if self.open_dir:
+        if self.render_list_node.open_dir:
             try:
                 output_dir = os.path.dirname(bpy.context.scene.render.filepath)
                 os.startfile(output_dir)
             except:
                 logger.warning('RSN File path error, can not open dir after rendering')
-        if self.clean_path:
+        if self.render_list_node.clean_path:
             bpy.context.scene.render.filepath = ""
         # return display type
         bpy.context.preferences.view.render_display_type = self.ori_render_display_type
 
     def modal(self, context, event):
         if event.type == 'TIMER':
-            if True in (self.rsn_queue.is_empty(), self.stop is True):
+            if True in (self.queue.is_empty(), self.stop is True):
                 # set modal property
                 bpy.context.window_manager.rsn_running_modal = False
                 self.remove_handles()
@@ -207,6 +155,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
 
             elif self.rendering is False:
                 self.switch2task()
+                print("SWITCH")
                 bpy.ops.render.render("INVOKE_DEFAULT", write_still=True)
 
         return {"PASS_THROUGH"}
@@ -264,7 +213,6 @@ def register():
 
     bpy.types.WindowManager.rsn_running_modal = BoolProperty(default=False, description='poll for the button')
     bpy.types.WindowManager.rsn_cur_tree_name = StringProperty(name='current rendering tree', default='')
-    bpy.types.WindowManager.rsn_viewer_node = StringProperty(name='Viewer task name')
 
 
 def unregister():

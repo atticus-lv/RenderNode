@@ -50,10 +50,6 @@ class RSN_OT_UpdateVarCollect(bpy.types.Operator):
             if self.sort:
                 self.sort_items()
 
-        elif self.action == "REMOVE":
-            self.node.node_collect.remove(self.node.node_collect_index)
-            self.node.node_collect_index -= 1 if self.node.node_collect_index != 0 else 0
-
         return {"FINISHED"}
 
     def get_var_nodes(self):
