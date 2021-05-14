@@ -36,15 +36,15 @@ node_categories = [
     ]),
 
     RSNCategory("OBJECT", "Object", items=[
-        nodeitems_utils.NodeItem('RenderNodeObjectInput'),
+        # nodeitems_utils.NodeItem('RenderNodeObjectInput'),
+        # nodeitems_utils.NodeItem('RenderNodeObjectData'),
+        # nodeitems_utils.NodeItem('RenderNodeObjectDisplay'),
+        # nodeitems_utils.NodeItem('RenderNodeObjectMaterial'),
         nodeitems_utils.NodeItem('RSNodeCollectionDisplayNode'),
-        # nodeitems_utils.NodeItem('RSNodeObjectDisplayNode'),
-        nodeitems_utils.NodeItem('RenderNodeObjectDisplay'),
-        # nodeitems_utils.NodeItem('RSNodeObjectMaterialNode'),
-        nodeitems_utils.NodeItem('RenderNodeObjectMaterial'),
+        nodeitems_utils.NodeItem('RSNodeObjectDisplayNode'),
+        nodeitems_utils.NodeItem('RSNodeObjectMaterialNode'),
         nodeitems_utils.NodeItem('RSNodeObjectPSRNode'),
-        # nodeitems_utils.NodeItem('RSNodeObjectDataNode'),
-        nodeitems_utils.NodeItem('RenderNodeObjectData'),
+        nodeitems_utils.NodeItem('RSNodeObjectDataNode'),
 
         nodeitems_utils.NodeItem('RSNodeObjectModifierNode'),
     ]),

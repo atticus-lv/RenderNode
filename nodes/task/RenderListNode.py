@@ -98,12 +98,8 @@ class RSNodeRenderListNode(RenderStackNode):
         row.scale_y = 1.25
         row.scale_x = 1.15
 
-        sheet = row.operator("rsn.render_stack_task", text=f'Render!', icon_value=rsn_icon.get_image_icon_id())
-        sheet.render_list_node_name = self.name
-        sheet.open_dir = self.open_dir
-        sheet.clean_path = self.clean_path
-        sheet.render_display_type = self.render_display_type
-        sheet.processor_node = self.processor_node
+        render = row.operator("rsn.render_stack_task", text=f'Render!', icon_value=rsn_icon.get_image_icon_id())
+        render.render_list_node_name = self.name
 
         row.operator("rsn.update_task_list", text='Refresh', icon="FILE_REFRESH").render_list_name = self.name
 

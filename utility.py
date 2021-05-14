@@ -362,10 +362,10 @@ class RSN_Nodes:
 
 
 class RenderQueue():
-    def __init__(self, nodetree, render_list_node: str):
+    def __init__(self, nodetree, render_list_node):
         """init a rsn queue
         :parm nodetree: a blender node tree(rsn node tree)
-        :parm render_list_node: name of the render_list_node
+        :parm render_list_node: render_list_node
 
         """
         self.nt = nodetree
@@ -375,14 +375,10 @@ class RenderQueue():
         self.init_queue()
 
     def init_queue(self):
-        self.rsn = RSN_Nodes(node_tree=self.nt, root_node_name=self.root_node)
-        self.task_list = self.rsn.get_children_from_render_list(return_dict=0)
+        self.task_list = self.root_node.task_list.keys()
 
         for task in self.task_list:
             self.task_queue.append(task)
-
-        for task in self.task_queue:
-            print(f"QUEUE:{task}")
 
     def is_empty(self):
         return len(self.task_queue) == 0

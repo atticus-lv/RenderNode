@@ -17,6 +17,7 @@ class RSNodeObjectDisplayNode(RenderStackNode):
 
     def init(self, context):
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
+        self.width = 200
 
     def draw_buttons(self, context, layout):
         col = layout.column(align=1)
@@ -24,12 +25,11 @@ class RSNodeObjectDisplayNode(RenderStackNode):
         row = col.row(align=1)
         row.prop(self, "object")
 
-        row.prop(self, 'hide_viewport', text='',
-                 icon='HIDE_OFF' if not self.hide_viewport else 'HIDE_ON')
-        row.prop(self, 'hide_render', text='',
-                 icon='RESTRICT_RENDER_OFF' if not self.hide_render else 'RESTRICT_RENDER_ON')
         if self.object:
-            col.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='Select').name = self.object.name
+            row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.object.name
+
+        col.prop(self, 'hide_viewport')
+        col.prop(self, 'hide_render')
 
     def get_data(self):
         task_data_obj = {}

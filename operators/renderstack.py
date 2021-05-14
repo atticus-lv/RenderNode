@@ -27,6 +27,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
 
     render_list_node_name: StringProperty()
     render_list_node = None
+
     ori_render_display_type = None  # correct display_type after render
 
     # UI
@@ -50,7 +51,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         self.rendering = True
 
     def post(self, dummy, thrd=None):
-        print(f"Finished Task: {self.queue.pop()}")
+        self.frame_check()
         self.rendering = False
 
     def cancelled(self, dummy, thrd=None):
@@ -83,9 +84,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         rsn_tree.set_context_tree_as_wm_tree()
         # init RenderQueue
         self.queue = RenderQueue(nodetree=rsn_tree.get_wm_node_tree(),
-                                 render_list_node=self.render_list_node_name)
-
-        print("INIT QUEUE!!!", self.queue)
+                                 render_list_node=self.render_list_node)
 
         if self.queue.is_empty():
             context.window_manager.rsn_running_modal = False
@@ -107,7 +106,6 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     def frame_check(self):
         # update task
         self.queue.force_update()
-        print(self.queue)
         self.frame_start, self.frame_end, self.frame_step = self.queue.get_frame_range()
 
         if not self.queue.is_empty():
@@ -155,7 +153,6 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
 
             elif self.rendering is False:
                 self.switch2task()
-                print("SWITCH")
                 bpy.ops.render.render("INVOKE_DEFAULT", write_still=True)
 
         return {"PASS_THROUGH"}
@@ -221,4 +218,3 @@ def unregister():
 
     del bpy.types.WindowManager.rsn_running_modal
     del bpy.types.WindowManager.rsn_cur_tree_name
-    del bpy.types.WindowManager.rsn_viewer_node
