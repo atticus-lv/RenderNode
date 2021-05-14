@@ -59,12 +59,10 @@ class RSNodeTaskNode(RenderStackNode):
 
 
 def update_viewer_tasks(self, context):
-    # if context.window_manager.rsn_running_modal is True:
-    #     name = context.window_manager.rsn_cur_tree_name
-    #     nt = bpy.data.node_groups[name]
-    # else:
-    #     nt = context.space_data.node_tree
-    nt = context.space_data.node_tree
+    try:
+        nt = context.space_data.node_tree
+    except AttributeError:
+        return None
 
     for node in nt.nodes:
         if node.bl_idname == 'RSNodeTaskNode' and node.name != context.window_manager.rsn_viewer_node:

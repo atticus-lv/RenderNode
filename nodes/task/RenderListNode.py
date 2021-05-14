@@ -54,7 +54,10 @@ class RSN_OT_UpdateTaskList(bpy.types.Operator):
         for name in task_list:
             item = tree.root_node.task_list.add()
             item.name = name
-            if name in remain: item.render = remain[name]
+            if name in remain:
+                item.render = remain[name]
+            else:
+                item.render = True
 
 
 class RSNodeRenderListNode(RenderStackNode):

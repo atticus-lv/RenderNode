@@ -375,11 +375,8 @@ class RenderQueue():
         self.init_queue()
 
     def init_queue(self):
-        for task_name, render in self.root_node.task_list.items():
-            print(task_name,render)
-            if render:
-                print(task_name)
-                self.task_queue.append(task_name)
+        for item in self.root_node.task_list:
+            if item.render: self.task_queue.append(item.name)
 
     def is_empty(self):
         return len(self.task_queue) == 0
@@ -407,7 +404,6 @@ class RenderQueue():
     def force_update(self):
         if not self.is_empty():
             self.nt.nodes[self.task_queue[0]].is_active_task = True
-            print("FORCE_UPDATE", self.task_queue[0])
 
     def pop(self):
         if not self.is_empty():
