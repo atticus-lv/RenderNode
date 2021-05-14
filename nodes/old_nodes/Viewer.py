@@ -16,38 +16,6 @@ def reroute(node):
     return task_node_name
 
 
-class RSN_OT_AddViewerNode(bpy.types.Operator):
-    bl_idname = 'rsn.add_viewer_node'
-    bl_label = 'Add Viewer Node'
-
-    def execute(self, context):
-        try:
-            nt = context.space_data.edit_tree
-            task = context.space_data.edit_tree.nodes.active
-            loc_x = task.location[0] + 200
-            loc_y = task.location[1] + 25
-            # remove viewer node
-            viewer = None
-            for node in nt.nodes:
-                if node.bl_idname == 'RSNodeViewerNode':
-                    viewer = node
-            if not viewer:
-                viewer = context.space_data.edit_tree.nodes.new(type='RSNodeViewerNode')
-            viewer.location[0] = loc_x
-            viewer.location[1] = loc_y
-
-            nt.links.new(task.outputs[0], viewer.inputs[0])
-            viewer.update()
-            viewer.select = 0
-            # force update
-            dg = context.evaluated_depsgraph_get()
-            dg.update()
-        except:
-            pass
-
-        return {"FINISHED"}
-
-
 class RSNodeViewerNode(RenderStackNode):
     bl_idname = 'RSNodeViewerNode'
     bl_label = 'Viewer'
@@ -99,11 +67,7 @@ def draw_menu(self, context):
         layout.operator("rsn.add_viewer_node", text="View Task")
 
 
-
-
-
 def register():
-    bpy.utils.register_class(RSN_OT_AddViewerNode)
     bpy.utils.register_class(RSNodeViewerNode)
 
     # bpy.types.NODE_MT_context_menu.prepend(draw_menu)

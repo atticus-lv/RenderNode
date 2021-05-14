@@ -57,6 +57,20 @@ class RSNodeTaskNode(RenderStackNode):
 
         return var_collect_data
 
+class RSN_OT_AddViewerNode(bpy.types.Operator):
+    bl_idname = 'rsn.add_viewer_node'
+    bl_label = 'Set Active Task'
+
+    def execute(self, context):
+        try:
+            nt = context.space_data.edit_tree
+            node = context.space_data.edit_tree.nodes.active
+            if node.bl_idname == 'RSNodeTaskNode':
+                node.is_active_task = True
+        except:
+            pass
+
+        return {"FINISHED"}
 
 def update_viewer_tasks(self, context):
     try:
@@ -114,6 +128,7 @@ def update_viewer_tasks(self, context):
 
 def register():
     bpy.utils.register_class(RSNodeTaskNode)
+    bpy.utils.register_class(RSN_OT_AddViewerNode)
 
     bpy.types.WindowManager.rsn_node_list = StringProperty(default='')
     bpy.types.WindowManager.rsn_viewer_node = StringProperty(name='Viewer task name', update=update_viewer_tasks)
@@ -121,6 +136,7 @@ def register():
 
 def unregister():
     bpy.utils.unregister_class(RSNodeTaskNode)
+    bpy.utils.unregister_class(RSN_OT_AddViewerNode)
 
     del bpy.types.WindowManager.rsn_node_list
     del bpy.types.WindowManager.rsn_viewer_node
