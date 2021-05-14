@@ -375,10 +375,11 @@ class RenderQueue():
         self.init_queue()
 
     def init_queue(self):
-        self.task_list = self.root_node.task_list.keys()
-
-        for task in self.task_list:
-            self.task_queue.append(task)
+        for task_name, render in self.root_node.task_list.items():
+            print(task_name,render)
+            if render:
+                print(task_name)
+                self.task_queue.append(task_name)
 
     def is_empty(self):
         return len(self.task_queue) == 0
