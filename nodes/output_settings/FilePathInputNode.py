@@ -67,14 +67,14 @@ class RSNodeFilePathInputNode(RenderStackNode):
         task_data = {}
         # get the save location of the images
         if self.use_blend_file_path:
-            task_data['path'] = os.path.dirname(bpy.data.filepath) + "/"
+            task_data['path'] = "//" #realative path
         else:
             if self.custom_path == '':
-                task_data['path'] = os.path.dirname(bpy.data.filepath) + "/"
+                task_data['path'] = "//"
             else:
                 task_data['path'] = self.custom_path
         # path expression
-        task_data['path_format'] = self.path_format
+        task_data['path_expression'] = self.path_format
         task_data['version'] = str(self.version)
         return task_data
 

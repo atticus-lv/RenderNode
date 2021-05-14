@@ -289,24 +289,28 @@ def draw_callback_nodeoutline(self, context):
         except KeyError:
             pass
 
-    vertices = [(300, 150), (10, 150), (10, 40), (300, 40), ]
-    # text background
-    draw_round_rectangle(shader, vertices, radius=32, colour=(0, 0, 1, self.alpha))
     # draw text
+    ##################
+
+    # properties text
     task_text = "No Active Task!" if context.window_manager.rsn_viewer_node == '' else context.window_manager.rsn_viewer_node
-    draw_text_2d((1, 1, 1, self.alpha), f"Task: {task_text}", 20, 120)
 
     camera = context.scene.camera.name if context.scene.camera else "No scene camera"
-    draw_text_2d((1, 1, 1, self.alpha), f"Camera: {context.scene.camera.name}", 20, 100)
-
-    draw_text_2d((1, 1, 1, self.alpha), f"Engine: {context.scene.render.engine}", 20, 80)
-
-    draw_text_2d((1, 1, 1, self.alpha), f"Frame: {context.scene.frame_start}->{context.scene.frame_end}", 20, 60)
 
     is_save = True if bpy.data.filepath != '' else False
-    file_name = os.path.basename(bpy.data.filepath)
-    file_path_text = context.scene.render.filepath if is_save else "Save your file first!"
-    draw_text_2d((1, 1, 1, self.alpha), f"FilePath: {file_path_text}", 20, 40)
+    file_path_text = bpy.path.relpath(context.scene.render.filepath) if is_save else "Save your file first!"
+
+    # background
+    size = blf.dimensions(0, 2 * file_path_text)
+    vertices = [(10 + size[0], 150 + size[1]), (20, 150 + size[1]), (20, 30), (10 + size[0], 20), ]
+    draw_round_rectangle(shader, vertices, radius=16, colour=(0.25, 0.25, 1, self.alpha))
+
+    # draw text
+    draw_text_2d((1, 1, 1, self.alpha), f"Task: {task_text}", 20, 150)
+    draw_text_2d((1, 1, 1, self.alpha), f"Camera: {camera}", 20, 120)
+    draw_text_2d((1, 1, 1, self.alpha), f"Engine: {context.scene.render.engine}", 20, 90)
+    draw_text_2d((1, 1, 1, self.alpha), f"Frame: {context.scene.frame_start} - {context.scene.frame_end}", 20, 60)
+    draw_text_2d((1, 1, 1, self.alpha), f"FilePath: {file_path_text}", 20, 30)
 
     # restore
     bgl.glDisable(bgl.GL_BLEND)

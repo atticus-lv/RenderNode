@@ -137,16 +137,18 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         """only save files will work"""
         task = self.task_data
         if 'path' in task:
-            if task['path'] != '':
+            if task['path'] == '//':
+                directory_path = bpy.path.abspath(task['path'])
+            else:
                 directory_path = os.path.dirname(task['path'])
-                try:
-                    if not os.path.exists(directory_path):
-                        os.makedirs(directory_path)
-                    return directory_path
-                except Exception as e:
-                    self.report({'ERROR'}, f'File Path: No Such a Path')
+            try:
+                if not os.path.exists(directory_path):
+                    os.makedirs(directory_path)
+                return directory_path
+            except Exception as e:
+                self.report({'ERROR'}, f'File Path: No Such a Path')
         else:
-            return os.path.dirname(bpy.data.filepath) + "/"
+            return '//'
 
     def get_postfix(self):
         """path expression"""
@@ -158,7 +160,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
 
         if 'path' in self.task_data:
 
-            postfix = self.task_data["path_format"]
+            postfix = self.task_data["path_expression"]
             # replace camera name
             if cam:
                 postfix = postfix.replace('$camera', cam.name)
