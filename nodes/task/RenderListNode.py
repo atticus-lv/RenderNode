@@ -18,7 +18,13 @@ class TaskProperty(bpy.types.PropertyGroup):
 class RSN_UL_RenderTaskList(bpy.types.UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
         row = layout.row()
-        row.label(text=item.name, icon="NODE")
+
+        node = context.space_data.node_tree.nodes.get(item.name)
+        if node:
+            row.prop(node, 'is_active_task', text='', emboss=False,
+                     icon="HIDE_OFF" if node.is_active_task else "HIDE_ON")
+
+        row.label(text=item.name)
         row.prop(item, "render", text="", icon="CHECKMARK")
 
 
