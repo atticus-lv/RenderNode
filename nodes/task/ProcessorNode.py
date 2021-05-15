@@ -8,101 +8,59 @@ class RSNodeProcessorNode(RenderStackNode):
     bl_idname = 'RSNodeProcessorNode'
     bl_label = 'Processor'
 
-    count_frames: IntProperty(default=1)
-    done_frames: IntProperty(default=1)
+    active: BoolProperty(default=False)
 
-    all_tasks: StringProperty()
-    curr_task: StringProperty()
-    task_label: StringProperty(default='')
+    task_list: StringProperty()  # store data into node's property
+    cur_task: StringProperty()
 
-    frame_start: IntProperty()
-    frame_end: IntProperty()
-    frame_current: IntProperty()
-
-    green: FloatVectorProperty(subtype='COLOR', default=(0, 1, 0), min=1, max=1)
-    red: FloatVectorProperty(subtype='COLOR', default=(0, 0, 0), min=1, max=1)
+    # draw properties
+    done_col: FloatVectorProperty(name='Done Color', subtype='COLOR', default=(0, 1, 0), min=1, max=1)
+    wait_col: FloatVectorProperty(name='Wait Color', subtype='COLOR', default=(0, 0, 0), min=1, max=1)
 
     def init(self, context):
-        self.inputs.new('RSNodeSocketRenderList', 'Render List')
         self.width = 225
 
     def draw_buttons_ext(self, context, layout):
-        layout.prop(self, "green", text="Color 1")
-        layout.prop(self, "red", text="Color 2")
+        layout.prop(self, "done_col")
+        layout.prop(self, "wait_col")
 
     def draw_buttons(self, context, layout):
-        done = self.count_frames - self.done_frames
-        percent = done / self.count_frames
-        # total
+        if not self.active:
+            layout.label(text='Waiting For Render...')
+        task_list = self.task_list.split(',')
+
+        cur_id = task_list.index(self.cur_task)
+        total_process = (cur_id + 1) / len(task_list)
+
         col = layout.column(align=1)
-        col.scale_y = 1
+        col.alignment = "CENTER"
 
-        col.label(text=f"Total: {1 - percent:.0%} | Process: {self.done_frames} / {self.count_frames}")
+        col.label(text=f'Total Process:{total_process * 100}%')
+        sub = col.split(factor=total_process, align=1)
+        sub.scale_y = 0.25
+        sub.prop(self, "done_col", text='')
+        sub.prop(self, "wait_col", text='')
 
-        col1 = col
-        row = col.row(align=1)
-        sub = row.split(factor=1 - percent, align=1)
-        if self.done_frames == 0:
-            col1.label(text='Rendering the first image...', icon='SORTTIME')
-            row.prop(self, 'red', text="")
-        else:
-            sub.prop(self, 'green', text="")
-            sub.prop(self, 'red', text="")
-        # tasks
-        curr_done = (self.frame_current + 1 - self.frame_start) / (self.frame_end + 1 - self.frame_start)
-        task_list = self.all_tasks.split(",")
-
-        layout.separator(factor=0.5)
-
-        if self.all_tasks != '':
-            try:
-                index = task_list.index(self.curr_task)
-                for i, name in enumerate(task_list):
-                    # task finish
-                    if i < index:
-                        box = layout.box().column(align=1)
-                        row = box.row()
-                        row.label(text=name, icon='CHECKBOX_HLT')
-                    # task rendering
-                    elif i == index:
-                        if name != 'RENDER_FINISHED':
-
-                            box = layout.box().column(align=1)
-                            col = box.row().column(align=1)
-                            # title
-                            label = self.task_label
-                            col.label(icon="RECOVER_LAST",
-                                      text=f'{name} | {label}')
-                            # process bar
-                            col.label(
-                                text=f"{curr_done:.0%}: {self.frame_start} - {self.frame_current} - {self.frame_end}")
-                            col.separator(factor=0.5)
-                            row = col.row()
-                            row.scale_y = 0.3
-                            if curr_done == 0:
-                                row.prop(self, 'red', text="")
-                            else:
-                                sub = row.split(factor=curr_done, align=1)
-                                sub.prop(self, 'green', text="")
-                                sub.prop(self, 'red', text="")
-
-                        # last task finish
-                        elif name == 'RENDER_FINISHED':
-                            layout.separator(factor=0.5)
-                            col = layout.column(align=1)
-                            col.label(text='RENDER FINISHED', icon='HEART')
-                    # task waiting
-                    elif i > index and name != 'RENDER_FINISHED':
-                        # stop render
-                        if name == 'RENDER_STOPED':
-                            col = layout.column(align=1)
-                            col.label(text='RENDER STOPED', icon='ORPHAN_DATA')
-                        # task waiting
-                        else:
-                            box = layout.box().column(align=1)
-                            box.label(text=name, icon='CHECKBOX_DEHLT')
-            except:
-                pass
+        col = layout.column(align=1)
+        # process of single task
+        for index, task_name in enumerate(task_list):
+            # finish list
+            if index < cur_id:
+                col.box().label(text=task_name, icon="CHECKBOX_HLT")
+            # current
+            elif index == cur_id:
+                if not context.window_manager.rsn_running_modal:
+                    box = col.box()
+                    box.label(text=task_name, icon="CHECKBOX_HLT")
+                    col.label(text='Render Finished!', icon='HEART')
+                else:
+                    row = col.box().row(align=1)
+                    row.label(text=task_name, icon="RENDER_STILL")
+                    row.label(text="Process:{:.2f}%".format(
+                        context.scene.frame_current / (context.scene.frame_end + 1 - context.scene.frame_start)))
+            # waiting
+            elif index > cur_id:
+                col.box().label(text=task_name, icon="CHECKBOX_DEHLT")
 
 
 def register():

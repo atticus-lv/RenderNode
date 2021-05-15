@@ -3,6 +3,8 @@ from ...utility import *
 from ...nodes.BASE.node_tree import RenderStackNode
 from ...ui.icon_utils import RSN_Preview
 
+from itertools import groupby
+
 rsn_icon = RSN_Preview(image='RSN.png', name='rsn_icon')
 
 
@@ -18,8 +20,9 @@ class TaskProperty(bpy.types.PropertyGroup):
 class RSN_UL_RenderTaskList(bpy.types.UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
         row = layout.row()
+        nt = context.space_data.node_tree
 
-        node = context.space_data.node_tree.nodes.get(item.name)
+        node = nt.nodes.get(item.name)
         if node:
             row.prop(node, 'is_active_task', text='', emboss=False,
                      icon="HIDE_OFF" if node.is_active_task else "HIDE_ON")
@@ -109,6 +112,7 @@ class RSNodeRenderListNode(RenderStackNode):
 
         render = row.operator("rsn.render_stack_task", text=f'Render!', icon_value=rsn_icon.get_image_icon_id())
         render.render_list_node_name = self.name
+        render.processor_node = self.processor_node
 
         row.operator("rsn.update_task_list", text='Refresh', icon="FILE_REFRESH").render_list_name = self.name
 
@@ -119,6 +123,7 @@ class RSNodeRenderListNode(RenderStackNode):
             col.prop(self, 'clean_path')
             col.prop(context.scene.render, "use_lock_interface", toggle=False)
             col.prop(self, 'render_display_type')
+            col.prop_search(self, 'processor_node', context.space_data.node_tree, "nodes", text='Process Node')
 
     def update(self):
         self.auto_update_inputs('RSNodeSocketRenderList', "Task")

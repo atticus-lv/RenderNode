@@ -92,6 +92,14 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
             return {"FINISHED"}
 
         self.queue.force_update()
+        # set processor_node
+        if self.processor_node:
+            node = self.queue.nt.nodes[self.processor_node]
+            try:
+                node.active = True
+                node.task_list = context.window_manager.rsn_cur_task_list
+            except Exception as e:
+                self.report({"WARNING"}, 'Processor Node Error!')
 
         self.append_handles()
 
@@ -100,7 +108,6 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         context.preferences.view.render_display_type = self.render_list_node.render_display_type
 
         return {"RUNNING_MODAL"}
-        # return {"FINISHED"}
 
     # update
     def frame_check(self):
@@ -121,6 +128,14 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     def switch2task(self):
         # update task again
         self.queue.force_update()
+
+        if self.processor_node:
+            node = self.queue.nt.nodes[self.processor_node]
+            try:
+                node.active = True
+                node.cur_task = bpy.context.window_manager.rsn_viewer_node
+            except Exception as e:
+                pass
 
         bpy.context.scene.render.use_file_extension = 1
 
