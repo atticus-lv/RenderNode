@@ -15,14 +15,6 @@ def dpifac():
     return prefs.dpi * prefs.pixel_size / 72
 
 
-def draw_text_2d(color, text, x, y):
-    font_id = 0
-    blf.position(font_id, x, y, 0)
-    blf.color(font_id, color[0], color[1], color[2], color[3])
-    blf.size(font_id, 20, 72)
-    blf.draw(font_id, text)
-
-
 def draw_tri_fan(shader, vertices, colour):
     batch = batch_for_shader(shader, 'TRI_FAN', {"pos": vertices})
     shader.bind()

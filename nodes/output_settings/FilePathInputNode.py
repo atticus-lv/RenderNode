@@ -60,7 +60,7 @@ class RSNodeFilePathInputNode(RenderStackNode):
                 pass
             # viewer node tips
             pref = get_pref()
-            if not pref.node_viewer.update_path:
+            if not pref.node_task.update_path:
                 layout.label(text='Update is disable in viewer node', icon='ERROR')
 
     def get_data(self):

@@ -113,7 +113,7 @@ class RenderStackNode(bpy.types.Node):
             if self.name in node_list:
                 pref = get_pref()
                 bpy.ops.rsn.update_parms(view_mode_handler=bpy.context.window_manager.rsn_viewer_node,
-                                         update_scripts=pref.node_viewer.update_scripts,
+                                         update_scripts=pref.node_task.update_scripts,
                                          use_render_mode=False)
 
     ### new method ###

@@ -7,7 +7,7 @@ from bpy.props import *
 from gpu_extras.batch import batch_for_shader
 from math import cos, sin, pi, hypot
 
-from .utils import dpifac, draw_tri_fan, get_node_from_pos, draw_text_2d
+from .utils import dpifac, draw_tri_fan
 from ...preferences import get_pref
 
 
@@ -42,6 +42,14 @@ def get_node_vertices(nlocx, nlocy, ndimx, ndimy):
     bottom_right = (nlocx + ndimx, nlocy - ndimy)
 
     return top_left, top_right, bottom_left, bottom_right
+
+
+def draw_text_2d(color, text, x, y, size=20):
+    font_id = 0
+    blf.position(font_id, x, y, 0)
+    blf.color(font_id, color[0], color[1], color[2], color[3])
+    blf.size(font_id, size, 72)
+    blf.draw(font_id, text)
 
 
 def draw_round_rectangle(shader, points, radius=8, colour=(1.0, 1.0, 1.0, 0.7)):
@@ -303,17 +311,19 @@ def draw_callback_nodeoutline(self, context):
     # background
     r, g, b = self.background_color
     size = blf.dimensions(0, 2 * file_path_text)
+    size = [v / context.preferences.view.ui_scale for v in size]
     vertices = [(10 + size[0], 150 + size[1]), (20, 150 + size[1]), (20, 30), (10 + size[0], 20), ]
     draw_round_rectangle(shader, vertices, radius=18, colour=(0, 0, 0, self.alpha))  # shadow
     draw_round_rectangle(shader, vertices, radius=14, colour=(r, g, b, self.alpha))
 
     # draw text
     r, g, b = self.text_color
-    draw_text_2d((r, g, b, self.alpha), f"Task: {task_text}", 20, 150)
-    draw_text_2d((r, g, b, self.alpha), f"Camera: {camera}", 20, 120)
-    draw_text_2d((r, g, b, self.alpha), f"Engine: {context.scene.render.engine}", 20, 90)
-    draw_text_2d((r, g, b, self.alpha), f"Frame: {context.scene.frame_start} - {context.scene.frame_end}", 20, 60)
-    draw_text_2d((r, g, b, self.alpha), f"FilePath: {file_path_text}", 20, 30)
+    size = 20
+    draw_text_2d((r, g, b, self.alpha, size), f"Task: {task_text}", 20, 150)
+    draw_text_2d((r, g, b, self.alpha, size), f"Camera: {camera}", 20, 120)
+    draw_text_2d((r, g, b, self.alpha, size), f"Engine: {context.scene.render.engine}", 20, 90)
+    draw_text_2d((r, g, b, self.alpha, size), f"Frame: {context.scene.frame_start} - {context.scene.frame_end}", 20, 60)
+    draw_text_2d((r, g, b, self.alpha, size), f"FilePath: {file_path_text}", 20, 30)
 
     # restore
     bgl.glDisable(bgl.GL_BLEND)

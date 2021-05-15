@@ -23,10 +23,10 @@ class PropsDrawNodes(bpy.types.PropertyGroup):
     file_path_color: FloatVectorProperty(name='File Path Color', subtype='COLOR',
                                          default=(1.0, 0.8, 0))
 
-    background_color: FloatVectorProperty(name='File Path Color', subtype='COLOR',
+    background_color: FloatVectorProperty(name='Background Color', subtype='COLOR',
                                           default=(0.2, 0.2, 0.4))
 
-    text_color: FloatVectorProperty(name='File Path Color', subtype='COLOR',
+    text_color: FloatVectorProperty(name='Text Color', subtype='COLOR',
                                     default=(1, 1, 1))
 
 
@@ -112,7 +112,7 @@ class RSN_Preference(bpy.types.AddonPreferences):
 
     node_view_layer_passes: PointerProperty(type=NodeViewLayerPassedProps)
     node_smtp: PointerProperty(type=NodeSmtpProps)
-    node_viewer: PointerProperty(type=NodeTaskProps)
+    node_task: PointerProperty(type=NodeTaskProps)
     node_file_path: PointerProperty(type=NodeFilePathProps)
 
     def draw(self, context):
@@ -121,11 +121,11 @@ class RSN_Preference(bpy.types.AddonPreferences):
         if self.option == "PROPERTIES":
             self.draw_properties()
         elif self.option == "NODES":
-            self.draw_nodes()
+            self.draw_nodes_option()
         elif self.option == 'KEYMAP':
             self.drawKeymap()
 
-    def draw_nodes(self):
+    def draw_nodes_option(self):
         layout = self.layout
         col = layout.column(align=1)
 
@@ -203,14 +203,14 @@ class RSN_Preference(bpy.types.AddonPreferences):
             box.prop(self.node_smtp, "password", text='Password')
 
     def viewer_node(self, box):
-        box.prop(self.node_viewer, 'show', text="Task Node (Update Option)", emboss=False,
-                 icon='TRIA_DOWN' if self.node_viewer.show else 'TRIA_RIGHT')
-        if self.node_viewer.show:
+        box.prop(self.node_task, 'show', text="Task Node (Update Option)", emboss=False,
+                 icon='TRIA_DOWN' if self.node_task.show else 'TRIA_RIGHT')
+        if self.node_task.show:
             box.use_property_split = True
 
-            box.prop(self.node_viewer, 'update_scripts')
-            box.prop(self.node_viewer, 'update_path')
-            box.prop(self.node_viewer, 'update_view_layer_passes')
+            box.prop(self.node_task, 'update_scripts')
+            box.prop(self.node_task, 'update_path')
+            box.prop(self.node_task, 'update_view_layer_passes')
 
     def drawKeymap(self):
         col = self.layout.box().column()

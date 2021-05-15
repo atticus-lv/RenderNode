@@ -114,7 +114,7 @@ def update_viewer_tasks(self, context):
                 try:
                     bpy.context.window_manager.rsn_viewer_node = context.window_manager.rsn_viewer_node
                     bpy.ops.rsn.update_parms(view_mode_handler=context.window_manager.rsn_viewer_node,
-                                             update_scripts=pref.node_viewer.update_scripts,
+                                             update_scripts=pref.node_task.update_scripts,
                                              use_render_mode=False)
                     # This error shows when the dragging the link off viewer node(Works well with knife tool)
                     # this seems to be a blender error

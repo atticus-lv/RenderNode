@@ -447,11 +447,11 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             self.update_world()
             self.ssm_light_studio()
 
-            if pref.node_viewer.update_scripts or self.use_render_mode:
+            if pref.node_task.update_scripts or self.use_render_mode:
                 self.updata_scripts()
-            if pref.node_viewer.update_path or self.use_render_mode:
+            if pref.node_task.update_path or self.use_render_mode:
                 self.update_path()
-            if pref.node_viewer.update_view_layer_passes or self.use_render_mode:
+            if pref.node_task.update_view_layer_passes or self.use_render_mode:
                 self.update_view_layer_passes()
             if self.use_render_mode:
                 self.send_email()

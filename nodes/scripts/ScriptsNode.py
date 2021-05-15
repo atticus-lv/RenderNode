@@ -43,7 +43,7 @@ class RSNodeScriptsNode(RenderStackNode):
             layout.prop(self, "file", text="")
 
         pref = get_pref()
-        if not pref.node_viewer.update_scripts:
+        if not pref.node_task.update_scripts:
             layout.label(text='Update is disable in viewer node', icon='ERROR')
 
     def get_data(self):

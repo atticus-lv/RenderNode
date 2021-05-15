@@ -48,9 +48,9 @@ class RSNodeViewerNode(RenderStackNode):
         pref = get_pref()
         row.prop(self, 'show_pref', icon_only=1, icon='TRIA_DOWN' if self.show_pref else "TRIA_LEFT")
         if self.show_pref:
-            layout.prop(pref.node_viewer, 'update_scripts', toggle=1)
-            layout.prop(pref.node_viewer, 'update_path', toggle=1)
-            layout.prop(pref.node_viewer, 'update_view_layer_passes', toggle=1)
+            layout.prop(pref.node_task, 'update_scripts', toggle=1)
+            layout.prop(pref.node_task, 'update_path', toggle=1)
+            layout.prop(pref.node_task, 'update_view_layer_passes', toggle=1)
 
     def draw_buttons_ext(self, context, layout):
         box = layout.box()
