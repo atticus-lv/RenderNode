@@ -36,10 +36,10 @@ node_categories = [
     ]),
 
     RSNCategory("OBJECT", "Object", items=[
-        # nodeitems_utils.NodeItem('RenderNodeObjectInput'),
-        # nodeitems_utils.NodeItem('RenderNodeObjectData'),
-        # nodeitems_utils.NodeItem('RenderNodeObjectDisplay'),
-        # nodeitems_utils.NodeItem('RenderNodeObjectMaterial'),
+        nodeitems_utils.NodeItem('RenderNodeObjectInput'),
+        # nodeitems_utils.NodeItem('RenderNodeObjectData'), # temp, maybe remove later
+        nodeitems_utils.NodeItem('RenderNodeObjectDisplay'),
+        nodeitems_utils.NodeItem('RenderNodeObjectMaterial'),
         nodeitems_utils.NodeItem('RSNodeCollectionDisplayNode'),
         nodeitems_utils.NodeItem('RSNodeObjectDisplayNode'),
         nodeitems_utils.NodeItem('RSNodeObjectMaterialNode'),
@@ -80,7 +80,7 @@ node_categories = [
         }),
         nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Switch", settings={
             "node_type": repr("SWITCH"),
-            "label"    : repr("Switch"),
+            "label": repr("Switch"),
         }),
         # nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Version", settings={
         #     "node_type": repr("VERSION"),

@@ -112,9 +112,9 @@ class RenderNodeObjectData(RenderStackNode):
                 # self.set_warning(msg=f"{e}")
 
 
-def register():
-    bpy.utils.register_class(RenderNodeObjectData)
-
-
-def unregister():
-    bpy.utils.unregister_class(RenderNodeObjectData)
+# def register():
+#     bpy.utils.register_class(RenderNodeObjectData)
+#
+#
+# def unregister():
+#     bpy.utils.unregister_class(RenderNodeObjectData)

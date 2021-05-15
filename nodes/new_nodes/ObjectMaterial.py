@@ -20,7 +20,7 @@ def update_node(self, context):
 
 class RenderNodeObjectMaterial(RenderStackNode):
     bl_idname = 'RenderNodeObjectMaterial'
-    bl_label = 'Object Material'
+    bl_label = 'Object Material +'
 
     def init(self, context):
         self.create_prop('RenderNodeSocketObject', 'object', 'Object')

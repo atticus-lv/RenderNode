@@ -5,7 +5,7 @@ from ...nodes.BASE.node_tree import RenderStackNode
 
 class RenderNodeObjectDisplay(RenderStackNode):
     bl_idname = 'RenderNodeObjectDisplay'
-    bl_label = 'Object Display'
+    bl_label = 'Object Display +'
 
     def init(self, context):
         self.create_prop('RenderNodeSocketObject', 'object', 'Object')
