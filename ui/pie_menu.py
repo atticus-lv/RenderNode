@@ -45,15 +45,23 @@ class RSN_MT_PieMenu(Menu):
         ##
 
         ## right
-        pie.separator()
+        col1 = pie.column()
+
+        # simple_icon = preview_collections["rsn_icon"]["simple_task_icon"]
+
+        col = col1.box().column()
+        # merge_icon = preview_collections["rsn_icon"]["merge_icon"]
+        col.operator("rsn.merge_selected_nodes", icon_value=merge_icon.get_image_icon_id()).make_version = 0
+
+        col.operator("rsn.merge_selected_nodes", icon_value=version_icon.get_image_icon_id(),
+                     text='Make Variants').make_version = 1
+
+        col.operator("rsn.split_to_selected", text="Split active to selected",
+                     icon_value=split_icon.get_image_icon_id())
         ##
 
         # bottom
         col = pie.column(align=1)
-        col.operator("rsn.search_nodes", icon="VIEWZOOM", text='Quick Search')
-        col.separator(factor=0.5)
-
-        # col.template_ID(context.space_data, "node_tree", new="node.new_node_tree")
 
         for g in bpy.data.node_groups:
             if g.bl_idname == 'RenderStackNodeTree':
@@ -63,7 +71,6 @@ class RSN_MT_PieMenu(Menu):
                 else:
                     sub.label(icon='HIDE_OFF', text=g.name)
                 sub.prop(bpy.data.node_groups[g.name], 'use_fake_user', icon_only=1)
-
         ##
         pie.separator()
         ##
@@ -72,33 +79,16 @@ class RSN_MT_PieMenu(Menu):
         pie.separator()
         ##
 
-        col1 = pie.column(align=1)
-        col1.separator(factor=2)
-        # simple_icon = preview_collections["rsn_icon"]["simple_task_icon"]
-
-        col = col1.box().column()
-        # merge_icon = preview_collections["rsn_icon"]["merge_icon"]
-        col.operator("rsn.merge_selected_nodes", icon_value=merge_icon.get_image_icon_id()).make_version = 0
-        col.operator("rsn.merge_selected_nodes", icon_value=version_icon.get_image_icon_id(),
-                     text='Make Variants').make_version = 1
-        col.operator("rsn.split_to_selected", text="Split active to selected",
-                     icon_value=split_icon.get_image_icon_id())
+        ##
+        pie.separator()
+        ##
 
         ##
         pie.separator()
         ##
 
         # right bottom
-        col = pie.column().box().column()
-        col.scale_x = 1.25
-        col.operator("rsn.move_node", text='Simple Task', icon_value=simple_task_icon.get_image_icon_id())
-
-        col.separator(factor=0.5)
-
-        if context.scene.RSNBusyDrawing is True:
-            draw = col.prop(context.scene, 'RSNBusyDrawing', text='Draw Nodes', toggle=1, icon='GREASEPENCIL')
-        else:
-            col.operator("rsn.draw_nodes", icon='GREASEPENCIL')
+        pie.operator("rsn.move_node", text='Simple Task', icon_value=simple_task_icon.get_image_icon_id())
 
         ##
         pie.separator()
