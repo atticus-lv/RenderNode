@@ -26,6 +26,8 @@ class RSN_UL_RenderTaskList(bpy.types.UIList):
         if node:
             row.prop(node, 'is_active_task', text='', emboss=False,
                      icon="HIDE_OFF" if node.is_active_task else "HIDE_ON")
+        else:
+            row.label(text='', icon='ERROR')
 
         row.label(text=item.name)
         row.prop(item, "render", text="", icon="CHECKMARK")
@@ -110,11 +112,13 @@ class RSNodeRenderListNode(RenderStackNode):
         row.scale_y = 1.25
         row.scale_x = 1.15
 
-        render = row.operator("rsn.render_stack_task", text=f'Render!', icon_value=rsn_icon.get_image_icon_id())
+        row.operator("rsn.update_task_list", text='', icon="FILE_REFRESH").render_list_name = self.name
+
+        render = row.operator("rsn.render_stack_task", text=f'Render!',
+                              icon='SHADING_RENDERED')  # icon_value=rsn_icon.get_image_icon_id()
+
         render.render_list_node_name = self.name
         render.processor_node = self.processor_node
-
-        row.operator("rsn.update_task_list", text='Refresh', icon="FILE_REFRESH").render_list_name = self.name
 
         row.prop(self, "show_action", icon='PREFERENCES', text='')
         if self.show_action:
