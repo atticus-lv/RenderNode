@@ -9,6 +9,27 @@ def get_pref():
     return bpy.context.preferences.addons.get(__folder_name__).preferences
 
 
+class PropsDrawNodes(bpy.types.PropertyGroup):
+    border_radius: FloatProperty(name='Border Radius',
+                                 description='Scale of the border when draw task nodes',
+                                 default=5, min=2, soft_min=2, soft_max=8)
+
+    settiings_color: FloatVectorProperty(name='Border Color', subtype='COLOR',
+                                         default=(0.2, 1.0, 0.2))
+
+    task_color: FloatVectorProperty(name='Task Color', subtype='COLOR',
+                                    default=(0, 1.0, 1.0))
+
+    file_path_color: FloatVectorProperty(name='File Path Color', subtype='COLOR',
+                                         default=(1.0, 0.8, 0))
+
+    background_color: FloatVectorProperty(name='File Path Color', subtype='COLOR',
+                                          default=(0.2, 0.2, 0.4))
+
+    text_color: FloatVectorProperty(name='File Path Color', subtype='COLOR',
+                                    default=(1, 1, 1))
+
+
 class NodeViewLayerPassedProps(bpy.types.PropertyGroup):
     show: BoolProperty(name="Dropdown")
 
@@ -31,22 +52,9 @@ class NodeSmtpProps(bpy.types.PropertyGroup):
         subtype='PASSWORD')
 
 
-class NodeViewerProps(bpy.types.PropertyGroup):
+class NodeTaskProps(bpy.types.PropertyGroup):
     show: BoolProperty(name="Dropdown", default=True)
-
-    border_radius: FloatProperty(name='Border Radius',
-                                 description='Scale of the border when draw task nodes',
-                                 default=5, min=2, soft_min=2, soft_max=8)
-
-    settiings_color: FloatVectorProperty(name='Border Color', subtype='COLOR',
-                                         default=(0.2, 1.0, 0.2))
-
-    task_color: FloatVectorProperty(name='Task Color', subtype='COLOR',
-                                    default=(0, 1.0, 1.0))
-
-    file_path_color: FloatVectorProperty(name='File Path Color', subtype='COLOR',
-                                         default=(1.0, 0.8, 0))
-
+    # update_properties
     update_scripts: BoolProperty(name='Update Scripts',
                                  description="Update scripts node when using viewer node",
                                  default=False)
@@ -81,6 +89,8 @@ class RSN_Preference(bpy.types.AddonPreferences):
         ('KEYMAP', 'Keymap', ''), ],
         default='NODES')
 
+    draw_nodes: PointerProperty(type=PropsDrawNodes)
+
     # Tab Search
     quick_place: BoolProperty(name="Quick Place",
                               description="When using the quick search to add nodes,quick place without moveing it",
@@ -102,7 +112,7 @@ class RSN_Preference(bpy.types.AddonPreferences):
 
     node_view_layer_passes: PointerProperty(type=NodeViewLayerPassedProps)
     node_smtp: PointerProperty(type=NodeSmtpProps)
-    node_viewer: PointerProperty(type=NodeViewerProps)
+    node_viewer: PointerProperty(type=NodeTaskProps)
     node_file_path: PointerProperty(type=NodeFilePathProps)
 
     def draw(self, context):
@@ -148,12 +158,16 @@ class RSN_Preference(bpy.types.AddonPreferences):
 
         box = col.box().split().column(align=1)
         box.label(text="Draw Nodes")
-        box.prop(self.node_viewer, 'border_radius', slider=1)
-        box.prop(self.node_viewer, 'settiings_color')
+        box.prop(self.draw_nodes, 'border_radius', slider=1)
+        box.prop(self.draw_nodes, 'settiings_color')
         box.separator(factor=1)
 
-        box.prop(self.node_viewer, 'task_color')
-        box.prop(self.node_viewer, 'file_path_color')
+        box.prop(self.draw_nodes, 'task_color')
+        box.prop(self.draw_nodes, 'file_path_color')
+        box.separator(factor=1)
+
+        box.prop(self.draw_nodes, 'background_color')
+        box.prop(self.draw_nodes, 'text_color')
 
         layout.separator(factor=0.5)
 
@@ -233,10 +247,12 @@ class RSN_Preference(bpy.types.AddonPreferences):
 addon_keymaps = []
 
 classes = (
+    PropsDrawNodes,
+
     NodeViewLayerPassedProps,
     NodeSmtpProps,
     NodeFilePathProps,
-    NodeViewerProps,
+    NodeTaskProps,
     # pref
     RSN_Preference,
 )

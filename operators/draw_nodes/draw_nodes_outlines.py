@@ -301,16 +301,19 @@ def draw_callback_nodeoutline(self, context):
     file_path_text = bpy.path.relpath(context.scene.render.filepath) if is_save else "Save your file first!"
 
     # background
+    r, g, b = self.background_color
     size = blf.dimensions(0, 2 * file_path_text)
     vertices = [(10 + size[0], 150 + size[1]), (20, 150 + size[1]), (20, 30), (10 + size[0], 20), ]
-    draw_round_rectangle(shader, vertices, radius=16, colour=(0.25, 0.25, 1, self.alpha))
+    draw_round_rectangle(shader, vertices, radius=18, colour=(0, 0, 0, self.alpha))  # shadow
+    draw_round_rectangle(shader, vertices, radius=14, colour=(r, g, b, self.alpha))
 
     # draw text
-    draw_text_2d((1, 1, 1, self.alpha), f"Task: {task_text}", 20, 150)
-    draw_text_2d((1, 1, 1, self.alpha), f"Camera: {camera}", 20, 120)
-    draw_text_2d((1, 1, 1, self.alpha), f"Engine: {context.scene.render.engine}", 20, 90)
-    draw_text_2d((1, 1, 1, self.alpha), f"Frame: {context.scene.frame_start} - {context.scene.frame_end}", 20, 60)
-    draw_text_2d((1, 1, 1, self.alpha), f"FilePath: {file_path_text}", 20, 30)
+    r, g, b = self.text_color
+    draw_text_2d((r, g, b, self.alpha), f"Task: {task_text}", 20, 150)
+    draw_text_2d((r, g, b, self.alpha), f"Camera: {camera}", 20, 120)
+    draw_text_2d((r, g, b, self.alpha), f"Engine: {context.scene.render.engine}", 20, 90)
+    draw_text_2d((r, g, b, self.alpha), f"Frame: {context.scene.frame_start} - {context.scene.frame_end}", 20, 60)
+    draw_text_2d((r, g, b, self.alpha), f"FilePath: {file_path_text}", 20, 30)
 
     # restore
     bgl.glDisable(bgl.GL_BLEND)
@@ -346,11 +349,15 @@ class RSN_OT_DrawNodes(Operator):
     def invoke(self, context, event):
         # init draw values
         self.alpha = 0
-        self.radius = get_pref().node_viewer.border_radius
+        self.radius = get_pref().draw_nodes.border_radius
         # node color
-        self.settiings_color = get_pref().node_viewer.settiings_color
-        self.task_color = get_pref().node_viewer.task_color
-        self.file_path_color = get_pref().node_viewer.file_path_color
+        self.settiings_color = get_pref().draw_nodes.settiings_color
+        self.task_color = get_pref().draw_nodes.task_color
+        self.file_path_color = get_pref().draw_nodes.file_path_color
+        # background color
+        self.background_color = get_pref().draw_nodes.background_color
+        # text color
+        self.text_color = get_pref().draw_nodes.text_color
 
         if True in {context.area.type != 'NODE_EDITOR',
                     context.space_data.edit_tree is None,
