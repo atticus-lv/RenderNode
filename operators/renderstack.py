@@ -94,8 +94,8 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         self.queue.force_update()
         # set processor_node
         if self.processor_node:
-            node = self.queue.nt.nodes[self.processor_node]
             try:
+                node = self.queue.nt.nodes[self.processor_node]
                 node.active = True
                 node.task_list = context.window_manager.rsn_cur_task_list
             except Exception as e:
@@ -130,8 +130,8 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         self.queue.force_update()
 
         if self.processor_node:
-            node = self.queue.nt.nodes[self.processor_node]
             try:
+                node = self.queue.nt.nodes[self.processor_node]
                 node.active = True
                 node.cur_task = bpy.context.window_manager.rsn_viewer_node
             except Exception as e:
@@ -141,8 +141,6 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
 
     # finish
     def finish(self):
-        # clear_queue/log
-        # self.finish_process_node()
         self.queue.clear_queue()
         # open folder after render
         if self.render_list_node.open_dir:
