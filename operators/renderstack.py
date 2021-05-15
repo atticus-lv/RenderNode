@@ -217,6 +217,6 @@ def unregister():
     for cls in classes:
         bpy.utils.unregister_class(cls)
 
-    def bpy.types.WindowManager.rsn_cur_task_list
+    del bpy.types.WindowManager.rsn_cur_task_list
     del bpy.types.WindowManager.rsn_running_modal
     del bpy.types.WindowManager.rsn_cur_tree_name
