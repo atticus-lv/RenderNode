@@ -32,7 +32,7 @@ class NodeSmtpProps(bpy.types.PropertyGroup):
 
 
 class NodeViewerProps(bpy.types.PropertyGroup):
-    show: BoolProperty(name="Dropdown")
+    show: BoolProperty(name="Dropdown", default=True)
 
     border_radius: FloatProperty(name='Border Radius',
                                  description='Scale of the border when draw task nodes',
@@ -81,16 +81,21 @@ class RSN_Preference(bpy.types.AddonPreferences):
         ('KEYMAP', 'Keymap', ''), ],
         default='NODES')
 
+    # Tab Search
     quick_place: BoolProperty(name="Quick Place",
                               description="When using the quick search to add nodes,quick place without moveing it",
                               default=False)
+    limited_search: BoolProperty(name='Limited Search Area',
+                                 description='Tab Search only in Render Editor',
+                                 default=False)
 
-    log_level: EnumProperty(items=[
-        ('10', 'Debug', ''),
-        ('20', 'Info', ''),
-        ('30', 'Warning', ''),
-        ('40', 'Error', '')],
-        default='30', name='Log Level')
+    log_level: EnumProperty(name='Log Level',
+                            items=[
+                                ('10', 'Debug', ''),
+                                ('20', 'Info', ''),
+                                ('30', 'Warning', ''),
+                                ('40', 'Error', '')],
+                            default='30', )
 
     need_update: BoolProperty(name='Need Update')
     latest_version: IntProperty()
@@ -139,6 +144,7 @@ class RSN_Preference(bpy.types.AddonPreferences):
         box = col.box().split().column(align=1)
         box.label(text="Tab Search")
         box.prop(self, 'quick_place')
+        box.prop(self, 'limited_search')
 
         box = col.box().split().column(align=1)
         box.label(text="Draw Nodes")
@@ -158,7 +164,7 @@ class RSN_Preference(bpy.types.AddonPreferences):
         # row.operator('rsn.check_update', icon='URL',
         #              text='Check Update' if not self.need_update else f"New Version {''.join(str(self.latest_version).split())}!")
 
-    def view_layer_passes_node(self,box):
+    def view_layer_passes_node(self, box):
         box.prop(self.node_view_layer_passes, 'show', text="View Layer Passes Node", emboss=False,
                  icon='TRIA_DOWN' if self.node_view_layer_passes.show else 'TRIA_RIGHT')
         if self.node_view_layer_passes.show:
@@ -183,7 +189,7 @@ class RSN_Preference(bpy.types.AddonPreferences):
             box.prop(self.node_smtp, "password", text='Password')
 
     def viewer_node(self, box):
-        box.prop(self.node_viewer, 'show', text="Viewer Node", emboss=False,
+        box.prop(self.node_viewer, 'show', text="Task Node (Update Option)", emboss=False,
                  icon='TRIA_DOWN' if self.node_viewer.show else 'TRIA_RIGHT')
         if self.node_viewer.show:
             box.use_property_split = True

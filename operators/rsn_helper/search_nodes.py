@@ -11,38 +11,12 @@ class RSN_OT_SearchNodes(bpy.types.Operator):
     # bl_property = "my_search"
     bl_options = {"REGISTER", "UNDO"}
 
-    # def node_enum_items(self, context):
-    #     node_items_list = []
-    #     for index, item in enumerate(nodeitems_utils.node_items_iter(context)):
-    #         if isinstance(item, nodeitems_utils.NodeItem):
-    #             node_items_list.append((item.nodetype, item.label, ''))
-    #
-    #     print(node_items_list)
-    #     return node_items_list
-    #
-    # def create_node(self, context, node_type=None):
-    #     if node_type:
-    #         bpy.ops.node.select_all(action='DESELECT')
-    #
-    #         node = context.space_data.edit_tree.nodes.new(type=node_type)
-    #
-    #         node.select = True
-    #         context.space_data.edit_tree.nodes.active = node
-    #         node.location = context.space_data.cursor_location
-    #         if not get_pref().quick_place:
-    #             bpy.ops.node.translate_attach_remove_on_cancel('INVOKE_DEFAULT')
-
-    #         node.location = space.cursor_location
-
-    # def invoke(self, context, event):
-    #     context.window_manager.invoke_search_popup(self)
-    #     return {'RUNNING_MODAL'}
-
     @classmethod
     def poll(self, context):
-        return context.space_data and hasattr(context.space_data, 'edit_tree')
-
-    
+        if context.space_data and hasattr(context.space_data, 'node_tree'):
+            if get_pref().limited_search:
+                return context.area.ui_type == 'RenderStackNodeTree'
+            return True
 
     def execute(self, context):
         try:

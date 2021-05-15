@@ -93,7 +93,7 @@ class RSNodeRenderListNode(RenderStackNode):
 
     def init(self, context):
         self.inputs.new('RSNodeSocketRenderList', "Task")
-        self.width = 250
+        self.width = 275
 
     def draw_buttons(self, context, layout):
         col = layout.column(align=1)
@@ -116,14 +116,14 @@ class RSNodeRenderListNode(RenderStackNode):
 
         row.operator("rsn.update_task_list", text='Refresh', icon="FILE_REFRESH").render_list_name = self.name
 
-        row.prop(self, "show_action", icon="TRIA_DOWN" if self.show_action else "TRIA_LEFT", text='')
+        row.prop(self, "show_action", icon='PREFERENCES', text='')
         if self.show_action:
             col = col.box().split().column(align=1)
             col.prop(self, 'open_dir')
             col.prop(self, 'clean_path')
             col.prop(context.scene.render, "use_lock_interface", toggle=False)
             col.prop(self, 'render_display_type')
-            col.prop_search(self, 'processor_node', context.space_data.node_tree, "nodes", text='Process Node')
+            col.prop_search(self, 'processor_node', context.space_data.node_tree, "nodes")
 
     def update(self):
         self.auto_update_inputs('RSNodeSocketRenderList', "Task")
