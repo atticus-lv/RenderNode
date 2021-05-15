@@ -208,6 +208,7 @@ def register():
     for cls in classes:
         bpy.utils.register_class(cls)
 
+    bpy.types.WindowManager.rsn_cur_task_list = StringProperty()
     bpy.types.WindowManager.rsn_running_modal = BoolProperty(default=False, description='poll for the button')
     bpy.types.WindowManager.rsn_cur_tree_name = StringProperty(name='current rendering tree', default='')
 
@@ -216,5 +217,6 @@ def unregister():
     for cls in classes:
         bpy.utils.unregister_class(cls)
 
+    def bpy.types.WindowManager.rsn_cur_task_list
     del bpy.types.WindowManager.rsn_running_modal
     del bpy.types.WindowManager.rsn_cur_tree_name

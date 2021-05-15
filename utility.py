@@ -372,11 +372,18 @@ class RenderQueue():
         self.root_node = render_list_node
         self.task_queue = deque()
 
+        self.task_list = []
+
         self.init_queue()
 
     def init_queue(self):
         for item in self.root_node.task_list:
-            if item.render: self.task_queue.append(item.name)
+            if item.render:
+                self.task_queue.append(item.name)
+                self.task_list.append(item.name)
+
+        # for processing visualization
+        bpy.context.window_manager.rsn_cur_task_list = ','.join(self.task_list)
 
     def is_empty(self):
         return len(self.task_queue) == 0
@@ -411,3 +418,4 @@ class RenderQueue():
 
     def clear_queue(self):
         self.task_queue.clear()
+        bpy.context.window_manager.rsn_cur_task_list = ''
