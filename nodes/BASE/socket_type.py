@@ -69,8 +69,10 @@ class RenderNodeSocketString(RenderNodeSocket):
 class RenderNodeSocketVector(RenderNodeSocket):
     bl_idname = 'RenderNodeSocketVector'
     bl_label = 'RenderNodeSocketVector'
+    bl_property = 'value'
 
-    value: FloatVectorProperty(name='Vector', update=update_node)
+    value: FloatVectorProperty(name='Vector', default=(1.0, 1.0, 1.0),
+                               update=update_node)
 
     def draw_color(self, context, node):
         return 0.5, 0.3, 1.0, 1

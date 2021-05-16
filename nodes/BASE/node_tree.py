@@ -45,12 +45,17 @@ class RenderStackNode(bpy.types.Node):
 
     node_dict = {}
 
-    def create_prop(self, socket_type, socket_name, socket_label):
-        self.inputs.new(socket_type, socket_name)
-        input = self.inputs[-1]
+    def create_prop(self, socket_type, socket_name, socket_label, default_value=None):
+        if self.inputs.get(socket_name):
+            return None
+
+        input = self.inputs.new(socket_type, socket_name)
         input.text = socket_label
 
-        self.node_dict[socket_name] = self.inputs[socket_name].value
+        if default_value: input.value = default_value
+
+        # store to node_dict
+        self.node_dict[socket_name] = input.value
 
     def remove_prop(self, socket_name):
         input = self.inputs.get(socket_name)
@@ -128,10 +133,8 @@ class RenderStackNode(bpy.types.Node):
                 self.node_dict[input.name] = input.value
             else:
                 node = self.reroute_socket_node(input, self)
-                print(node)
                 if hasattr(node, 'value'):
                     self.node_dict[input.name] = node.value
-                    print(node.value)
                     self.node_dict[input.name] = node.value
 
     def process(self):

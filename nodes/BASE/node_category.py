@@ -41,6 +41,7 @@ node_categories = [
         nodeitems_utils.NodeItem('RenderNodeMaterialInput'),
         nodeitems_utils.NodeItem('RenderNodeObjectDisplay'),
         nodeitems_utils.NodeItem('RenderNodeObjectMaterial'),
+        nodeitems_utils.NodeItem('RenderNodeObjectPSR'),
         # nodeitems_utils.NodeItem('RenderNodeObjectPSR'),
         # nodeitems_utils.NodeItem('RenderNodeObjectData'),  # temp, maybe remove later
         nodeitems_utils.NodeItem('RSNodeCollectionDisplayNode'),
