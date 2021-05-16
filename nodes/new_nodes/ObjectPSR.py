@@ -41,9 +41,6 @@ class RN_OT_AcceptUpdate(bpy.types.Operator):
 
 
 def update_node(self, context):
-    if self.accept_mode:
-        pass
-
     if self.use_p:
         self.create_prop('RenderNodeSocketVector', 'location', 'Location', default_value=(0, 0, 0))
     else:
@@ -59,7 +56,8 @@ def update_node(self, context):
     else:
         self.remove_prop('rotation')
 
-    self.update_parms()
+    if not self.accept_mode:
+        self.update_parms()
 
 
 class RenderNodeObjectPSR(RenderStackNode):
