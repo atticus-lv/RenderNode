@@ -337,7 +337,7 @@ def draw_callback_nodeoutline(self, context):
     r, g, b = self.text_color
     size = 20
     for i, text in enumerate(texts):
-        draw_text_2d((r, g, b, self.alpha, size), text, 20, bottom - step * i)
+        draw_text_2d((r, g, b, self.alpha, size), text, 20, top - step * i)
 
     # restore
     #####################

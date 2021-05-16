@@ -50,9 +50,7 @@ class RSN_OT_SearchAndLink(bpy.types.Operator):
         return {'FINISHED'}
 
     def invoke(self, context, event):
-
         context.window_manager.invoke_search_popup(self)
-
         return {'FINISHED'}
 
     def node_enum_items(self, context):
