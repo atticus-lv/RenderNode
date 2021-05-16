@@ -24,7 +24,7 @@ class RSNodeViewLayerPassesNode(RenderStackNode):
         layout.prop(self, 'use_passes', toggle=1)
 
         pref = get_pref()
-        if not pref.node_viewer.update_view_layer_passes:
+        if not pref.node_task.update_view_layer_passes:
             layout.label(text='Update is disable in viewer node', icon='ERROR')
 
     def get_data(self):

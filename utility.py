@@ -94,11 +94,7 @@ class RSN_Nodes:
         self.root_node = self.get_node_from_name(root_node_name)
 
     def get_node_from_name(self, name):
-        try:
-            node = self.nt.nodes[name]
-            return node
-        except KeyError:
-            return None
+        return self.nt.nodes.get(name)
 
     def get_root_node(self):
         return self.root_node
@@ -292,8 +288,16 @@ class RSN_Nodes:
             task_node = self.nt.nodes[task_name]
             task_data['name'] = task_name
             task_data['label'] = task_node.label
+
+            # new method
+            if node.bl_idname.startswith('RenderNode'):
+                node.process()
+
+            # old method/nodes
+            #####################
+
             # Object select Nodes
-            if node.bl_idname == 'RSNodePropertyInputNode':
+            elif node.bl_idname == 'RSNodePropertyInputNode':
                 if 'property' not in task_data:
                     task_data['property'] = {}
                 task_data['property'].update(node.get_data())
@@ -308,7 +312,7 @@ class RSN_Nodes:
                     task_data['object_modifier'] = {}
                 task_data['object_modifier'].update(node.get_data())
 
-            elif node.bl_idname == 'RSNodeObjectDisplayNode':
+            elif node.bl_idname in 'RSNodeObjectDisplayNode':
                 if 'object_display' not in task_data:
                     task_data['object_display'] = {}
                 task_data['object_display'].update(node.get_data())
@@ -357,72 +361,61 @@ class RSN_Nodes:
         return task_data
 
 
-class RSN_Queue():
-    def __init__(self, nodetree, render_list_node: str):
+class RenderQueue():
+    def __init__(self, nodetree, render_list_node):
         """init a rsn queue
         :parm nodetree: a blender node tree(rsn node tree)
-        :parm render_list_node: name of the render_list_node
+        :parm render_list_node: render_list_node
 
         """
-
         self.nt = nodetree
         self.root_node = render_list_node
         self.task_queue = deque()
-        self.task_data_queue = deque()
 
-        self.init_rsn_task()
+        self.task_list = []
+
         self.init_queue()
 
-    def init_rsn_task(self):
-        self.rsn = RSN_Nodes(node_tree=self.nt, root_node_name=self.root_node)
-        self.task_list_dict = self.rsn.get_children_from_render_list(return_dict=1)
-
     def init_queue(self):
-        """get all the task_data
-        fill the key 'frame' for the latter render
-        """
+        for item in self.root_node.task_list:
+            if item.render:
+                self.task_queue.append(item.name)
+                self.task_list.append(item.name)
 
-        for task in self.task_list_dict:
-            task_data = self.rsn.get_task_data(task_name=task, task_dict=self.task_list_dict)
-
-            if "frame_start" not in task_data:
-                task_data["frame_start"] = bpy.context.scene.frame_current
-                task_data["frame_end"] = bpy.context.scene.frame_current
-                task_data["frame_step"] = bpy.context.scene.frame_step
-
-            self.task_queue.append(task)
-            self.task_data_queue.append(task_data)
+        # for processing visualization
+        bpy.context.window_manager.rsn_cur_task_list = ','.join(self.task_list)
 
     def is_empty(self):
         return len(self.task_queue) == 0
 
-    def get_length(self):
-        return len(self.task_queue)
+    def get_frame_range(self):
+        self.force_update()
+        # if not frame range node input, consider as render single frmae
+        frame_start = frame_end = bpy.context.scene.frame_start
+        frame_step = bpy.context.scene.frame_step
 
-    def update_task_data(self):
+        # search frame range node
+        node_list = bpy.context.window_manager.rsn_node_list.split(',')
+        frame_range_nodes = [self.nt.nodes[name] for name in node_list if
+                             self.nt.nodes[name].bl_idname == 'RSNodeFrameRangeInputNode']
+
+        # get the last frame range node for current task
+        if len(frame_range_nodes) != 0:
+            node = frame_range_nodes[-1]
+            frame_start = node.frame_start
+            frame_end = node.frame_end
+            frame_step = node.frame_step
+
+        return frame_start, frame_end, frame_step
+
+    def force_update(self):
         if not self.is_empty():
-            self.task_name = self.task_queue[0]
-            self.task_data = self.task_data_queue[0]
-            self.frame_start = self.task_data_queue[0]["frame_start"]
-            self.frame_end = self.task_data_queue[0]["frame_end"]
-            self.frame_step = self.task_data_queue[0]["frame_step"]
-
-    def get_frame_length(self):
-        length = 0
-        for task_data in self.task_data_queue:
-            length += (task_data['frame_end'] + 1 - task_data['frame_start']) // task_data['frame_step']
-        return length
+            self.nt.nodes[self.task_queue[0]].is_active_task = True
 
     def pop(self):
         if not self.is_empty():
-            return self.task_queue.popleft(), self.task_data_queue.popleft()
+            return self.task_queue.popleft()
 
     def clear_queue(self):
         self.task_queue.clear()
-        self.task_data_queue.clear()
-
-        self.task_name = None
-        self.task_data = None
-        self.frame_start = None
-        self.frame_end = None
-        self.frame_step = None
+        bpy.context.window_manager.rsn_cur_task_list = ''

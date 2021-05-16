@@ -25,17 +25,16 @@ class RSNodeObjectDisplayNode(RenderStackNode):
         row = col.row(align=1)
         row.prop(self, "object")
 
-        row.prop(self, 'hide_viewport', text='',
-                 icon='HIDE_OFF' if not self.hide_viewport else 'HIDE_ON')
-        row.prop(self, 'hide_render', text='',
-                 icon='RESTRICT_RENDER_OFF' if not self.hide_render else 'RESTRICT_RENDER_ON')
         if self.object:
-            col.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='Select').name = self.object.name
+            row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.object.name
+
+        col.prop(self, 'hide_viewport')
+        col.prop(self, 'hide_render')
 
     def get_data(self):
         task_data_obj = {}
         if self.object:
-            task_data_obj[self.name] = {'object'   : f"bpy.data.objects['{self.object.name}']",
+            task_data_obj[self.name] = {'object'       : f"bpy.data.objects['{self.object.name}']",
                                         'hide_viewport': self.hide_viewport,
                                         'hide_render'  : self.hide_render}
 

@@ -137,16 +137,18 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         """only save files will work"""
         task = self.task_data
         if 'path' in task:
-            if task['path'] != '':
+            if task['path'] == '//':
+                directory_path = bpy.path.abspath(task['path'])
+            else:
                 directory_path = os.path.dirname(task['path'])
-                try:
-                    if not os.path.exists(directory_path):
-                        os.makedirs(directory_path)
-                    return directory_path
-                except Exception as e:
-                    self.report({'ERROR'}, f'File Path: No Such a Path')
+            try:
+                if not os.path.exists(directory_path):
+                    os.makedirs(directory_path)
+                return directory_path
+            except Exception as e:
+                self.report({'ERROR'}, f'File Path: No Such a Path')
         else:
-            return os.path.dirname(bpy.data.filepath) + "/"
+            return '//'
 
     def get_postfix(self):
         """path expression"""
@@ -158,7 +160,7 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
 
         if 'path' in self.task_data:
 
-            postfix = self.task_data["path_format"]
+            postfix = self.task_data["path_expression"]
             # replace camera name
             if cam:
                 postfix = postfix.replace('$camera', cam.name)
@@ -413,7 +415,6 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             cam = eval(self.task_data['camera'])
             if cam: compare(bpy.context.scene, 'camera', cam)
 
-    @timefn
     def data_changes(self):
         pref = get_pref()
         logger.setLevel(int(pref.log_level))
@@ -446,11 +447,11 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             self.update_world()
             self.ssm_light_studio()
 
-            if pref.node_viewer.update_scripts or self.use_render_mode:
+            if pref.node_task.update_scripts or self.use_render_mode:
                 self.updata_scripts()
-            if pref.node_viewer.update_path or self.use_render_mode:
+            if pref.node_task.update_path or self.use_render_mode:
                 self.update_path()
-            if pref.node_viewer.update_view_layer_passes or self.use_render_mode:
+            if pref.node_task.update_view_layer_passes or self.use_render_mode:
                 self.update_view_layer_passes()
             if self.use_render_mode:
                 self.send_email()

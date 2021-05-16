@@ -1,12 +1,142 @@
-import bpy, blf, bgl
-import gpu
-from bpy.types import Operator, Panel, Menu
-from bpy.props import *
-from gpu_extras.batch import batch_for_shader
-from math import cos, sin, pi, hypot
+from math import cos, sin, pi
 
-from .utils import dpifac, draw_tri_fan, get_node_from_pos, draw_text_2d
+import bgl
+import blf
+import bpy
+import gpu
+
+from bpy.props import *
+from bpy.types import Operator
+from gpu_extras.batch import batch_for_shader
+
+from .utils import dpifac, draw_tri_fan
 from ...preferences import get_pref
+
+
+def find_node_parent(node):
+    def get_parent(obj):
+        if hasattr(obj, "parent"):
+            get_parent(obj.parent)
+        else:
+            return obj
+
+    return get_parent(node)
+
+
+def get_node_location(node):
+    nlocx = (node.location.x + 1) * dpifac()
+    nlocy = (node.location.y + 1) * dpifac()
+    ndimx = node.dimensions.x
+    ndimy = node.dimensions.y
+
+    # # if node have parent
+    # loc = find_node_parent(node).location
+    # nlocx += loc.x
+    # nlocy += loc.y
+
+    return nlocx, nlocy, ndimx, ndimy
+
+
+def get_node_vertices(nlocx, nlocy, ndimx, ndimy):
+    top_left = (nlocx, nlocy)
+    top_right = (nlocx + ndimx, nlocy)
+    bottom_left = (nlocx, nlocy - ndimy)
+    bottom_right = (nlocx + ndimx, nlocy - ndimy)
+
+    return top_left, top_right, bottom_left, bottom_right
+
+
+def draw_text_2d(color, text, x, y, size=20):
+    font_id = 0
+    blf.position(font_id, x, y, 0)
+    blf.color(font_id, color[0], color[1], color[2], color[3])
+    blf.size(font_id, size, 72)
+    blf.draw(font_id, text)
+
+
+def draw_round_rectangle(shader, points, radius=8, colour=(1.0, 1.0, 1.0, 0.7)):
+    sides = 16
+    radius = 16
+
+    # fill
+    draw_tri_fan(shader, points, colour)
+
+    top_left = points[1]
+    top_right = points[0]
+    bottom_left = points[2]
+    bottom_right = points[3]
+
+    # Top edge
+    top_left_top = (top_left[0], top_left[1] + radius)
+    top_right_top = (top_right[0], top_right[1] + radius)
+    vertices = [top_right_top, top_left_top, top_left, top_right]
+    draw_tri_fan(shader, vertices, colour)
+
+    # Left edge
+    top_left_left = (top_left[0] - radius, top_left[1])
+    bottom_left_left = (bottom_left[0] - radius, bottom_left[1])
+    vertices = [top_left, top_left_left, bottom_left_left, bottom_left]
+    draw_tri_fan(shader, vertices, colour)
+
+    # Bottom edge
+    bottom_left_bottom = (bottom_left[0], bottom_left[1] - radius)
+    bottom_right_bottom = (bottom_right[0], bottom_right[1] - radius)
+    vertices = [bottom_right, bottom_left, bottom_left_bottom, bottom_right_bottom]
+    draw_tri_fan(shader, vertices, colour)
+
+    # right edge
+    top_right_right = (top_right[0] + radius, top_right[1])
+    bottom_right_right = (bottom_right[0] + radius, bottom_right[1])
+    vertices = [top_right_right, top_right, bottom_right, bottom_right_right]
+    draw_tri_fan(shader, vertices, colour)
+
+    # Top right corner
+    vertices = [top_right]
+    mx = top_right[0]
+    my = top_right[1]
+    for i in range(sides + 1):
+        if 0 <= i <= 4:
+            cosine = radius * cos(i * 2 * pi / sides) + mx
+            sine = radius * sin(i * 2 * pi / sides) + my
+            vertices.append((cosine, sine))
+
+    draw_tri_fan(shader, vertices, colour)
+
+    # Top left corner
+    vertices = [top_left]
+    mx = top_left[0]
+    my = top_left[1]
+    for i in range(sides + 1):
+        if 4 <= i <= 8:
+            cosine = radius * cos(i * 2 * pi / sides) + mx
+            sine = radius * sin(i * 2 * pi / sides) + my
+            vertices.append((cosine, sine))
+
+    draw_tri_fan(shader, vertices, colour)
+
+    # Bottom left corner
+    vertices = [bottom_left]
+    mx = bottom_left[0]
+    my = bottom_left[1]
+    for i in range(sides + 1):
+        if 8 <= i <= 12:
+            cosine = radius * cos(i * 2 * pi / sides) + mx
+            sine = radius * sin(i * 2 * pi / sides) + my
+            vertices.append((cosine, sine))
+
+    draw_tri_fan(shader, vertices, colour)
+
+    # Bottom right corner
+    vertices = [bottom_right]
+    mx = bottom_right[0]
+    my = bottom_right[1]
+    for i in range(sides + 1):
+        if 12 <= i <= 16:
+            cosine = radius * cos(i * 2 * pi / sides) + mx
+            sine = radius * sin(i * 2 * pi / sides) + my
+            vertices.append((cosine, sine))
+
+    draw_tri_fan(shader, vertices, colour)
 
 
 def draw_rounded_node_border(shader, node, radius=8, colour=(1.0, 1.0, 1.0, 0.7)):
@@ -15,20 +145,7 @@ def draw_rounded_node_border(shader, node, radius=8, colour=(1.0, 1.0, 1.0, 0.7)
     sides = 16
     radius = radius * dpifac()
 
-    nlocx = (node.location.x + 1) * dpifac()
-    nlocy = (node.location.y + 1) * dpifac()
-    ndimx = node.dimensions.x
-    ndimy = node.dimensions.y
-    # This is a stupid way to do this...
-    if node.parent:
-        nlocx += node.parent.location.x
-        nlocy += node.parent.location.y
-        if node.parent.parent:
-            nlocx += node.parent.parent.location.x
-            nlocy += node.parent.parent.location.y
-            if node.parent.parent.parent:
-                nlocx += node.parent.parent.parent.location.x
-                nlocy += node.parent.parent.parent.location.y
+    nlocx, nlocy, ndimx, ndimy = get_node_location(node)
 
     if node.hide:
         nlocx += -1
@@ -40,8 +157,10 @@ def draw_rounded_node_border(shader, node, radius=8, colour=(1.0, 1.0, 1.0, 0.7)
         ndimy = 0
         radius += 6
 
+    top_left, top_right, bottom_left, bottom_right = get_node_vertices(nlocx, nlocy, ndimx, ndimy)
+
     # Top left corner
-    mx, my = bpy.context.region.view2d.view_to_region(nlocx, nlocy, clip=False)
+    mx, my = bpy.context.region.view2d.view_to_region(top_left[0], top_left[1], clip=False)
     vertices = [(mx, my)]
     for i in range(sides + 1):
         if (4 <= i <= 8) and my > bottom_bar and mx < area_width:
@@ -52,7 +171,7 @@ def draw_rounded_node_border(shader, node, radius=8, colour=(1.0, 1.0, 1.0, 0.7)
     draw_tri_fan(shader, vertices, colour)
 
     # Top right corner
-    mx, my = bpy.context.region.view2d.view_to_region(nlocx + ndimx, nlocy, clip=False)
+    mx, my = bpy.context.region.view2d.view_to_region(top_right[0], top_right[1], clip=False)
     vertices = [(mx, my)]
     for i in range(sides + 1):
         if (0 <= i <= 4) and my > bottom_bar and mx < area_width:
@@ -63,10 +182,10 @@ def draw_rounded_node_border(shader, node, radius=8, colour=(1.0, 1.0, 1.0, 0.7)
     draw_tri_fan(shader, vertices, colour)
 
     # Bottom left corner
-    mx, my = bpy.context.region.view2d.view_to_region(nlocx, nlocy - ndimy, clip=False)
+    mx, my = bpy.context.region.view2d.view_to_region(bottom_left[0], bottom_left[1], clip=False)
     vertices = [(mx, my)]
     for i in range(sides + 1):
-        if (8 <= i <= 12):
+        if 8 <= i <= 12:
             if my > bottom_bar and mx < area_width:
                 cosine = radius * cos(i * 2 * pi / sides) + mx
                 sine = radius * sin(i * 2 * pi / sides) + my
@@ -75,7 +194,7 @@ def draw_rounded_node_border(shader, node, radius=8, colour=(1.0, 1.0, 1.0, 0.7)
     draw_tri_fan(shader, vertices, colour)
 
     # Bottom right corner
-    mx, my = bpy.context.region.view2d.view_to_region(nlocx + ndimx, nlocy - ndimy, clip=False)
+    mx, my = bpy.context.region.view2d.view_to_region(bottom_right[0], bottom_right[1], clip=False)
     vertices = [(mx, my)]
     for i in range(sides + 1):
         if (12 <= i <= 16) and my > bottom_bar and mx < area_width:
@@ -154,6 +273,10 @@ def draw_callback_nodeoutline(self, context):
 
     shader = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
 
+    # draw outline
+    ########################
+
+    # set color
     task_outer = (self.task_color[0], self.task_color[1], self.task_color[2], self.alpha)
     file_path_outer = (self.file_path_color[0], self.file_path_color[1], self.file_path_color[2], self.alpha)
 
@@ -162,39 +285,67 @@ def draw_callback_nodeoutline(self, context):
 
     node_list = context.window_manager.rsn_node_list.split(',')
 
+    # draw all nodes
     for node_name in node_list:
         try:
             node = context.space_data.edit_tree.nodes[node_name]
             if node.bl_idname == 'RSNodeTaskNode':
                 draw_rounded_node_border(shader, node, radius=self.radius * 1.25, colour=task_outer)
                 draw_rounded_node_border(shader, node, radius=self.radius * 1.25 - 1.25, colour=col_inner)
-
             elif node.bl_idname == 'RSNodeFilePathInputNode':
                 draw_rounded_node_border(shader, node, radius=self.radius, colour=file_path_outer)
                 draw_rounded_node_border(shader, node, radius=self.radius - 1, colour=col_inner)
-
             else:
                 draw_rounded_node_border(shader, node, radius=self.radius, colour=col_outer)
                 draw_rounded_node_border(shader, node, radius=self.radius - 1, colour=col_inner)
-
         except KeyError:
             pass
 
-    # draw text information
+    # draw text
+    ##################
+
+    # properties text
     task_text = "No Active Task!" if context.window_manager.rsn_viewer_node == '' else context.window_manager.rsn_viewer_node
-    draw_text_2d((1, 1, 1, self.alpha), f"Task: {task_text}", 20, 70)
-
+    camera = context.scene.camera.name if context.scene.camera else "No scene camera"
     is_save = True if bpy.data.filepath != '' else False
-    file_path_text = context.scene.render.filepath if is_save else "Save your file first!"
-    draw_text_2d((1, 1, 1, self.alpha), f"FilePath: {file_path_text}", 20, 40)
+    file_path_text = bpy.path.relpath(context.scene.render.filepath) if is_save else "Save your file first!"
+
+    texts = [
+        f"Task: {task_text}",
+        f"Camera: {camera}",
+        f"Engine: {context.scene.render.engine}",
+        f"Frame: {context.scene.frame_start} - {context.scene.frame_end}",
+        f"FilePath: {file_path_text}",
+    ]
+
+    # text background
+    r, g, b = self.background_color
+    longest_text = max(texts, key=len, default='')
+    size = blf.dimensions(0, longest_text)  # get the longest text
+    size = [v * 1.5 / context.preferences.view.ui_scale for v in size]  # scale with the ui scale
+
+    # set corner
+    top = 125
+    bottom = 25
+    step = 25
+
+    vertices = [(10 + size[0], top + size[1]), (20, top + size[1]), (20, 25), (10 + size[0], bottom), ]
+    draw_round_rectangle(shader, vertices, radius=18, colour=(0, 0, 0, self.alpha))  # shadow
+    draw_round_rectangle(shader, vertices, radius=14, colour=(r, g, b, self.alpha))  # main box
+
+    # draw texts
+    r, g, b = self.text_color
+    size = 20
+    for i, text in enumerate(texts):
+        draw_text_2d((r, g, b, self.alpha, size), text, 20, top - step * i)
+
+    # restore
+    #####################
+    bgl.glDisable(bgl.GL_BLEND)
+    bgl.glDisable(bgl.GL_LINE_SMOOTH)
 
 
-# restore
-bgl.glDisable(bgl.GL_BLEND)
-bgl.glDisable(bgl.GL_LINE_SMOOTH)
-
-
-class RSN_OT_DrawNodes(Operator, ):
+class RSN_OT_DrawNodes(Operator):
     """"""
     bl_idname = "rsn.draw_nodes"
     bl_label = "Draw Nodes"
@@ -206,14 +357,14 @@ class RSN_OT_DrawNodes(Operator, ):
         if event.type == 'TIMER':
             # show draw
             if context.scene.RSNBusyDrawing:
-                if self.alpha < 0.5: self.alpha += 0.02
+                if self.alpha < 0.5: self.alpha += 0.02  # show
 
             # close draw
             else:
                 if self.alpha > 0:
-                    self.alpha -= 0.02
+                    self.alpha -= 0.02  # fade
                     return {'RUNNING_MODAL'}
-                # remove handles
+                # remove timer / handles
                 context.window_manager.event_timer_remove(self._timer)
                 bpy.types.SpaceNodeEditor.draw_handler_remove(self._handle, 'WINDOW')
                 return {'FINISHED'}
@@ -221,21 +372,28 @@ class RSN_OT_DrawNodes(Operator, ):
         return {'PASS_THROUGH'}
 
     def invoke(self, context, event):
-        # init draw values
-        self.alpha = 0
-        self.radius = get_pref().node_viewer.border_radius
-        # node color
-        self.settiings_color = get_pref().node_viewer.settiings_color
-        self.task_color = get_pref().node_viewer.task_color
-        self.file_path_color = get_pref().node_viewer.file_path_color
-
         if True in {context.area.type != 'NODE_EDITOR',
                     context.space_data.edit_tree is None,
                     context.space_data.edit_tree.bl_idname != 'RenderStackNodeTree'}:
             self.report({'WARNING'}, "NodeEditor not found, cannot run operator")
             return {'CANCELLED'}
 
+        # init draw values
+        #####################
+
+        self.alpha = 0
+        self.radius = get_pref().draw_nodes.border_radius
+        # node color
+        self.settiings_color = get_pref().draw_nodes.settiings_color
+        self.task_color = get_pref().draw_nodes.task_color
+        self.file_path_color = get_pref().draw_nodes.file_path_color
+        # background color
+        self.background_color = get_pref().draw_nodes.background_color
+        # text color
+        self.text_color = get_pref().draw_nodes.text_color
+
         # set statue
+        ##################
         context.scene.RSNBusyDrawing = True
         # add timer and handles
         self._timer = context.window_manager.event_timer_add(0.01, window=context.window)

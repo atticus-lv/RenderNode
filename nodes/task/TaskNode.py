@@ -2,9 +2,7 @@ import bpy
 from bpy.props import *
 from ...nodes.BASE.node_tree import RenderStackNode
 from ...utility import *
-
-
-
+from ...preferences import get_pref
 
 
 def update_node(self, context):
@@ -12,13 +10,22 @@ def update_node(self, context):
         self.update_parms()
 
 
+def set_active_task(self, context):
+    if self.is_active_task is True:
+        bpy.context.window_manager.rsn_viewer_node = self.name
+        print(f"RenderNode:Set Active Task: {self.name}")
+
+
 class RSNodeTaskNode(RenderStackNode):
-    """A simple Task node
-    :parm node_list: for checking update of various nodes
-    """
+    """A simple Task node"""
     bl_idname = "RSNodeTaskNode"
     bl_label = 'Task'
 
+    # set active and update
+    ###############
+    is_active_task: BoolProperty(default=False,
+                                 update=set_active_task,
+                                 description='Set as active Task')
 
     def init(self, context):
         self.inputs.new('RSNodeSocketTaskSettings', "Settings")
@@ -28,46 +35,14 @@ class RSNodeTaskNode(RenderStackNode):
         # bpy.ops.rsn.edit_var_collect(action="ADD", task_node_name=self.name)
 
     def draw_buttons(self, context, layout):
-        layout.use_property_split = 1
-        layout.use_property_decorate = 0
-
-        row = layout.row(align=1)
+        row = layout.row()
         row.prop(self, 'label', text='')
-        row.operator("rsn.get_task_info", text="", icon="INFO").task_name = self.name
 
-    def draw_buttons_ext(self, context, layout):
-        pass
-        # Various Collect List
-        # layout.label(text="Various Collect:")
-        # row = layout.row(align=1)
-        # row.template_list(
-        #     "RSN_UL_TaskVarCollectList", "The list",
-        #     self, "var_collect_list",
-        #     self, "var_collect_list_index", )
-        #
-        # # edit items bUtton
-        # col = row.column(align=1)
-        # # Add item
-        # ADD = col.operator("rsn.edit_var_collect", text="", icon="ADD")
-        # ADD.task_node_name = self.name
-        # ADD.action = "ADD"
-        # # Remove item
-        # REMOVE = col.operator("rsn.edit_var_collect", text="", icon="REMOVE")
-        # REMOVE.task_node_name = self.name
-        # REMOVE.action = "REMOVE"
-        #
-        # # Current Various Collect
-        # layout.label(text="Current Various Collect:")
-        # if len(self.var_collect_list) != 0:
-        #     curr_var_collect = self.var_collect_list[self.var_collect_list_index]
-        #     row = layout.row(align=1)
-        #     row.template_list(
-        #         "RSN_UL_VarCollectNodeList", "The list",
-        #         curr_var_collect, "node_properties",
-        #         curr_var_collect, "node_properties_index", )
+        row.prop(self, 'is_active_task', text='', icon="HIDE_OFF" if self.is_active_task else "HIDE_ON")
 
     def update(self):
         self.auto_update_inputs('RSNodeSocketTaskSettings', "Settings")
+        set_active_task(self, bpy.context)
 
     def get_data(self):
         var_collect_data = {}
@@ -82,51 +57,86 @@ class RSNodeTaskNode(RenderStackNode):
 
         return var_collect_data
 
-
-class RSN_OT_GetTaskInfo(bpy.types.Operator):
-    """Information"""
-    bl_idname = "rsn.get_task_info"
-    bl_label = "Information"
-
-    task_name: StringProperty(default='')
-    task_data: StringProperty(default='')
+class RSN_OT_AddViewerNode(bpy.types.Operator):
+    bl_idname = 'rsn.add_viewer_node'
+    bl_label = 'Set Active Task'
 
     def execute(self, context):
+        try:
+            nt = context.space_data.edit_tree
+            node = context.space_data.edit_tree.nodes.active
+            if node.bl_idname == 'RSNodeTaskNode':
+                node.is_active_task = True
+        except:
+            pass
+
         return {"FINISHED"}
 
-    def draw(self, context):
-        layout = self.layout
-        row = layout.split(factor=0.3, align=1)
-        row.operator('rsn.clip_board', text='Copy').data_to_copy = self.task_data
-        row.label(text='')
+def update_viewer_tasks(self, context):
+    try:
+        nt = context.space_data.node_tree
+    except AttributeError:
+        return None
 
-        col = layout.box().column(align=1)
-        if self.task_data != '':
-            l = self.task_data.split('\n')
-            for s in l:
-                col.label(text=s)
+    for node in nt.nodes:
+        if node.bl_idname == 'RSNodeTaskNode' and node.name != context.window_manager.rsn_viewer_node:
+            node.is_active_task = False
 
-    def invoke(self, context, event):
-        nt = context.space_data.edit_tree
-        RSN = RSN_Nodes(node_tree=nt, root_node_name=self.task_name)
-        try:
-            task_dict = RSN.get_children_from_task(task_name=self.task_name, return_dict=True)
-            data = RSN.get_task_data(task_name=self.task_name, task_dict=task_dict)
-            self.task_data = json.dumps(data, indent=2, ensure_ascii=False)
-            return context.window_manager.invoke_popup(self, width=300)
-        except Exception:
-            return {"CANCELLED"}
+    rsn_task = RSN_Nodes(node_tree=nt,
+                         root_node_name=context.window_manager.rsn_viewer_node)
+
+    node_list = rsn_task.get_children_from_node(rsn_task.root_node)  # VariantsNodeProperty node in each task
+    # only one set VariantsNodeProperty node will be active
+    var_collect = {}
+    for node_name in node_list:
+        set_var_node = rsn_task.nt.nodes[node_name]
+        if set_var_node.bl_idname == 'RSNodeSetVariantsNode':
+            for item in set_var_node.node_collect:
+                if item.use:
+                    var_collect[item.name] = item.active
+            break
+
+    for node_name, active in var_collect.items():
+        var_node = rsn_task.nt.nodes[node_name]
+        black_list = rsn_task.get_children_from_var_node(var_node, active)
+
+        node_list = [i for i in node_list if i not in black_list]
+
+    if len(node_list) > 0:
+        node_list_str = ','.join(node_list)
+
+        if bpy.context.window_manager.rsn_node_list != node_list_str:
+            bpy.context.window_manager.rsn_node_list = node_list_str
+
+            pref = get_pref()
+
+            if rsn_task.root_node.inputs[0].is_linked:
+                try:
+                    bpy.context.window_manager.rsn_viewer_node = context.window_manager.rsn_viewer_node
+                    bpy.ops.rsn.update_parms(view_mode_handler=context.window_manager.rsn_viewer_node,
+                                             update_scripts=pref.node_task.update_scripts,
+                                             use_render_mode=False)
+                    # This error shows when the dragging the link off viewer node(Works well with knife tool)
+                    # this seems to be a blender error
+
+                except IndexError:
+                    pass
+
+            else:
+                bpy.context.window_manager.rsn_viewer_node = ''
 
 
 def register():
-
-
-    bpy.utils.register_class(RSN_OT_GetTaskInfo)
     bpy.utils.register_class(RSNodeTaskNode)
+    bpy.utils.register_class(RSN_OT_AddViewerNode)
+
+    bpy.types.WindowManager.rsn_node_list = StringProperty(default='')
+    bpy.types.WindowManager.rsn_viewer_node = StringProperty(name='Viewer task name', update=update_viewer_tasks)
 
 
 def unregister():
-
-
-    bpy.utils.unregister_class(RSN_OT_GetTaskInfo)
     bpy.utils.unregister_class(RSNodeTaskNode)
+    bpy.utils.unregister_class(RSN_OT_AddViewerNode)
+
+    del bpy.types.WindowManager.rsn_node_list
+    del bpy.types.WindowManager.rsn_viewer_node
