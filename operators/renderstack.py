@@ -155,10 +155,16 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         bpy.context.preferences.view.render_display_type = self.ori_render_display_type
 
     def modal(self, context, event):
+        if event.type == 'ESC':
+            # set modal property
+            context.window_manager.rsn_running_modal = False
+            self.remove_handles()
+            self.finish()
+
         if event.type == 'TIMER':
             if True in (self.queue.is_empty(), self.stop is True):
                 # set modal property
-                bpy.context.window_manager.rsn_running_modal = False
+                context.window_manager.rsn_running_modal = False
                 self.remove_handles()
                 self.finish()
 

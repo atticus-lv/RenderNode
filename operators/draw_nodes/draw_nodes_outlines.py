@@ -346,7 +346,7 @@ def draw_callback_nodeoutline(self, context):
 
 
 class RSN_OT_DrawNodes(Operator):
-    """"""
+    """Draw the active task's settings """
     bl_idname = "rsn.draw_nodes"
     bl_label = "Draw Nodes"
     bl_options = {'REGISTER', 'UNDO'}
