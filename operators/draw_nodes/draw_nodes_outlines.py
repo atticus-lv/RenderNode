@@ -1,11 +1,13 @@
-import os
+from math import cos, sin, pi
 
-import bpy, blf, bgl
+import bgl
+import blf
+import bpy
 import gpu
-from bpy.types import Operator, Panel, Menu
+
 from bpy.props import *
+from bpy.types import Operator
 from gpu_extras.batch import batch_for_shader
-from math import cos, sin, pi, hypot
 
 from .utils import dpifac, draw_tri_fan
 from ...preferences import get_pref
@@ -93,7 +95,7 @@ def draw_round_rectangle(shader, points, radius=8, colour=(1.0, 1.0, 1.0, 0.7)):
     mx = top_right[0]
     my = top_right[1]
     for i in range(sides + 1):
-        if (0 <= i <= 4):
+        if 0 <= i <= 4:
             cosine = radius * cos(i * 2 * pi / sides) + mx
             sine = radius * sin(i * 2 * pi / sides) + my
             vertices.append((cosine, sine))
@@ -105,7 +107,7 @@ def draw_round_rectangle(shader, points, radius=8, colour=(1.0, 1.0, 1.0, 0.7)):
     mx = top_left[0]
     my = top_left[1]
     for i in range(sides + 1):
-        if (4 <= i <= 8):
+        if 4 <= i <= 8:
             cosine = radius * cos(i * 2 * pi / sides) + mx
             sine = radius * sin(i * 2 * pi / sides) + my
             vertices.append((cosine, sine))
@@ -117,7 +119,7 @@ def draw_round_rectangle(shader, points, radius=8, colour=(1.0, 1.0, 1.0, 0.7)):
     mx = bottom_left[0]
     my = bottom_left[1]
     for i in range(sides + 1):
-        if (8 <= i <= 12):
+        if 8 <= i <= 12:
             cosine = radius * cos(i * 2 * pi / sides) + mx
             sine = radius * sin(i * 2 * pi / sides) + my
             vertices.append((cosine, sine))
@@ -129,7 +131,7 @@ def draw_round_rectangle(shader, points, radius=8, colour=(1.0, 1.0, 1.0, 0.7)):
     mx = bottom_right[0]
     my = bottom_right[1]
     for i in range(sides + 1):
-        if (12 <= i <= 16):
+        if 12 <= i <= 16:
             cosine = radius * cos(i * 2 * pi / sides) + mx
             sine = radius * sin(i * 2 * pi / sides) + my
             vertices.append((cosine, sine))
@@ -183,7 +185,7 @@ def draw_rounded_node_border(shader, node, radius=8, colour=(1.0, 1.0, 1.0, 0.7)
     mx, my = bpy.context.region.view2d.view_to_region(bottom_left[0], bottom_left[1], clip=False)
     vertices = [(mx, my)]
     for i in range(sides + 1):
-        if (8 <= i <= 12):
+        if 8 <= i <= 12:
             if my > bottom_bar and mx < area_width:
                 cosine = radius * cos(i * 2 * pi / sides) + mx
                 sine = radius * sin(i * 2 * pi / sides) + my
@@ -271,6 +273,10 @@ def draw_callback_nodeoutline(self, context):
 
     shader = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
 
+    # draw outline
+    ########################
+
+    # set color
     task_outer = (self.task_color[0], self.task_color[1], self.task_color[2], self.alpha)
     file_path_outer = (self.file_path_color[0], self.file_path_color[1], self.file_path_color[2], self.alpha)
 
@@ -279,21 +285,19 @@ def draw_callback_nodeoutline(self, context):
 
     node_list = context.window_manager.rsn_node_list.split(',')
 
+    # draw all nodes
     for node_name in node_list:
         try:
             node = context.space_data.edit_tree.nodes[node_name]
             if node.bl_idname == 'RSNodeTaskNode':
                 draw_rounded_node_border(shader, node, radius=self.radius * 1.25, colour=task_outer)
                 draw_rounded_node_border(shader, node, radius=self.radius * 1.25 - 1.25, colour=col_inner)
-
             elif node.bl_idname == 'RSNodeFilePathInputNode':
                 draw_rounded_node_border(shader, node, radius=self.radius, colour=file_path_outer)
                 draw_rounded_node_border(shader, node, radius=self.radius - 1, colour=col_inner)
-
             else:
                 draw_rounded_node_border(shader, node, radius=self.radius, colour=col_outer)
                 draw_rounded_node_border(shader, node, radius=self.radius - 1, colour=col_inner)
-
         except KeyError:
             pass
 
@@ -302,30 +306,41 @@ def draw_callback_nodeoutline(self, context):
 
     # properties text
     task_text = "No Active Task!" if context.window_manager.rsn_viewer_node == '' else context.window_manager.rsn_viewer_node
-
     camera = context.scene.camera.name if context.scene.camera else "No scene camera"
-
     is_save = True if bpy.data.filepath != '' else False
     file_path_text = bpy.path.relpath(context.scene.render.filepath) if is_save else "Save your file first!"
 
-    # background
-    r, g, b = self.background_color
-    size = blf.dimensions(0, 2 * file_path_text)
-    size = [v / context.preferences.view.ui_scale for v in size]
-    vertices = [(10 + size[0], 150 + size[1]), (20, 150 + size[1]), (20, 30), (10 + size[0], 20), ]
-    draw_round_rectangle(shader, vertices, radius=18, colour=(0, 0, 0, self.alpha))  # shadow
-    draw_round_rectangle(shader, vertices, radius=14, colour=(r, g, b, self.alpha))
+    texts = [
+        f"Task: {task_text}",
+        f"Camera: {camera}",
+        f"Engine: {context.scene.render.engine}",
+        f"Frame: {context.scene.frame_start} - {context.scene.frame_end}",
+        f"FilePath: {file_path_text}",
+    ]
 
-    # draw text
+    # text background
+    r, g, b = self.background_color
+    longest_text = max(texts, key=len, default='')
+    size = blf.dimensions(0, longest_text)  # get the longest text
+    size = [v * 1.5 / context.preferences.view.ui_scale for v in size]  # scale with the ui scale
+
+    # set corner
+    top = 125
+    bottom = 25
+    step = 25
+
+    vertices = [(10 + size[0], top + size[1]), (20, top + size[1]), (20, 25), (10 + size[0], bottom), ]
+    draw_round_rectangle(shader, vertices, radius=18, colour=(0, 0, 0, self.alpha))  # shadow
+    draw_round_rectangle(shader, vertices, radius=14, colour=(r, g, b, self.alpha))  # main box
+
+    # draw texts
     r, g, b = self.text_color
     size = 20
-    draw_text_2d((r, g, b, self.alpha, size), f"Task: {task_text}", 20, 150)
-    draw_text_2d((r, g, b, self.alpha, size), f"Camera: {camera}", 20, 120)
-    draw_text_2d((r, g, b, self.alpha, size), f"Engine: {context.scene.render.engine}", 20, 90)
-    draw_text_2d((r, g, b, self.alpha, size), f"Frame: {context.scene.frame_start} - {context.scene.frame_end}", 20, 60)
-    draw_text_2d((r, g, b, self.alpha, size), f"FilePath: {file_path_text}", 20, 30)
+    for i, text in enumerate(texts):
+        draw_text_2d((r, g, b, self.alpha, size), text, 20, bottom - step * i)
 
     # restore
+    #####################
     bgl.glDisable(bgl.GL_BLEND)
     bgl.glDisable(bgl.GL_LINE_SMOOTH)
 
@@ -342,14 +357,14 @@ class RSN_OT_DrawNodes(Operator):
         if event.type == 'TIMER':
             # show draw
             if context.scene.RSNBusyDrawing:
-                if self.alpha < 0.5: self.alpha += 0.02
+                if self.alpha < 0.5: self.alpha += 0.02  # show
 
             # close draw
             else:
                 if self.alpha > 0:
-                    self.alpha -= 0.02
+                    self.alpha -= 0.02  # fade
                     return {'RUNNING_MODAL'}
-                # remove handles
+                # remove timer / handles
                 context.window_manager.event_timer_remove(self._timer)
                 bpy.types.SpaceNodeEditor.draw_handler_remove(self._handle, 'WINDOW')
                 return {'FINISHED'}
@@ -357,7 +372,15 @@ class RSN_OT_DrawNodes(Operator):
         return {'PASS_THROUGH'}
 
     def invoke(self, context, event):
+        if True in {context.area.type != 'NODE_EDITOR',
+                    context.space_data.edit_tree is None,
+                    context.space_data.edit_tree.bl_idname != 'RenderStackNodeTree'}:
+            self.report({'WARNING'}, "NodeEditor not found, cannot run operator")
+            return {'CANCELLED'}
+
         # init draw values
+        #####################
+
         self.alpha = 0
         self.radius = get_pref().draw_nodes.border_radius
         # node color
@@ -369,13 +392,8 @@ class RSN_OT_DrawNodes(Operator):
         # text color
         self.text_color = get_pref().draw_nodes.text_color
 
-        if True in {context.area.type != 'NODE_EDITOR',
-                    context.space_data.edit_tree is None,
-                    context.space_data.edit_tree.bl_idname != 'RenderStackNodeTree'}:
-            self.report({'WARNING'}, "NodeEditor not found, cannot run operator")
-            return {'CANCELLED'}
-
         # set statue
+        ##################
         context.scene.RSNBusyDrawing = True
         # add timer and handles
         self._timer = context.window_manager.event_timer_add(0.01, window=context.window)
