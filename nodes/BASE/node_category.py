@@ -11,10 +11,10 @@ class RSNCategory(nodeitems_utils.NodeCategory):
 node_categories = [
     RSNCategory("TASK", "Task", items=[
         nodeitems_utils.NodeItem("RSNodeTaskNode"),
-        # nodeitems_utils.NodeItem("RSNodeTaskListNode"),
         nodeitems_utils.NodeItem("RSNodeRenderListNode"),
         nodeitems_utils.NodeItem("RSNodeProcessorNode"),
-        nodeitems_utils.NodeItem("RSNodeViewerNode"),
+        # nodeitems_utils.NodeItem("RSNodeViewerNode"),
+        # nodeitems_utils.NodeItem("RSNodeTaskListNode"),
 
     ]),
 
@@ -26,20 +26,21 @@ node_categories = [
     ]),
 
     RSNCategory("INPUT", "Input", items=[
-        nodeitems_utils.NodeItem("RSNodeCommonSettingsNode"),
-        nodeitems_utils.NodeItem("RSNodePropertyInputNode"),
         nodeitems_utils.NodeItem("RSNodeCamInputNode"),
         nodeitems_utils.NodeItem("RSNodeWorldInputNode"),
         nodeitems_utils.NodeItem('RSNodeViewLayerInputNode'),
+        nodeitems_utils.NodeItem("RSNodePropertyInputNode"),
         nodeitems_utils.NodeItem('RSNodeColorManagementNode'),
+        nodeitems_utils.NodeItem("RSNodeCommonSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeTaskInfoInputsNode"),
     ]),
 
     RSNCategory("OBJECT", "Object", items=[
         nodeitems_utils.NodeItem('RenderNodeObjectInput'),
-        # nodeitems_utils.NodeItem('RenderNodeObjectData'), # temp, maybe remove later
+        nodeitems_utils.NodeItem('RenderNodeStringInput'),
         nodeitems_utils.NodeItem('RenderNodeObjectDisplay'),
         nodeitems_utils.NodeItem('RenderNodeObjectMaterial'),
+        nodeitems_utils.NodeItem('RenderNodeObjectData'),  # temp, maybe remove later
         nodeitems_utils.NodeItem('RSNodeCollectionDisplayNode'),
         nodeitems_utils.NodeItem('RSNodeObjectDisplayNode'),
         nodeitems_utils.NodeItem('RSNodeObjectMaterialNode'),

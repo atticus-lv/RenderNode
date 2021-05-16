@@ -24,7 +24,7 @@ def source_attr(src_obj, scr_data_path):
 
 class RenderNodeObjectData(RenderStackNode):
     bl_idname = 'RenderNodeObjectData'
-    bl_label = 'Object Data'
+    bl_label = 'Object Data +'
 
     d_type = None
     value = None
@@ -112,9 +112,9 @@ class RenderNodeObjectData(RenderStackNode):
                 # self.set_warning(msg=f"{e}")
 
 
-# def register():
-#     bpy.utils.register_class(RenderNodeObjectData)
-#
-#
-# def unregister():
-#     bpy.utils.unregister_class(RenderNodeObjectData)
+def register():
+    bpy.utils.register_class(RenderNodeObjectData)
+
+
+def unregister():
+    bpy.utils.unregister_class(RenderNodeObjectData)
