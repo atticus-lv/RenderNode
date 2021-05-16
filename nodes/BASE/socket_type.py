@@ -63,7 +63,7 @@ class RenderNodeSocketString(RenderNodeSocket):
     value: StringProperty(default='', update=update_node)
 
     def draw_color(self, context, node):
-        return 0.2, 0.5, 1.0, 1
+        return 0.2, 0.7, 1.0, 1
 
 
 class RenderNodeSocketVector(RenderNodeSocket):
