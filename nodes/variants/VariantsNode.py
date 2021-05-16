@@ -11,7 +11,7 @@ class RSNodeVariantsNode(RenderStackNode):
     # active: IntProperty(default=0, min=0, update=update_node)
 
     def init(self, context):
-        self.inputs.new('RSNodeSocketTaskSettings', "Input")
+        self.inputs.new('RSNodeSocketTaskSettings', "Settings")
         self.outputs.new('RSNodeSocketTaskSettings', "Output")
 
     def draw_buttons(self, context, layout):
