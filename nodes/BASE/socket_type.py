@@ -51,7 +51,7 @@ class RenderNodeSocketFloat(RenderNodeSocket):
     bl_idname = 'RenderNodeSocketFloat'
     bl_label = 'RenderNodeSocketFloat'
 
-    value: FloatProperty(default=10, update=update_node)
+    value: FloatProperty(default=0, update=update_node)
 
     def draw_color(self, context, node):
         return 0.5, 0.5, 0.5, 1
@@ -125,7 +125,7 @@ class RenderNodeSocketCamera(RenderNodeSocket):
         if self.is_linked:
             row.label(text=self.text)
         else:
-            row.prop(self, 'value', text=self.text)
+            row.prop(self, 'value', text='')
             if self.value:
                 row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.value.name
 
@@ -203,7 +203,7 @@ class RSNodeSocketCamera(bpy.types.NodeSocket):
         layout.label(text=text)
 
     def draw_color(self, context, node):
-        return 0, 0.8, 1.0, 1.0
+        return 0.6, 0.6, 0.6, 1.0
 
 
 class RSNodeSocketRenderSettings(bpy.types.NodeSocket):
