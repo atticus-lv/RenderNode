@@ -37,6 +37,7 @@ node_categories = [
     RSNCategory("SCENE", "Scene", items=[
         nodeitems_utils.NodeItem("RenderNodeSceneCamera"),
         nodeitems_utils.NodeItem("RenderNodeSceneWorld"),
+        nodeitems_utils.NodeItem("RenderNodeSceneViewLayer"),
     ]),
 
     RSNCategory("OBJECT", "Object", items=[
