@@ -1,5 +1,6 @@
 import bpy
 from bpy.props import *
+from ...preferences import get_pref
 
 
 def update_node(self, context):
@@ -16,11 +17,11 @@ class RenderNodeSocket(bpy.types.NodeSocket):
     value: IntProperty(default=0, update=update_node)
 
     def draw(self, context, layout, node, text):
-        row = layout.row(align=1)
+        col = layout.column(align=1)
         if self.is_linked:
-            row.label(text=self.text)
+            col.label(text=self.text)
         else:
-            row.prop(self, 'value', text=self.text)
+            col.prop(self, 'value', text=self.text)
 
     def draw_color(self, context, node):
         return 0.5, 0.5, 0.5, 1
@@ -109,11 +110,44 @@ class RenderNodeSocketObject(RenderNodeSocket):
         return 1, 0.6, 0.3, 1
 
 
+def poll_camera(self, object):
+    if self.value: return self.value.type == 'CAMERA'
+
+
+class RenderNodeSocketCamera(RenderNodeSocketObject):
+    bl_idname = 'RenderNodeSocketCamera'
+    bl_label = 'RenderNodeSocketCamera'
+
+    value: PointerProperty(type=bpy.types.Object, update=update_node, poll=poll_camera)
+
+    def draw(self, context, layout, node, text):
+        row = layout.row(align=1)
+        if self.is_linked:
+            row.label(text=self.text)
+        else:
+            row.prop(self, 'value', text=self.text)
+            if self.value:
+                row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.value.name
+
+    def draw_color(self, context, node):
+        return 1, 0.6, 0.3, 1
+
+
 class RenderNodeSocketMaterial(RenderNodeSocket):
     bl_idname = 'RenderNodeSocketMaterial'
-    bl_label = 'RenderNodeSocketObject'
+    bl_label = 'RenderNodeSocketMaterial'
 
     value: PointerProperty(type=bpy.types.Material, update=update_node)
+
+    def draw_color(self, context, node):
+        return 1, 0.4, 0.4, 1
+
+
+class RenderNodeSocketWorld(RenderNodeSocket):
+    bl_idname = 'RenderNodeSocketWorld'
+    bl_label = 'RenderNodeSocketWorld'
+
+    value: PointerProperty(type=bpy.types.World, update=update_node)
 
     def draw_color(self, context, node):
         return 1, 0.4, 0.4, 1
@@ -197,7 +231,10 @@ classes = (
     # new
     RenderNodeSocket,
     RenderNodeSocketObject,
+    RenderNodeSocketCamera,
     RenderNodeSocketMaterial,
+    RenderNodeSocketWorld,
+
     RenderNodeSocketBool,
     RenderNodeSocketInt,
     RenderNodeSocketFloat,

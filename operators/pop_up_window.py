@@ -12,7 +12,7 @@ class RSN_OT_SwitchToBindTree(bpy.types.Operator):
     def execute(self, context):
         for area in bpy.context.screen.areas:
             if area.type == 'NODE_EDITOR':
-                area.spaces[0].node_tree = context.scene.bind_rsn_tree
+                area.spaces[0].node_tree = context.scene.rsn_bind_tree
                 break
 
         return {'FINISHED'}
@@ -51,7 +51,7 @@ class RSN_OT_PoPEditor(bpy.types.Operator):
 
         # bind_tree
         if self.bind_tree:
-            context.space_data.node_tree = context.scene.bind_rsn_tree
+            context.space_data.node_tree = context.scene.rsn_bind_tree
 
         # restore
         window.resolution_x = ORx

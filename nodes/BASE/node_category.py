@@ -34,6 +34,10 @@ node_categories = [
         nodeitems_utils.NodeItem("RSNodeCommonSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeTaskInfoInputsNode"),
     ]),
+    RSNCategory("SCENE", "Scene", items=[
+        nodeitems_utils.NodeItem("RenderNodeSceneCamera"),
+        nodeitems_utils.NodeItem("RenderNodeSceneWorld"),
+    ]),
 
     RSNCategory("OBJECT", "Object", items=[
         nodeitems_utils.NodeItem('RenderNodeObjectInput'),

@@ -93,7 +93,7 @@ class RenderNodeObjectPSR(RenderStackNode):
         self.store_data()
 
         ob = self.node_dict['object']
-        if not ob: pass
+        if not ob: return None
 
         if not self.accept_mode:
 

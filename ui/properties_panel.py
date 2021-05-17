@@ -11,10 +11,13 @@ class RSN_PT_Panel(bpy.types.Panel):
 
     def draw(self, context):
         layout = self.layout
-        layout.prop(context.scene, 'bind_rsn_tree')
 
-        row = layout.row()
+        layout.prop(context.scene, 'rsn_bind_tree')
+        box = layout.box().column(align = 0)
+        if context.scene.rsn_bind_tree:
+            box.template_ID(context.scene, "rsn_bind_tree")
 
+        row = box.row()
         row.operator('rsn.switch_to_bind_tree')
 
         pop = row.operator('rsn.pop_editor')
@@ -28,12 +31,12 @@ def poll_bind_tree(self, object):
 
 def register():
     # bpy.types.Scene.bind_rsn_tree = StringProperty(name='Bind')
-    bpy.types.Scene.bind_rsn_tree = PointerProperty(name='Bind', type=bpy.types.NodeTree, poll=poll_bind_tree)
+    bpy.types.Scene.rsn_bind_tree = PointerProperty(name='Bind Tree', type=bpy.types.NodeTree, poll=poll_bind_tree)
 
     bpy.utils.register_class(RSN_PT_Panel)
 
 
 def unregister():
-    del bpy.types.Scene.bind_rsn_tree
+    del bpy.types.Scene.rsn_bind_tree
 
     bpy.utils.unregister_class(RSN_PT_Panel)
