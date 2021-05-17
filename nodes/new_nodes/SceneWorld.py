@@ -6,7 +6,7 @@ from ...nodes.BASE.node_tree import RenderStackNode
 class RenderNodeSceneWorld(RenderStackNode):
     """A simple input node"""
     bl_idname = 'RenderNodeSceneWorld'
-    bl_label = 'Scene World'
+    bl_label = 'Scene World +'
 
     def init(self, context):
         self.create_prop('RenderNodeSocketWorld', "world", 'World')

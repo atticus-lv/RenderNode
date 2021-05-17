@@ -10,7 +10,7 @@ def update_node(self, context):
 class RSNodeEeveeRenderSettingsNode(RenderStackNode):
     """A simple input node"""
     bl_idname = 'RSNodeEeveeRenderSettingsNode'
-    bl_label = 'Eevee Settings'
+    bl_label = 'Eevee Settings +'
 
     samples: IntProperty(default=64, min=1, name="Eevee Samples", update=update_node)
 
