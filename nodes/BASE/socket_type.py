@@ -111,8 +111,7 @@ class RenderNodeSocketObject(RenderNodeSocket):
 
 
 def poll_camera(self, object):
-    if self.value:
-        return self.value.type == 'CAMERA'
+    return object.type == 'CAMERA'
 
 
 class RenderNodeSocketCamera(RenderNodeSocket):
@@ -152,6 +151,24 @@ class RenderNodeSocketWorld(RenderNodeSocket):
 
     def draw_color(self, context, node):
         return 1, 0.4, 0.4, 1
+
+
+class RenderNodeSocketViewLayer(RenderNodeSocket):
+    bl_idname = 'RenderNodeSocketViewLayer'
+    bl_label = 'RenderNodeSocketViewLayer'
+
+    value: StringProperty(update=update_node)
+
+    def draw(self, context, layout, node, text):
+
+        row = layout.row(align=1)
+        if self.is_linked:
+            row.label(text=self.text)
+        else:
+            row.prop_search(self, "value", context.scene, "view_layers", text='')
+
+    def draw_color(self, context, node):
+        return 0.2, 0.7, 1.0, 1
 
 
 ### old types ###
@@ -235,6 +252,7 @@ classes = (
     RenderNodeSocketCamera,
     RenderNodeSocketMaterial,
     RenderNodeSocketWorld,
+    RenderNodeSocketViewLayer,
 
     RenderNodeSocketBool,
     RenderNodeSocketInt,
