@@ -384,7 +384,7 @@ class RSN_OT_DrawNodes(Operator):
         self.alpha = 0
         self.radius = get_pref().draw_nodes.border_radius
         # node color
-        self.settiings_color = get_pref().draw_nodes.settings_color
+        self.settings_color = get_pref().draw_nodes.settings_color
         self.task_color = get_pref().draw_nodes.task_color
         self.file_path_color = get_pref().draw_nodes.file_path_color
         # background color
