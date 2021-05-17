@@ -280,7 +280,7 @@ def draw_callback_nodeoutline(self, context):
     task_outer = (self.task_color[0], self.task_color[1], self.task_color[2], self.alpha)
     file_path_outer = (self.file_path_color[0], self.file_path_color[1], self.file_path_color[2], self.alpha)
 
-    col_outer = (self.settiings_color[0], self.settiings_color[1], self.settiings_color[2], self.alpha)
+    col_outer = (self.settings_color[0], self.settings_color[1], self.settings_color[2], self.alpha)
     col_inner = (0.0, 0.0, 0.0, self.alpha + 0.1)
 
     node_list = context.window_manager.rsn_node_list.split(',')
@@ -384,7 +384,7 @@ class RSN_OT_DrawNodes(Operator):
         self.alpha = 0
         self.radius = get_pref().draw_nodes.border_radius
         # node color
-        self.settiings_color = get_pref().draw_nodes.settiings_color
+        self.settiings_color = get_pref().draw_nodes.settings_color
         self.task_color = get_pref().draw_nodes.task_color
         self.file_path_color = get_pref().draw_nodes.file_path_color
         # background color
