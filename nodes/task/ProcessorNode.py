@@ -27,6 +27,7 @@ class RSNodeProcessorNode(RenderStackNode):
     def draw_buttons(self, context, layout):
         if not self.active:
             layout.label(text='Waiting For Render...')
+            return None
         task_list = self.task_list.split(',')
 
         cur_id = task_list.index(self.cur_task)

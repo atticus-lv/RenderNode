@@ -17,11 +17,11 @@ class RenderNodeSocket(bpy.types.NodeSocket):
     value: IntProperty(default=0, update=update_node)
 
     def draw(self, context, layout, node, text):
-        col = layout.column(align=1)
+        row = layout.row(align=1)
         if self.is_linked:
-            col.label(text=self.text)
+            row.label(text=self.text)
         else:
-            col.prop(self, 'value', text=self.text)
+            row.prop(self, 'value', text=self.text)
 
     def draw_color(self, context, node):
         return 0.5, 0.5, 0.5, 1
@@ -111,10 +111,11 @@ class RenderNodeSocketObject(RenderNodeSocket):
 
 
 def poll_camera(self, object):
-    if self.value: return self.value.type == 'CAMERA'
+    if self.value:
+        return self.value.type == 'CAMERA'
 
 
-class RenderNodeSocketCamera(RenderNodeSocketObject):
+class RenderNodeSocketCamera(RenderNodeSocket):
     bl_idname = 'RenderNodeSocketCamera'
     bl_label = 'RenderNodeSocketCamera'
 
