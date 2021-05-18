@@ -12,11 +12,11 @@
 
 > Task node is the most important node of rsn. It contains changes for a task that can be use for render
 >
-> **Settings Input** can plug in any kind of settings node<br>**Task output** can connect to RenderList node,viewer node and merge node
+> **Settings Input** can plug in any kind of settings node<br>**Task output** can connect to RenderList node, viewer node and merge node
 
 **Label** can be use in the file path node as output name
 
-**Info Button** can view the infomation of the settings node
+**Info Button** can view the information of the settings node
 
 
 
@@ -78,7 +78,7 @@ If you break your render with "ESC",it will store the frame you stop<br>You can 
 >
 > **Task input** can connect to Task node
 
-**Update Scripts** will excute the python code in the scripts node when view the task
+**Update Scripts** will execute the python code in the scripts node when view the task
 
 **Update FilePath** will overwrite the output path when view the task
 
@@ -86,7 +86,7 @@ If you break your render with "ESC",it will store the frame you stop<br>You can 
 
 Options above will auto update when render 
 
-If the task node is mute(by pressing M), it will check by the viewer node<br>Make sure there is only one viewer node in your node tree.
+If the task node is mute (by pressing M), it will check by the viewer node<br>Make sure there is only one viewer node in your node tree.
 
 <!-- panels:end -->
 
