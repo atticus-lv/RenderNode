@@ -15,7 +15,7 @@ class VariantsNodeProperty(bpy.types.PropertyGroup):
     name: StringProperty(name="The name of the variants node")
     active: IntProperty(default=0, min=0, name="Active Input")
     use: BoolProperty(default=True, name="Use for render",
-                      description="If enable, the active input of the variant node will be apply to the scene,else it will apply the last input of the variant node")
+                      description="If enable, the active input of the variant node will be apply to the Scene,else it will apply the last input of the variant node")
 
 
 # use uilist for visualization

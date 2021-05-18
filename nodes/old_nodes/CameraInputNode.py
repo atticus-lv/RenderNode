@@ -21,7 +21,7 @@ class RSNodeCamInputNode(RenderStackNode):
     def init(self, context):
         self.outputs.new('RSNodeSocketCamera', "Camera")
         self.width = 180
-        # inherit the scene camera\
+        # inherit the Scene camera\
         try:
             if context.scene.camera: self.camera = context.scene.camera
         except:

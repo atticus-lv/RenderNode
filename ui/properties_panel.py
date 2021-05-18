@@ -7,7 +7,7 @@ class RSN_PT_Panel(bpy.types.Panel):
     bl_idname = "RSN_PT_Panel"
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'
-    bl_context = "scene"
+    bl_context = "Scene"
 
     def draw(self, context):
         layout = self.layout
@@ -19,7 +19,7 @@ class RSN_PT_Panel(bpy.types.Panel):
             row.operator('rsn.switch_to_bind_tree', text='', icon='SCREEN_BACK')
 
             # box = layout.box().column(align=0)
-            # box.template_ID(context.scene, "rsn_bind_tree")
+            # box.template_ID(context.Scene, "rsn_bind_tree")
             #
             # row = box.row()
             # row.operator('rsn.switch_to_bind_tree')

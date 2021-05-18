@@ -33,7 +33,7 @@ class RSN_OT_PoPEditor(bpy.types.Operator):
         # set display type
         self.ori_render_display_type = context.preferences.view.render_display_type
         context.preferences.view.render_display_type = "WINDOW"
-        # Modify scene settings
+        # Modify Scene settings
         window = context.scene.render
 
         ORx = window.resolution_x

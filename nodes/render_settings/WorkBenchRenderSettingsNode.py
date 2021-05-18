@@ -16,7 +16,7 @@ class WorkBenchRenderSettingsNode(RenderStackNode):
 
     def draw_buttons(self, context, layout):
         pass
-        # shading = context.scene.display.shading
+        # shading = context.Scene.display.shading
         # col = layout.column()
         # split = col.split(factor=0.9)
         #

@@ -13,9 +13,9 @@ def update_node(self, context):
     self.update_parms()
 
 
-class RenderNodeFilePath(RenderStackNode):
-    bl_idname = "RenderNodeFilePath"
-    bl_label = "File Path +"
+class RenderNodeSceneFilePath(RenderStackNode):
+    bl_idname = "RenderNodeSceneFilePath"
+    bl_label = "Scene File Path"
 
     save_rel_folder: BoolProperty(name="Save to Relative",
                                   description='Save Image to Relative Folder(locate at .blend)',
@@ -30,7 +30,7 @@ class RenderNodeFilePath(RenderStackNode):
         self.create_prop('RenderNodeSocketInt', 'version', 'Version')
         self.create_prop('RenderNodeSocketString', 'path_expression', 'Path Exp')
 
-        self.outputs.new('RSNodeSocketOutputSettings', "Output Settings")
+        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
         self.inputs['path_expression'].value = get_pref().node_file_path.path_format
 
@@ -144,8 +144,8 @@ format_names = {
 
 
 def register():
-    bpy.utils.register_class(RenderNodeFilePath)
+    bpy.utils.register_class(RenderNodeSceneFilePath)
 
 
 def unregister():
-    bpy.utils.unregister_class(RenderNodeFilePath)
+    bpy.utils.unregister_class(RenderNodeSceneFilePath)
