@@ -112,7 +112,7 @@ class RenderNodeSceneImageFormat(RenderStackNode):
         attr_list = ['file_format',
                      'compression',
                      'jpeg2k_tiff_codec', 'use_jpeg2k_cinema_preset', 'use_jpeg2k_cinema_48',
-                     'use_jpeg2k_yccuse_jpeg2k_ycc',
+                     'use_jpeg2k_ycc',
                      'use_cineon_log',
                      'exr_codec', 'use_preview', 'use_zbuffer'
                                                  'tiff_codec']
