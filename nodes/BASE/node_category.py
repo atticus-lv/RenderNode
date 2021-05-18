@@ -12,7 +12,7 @@ node_categories = [
     RSNCategory("TASK", "Task", items=[
         nodeitems_utils.NodeItem("RSNodeTaskNode"),
         nodeitems_utils.NodeItem("RSNodeRenderListNode"),
-        nodeitems_utils.NodeItem("RSNodeProcessorNode"),
+        # nodeitems_utils.NodeItem("RSNodeProcessorNode"),
         # nodeitems_utils.NodeItem("RSNodeViewerNode"),
         # nodeitems_utils.NodeItem("RSNodeTaskListNode"),
 

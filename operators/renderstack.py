@@ -30,8 +30,6 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
 
     ori_render_display_type = None  # correct display_type after render
 
-    # UI
-    processor_node: StringProperty(name='Processor', default='')
 
     # render state
     ###############
@@ -91,15 +89,11 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
             self.report({"WARNING"}, 'Nothing to render！')
             return {"FINISHED"}
 
+        # back to the first task
         self.queue.force_update()
-        # set processor_node
-        if self.processor_node:
-            try:
-                node = self.queue.nt.nodes[self.processor_node]
-                node.active = True
-                node.task_list = context.window_manager.rsn_cur_task_list
-            except Exception as e:
-                self.report({"WARNING"}, 'Processor Node Error!')
+
+        # set processor_bar
+        self.render_list_node.processor_bar.task_list = context.window_manager.rsn_cur_task_list
 
         self.append_handles()
 
@@ -128,14 +122,8 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     def switch2task(self):
         # update task again
         self.queue.force_update()
-
-        if self.processor_node:
-            try:
-                node = self.queue.nt.nodes[self.processor_node]
-                node.active = True
-                node.cur_task = bpy.context.window_manager.rsn_viewer_node
-            except Exception as e:
-                pass
+        # set processor_bar
+        self.render_list_node.processor_bar.cur_task = bpy.context.window_manager.rsn_viewer_node
 
         bpy.context.scene.render.use_file_extension = 1
 
