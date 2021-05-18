@@ -36,7 +36,7 @@ class RSNodeProcessorNode(RenderStackNode):
         col = layout.column(align=1)
         col.alignment = "CENTER"
 
-        col.label(text=f'Total Process:{total_process * 100}%')
+        col.label(text=f'Total Process:{round(total_process * 100, 2)} %')
         sub = col.split(factor=total_process, align=1)
         sub.scale_y = 0.25
         sub.prop(self, "done_col", text='')
