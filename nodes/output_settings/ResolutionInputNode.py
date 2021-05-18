@@ -27,7 +27,7 @@ class RSNodeResolutionInputNode(RenderStackNode):
     preset_mode: BoolProperty(name='Preset Mode', default=False)
 
     def init(self, context):
-        self.outputs.new('RSNodeSocketOutputSettings', "Output Settings")
+        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
         self.width = 200
 
     def draw_buttons(self, context, layout):

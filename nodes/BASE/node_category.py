@@ -30,12 +30,19 @@ node_categories = [
     RSNCategory("SCENE", "Scene", items=[
         nodeitems_utils.NodeItem("RenderNodeSceneCamera"),
         nodeitems_utils.NodeItem("RenderNodeSceneWorld"),
-        nodeitems_utils.NodeItem("RenderNodeSceneFilePath"),
-        nodeitems_utils.NodeItem("RenderNodeSceneImageFormat"),
         nodeitems_utils.NodeItem("RenderNodeSceneRenderEngine"),
-        nodeitems_utils.NodeItem("RenderNodeSceneFrameRange"),
         nodeitems_utils.NodeItem("RenderNodeSceneViewLayer"),
         nodeitems_utils.NodeItem("RenderNodeSceneColorManagement"),
+    ]),
+
+    RSNCategory("OUTPUT", "Output", items=[
+        nodeitems_utils.NodeItem("RenderNodeSceneFilePath"),
+        nodeitems_utils.NodeItem("RenderNodeSceneImageFormat"),
+        nodeitems_utils.NodeItem("RenderNodeSceneFrameRange"),
+        nodeitems_utils.NodeItem("RenderNodeSceneResolution"), # performance is bad
+        # nodeitems_utils.NodeItem("RSNodeResolutionInputNode"),
+        nodeitems_utils.NodeItem("RSNodeActiveRenderSlotNode"),
+        nodeitems_utils.NodeItem("RSNodeViewLayerPassesNode"),
     ]),
 
     RSNCategory("OBJECT", "Object", items=[
@@ -52,14 +59,12 @@ node_categories = [
         nodeitems_utils.NodeItem('RSNodeObjectModifierNode'),
     ]),
 
-    RSNCategory("OUTPUT_SETTINGS", "Output Settings", items=[
-        nodeitems_utils.NodeItem("RSNodeFilePathInputNode"),
-        nodeitems_utils.NodeItem("RSNodeResolutionInputNode"),
-        nodeitems_utils.NodeItem("RSNodeFrameRangeInputNode"),
-        nodeitems_utils.NodeItem("RSNodeImageFormatInputNode"),
-        nodeitems_utils.NodeItem("RSNodeActiveRenderSlotNode"),
-        nodeitems_utils.NodeItem("RSNodeViewLayerPassesNode"),
-    ]),
+    # RSNCategory("OUTPUT_SETTINGS", "Output Settings", items=[
+    #     nodeitems_utils.NodeItem("RSNodeFilePathInputNode"),
+    #     nodeitems_utils.NodeItem("RSNodeResolutionInputNode"),
+    #     nodeitems_utils.NodeItem("RSNodeFrameRangeInputNode"),
+    #     nodeitems_utils.NodeItem("RSNodeImageFormatInputNode"),
+    # ]),
 
     RSNCategory("RENDER_SETTINGS", "Render Settings", items=[
         nodeitems_utils.NodeItem("RSNodeWorkBenchRenderSettingsNode"),

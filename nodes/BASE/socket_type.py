@@ -4,9 +4,12 @@ from ...preferences import get_pref
 
 
 def update_node(self, context):
-    self.node.node_dict[self.name] = self.value
-    # update node tree
-    self.node.update_parms()
+    try:
+        self.node.node_dict[self.name] = self.value
+        # update node tree
+        self.node.update_parms()
+    except Exception as e:
+        print(e)
 
 
 class RenderNodeSocket(bpy.types.NodeSocket):
