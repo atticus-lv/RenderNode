@@ -10,7 +10,7 @@
 
 <!-- div:right-panel -->
 
-> This node allow you to execute a single line script or a internal python file before rendeing.<br>You can use it to change any properties that current nodes can not access
+> This node allow you to execute a single line script or a internal python file before rendering.<br>You can use it to change any properties that current nodes can not access
 >
 
 <!-- panels:end -->
