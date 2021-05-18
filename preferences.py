@@ -23,6 +23,8 @@ class PropsDrawNodes(bpy.types.PropertyGroup):
     file_path_color: FloatVectorProperty(name='File Path Color', subtype='COLOR',
                                          default=(1.0, 0.8, 0))
 
+    show_text_info: BoolProperty(name='Show Text Info', default=True)
+
     background_color: FloatVectorProperty(name='Background Color', subtype='COLOR',
                                           default=(0.2, 0.2, 0.4))
 
