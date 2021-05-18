@@ -60,6 +60,7 @@ node_categories = [
     ]),
 
     RSNCategory("OUTPUT_SETTINGS", "Output Settings", items=[
+        nodeitems_utils.NodeItem("RenderNodeFilePath"),
         nodeitems_utils.NodeItem("RSNodeFilePathInputNode"),
         nodeitems_utils.NodeItem("RSNodeResolutionInputNode"),
         nodeitems_utils.NodeItem("RSNodeFrameRangeInputNode"),

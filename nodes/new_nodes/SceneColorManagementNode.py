@@ -7,6 +7,7 @@ import re
 
 
 def get_ocio_path():
+    """get current blender version cm"""
     bl_path = os.getcwd()
     version = f'{bpy.app.version[0]}' + '.' + f'{bpy.app.version[1]}'
     cs_folder = os.path.join(bl_path, version, 'datafiles', 'colormanagement')
@@ -15,7 +16,7 @@ def get_ocio_path():
 
 
 def search_ocio(rule: str):
-    list = []
+    """use re to find certain words"""
     ocio_path = get_ocio_path()
     with open(ocio_path, mode='r') as f:
         config = f.read()
@@ -29,6 +30,7 @@ rule_display_device = r"active_displays: \[(.*?)]"
 rule_view_transform = r"active_views: \[(.*?)]"
 rule_look = r"- !<Look>\s.*name:\s(.*)\s"
 
+# list to enum_property
 list_display_device = [name for name in search_ocio(rule_display_device)[0].split(', ')]
 enum_display_device = [(name, name, '') for name in list_display_device]
 

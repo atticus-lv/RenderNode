@@ -292,7 +292,7 @@ def draw_callback_nodeoutline(self, context):
             if node.bl_idname == 'RSNodeTaskNode':
                 draw_rounded_node_border(shader, node, radius=self.radius * 1.25, colour=task_outer)
                 draw_rounded_node_border(shader, node, radius=self.radius * 1.25 - 1.25, colour=col_inner)
-            elif node.bl_idname == 'RSNodeFilePathInputNode':
+            elif node.bl_idname in {'RenderNodeFilePath','RSNodeFilePathInputNode'} :
                 draw_rounded_node_border(shader, node, radius=self.radius, colour=file_path_outer)
                 draw_rounded_node_border(shader, node, radius=self.radius - 1, colour=col_inner)
             else:
@@ -308,7 +308,7 @@ def draw_callback_nodeoutline(self, context):
     task_text = "No Active Task!" if context.window_manager.rsn_viewer_node == '' else context.window_manager.rsn_viewer_node
     camera = context.scene.camera.name if context.scene.camera else "No scene camera"
     is_save = True if bpy.data.filepath != '' else False
-    file_path_text = bpy.path.relpath(context.scene.render.filepath) if is_save else "Save your file first!"
+    file_path_text = context.scene.render.filepath if is_save else "Save your file first!"
 
     texts = [
         f"Task: {task_text}",
