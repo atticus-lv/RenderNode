@@ -55,13 +55,14 @@ class RenderNodeSceneFilePath(RenderStackNode):
 
     def process(self):
         self.store_data()
+
         directory_path = self.make_path()
         if not directory_path: return None
 
         postfix = self.get_postfix()
-
         path = os.path.join(directory_path, postfix)
-        bpy.context.scene.render.filepath = path
+
+        self.compare(bpy.context.scene.render, 'filepath', path)
 
     def make_path(self):
         """only save files will work"""

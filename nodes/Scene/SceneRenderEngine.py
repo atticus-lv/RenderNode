@@ -11,7 +11,6 @@ class RenderNodeSceneRenderEngine(RenderStackNode):
     """A simple input node"""
     bl_idname = 'RenderNodeSceneRenderEngine'
     bl_label = 'Scene Render Engine'
-    bl_property = 'enum_engine'
 
     _enum_item_hack = []
 
@@ -23,7 +22,7 @@ class RenderNodeSceneRenderEngine(RenderStackNode):
         col.prop(self, "engine")
 
     def process(self):
-        bpy.context.scene.render.engine = self.engine
+        self.compare(bpy.context.scene.render, 'engine', self.engine)
 
     def engine_enum_items(self, context):
         enum_items = RenderNodeSceneRenderEngine._enum_item_hack
@@ -33,7 +32,7 @@ class RenderNodeSceneRenderEngine(RenderStackNode):
         enum_items.append(('BLENDER_EEVEE', 'Eevee', ''))
         enum_items.append(('BLENDER_WORKBENCH', 'Workbench', ''))
 
-        addon =  [engine.bl_idname for engine in bpy.types.RenderEngine.__subclasses__()]
+        addon = [engine.bl_idname for engine in bpy.types.RenderEngine.__subclasses__()]
 
         # append to enum_items
         for name in addon:

@@ -70,7 +70,6 @@ class RenderNodeSocketString(RenderNodeSocket):
 class RenderNodeSocketVector(RenderNodeSocket):
     bl_idname = 'RenderNodeSocketVector'
     bl_label = 'RenderNodeSocketVector'
-    bl_property = 'value'
 
     value: FloatVectorProperty(name='Vector', default=(1.0, 1.0, 1.0),
                                update=update_node)

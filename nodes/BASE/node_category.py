@@ -31,6 +31,7 @@ node_categories = [
         nodeitems_utils.NodeItem("RenderNodeSceneCamera"),
         nodeitems_utils.NodeItem("RenderNodeSceneWorld"),
         nodeitems_utils.NodeItem("RenderNodeSceneFilePath"),
+        nodeitems_utils.NodeItem("RenderNodeSceneImageFormat"),
         nodeitems_utils.NodeItem("RenderNodeSceneRenderEngine"),
         nodeitems_utils.NodeItem("RenderNodeSceneFrameRange"),
         nodeitems_utils.NodeItem("RenderNodeSceneViewLayer"),
@@ -42,7 +43,7 @@ node_categories = [
         nodeitems_utils.NodeItem('RenderNodeObjectMaterial'),
         nodeitems_utils.NodeItem('RenderNodeObjectPSR'),
         # nodeitems_utils.NodeItem('RenderNodeObjectPSR'),
-        # nodeitems_utils.NodeItem('RenderNodeObjectData'),  # temp, maybe remove later
+        # nodeitems_utils.NodeItem('RenderNodeObjectData'),  # temp_file_format, maybe remove later
         nodeitems_utils.NodeItem('RSNodeCollectionDisplayNode'),
         # nodeitems_utils.NodeItem('RSNodeObjectDisplayNode'),
         # nodeitems_utils.NodeItem('RSNodeObjectMaterialNode'),
