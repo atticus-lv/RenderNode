@@ -112,6 +112,8 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         else:
             logger.debug(f'Not task is linked to the viewer')
 
+        return node_list_dict
+
     def update_color_management(self):
         """may change in 2.93 version"""
         if 'ev' in self.task_data:
@@ -419,10 +421,9 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
         pref = get_pref()
         logger.setLevel(int(pref.log_level))
 
-        self.get_data()
+        node_list_dict = self.get_data()
 
         if self.task_data:
-
             self.update_camera()
             self.update_color_management()
             self.update_res()
@@ -447,14 +448,21 @@ class RSN_OT_UpdateParms(bpy.types.Operator):
             self.update_world()
             self.ssm_light_studio()
 
-            if pref.node_task.update_scripts or self.use_render_mode:
+            if pref.node_task.update_scripts:
                 self.updata_scripts()
-            if pref.node_task.update_path or self.use_render_mode:
+            if pref.node_task.update_path:
                 self.update_path()
-            if pref.node_task.update_view_layer_passes or self.use_render_mode:
+            if pref.node_task.update_view_layer_passes:
                 self.update_view_layer_passes()
             if self.use_render_mode:
                 self.send_email()
+
+        if node_list_dict:
+            # new method
+            for task_name, node_list in node_list_dict.items():
+                for node_name in node_list:
+                    node = self.nt.nodes[node_name]
+                    if node.bl_idname.startswith('RenderNode'): node.process()
 
 
 def register():

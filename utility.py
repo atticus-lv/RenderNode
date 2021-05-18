@@ -289,15 +289,12 @@ class RSN_Nodes:
             task_data['name'] = task_name
             task_data['label'] = task_node.label
 
-            # new method
-            if node.bl_idname.startswith('RenderNode'):
-                node.process()
 
             # old method/nodes
             #####################
 
             # Object select Nodes
-            elif node.bl_idname == 'RSNodePropertyInputNode':
+            if node.bl_idname == 'RSNodePropertyInputNode':
                 if 'property' not in task_data:
                     task_data['property'] = {}
                 task_data['property'].update(node.get_data())
