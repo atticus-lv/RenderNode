@@ -1,6 +1,7 @@
 import bpy
 import nodeitems_utils
 from bpy.props import *
+from mathutils import Color, Vector
 
 from ...utility import *
 from ...preferences import get_pref
@@ -61,7 +62,7 @@ class RenderStackNode(bpy.types.Node):
         input = self.inputs.get(socket_name)
         if input:
             self.inputs.remove(input)
-            self.node_dict.pop(socket_name) # remove from node dict
+            self.node_dict.pop(socket_name)  # remove from node dict
 
     ## STATE METHOD
     #########################################
@@ -132,12 +133,15 @@ class RenderStackNode(bpy.types.Node):
     def store_data(self):
         for input in self.inputs:
             if not input.is_linked:
-                self.node_dict[input.name] = input.value
+                self.node_dict[input.name] = self.transfer_value(input.value)
             else:
                 node = self.reroute_socket_node(input, self)
                 if hasattr(node, 'value'):
-                    self.node_dict[input.name] = node.value
-                    self.node_dict[input.name] = node.value
+                    self.node_dict[input.name] = self.transfer_value(node.value)
+                    self.node_dict[input.name] = self.transfer_value(node.value)
+
+    def transfer_value(self, value):
+        return list(value) if type(value) in {Color, Vector} else value
 
     def process(self):
         pass

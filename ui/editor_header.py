@@ -3,8 +3,7 @@ from ..preferences import get_pref
 
 
 def draw_item(self, context):
-    if context.area.ui_type == 'RenderStackNodeTree' and context.space_data and hasattr(context.space_data,
-                                                                                        'node_tree'):
+    if context.area.ui_type == 'RenderStackNodeTree' and context.space_data.node_tree is not None:
         layout = self.layout
         layout.separator(factor=0.5)
         row = layout.row(align=True)

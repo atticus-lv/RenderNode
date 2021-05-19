@@ -22,10 +22,8 @@ node_categories = [
         nodeitems_utils.NodeItem('RenderNodeObjectInput'),
         nodeitems_utils.NodeItem('RenderNodeStringInput'),
         nodeitems_utils.NodeItem('RenderNodeMaterialInput'),
-
-        nodeitems_utils.NodeItem("RSNodePropertyInputNode"),
-        nodeitems_utils.NodeItem("RSNodeCommonSettingsNode"),
-        nodeitems_utils.NodeItem("RSNodeTaskInfoInputsNode"),
+        # nodeitems_utils.NodeItem("RSNodePropertyInputNode"),
+        # nodeitems_utils.NodeItem("RSNodeTaskInfoInputsNode"),
     ]),
     RSNCategory("OUTPUT", "Output", items=[
         nodeitems_utils.NodeItem("RenderNodeSceneFilePath"),
@@ -84,6 +82,8 @@ node_categories = [
     ]),
 
     RSNCategory("EXTRA", "Extra", items=[
+        nodeitems_utils.NodeItem("RenderNodeProperty"),
+        nodeitems_utils.NodeItem("RSNodeCommonSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeScriptsNode"),
         nodeitems_utils.NodeItem("RSNodeSmtpEmailNode"),
         nodeitems_utils.NodeItem("RSNodeLightStudioNode"),

@@ -29,6 +29,7 @@ class RenderNodeObjectData(RenderStackNode):
     d_type = None
     value = None
 
+
     float_value: FloatProperty(name='Value', update=update_node)
     string_value: StringProperty(name='Value', update=update_node)
     bool_value: BoolProperty(name='Check', update=update_node)
