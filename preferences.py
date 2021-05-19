@@ -58,7 +58,7 @@ class NodeTaskProps(bpy.types.PropertyGroup):
     show: BoolProperty(name="Dropdown", default=True)
     # update_properties
     update_scripts: BoolProperty(name='Update Scripts',
-                                 description="Update scripts node when using viewer node",
+                                 description="Update ex node when using viewer node",
                                  default=False)
     update_path: BoolProperty(name='Update File Path',
                               description="Update File Path node when using viewer node",

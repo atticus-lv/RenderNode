@@ -376,9 +376,9 @@ class RSN_Nodes:
 
             elif node.bl_idname == 'RSNodeScriptsNode':
                 if node.type == 'SINGLE':
-                    if 'scripts' not in task_data:
-                        task_data['scripts'] = {}
-                    task_data['scripts'].update(node.get_data())
+                    if 'ex' not in task_data:
+                        task_data['ex'] = {}
+                    task_data['ex'].update(node.get_data())
                 else:
                     if 'scripts_file' not in task_data:
                         task_data['scripts_file'] = {}
@@ -711,8 +711,8 @@ class RSN_OLD_TaskUpdater():
             bpy.context.window.view_layer = bpy.context.scene.view_layers[self.task_data['view_layer']]
 
     def updata_scripts(self):
-        if 'scripts' in self.task_data:
-            for node_name, value in self.task_data['scripts'].items():
+        if 'ex' in self.task_data:
+            for node_name, value in self.task_data['ex'].items():
                 try:
                     exec(value)
                 except Exception as e:

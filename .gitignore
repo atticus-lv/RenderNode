@@ -36,11 +36,11 @@ nodes/render_settings/__pycache__/CyclesRenderSettingsNode.cpython-37.pyc
 nodes/render_settings/__pycache__/EeveeRenderSettingsNode.cpython-37.pyc
 nodes/render_settings/__pycache__/LuxcoreRenderSettingsNode.cpython-37.pyc
 nodes/render_settings/__pycache__/WorkBenchRenderSettingsNode.cpython-37.pyc
-nodes/scripts/__pycache__/__init__.cpython-37.pyc
-nodes/scripts/__pycache__/ProcessorNode.cpython-37.pyc
-nodes/scripts/__pycache__/ScriptsNode.cpython-37.pyc
-nodes/scripts/__pycache__/SmtpEmailNode.cpython-37.pyc
-nodes/scripts/__pycache__/ssm_LightStudio.cpython-37.pyc
+nodes/ex/__pycache__/__init__.cpython-37.pyc
+nodes/ex/__pycache__/ProcessorNode.cpython-37.pyc
+nodes/ex/__pycache__/ScriptsNode.cpython-37.pyc
+nodes/ex/__pycache__/SmtpEmailNode.cpython-37.pyc
+nodes/ex/__pycache__/ssm_LightStudio.cpython-37.pyc
 nodes/task/__pycache__/__init__.cpython-37.pyc
 nodes/task/__pycache__/RenderListNode.cpython-37.pyc
 nodes/task/__pycache__/TaskListNode.cpython-37.pyc

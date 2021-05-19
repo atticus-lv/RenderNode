@@ -27,22 +27,22 @@ node_categories = [
         nodeitems_utils.NodeItem("RSNodeCommonSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeTaskInfoInputsNode"),
     ]),
+    RSNCategory("OUTPUT", "Output", items=[
+        nodeitems_utils.NodeItem("RenderNodeSceneFilePath"),
+        nodeitems_utils.NodeItem("RenderNodeSceneImageFormat"),
+        nodeitems_utils.NodeItem("RenderNodeSceneFrameRange"),
+        nodeitems_utils.NodeItem("RenderNodeSceneResolution"),  # performance is bad
+        # nodeitems_utils.NodeItem("RSNodeResolutionInputNode"),
+        nodeitems_utils.NodeItem("RSNodeActiveRenderSlotNode"),
+        nodeitems_utils.NodeItem("RSNodeViewLayerPassesNode"),
+    ]),
+
     RSNCategory("SCENE", "Scene", items=[
         nodeitems_utils.NodeItem("RenderNodeSceneCamera"),
         nodeitems_utils.NodeItem("RenderNodeSceneWorld"),
         nodeitems_utils.NodeItem("RenderNodeSceneRenderEngine"),
         nodeitems_utils.NodeItem("RenderNodeSceneViewLayer"),
         nodeitems_utils.NodeItem("RenderNodeSceneColorManagement"),
-    ]),
-
-    RSNCategory("OUTPUT", "Output", items=[
-        nodeitems_utils.NodeItem("RenderNodeSceneFilePath"),
-        nodeitems_utils.NodeItem("RenderNodeSceneImageFormat"),
-        nodeitems_utils.NodeItem("RenderNodeSceneFrameRange"),
-        nodeitems_utils.NodeItem("RenderNodeSceneResolution"), # performance is bad
-        # nodeitems_utils.NodeItem("RSNodeResolutionInputNode"),
-        nodeitems_utils.NodeItem("RSNodeActiveRenderSlotNode"),
-        nodeitems_utils.NodeItem("RSNodeViewLayerPassesNode"),
     ]),
 
     RSNCategory("OBJECT", "Object", items=[
@@ -66,20 +66,20 @@ node_categories = [
     #     nodeitems_utils.NodeItem("RSNodeImageFormatInputNode"),
     # ]),
 
-    RSNCategory("RENDER_SETTINGS", "Render Settings", items=[
+    RSNCategory("VARIANTS", "Variants", items=[
+        nodeitems_utils.NodeItem("RSNodeVariantsNode"),
+        nodeitems_utils.NodeItem("RSNodeSetVariantsNode"),
+        nodeitems_utils.NodeItem("RSNodeNullNode"),
+
+    ]),
+
+    RSNCategory("RENDER_SETTINGS", "Render Settings(Extra)", items=[
         # nodeitems_utils.NodeItem("RSNodeWorkBenchRenderSettingsNode"),
         # nodeitems_utils.NodeItem("RSNodeEeveeRenderSettingsNode"),
         # nodeitems_utils.NodeItem("RSNodeCyclesRenderSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeCyclesLightPathNode"),
         nodeitems_utils.NodeItem("RSNodeOctaneRenderSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeLuxcoreRenderSettingsNode"),
-    ]),
-
-    RSNCategory("VARIANTS", "Variants", items=[
-        nodeitems_utils.NodeItem("RSNodeVariantsNode"),
-        nodeitems_utils.NodeItem("RSNodeSetVariantsNode"),
-        nodeitems_utils.NodeItem("RSNodeNullNode"),
-
     ]),
 
     RSNCategory("EXTRA", "Extra", items=[
