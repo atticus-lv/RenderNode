@@ -33,7 +33,8 @@ node_categories = [
         nodeitems_utils.NodeItem("RenderNodeSceneFrameRange"),
         nodeitems_utils.NodeItem("RenderNodeSceneResolution"),  # performance is bad
         # nodeitems_utils.NodeItem("RSNodeResolutionInputNode"),
-        nodeitems_utils.NodeItem("RSNodeActiveRenderSlotNode"),
+        # nodeitems_utils.NodeItem("RSNodeActiveRenderSlotNode"),
+        nodeitems_utils.NodeItem("RenderNodeSceneRenderSlot"),
         nodeitems_utils.NodeItem("RSNodeViewLayerPassesNode"),
     ]),
 
