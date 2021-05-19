@@ -24,7 +24,7 @@ class RSNodeLuxcoreRenderSettingsNode(RenderStackNode):
 
     def init(self, context):
         self.warning = False
-        self.outputs.new('RSNodeSocketRenderSettings', "Render Settings")
+        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
         self.width = 225
 
     def draw_buttons(self, context, layout):

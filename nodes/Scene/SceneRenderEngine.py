@@ -10,6 +10,10 @@ def update_node(self, context):
         self.create_prop('RenderNodeSocketInt', 'samples', 'Render', default_value=64)
         self.create_prop('RenderNodeSocketInt', 'viewport_samples', 'Viewport', default_value=64)
 
+        if self.engine == 'CYCLES':
+            self.create_prop('RenderNodeSocketBool', 'use_adaptive_sampling', 'Adaptive Sampling', default_value=False)
+        else:
+            self.remove_prop('use_adaptive_sampling')
     else:
         self.remove_prop('samples')
         self.remove_prop('viewport_samples')
@@ -66,15 +70,16 @@ class RenderNodeSceneRenderEngine(RenderStackNode):
 
         # correct numbers
         if 'samples' in self.node_dict:
-            if 'samples' < 1:
-                self.inputs['samples'] = 1
-            if 'viewport_samples' < 1:
-                self.inputs['samples'] = 1
+            if self.inputs['samples'].value < 1:
+                self.inputs['samples'].value = 1
+            if self.inputs['viewport_samples'].value < 1:
+                self.inputs['viewport_samples'].value = 1
 
         # engine
         if self.engine == 'CYCLES':
             self.compare(bpy.context.scene.cycles, 'samples', self.node_dict['samples'])
             self.compare(bpy.context.scene.cycles, 'preview_samples', self.node_dict['viewport_samples'])
+            self.compare(bpy.context.scene.cycles, 'use_adaptive_sampling', self.node_dict['use_adaptive_sampling'])
             self.compare(bpy.context.scene.cycles, 'device', self.cycles_device)
 
         elif self.engine == 'BLENDER_EEVEE':

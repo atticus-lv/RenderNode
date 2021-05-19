@@ -66,7 +66,7 @@ class RSNodeOctaneRenderSettingsNode(RenderStackNode):
     warning_msg: StringProperty(name='warning message', default='')
 
     def init(self, context):
-        self.outputs.new('RSNodeSocketRenderSettings', "Render Settings")
+        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
         self.width = 200
 
     def draw_buttons(self, context, layout):
