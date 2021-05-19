@@ -13,7 +13,7 @@ class RenderNodeObjectInput(RenderStackNode):
     bl_idname = 'RenderNodeObjectInput'
     bl_label = 'Object Input'
 
-    value: PointerProperty(type=bpy.types.Object)
+    value: PointerProperty(type=bpy.types.Object,update=update_node)
 
     def init(self, context):
         self.outputs.new('NodeSocketObject', "Output")

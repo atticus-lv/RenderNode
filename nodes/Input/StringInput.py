@@ -13,7 +13,7 @@ class RenderNodeStringInput(RenderStackNode):
     bl_idname = 'RenderNodeStringInput'
     bl_label = 'String Input'
 
-    value: StringProperty()
+    value: StringProperty(update=update_node)
 
     def init(self, context):
         self.outputs.new('NodeSocketString', "Output")
