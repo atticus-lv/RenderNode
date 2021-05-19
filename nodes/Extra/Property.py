@@ -53,8 +53,6 @@ class RenderNodeProperty(RenderStackNode):
 
     def process(self):
         self.store_data()
-        # convert special Type
-
         if 'value' not in self.node_dict: return None
 
         try:
@@ -62,8 +60,6 @@ class RenderNodeProperty(RenderStackNode):
             if obj == self.node_dict['value']: return None
 
             exec(f'{self.full_data_path} = {self.node_dict["value"]}')
-
-
 
         except Exception as e:
             print(e)

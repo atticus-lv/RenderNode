@@ -11,7 +11,7 @@ def update_node(self, context):
 
 class RenderNodeObjectInput(RenderStackNode):
     bl_idname = 'RenderNodeMaterialInput'
-    bl_label = 'Material Input +'
+    bl_label = 'Material Input'
 
     value: PointerProperty(type=bpy.types.Material)
 

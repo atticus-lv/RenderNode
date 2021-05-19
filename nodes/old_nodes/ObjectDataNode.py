@@ -1,9 +1,8 @@
-import bpy
-from bpy.props import *
 from ...nodes.BASE.node_tree import RenderStackNode
-# from ...utility import source_attr
 from mathutils import Color, Vector
 
+import bpy
+from bpy.props import *
 
 def update_node(self, context):
     self.update_parms()

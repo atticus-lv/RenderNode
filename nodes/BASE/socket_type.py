@@ -90,7 +90,7 @@ class RenderNodeSocketColor(RenderNodeSocket):
                                min=0.0, max=1.0)
 
     def draw_color(self, context, node):
-        return 0.15, 1.0, 1.0, 1
+        return 0.9, 0.9, 0.3, 1
 
 
 class RenderNodeSocketObject(RenderNodeSocket):

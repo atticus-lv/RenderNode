@@ -62,7 +62,7 @@ def update_node(self, context):
 
 class RenderNodeObjectPSR(RenderStackNode):
     bl_idname = 'RenderNodeObjectPSR'
-    bl_label = 'Object PSR +'
+    bl_label = 'Object PSR'
 
     use_p: BoolProperty(name='P', update=update_node)
     use_s: BoolProperty(name='S', update=update_node)

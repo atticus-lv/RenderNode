@@ -49,8 +49,7 @@ node_categories = [
         nodeitems_utils.NodeItem('RenderNodeObjectMaterial'),
         nodeitems_utils.NodeItem('RenderNodeObjectPSR'),
         # nodeitems_utils.NodeItem('RenderNodeObjectPSR'),
-        # nodeitems_utils.NodeItem('RenderNodeObjectData'),  # temp_file_format, maybe remove later
-        nodeitems_utils.NodeItem('RSNodeCollectionDisplayNode'),
+        nodeitems_utils.NodeItem('RenderNodeObjectData'),
         # nodeitems_utils.NodeItem('RSNodeObjectDisplayNode'),
         # nodeitems_utils.NodeItem('RSNodeObjectMaterialNode'),
         # nodeitems_utils.NodeItem('RSNodeObjectPSRNode'),
@@ -83,6 +82,7 @@ node_categories = [
 
     RSNCategory("EXTRA", "Extra", items=[
         nodeitems_utils.NodeItem("RenderNodeProperty"),
+        nodeitems_utils.NodeItem('RSNodeCollectionDisplayNode'),
         nodeitems_utils.NodeItem("RSNodeCommonSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeScriptsNode"),
         nodeitems_utils.NodeItem("RSNodeSmtpEmailNode"),

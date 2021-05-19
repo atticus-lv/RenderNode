@@ -11,7 +11,7 @@ def update_node(self, context):
 
 class RenderNodeStringInput(RenderStackNode):
     bl_idname = 'RenderNodeStringInput'
-    bl_label = 'String Input +'
+    bl_label = 'String Input'
 
     value: StringProperty()
 
