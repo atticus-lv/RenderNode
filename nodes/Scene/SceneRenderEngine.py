@@ -64,10 +64,19 @@ class RenderNodeSceneRenderEngine(RenderStackNode):
     def process(self):
         self.store_data()
 
+        # correct numbers
+        if 'samples' in self.node_dict:
+            if 'samples' < 1:
+                self.inputs['samples'] = 1
+            if 'viewport_samples' < 1:
+                self.inputs['samples'] = 1
+
+        # engine
         if self.engine == 'CYCLES':
             self.compare(bpy.context.scene.cycles, 'samples', self.node_dict['samples'])
             self.compare(bpy.context.scene.cycles, 'preview_samples', self.node_dict['viewport_samples'])
             self.compare(bpy.context.scene.cycles, 'device', self.cycles_device)
+
         elif self.engine == 'BLENDER_EEVEE':
             self.compare(bpy.context.scene.eevee, 'taa_render_samples', self.node_dict['samples'])
             self.compare(bpy.context.scene.eevee, 'taa_samples', self.node_dict['viewport_samples'])

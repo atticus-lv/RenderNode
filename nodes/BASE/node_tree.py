@@ -59,7 +59,9 @@ class RenderStackNode(bpy.types.Node):
 
     def remove_prop(self, socket_name):
         input = self.inputs.get(socket_name)
-        if input: self.inputs.remove(input)
+        if input:
+            self.inputs.remove(input)
+            self.node_dict.pop(socket_name) # remove from node dict
 
     ## STATE METHOD
     #########################################
