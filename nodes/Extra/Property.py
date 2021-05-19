@@ -13,7 +13,7 @@ def update_node(self, context):
         self.remove_prop('value')
 
         if self.d_type == int:
-            self.create_prop('RenderNodeSocketInt', 'value', "Object")
+            self.create_prop('RenderNodeSocketInt', 'value', "Int")
         elif self.d_type == float:
             self.create_prop('RenderNodeSocketFloat', 'value', "Float")
         elif self.d_type == str:
@@ -24,10 +24,6 @@ def update_node(self, context):
             self.create_prop('RenderNodeSocketColor', 'value', "Color")
         elif self.d_type == Vector:
             self.create_prop('RenderNodeSocketVector', 'value', "Vector")
-        elif self.d_type == bpy.types.Object:
-            self.create_prop('RenderNodeSocketObject', 'value', "Object")
-        elif self.d_type == bpy.types.Material:
-            self.create_prop('RenderNodeSocketMaterial', 'value', "Material")
 
         self.update_parms()
 
@@ -43,6 +39,7 @@ class RenderNodeProperty(RenderStackNode):
     full_data_path: StringProperty(name='Path',
                                    description='Full Data Path',
                                    default='', update=update_node)
+
     d_type = None
 
     def init(self, context):
@@ -51,6 +48,8 @@ class RenderNodeProperty(RenderStackNode):
 
     def draw_buttons(self, context, layout):
         layout.prop(self, 'full_data_path')
+        if self.d_type not in {int, float, str, bool, Color, Vector, None}:
+            layout.label(text='Only support int, float, str, bool, Color, Vector')
 
     def process(self):
         self.store_data()
@@ -60,7 +59,11 @@ class RenderNodeProperty(RenderStackNode):
 
         try:
             obj = eval(self.full_data_path)
-            if obj != self.node_dict['value']: exec(f"{self.full_data_path} = {self.node_dict['value']}")
+            if obj == self.node_dict['value']: return None
+
+            exec(f'{self.full_data_path} = {self.node_dict["value"]}')
+
+
 
         except Exception as e:
             print(e)
