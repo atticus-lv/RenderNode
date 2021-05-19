@@ -9,7 +9,7 @@ from ...nodes.BASE.node_tree import RenderStackNode
 def get_render_preset_path():
     bl_path = os.getcwd()
     version = f'{bpy.app.version[0]}' + '.' + f'{bpy.app.version[1]}'
-    preset_folder = os.path.join(bl_path, version, 'ex', 'presets')
+    preset_folder = os.path.join(bl_path, version, 'scripts', 'presets')
     return os.path.join(preset_folder, 'render')
 
 
