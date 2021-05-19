@@ -6,17 +6,43 @@ from collections import defaultdict
 
 
 def update_node(self, context):
-    if self.engine in {'CYCLES', 'BLENDER_EEVEE'}:
-        self.create_prop('RenderNodeSocketInt', 'samples', 'Render', default_value=64)
-        self.create_prop('RenderNodeSocketInt', 'viewport_samples', 'Viewport', default_value=64)
-
-        if self.engine == 'CYCLES':
-            self.create_prop('RenderNodeSocketBool', 'use_adaptive_sampling', 'Adaptive Sampling', default_value=False)
-        else:
-            self.remove_prop('use_adaptive_sampling')
+    if self.engine == 'CYCLES':
+        self.create_prop('RenderNodeSocketInt', 'cycles_samples', 'Render', default_value=64)
+        self.create_prop('RenderNodeSocketInt', 'preview_samples', 'Viewport', default_value=64)
+        self.create_prop('RenderNodeSocketBool', 'use_adaptive_sampling', 'Adaptive Sampling', default_value=False)
     else:
-        self.remove_prop('samples')
-        self.remove_prop('viewport_samples')
+        self.remove_prop('cycles_samples')
+        self.remove_prop('preview_samples')
+        self.remove_prop('use_adaptive_sampling')
+
+    if self.engine == 'BLENDER_EEVEE':
+        self.create_prop('RenderNodeSocketInt', 'taa_render_samples', 'Render', default_value=64)
+        self.create_prop('RenderNodeSocketInt', 'taa_samples', 'Viewport', default_value=64)
+    else:
+        self.remove_prop('taa_render_samples')
+        self.remove_prop('taa_samples')
+
+    if self.engine == 'LUXCORE':
+        self.create_prop('RenderStackNodeBool', 'use_samples', 'Use Samples', default=True)
+        self.create_prop('RenderNodeSocketInt', 'luxcore_samples', 'Half Samples', default_value=64)
+        self.create_prop('RenderStackNodeBool', 'use_time', 'Use Time', default=True)
+        self.create_prop('RenderNodeSocketInt', 'luxcore_time', 'Half Time', default_value=64)
+    else:
+        self.remove_prop('use_samples')
+        self.remove_prop('luxcore_samples')
+        self.remove_prop('use_time')
+        self.remove_prop('luxcore_time')
+
+    if self.engine == 'octane':
+        self.create_prop('RenderNodeSocketInt', 'max_samples', 'Max. samples', default_value=500)
+        self.create_prop('RenderNodeSocketInt', 'max_diffuse_depth', 'Max. diffuse depth', default_value=5)
+        self.create_prop('RenderNodeSocketInt', 'max_glossy_depth', 'Max. glossy depth', default_value=12)
+        self.create_prop('RenderNodeSocketInt', 'max_scatter_depth', 'Max. scatter depth', default_value=8)
+    else:
+        self.remove_prop('max_samples')
+        self.remove_prop('max_diffuse_depth')
+        self.remove_prop('max_glossy_depth')
+        self.remove_prop('max_scatter_depth')
 
     self.update_parms()
 
@@ -49,8 +75,8 @@ class RenderNodeSceneRenderEngine(RenderStackNode):
                             update=update_node)
 
     def init(self, context):
-        self.create_prop('RenderNodeSocketInt', 'samples', 'Samples', default_value=64)
-        self.create_prop('RenderNodeSocketInt', 'viewport_samples', 'Viewport', default_value=64)
+        self.create_prop('RenderNodeSocketInt', 'taa_render_samples', 'Render', default_value=64)
+        self.create_prop('RenderNodeSocketInt', 'taa_samples', 'Viewport', default_value=64)
 
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
@@ -69,27 +95,41 @@ class RenderNodeSceneRenderEngine(RenderStackNode):
         self.store_data()
 
         # correct numbers
-        if 'samples' in self.node_dict:
-            if self.inputs['samples'].value < 1:
-                self.inputs['samples'].value = 1
-            if self.inputs['viewport_samples'].value < 1:
-                self.inputs['viewport_samples'].value = 1
+        for atrr in ['cycles_samples', 'preview_samples',
+                     'taa_render_samples', 'taa_samples',
+                     'luxcore_samples', 'luxcore_time',
+                     'max_samples', 'max_diffuse_depth', 'max_glossy_depth', 'max_scatter_depth']:
+
+            if atrr in self.node_dict:
+                if self.inputs[atrr].value < 1: self.inputs[atrr].value = 1
 
         # engine
         if self.engine == 'CYCLES':
-            self.compare(bpy.context.scene.cycles, 'samples', self.node_dict['samples'])
-            self.compare(bpy.context.scene.cycles, 'preview_samples', self.node_dict['viewport_samples'])
+            self.compare(bpy.context.scene.cycles, 'samples', self.node_dict['cycles_samples'])
+            self.compare(bpy.context.scene.cycles, 'preview_samples', self.node_dict['preview_samples'])
             self.compare(bpy.context.scene.cycles, 'use_adaptive_sampling', self.node_dict['use_adaptive_sampling'])
             self.compare(bpy.context.scene.cycles, 'device', self.cycles_device)
 
         elif self.engine == 'BLENDER_EEVEE':
-            self.compare(bpy.context.scene.eevee, 'taa_render_samples', self.node_dict['samples'])
-            self.compare(bpy.context.scene.eevee, 'taa_samples', self.node_dict['viewport_samples'])
+            self.compare(bpy.context.scene.eevee, 'taa_render_samples', self.node_dict['taa_render_samples'])
+            self.compare(bpy.context.scene.eevee, 'taa_samples', self.node_dict['taa_samples'])
 
         elif self.engine == 'BLENDER_WORKBENCH':
             self.compare(bpy.context.scene.display, 'render_aa', self.render_aa)
             self.compare(bpy.context.scene.display.shading, 'light', self.light)
             self.compare(bpy.context.scene.display.shading, 'studio_light', self.studio_light)
+
+        elif self.engine == 'LUXCORE':
+            self.compare(bpy.context.scene.luxcore.halt, 'use_samples', self.node_dict['use_samples'])
+            self.compare(bpy.context.scene.luxcore.halt, 'use_time', self.node_dict['use_time'])
+            self.compare(bpy.context.scene.luxcore.halt, 'samples', self.node_dict['luxcore_samples'])
+            self.compare(bpy.context.scene.luxcore.halt, 'time', self.node_dict['luxcore_time'])
+
+        elif self.engine == 'octane':
+            self.compare(bpy.context.scene.octane, 'max_samples', self.node_dict['max_samples'])
+            self.compare(bpy.context.scene.octane, 'max_diffuse_depth', self.node_dict['max_diffuse_depth'])
+            self.compare(bpy.context.scene.octane, 'max_glossy_depth', self.node_dict['max_glossy_depth'])
+            self.compare(bpy.context.scene.octane, 'max_scatter_depth', self.node_dict['max_scatter_depth'])
 
         # switch engine
         self.compare(bpy.context.scene.render, 'engine', self.engine)
