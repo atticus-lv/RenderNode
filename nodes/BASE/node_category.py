@@ -67,9 +67,9 @@ node_categories = [
     # ]),
 
     RSNCategory("RENDER_SETTINGS", "Render Settings", items=[
-        nodeitems_utils.NodeItem("RSNodeWorkBenchRenderSettingsNode"),
-        nodeitems_utils.NodeItem("RSNodeEeveeRenderSettingsNode"),
-        nodeitems_utils.NodeItem("RSNodeCyclesRenderSettingsNode"),
+        # nodeitems_utils.NodeItem("RSNodeWorkBenchRenderSettingsNode"),
+        # nodeitems_utils.NodeItem("RSNodeEeveeRenderSettingsNode"),
+        # nodeitems_utils.NodeItem("RSNodeCyclesRenderSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeCyclesLightPathNode"),
         nodeitems_utils.NodeItem("RSNodeOctaneRenderSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeLuxcoreRenderSettingsNode"),
