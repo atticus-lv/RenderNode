@@ -19,7 +19,10 @@ class RenderNodeObjectInput(RenderStackNode):
         self.outputs.new('NodeSocketObject', "Output")
 
     def draw_buttons(self, context, layout):
-        layout.prop(self, 'value', text='')
+        row = layout.row(align=1)
+        row.prop(self, 'value', text='')
+        if self.value:
+            row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.value.name
 
 
 def register():

@@ -16,7 +16,8 @@ class RN_OT_AcceptUpdate(bpy.types.Operator):
                 context.window_manager.event_timer_remove(self._timer)
                 return {"FINISHED"}
             else:
-                ob = self.node.inputs['object'].value
+                self.node.store_data()
+                ob = self.node.node_dict['object']
                 if not ob:
                     return {'PASS_THROUGH'}
                 if 'location' in self.node.inputs:
