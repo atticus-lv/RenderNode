@@ -43,17 +43,17 @@ class RN_OT_AcceptUpdate(bpy.types.Operator):
 
 def update_node(self, context):
     if self.use_p:
-        self.create_prop('RenderNodeSocketVector', 'location', 'Location', default_value=(0, 0, 0))
+        self.create_prop('RenderNodeSocketTranslation', 'location', 'Location', default_value=(0, 0, 0))
     else:
         self.remove_prop('location')
 
     if self.use_s:
-        self.create_prop('RenderNodeSocketVector', 'scale', 'Scale', default_value=(1, 1, 1))
+        self.create_prop('RenderNodeSocketXYZ', 'scale', 'Scale', default_value=(1, 1, 1))
     else:
         self.remove_prop('scale')
 
     if self.use_r:
-        self.create_prop('RenderNodeSocketVector', 'rotation', 'Rotation', default_value=(0, 0, 0))
+        self.create_prop('RenderNodeSocketEuler', 'rotation', 'Rotation', default_value=(0, 0, 0))
     else:
         self.remove_prop('rotation')
 
