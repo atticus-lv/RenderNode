@@ -13,13 +13,13 @@ class RenderNodeObjectInput(RenderStackNode):
     bl_idname = 'RenderNodeObjectInput'
     bl_label = 'Object Input'
 
-    value: PointerProperty(type=bpy.types.Object,update=update_node)
+    value: PointerProperty(type=bpy.types.Object, update=update_node)
 
     def init(self, context):
         self.outputs.new('NodeSocketObject', "Output")
 
     def draw_buttons(self, context, layout):
-        layout.prop(self, 'value',text='')
+        layout.prop(self, 'value', text='')
 
 
 def register():

@@ -144,9 +144,9 @@ class RSN_Nodes:
 
         def append_node_to_list(node):
             """Skip the reroute node"""
-            if node.bl_idname != 'NodeReroute':
-                if len(node_list) == 0 or (len(node_list) != 0 and node.name != node_list[-1]):
-                    node_list.append(node.name)
+            # if node.bl_idname != 'NodeReroute':
+            if len(node_list) == 0 or (len(node_list) != 0 and node.name != node_list[-1]):
+                node_list.append(node.name)
 
         # @lru_cache(maxsize=None)
         def get_sub_node(node, pass_mute_node=True):
