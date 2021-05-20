@@ -21,13 +21,17 @@ It can be also use in look-dev or design.<br>
 
 <!-- div:left-panel -->
 
-**Latest** *New features and fixes*:
+**Latest** *New fixes*:
 
 [https://github.com/atticus-lv/RenderStackNode/archive/main.zip](https://github.com/atticus-lv/RenderStackNode/archive/main.zip)
 
 **Stable** *Ready for work*
 
 [Stable 📚 ](https://github.com/atticus-lv/RenderStackNode/releases/latest)
+
+**Develop** *New features*
+
+https://github.com/atticus-lv/RenderStackNode/archive/develop.zip
 
 
 

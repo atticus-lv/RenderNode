@@ -13,7 +13,7 @@
 <!-- div:right-panel -->
 
 > [!TIP]
-> You can modify shortcuts and default behavior of some nodes here
+> You can change some UI color/the behavior of some nodes/shortcuts here
 
 <!-- tabs:start -->
 
@@ -25,8 +25,8 @@ set your log level<br>warning is default. It only show the user's error
 
 set the default behavior of some nodes
 
-+ Viewer
-    + viewport update parms
++ Task(Update option)
+    + viewport / render update option
 + FilePath
     + the default path expression of the file path node, check for more details
 + SMTP
@@ -36,9 +36,10 @@ set the default behavior of some nodes
 
 change your shortcuts
 
-+ Add Viewer node : select a task node and press the shortcut
++ Set active task : select a task node and press the shortcut
 + Mute node : mute the selected nodes
 + Helper menu : pie menu in the node editor
++ Quick Search : quick search and add nodes
 
 <!-- tabs:end -->
 
@@ -76,27 +77,9 @@ change your shortcuts
 > [!TIP]
 > A help menu for productivity in the node editor
 
-+ Simple Task : add a task with some basic node
 + Merge Selection : merge selected nodes (task node or settings nodes) to a merge node
 + Make Various : make various version with selected nodes
 + Link to Muti Task : Link active node to selected task node
-
-<!-- panels:end -->
-
-<!-- panels:start -->
-
-<!-- div:title-panel -->
-
-### Render Confirm Sheet
-
-<!-- div:left-panel -->
-
-<img src="media/img/rendersheet.png" width=720px;  alt=""/>
-
-<!-- div:right-panel -->
-
-> [!TIP]
-> Show when hit the render confirm button in *RenderList* node <br>The render sheet is used to confirm the information before the final rendering
 
 <!-- panels:end -->
 
