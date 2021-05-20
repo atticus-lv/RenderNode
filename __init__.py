@@ -1,8 +1,8 @@
 bl_info = {
     "name"       : "Render Node",
     "author"     : "Atticus",
-    "version"    : (1, 2, 5),
-    "blender"    : (2, 92, 0),
+    "version"    : (2, 0, 0),
+    "blender"    : (2, 93, 0),
     "location"   : "Node Editor > Render Editor",
     "description": "Node based render queue workflow",
     'warning'    : "",
@@ -50,7 +50,7 @@ def register():
         if name in sys.modules and hasattr(sys.modules[name], 'register'):
             try:
                 sys.modules[name].register()
-            except ValueError: # open template file may cause this problem
+            except ValueError:  # open template file may cause this problem
                 pass
 
 

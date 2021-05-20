@@ -58,7 +58,7 @@ def compare(obj: object, attr: str, val):
 
 
 class RSN_NodeTree:
-    """To store context node tree for getting data in renderstack"""
+    """To store context node tree for getting data in RenderQueue"""
 
     def get_context_tree(self, return_name=False):
         try:
@@ -163,12 +163,8 @@ class RSN_Nodes:
                             continue
                         else:
                             get_sub_node(sub_node)
-                    # This error shows when the dragging the link off viewer node(Works well with knife tool)
-                    # this seems to be a blender error
-                    except IndexError:
-                        pass
-                else:
-                    continue
+                    except IndexError:  # This error shows when the dragging the link off a node(Works well with knife tool)
+                        pass  # this seems to be a blender error
             # nodes append from left to right, from top to bottom
             append_node_to_list(node)
 
@@ -234,12 +230,9 @@ class RSN_Nodes:
                             continue
                         else:
                             get_sub_node(sub_node)
-                    # This error shows when the dragging the link off viewer node(Works well with knife tool)
-                    # this seems to be a blender error
-                    except IndexError:
-                        pass
-                else:
-                    continue
+
+                    except IndexError:  # This error shows when the dragging the link off viewer node(Works well with knife tool)
+                        pass  # this seems to be a blender error
             # nodes append from left to right, from top to bottom
             append_node_to_list(node)
 
@@ -288,24 +281,9 @@ class RSN_Nodes:
         except AttributeError:
             pass
 
-    def get_children_from_render_list(self, return_dict=False, type='RSNodeTaskNode'):
-        """pack method for render list node(get all task)
-
-        """
-
-        render_list = self.get_node_from_name(self.root_node.name)
-        node_list = self.get_children_from_node(render_list)
-        if not return_dict:
-            return node_list
-        else:
-            return self.get_sub_node_dict_from_node_list(node_list=node_list,
-                                                         parent_node_type=type)
-
-    def graph(self):
-        node_list = self.get_children_from_node(self.root_node)
 
     def get_task_data(self, task_name, task_dict):
-        """transfer nodes to data
+        """transfer nodes to data (OLD METHOD)
         :parm task_name: name of the task node
         :parm task_dict: parse dict
             {'task node name':[

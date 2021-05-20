@@ -186,10 +186,12 @@ class RenderStackNodeGroup(bpy.types.NodeCustomGroup):
         return ntree.bl_idname == 'RenderStackNodeTree'
 
 
+
+
+
 classes = (
     RenderStackNodeTree,
     RenderStackNode,
-    RenderStackNodeGroup,
 
 )
 
