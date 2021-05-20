@@ -1,10 +1,44 @@
+### Object Input
 
+> provide a object output
+>
+> It can connect to the nodes that have a object socket input
+
+### String Input
+
+> provide a string output<br>It can connect to the nodes that have a string socket input
+
+### Material Input
+
+> provide a material output<br>It can connect to the nodes that have a material socket input
+
+
+
+## Obsolete Nodes
+
+> The Following nodes are Obsolete.<br>Most of them can be replaced by new nodes<br>Although it still works, it is not recommended
 
 <!-- panels:start -->
 
 <!-- div:title-panel -->
 
-### Camera
+### Common Settings
+
+<!-- div:left-panel -->
+
+<img src="media/img/nodeInput/5.png" width="720px">
+
+<!-- div:right-panel -->
+
+> This node contains several nodes<br>camera, render engine, file path node, resolution, frame range
+
+<!-- panels:end -->
+
+<!-- panels:start -->
+
+<!-- div:title-panel -->
+
+### Camera 
 
 <!-- div:left-panel -->
 
@@ -20,7 +54,7 @@
 
 <!-- div:title-panel -->
 
-### World
+### World 
 
 <!-- div:left-panel -->
 
@@ -38,7 +72,7 @@
 
 <!-- div:title-panel -->
 
-### View Layer
+### View Layer 
 
 <!-- div:left-panel -->
 
@@ -56,7 +90,7 @@
 
 <!-- div:title-panel -->
 
-### Color Management
+### Color Management 
 
 <!-- div:left-panel -->
 
@@ -66,31 +100,13 @@
 
 > This node let you to set the color management of the scene(default ocio only).
 
-
 <!-- panels:end -->
 
 <!-- panels:start -->
 
 <!-- div:title-panel -->
 
-### Common Settings
-
-<!-- div:left-panel -->
-
-<img src="media/img/nodeInput/5.png" width="720px">
-
-<!-- div:right-panel -->
-
-> This node contains several nodes<br>camera, render engine, file path node, resolution, frame range
-> 
-
-<!-- panels:end -->
-
-<!-- panels:start -->
-
-<!-- div:title-panel -->
-
-### Property
+### Property  
 
 <!-- div:left-panel -->
 
@@ -108,7 +124,7 @@
 
 <!-- div:title-panel -->
 
-### Task Info (Experimental)
+### Task Info  
 
 <!-- div:left-panel -->
 

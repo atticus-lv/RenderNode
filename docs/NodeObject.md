@@ -65,11 +65,13 @@ First select the object<br>then right click on the property you want to pick<br>
 
 <!-- panels:end -->
 
+## Obsolete Nodes
+
 <!-- panels:start -->
 
 <!-- div:title-panel -->
 
-### Object Modifier
+### Object Modifier 
 
 <!-- div:left-panel -->
 
@@ -82,13 +84,3 @@ First select the object<br>then right click on the property you want to pick<br>
 First select the object, then right click on the property you want to pick<br>then **Copy data path**, paste it in the node's data path.<br>Now support most modifier (except for the geometry node modifier)<br><img src="media/img/nodeObject/5.5.png" width="360px">
 
 <!-- panels:end -->
-
-
-
-
-
-
-
-
-
-
