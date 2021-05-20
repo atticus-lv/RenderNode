@@ -297,7 +297,7 @@ class RSN_Nodes:
 
         for node_name in task_dict[task_name]:
             node = self.nt.nodes[node_name]
-            node.debug()
+            if node.bl_idname != 'NodeReroute': node.debug()
             # task node
             task_node = self.nt.nodes[task_name]
             task_data['name'] = task_name
@@ -365,7 +365,7 @@ class RSN_Nodes:
             else:
                 try:
                     task_data.update(node.get_data())
-                except TypeError:
+                except (TypeError,AttributeError): # get from some build-in node like reroute node
                     pass
 
         return task_data

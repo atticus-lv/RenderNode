@@ -132,15 +132,17 @@ class RenderStackNode(bpy.types.Node):
 
     def store_data(self):
         for input in self.inputs:
-            if not input.is_linked:
-                self.node_dict[input.name] = self.transfer_value(input.value)
-            else:
+            if input.is_linked:
                 node = self.reroute_socket_node(input, self)
+                print(f'accept result:{node}')
                 if hasattr(node, 'value'):
                     self.node_dict[input.name] = self.transfer_value(node.value)
                     self.node_dict[input.name] = self.transfer_value(node.value)
+            else:
+                self.node_dict[input.name] = self.transfer_value(input.value)
 
     def transfer_value(self, value):
+
         return list(value) if type(value) in {Color, Vector} else value
 
     def process(self):
@@ -158,10 +160,8 @@ class RenderStackNode(bpy.types.Node):
         def get_sub_node(socket, node):
             if socket.is_linked:
                 sub_node = socket.links[0].from_node
-                if len(sub_node.inputs) > 0:
-                    get_sub_node(sub_node.inputs[0], sub_node)
-                else:
-                    return sub_node
+                if len(sub_node.inputs) == 0: return sub_node
+                return get_sub_node(sub_node.inputs[0], sub_node)
 
         return get_sub_node(socket, node)
 
