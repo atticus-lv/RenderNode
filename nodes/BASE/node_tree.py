@@ -156,14 +156,12 @@ class RenderStackNode(bpy.types.Node):
     @staticmethod
     def reroute_socket_node(socket, node, target_node_type=None):
         def get_sub_node(socket, node):
-            target_node = None
             if socket.is_linked:
                 sub_node = socket.links[0].from_node
                 if len(sub_node.inputs) > 0:
                     get_sub_node(sub_node.inputs[0], sub_node)
                 else:
-                    target_node = sub_node
-            return target_node
+                    return sub_node
 
         return get_sub_node(socket, node)
 
@@ -184,9 +182,6 @@ class RenderStackNodeGroup(bpy.types.NodeCustomGroup):
     @classmethod
     def poll(cls, ntree):
         return ntree.bl_idname == 'RenderStackNodeTree'
-
-
-
 
 
 classes = (
