@@ -17,33 +17,33 @@ class RSN_OT_SimpleTask(bpy.types.Operator):
         y = 0
 
         task = nt.nodes.new('RSNodeTaskNode')
-        cam = nt.nodes.new('RSNodeCamInputNode')
-        eevee = nt.nodes.new('RSNodeEeveeRenderSettingsNode')
-        path = nt.nodes.new('RSNodeFilePathInputNode')
-        res = nt.nodes.new('RSNodeResolutionInputNode')
+        cam = nt.nodes.new('RenderNodeSceneCamera')
+        engine = nt.nodes.new('RenderNodeSceneRenderEngine')
+        path = nt.nodes.new('RenderNodeSceneFilePath')
+        res = nt.nodes.new('RenderNodeSceneResolution')
         # range = nt.nodes.new('RSNodeFrameRangeInputNode')
         merge_output = nt.nodes.new('RSNodeSettingsMergeNode')
 
         task.location = (x + 10, y)
         cam.location = (x - 200, y + 50)
-        eevee.location = (x - 200, y - 50)
+        engine.location = (x - 200, y - 50)
         path.location = (x - 500, y - 100)
         res.location = (x - 450, y - 250)
         # range.location = (x - 450, y - 380)
-        merge_output.location = (x - 200, y - 150)
+        merge_output.location = (x - 200, y - 200)
 
         for node in nt.nodes:
             node.select = 0
         task.select = 1
         cam.select = 1
-        eevee.select = 1
+        engine.select = 1
         path.select = 1
         res.select = 1
         # range.select = 1
         merge_output.select = 1
 
         nt.links.new(cam.outputs[0], task.inputs[0])
-        nt.links.new(eevee.outputs[0], task.inputs[1])
+        nt.links.new(engine.outputs[0], task.inputs[1])
         nt.links.new(merge_output.outputs[0], task.inputs[2])
         nt.links.new(path.outputs[0], merge_output.inputs[0])
         nt.links.new(res.outputs[0], merge_output.inputs[1])

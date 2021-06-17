@@ -18,11 +18,15 @@ class RenderNodeSceneFrameRange(RenderStackNode):
     bl_label = "Scene Frame Range"
 
     def init(self, context):
-        self.create_prop('RenderNodeSocketInt', 'frame_start', 'Start', default_value=bpy.context.scene.frame_start)
-        self.create_prop('RenderNodeSocketInt', 'frame_end', 'End', default_value=bpy.context.scene.frame_end)
-        self.create_prop('RenderNodeSocketInt', 'frame_step', 'Step', default_value=bpy.context.scene.frame_step)
+        self.create_prop('RenderNodeSocketInt', 'frame_start', 'Start')
+        self.create_prop('RenderNodeSocketInt', 'frame_end', 'End')
+        self.create_prop('RenderNodeSocketInt', 'frame_step', 'Step')
 
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
+
+        self.inputs['frame_start'].value = bpy.context.scene.frame_start
+        self.inputs['frame_end'].value = bpy.context.scene.frame_end
+        self.inputs['frame_step'].value = bpy.context.scene.frame_step
 
     def process(self):
         # correct input
