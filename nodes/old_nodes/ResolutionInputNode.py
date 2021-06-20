@@ -153,9 +153,10 @@ classes = (
 def register():
     for cls in classes:
         bpy.utils.register_class(cls)
-
-    add_res_preset_to_user()
-
+    try:
+        add_res_preset_to_user()
+    except:
+        pass
 
 def unregister():
     for cls in classes:
