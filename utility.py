@@ -281,7 +281,6 @@ class RSN_Nodes:
         except AttributeError:
             pass
 
-
     def get_task_data(self, task_name, task_dict):
         """transfer nodes to data (OLD METHOD)
         :parm task_name: name of the task node
@@ -365,7 +364,7 @@ class RSN_Nodes:
             else:
                 try:
                     task_data.update(node.get_data())
-                except (TypeError,AttributeError): # get from some build-in node like reroute node
+                except (TypeError, AttributeError):  # get from some build-in node like reroute node
                     pass
 
         return task_data
@@ -381,6 +380,7 @@ class RenderQueue():
         self.nt = nodetree
         self.root_node = render_list_node
         self.task_queue = deque()
+        self.frame_range_queue = deque()
 
         self.task_list = []
 
@@ -391,6 +391,7 @@ class RenderQueue():
             if item.render:
                 self.task_queue.append(item.name)
                 self.task_list.append(item.name)
+                self.frame_range_queue.append([item.frame_start, item.frame_end, item.frame_step])
 
         # for processing visualization
         bpy.context.window_manager.rsn_cur_task_list = ','.join(self.task_list)
@@ -400,23 +401,7 @@ class RenderQueue():
 
     def get_frame_range(self):
         self.force_update()
-        # if not frame range node input, consider as render single frmae
-        frame_start = frame_end = bpy.context.scene.frame_start
-        frame_step = bpy.context.scene.frame_step
-
-        # search frame range node
-        node_list = bpy.context.window_manager.rsn_node_list.split(',')
-        frame_range_nodes = [self.nt.nodes[name] for name in node_list if
-                             self.nt.nodes[name].bl_idname == 'RSNodeFrameRangeInputNode']
-
-        # get the last frame range node for current task
-        if len(frame_range_nodes) != 0:
-            node = frame_range_nodes[-1]
-            frame_start = node.frame_start
-            frame_end = node.frame_end
-            frame_step = node.frame_step
-
-        return frame_start, frame_end, frame_step
+        return self.frame_range_queue[0]
 
     def force_update(self):
         if not self.is_empty():
@@ -424,10 +409,13 @@ class RenderQueue():
 
     def pop(self):
         if not self.is_empty():
+            self.frame_range_queue.popleft()
             return self.task_queue.popleft()
 
     def clear_queue(self):
         self.task_queue.clear()
+        self.frame_range_queue.clear()
+
         bpy.context.window_manager.rsn_cur_task_list = ''
 
 
