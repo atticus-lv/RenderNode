@@ -4,10 +4,6 @@ from bpy.props import *
 from ...nodes.BASE.node_tree import RenderStackNode
 from ...preferences import get_pref
 
-import os
-import time
-import re
-
 
 def update_node(self, context):
     self.update_parms()
