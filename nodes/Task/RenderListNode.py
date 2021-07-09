@@ -17,12 +17,29 @@ class ProcessorBarProperty(bpy.types.PropertyGroup):
     wait_col: FloatVectorProperty(name='Wait Color', subtype='COLOR', default=(0, 0, 0), min=1, max=1)
 
 
+def correct_task_frame(self, context):
+    context.scene.frame_start = self.frame_start
+    context.scene.frame_end = self.frame_end
+    context.scene.frame_step = self.frame_step
+
+
 class TaskProperty(bpy.types.PropertyGroup):
     name: StringProperty(
         default="",
         name="Task Node Name",
         description="Name of the node")
+
     render: BoolProperty(name="Render", default=True, description="Use for render")
+
+    frame_start: IntProperty(
+        default=1,
+        name="Start", description="Frame Start", update=correct_task_frame)
+    frame_end: IntProperty(
+        default=1,
+        name="End", description="Frame End", update=correct_task_frame)
+    frame_step: IntProperty(
+        default=1,
+        name="Step", description="Frame Step", update=correct_task_frame)
 
 
 # use uilist for visualization
@@ -39,6 +56,11 @@ class RSN_UL_RenderTaskList(bpy.types.UIList):
             row.label(text='', icon='ERROR')
 
         row.label(text=item.name)
+
+        frame_count = (1 + item.frame_end - item.frame_start) // item.frame_step
+        row.label(
+            text=f'{item.frame_start}~{item.frame_end}({frame_count})')
+
         row.prop(item, "render", text="", icon="CHECKMARK")
 
 
@@ -67,17 +89,28 @@ class RSN_OT_UpdateTaskList(bpy.types.Operator):
                 tree.root_node.task_list.remove(i)  # remove unlink nodes
                 tree.root_node.task_list_index -= 1 if tree.root_node.task_list_index != 0 else 0
             else:
-                remain[key] = tree.root_node.task_list[i].render  # save render attribute
+                # save render attribute
+                item = tree.root_node.task_list[i]
+                attrs = {'render': item.render,
+                         'frame_start': item.frame_start,
+                         'frame_end': item.frame_end,
+                         'frame_step': item.frame_step,
+                         }
+                remain[key] = attrs
 
         tree.root_node.task_list.clear()  # clear list then add it back
 
         for name in task_list:
             item = tree.root_node.task_list.add()
             item.name = name
-            if name in remain:
-                item.render = remain[name]
-            else:
-                item.render = True
+
+            if name not in remain: continue
+
+            attrs = remain[name]
+            item.render = attrs['render']
+            item.frame_start = attrs['frame_start']
+            item.frame_end = attrs['frame_end']
+            item.frame_step = attrs['frame_step']
 
 
 def resize_node(self, context):
@@ -93,7 +126,6 @@ class RSNodeRenderListNode(RenderStackNode):
     bl_label = 'Render List'
 
     # action after render
-    show_action: BoolProperty(default=False)
     open_dir: BoolProperty(name='Open folder after render', default=True)
     clean_path: BoolProperty(name='Clean filepath after render', default=True)
     render_display_type: EnumProperty(items=[
@@ -120,42 +152,51 @@ class RSNodeRenderListNode(RenderStackNode):
         # left
         split = layout.split(factor=0.5 if self.show_processor_bar else 1)
         col = split.column(align=1)
+
+        col.operator("rsn.update_task_list", icon="FILE_REFRESH").render_list_name = self.name
+
         col.template_list(
             "RSN_UL_RenderTaskList", "Task List",
             self, "task_list",
             self, "task_list_index", )
 
-        # call render button when selected
-        row = col.row()
+        # properties
+        box = col.box().column(align=1)
+        item = self.task_list[self.task_list_index]
+        box.label(text=item.name, icon='ALIGN_TOP')
+        box.label(text='Frame Range')
+        row = box.row(align=1)
+        row.prop(item, 'frame_start')
+        row.prop(item, 'frame_end')
+        row.prop(item, 'frame_step')
+
+        # bottom
+        col.separator()
+        row = col.row(align=1)
         row.scale_y = 1.25
-        row.scale_x = 1.15
 
-        col1 = row.column()
-        col2 = row.column(align=1)
-        col2.scale_y = 2
-
-        sub_row = col1.row(align=1)
-        sub_row.operator("rsn.update_task_list", icon="FILE_REFRESH").render_list_name = self.name
-        sub_row.prop(self, "show_action", icon='PREFERENCES', text='')
-
-        if self.show_action:
-            col = col1.box().split().column(align=1)
-            col.prop(self, 'open_dir')
-            col.prop(self, 'clean_path')
-            col.prop(context.scene.render, "use_lock_interface", toggle=False)
-            col.prop(self, 'render_display_type')
-
-        render = col1.operator("rsn.render_stack_task", text=f'Render!',
-                               icon='SHADING_RENDERED')  # icon_value=rsn_icon.get_image_icon_id()
+        render = row.operator("rsn.render_stack_task", text=f'Render!',
+                              icon='SHADING_RENDERED')  # icon_value=rsn_icon.get_image_icon_id()
         render.render_list_node_name = self.name
 
-        col2.prop(self, 'show_processor_bar', icon='TOPBAR', text='')
+        row.prop(self, 'show_processor_bar', icon='PREFERENCES', text='')
 
         # right
-        # processor_bar
+        # settings bar
         if self.show_processor_bar:
-            col = split.column(align=1)
-            self.draw_processor_bar(context, col)
+            col = split.column()
+
+            sub_col = col.box().column(align=1)
+            sub_col.label(text='Render Action', icon='SETTINGS')
+            sub_col.prop(self, 'open_dir')
+            sub_col.prop(self, 'clean_path')
+            sub_col.prop(context.scene.render, "use_lock_interface", toggle=False)
+            sub_col.prop(self, 'render_display_type')
+
+            col.separator()
+
+            sub_col = col.box().column(align=1)
+            self.draw_processor_bar(context, sub_col)
 
     def update(self):
         self.auto_update_inputs('RSNodeSocketRenderList', "Task")
@@ -171,7 +212,7 @@ class RSNodeRenderListNode(RenderStackNode):
         col = layout.column(align=1)
         col.alignment = "CENTER"
 
-        col.label(text=f'Total Process: {round(total_process * 100, 2)} %')
+        col.label(text=f'Process: {round(total_process * 100, 2)} %', icon='SORTTIME')
         sub = col.split(factor=total_process, align=1)
         sub.scale_y = 0.25
         sub.prop(bar, "done_col", text='')
