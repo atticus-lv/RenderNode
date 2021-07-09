@@ -391,10 +391,12 @@ class RenderQueue():
             if item.render:
                 self.task_queue.append(item.name)
                 self.task_list.append(item.name)
-                self.frame_range_queue.append([item.frame_start, item.frame_end, item.frame_step])
+                node = self.nt.nodes[item.name]
+                self.frame_range_queue.append([node.frame_start, node.frame_end, node.frame_step])
 
         # for processing visualization
         bpy.context.window_manager.rsn_cur_task_list = ','.join(self.task_list)
+        bpy.context.scene.frame_current = self.frame_range_queue[0][0]
 
     def is_empty(self):
         return len(self.task_queue) == 0

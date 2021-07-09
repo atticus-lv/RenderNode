@@ -16,11 +16,27 @@ def set_active_task(self, context):
         print(f"RenderNode:Set Active Task: {self.name}")
 
 
+def correct_task_frame(self, context):
+    if self.is_active_task:
+        compare(context.scene, 'frame_start', self.frame_start)
+        compare(context.scene, 'frame_end', self.frame_end)
+        compare(context.scene, 'frame_step', self.frame_step)
+
+
 class RSNodeTaskNode(RenderStackNode):
     """A simple Task node"""
     bl_idname = "RSNodeTaskNode"
     bl_label = 'Task'
 
+    frame_start: IntProperty(
+        default=1,
+        name="Start", description="Frame Start", update=correct_task_frame)
+    frame_end: IntProperty(
+        default=1,
+        name="End", description="Frame End", update=correct_task_frame)
+    frame_step: IntProperty(
+        default=1,
+        name="Step", description="Frame Step", update=correct_task_frame)
     # set active and update
     ###############
     is_active_task: BoolProperty(default=False,
@@ -57,6 +73,7 @@ class RSNodeTaskNode(RenderStackNode):
 
         return var_collect_data
 
+
 class RSN_OT_AddViewerNode(bpy.types.Operator):
     bl_idname = 'rsn.add_viewer_node'
     bl_label = 'Set Active Task'
@@ -72,6 +89,7 @@ class RSN_OT_AddViewerNode(bpy.types.Operator):
 
         return {"FINISHED"}
 
+
 def update_viewer_tasks(self, context):
     try:
         nt = context.space_data.node_tree
@@ -86,6 +104,7 @@ def update_viewer_tasks(self, context):
                          root_node_name=context.window_manager.rsn_viewer_node)
 
     node_list = rsn_task.get_children_from_node(rsn_task.root_node)  # VariantsNodeProperty node in each task
+
     # only one set VariantsNodeProperty node will be active
     var_collect = {}
     for node_name in node_list:
@@ -121,9 +140,12 @@ def update_viewer_tasks(self, context):
 
                 except IndexError:
                     pass
-
             else:
                 bpy.context.window_manager.rsn_viewer_node = ''
+        else:
+            path_list = [nt.nodes[name] for name in node_list if nt.nodes[name].bl_idname == 'RenderNodeSceneFilePath']
+            if len(path_list) > 0:
+                path_list[-1].process()
 
 
 def register():

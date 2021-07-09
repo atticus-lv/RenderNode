@@ -109,15 +109,13 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         self.queue.force_update()
         self.frame_start, self.frame_end, self.frame_step = self.queue.get_frame_range()
 
-        if not self.queue.is_empty():
-            if bpy.context.scene.frame_current >= self.frame_end:
-                self.queue.pop()
-                self.queue.force_update()
-                bpy.context.scene.frame_current = self.frame_start
-            else:
-                bpy.context.scene.frame_current += self.frame_step
-            # show in nodes
-            # self.update_process_node()
+        if bpy.context.scene.frame_current >= self.frame_end:
+            self.queue.pop()
+            self.queue.force_update()
+            self.frame_start, self.frame_end, self.frame_step = self.queue.get_frame_range()
+            bpy.context.scene.frame_current = self.frame_start
+        else:
+            bpy.context.scene.frame_current += self.frame_step
 
     def switch2task(self):
         # update task again

@@ -17,10 +17,7 @@ class ProcessorBarProperty(bpy.types.PropertyGroup):
     wait_col: FloatVectorProperty(name='Wait Color', subtype='COLOR', default=(0, 0, 0), min=1, max=1)
 
 
-def correct_task_frame(self, context):
-    context.scene.frame_start = self.frame_start
-    context.scene.frame_end = self.frame_end
-    context.scene.frame_step = self.frame_step
+
 
 
 class TaskProperty(bpy.types.PropertyGroup):
@@ -31,15 +28,7 @@ class TaskProperty(bpy.types.PropertyGroup):
 
     render: BoolProperty(name="Render", default=True, description="Use for render")
 
-    frame_start: IntProperty(
-        default=1,
-        name="Start", description="Frame Start", update=correct_task_frame)
-    frame_end: IntProperty(
-        default=1,
-        name="End", description="Frame End", update=correct_task_frame)
-    frame_step: IntProperty(
-        default=1,
-        name="Step", description="Frame Step", update=correct_task_frame)
+
 
 
 # use uilist for visualization
@@ -57,9 +46,9 @@ class RSN_UL_RenderTaskList(bpy.types.UIList):
 
         row.label(text=item.name)
 
-        frame_count = (1 + item.frame_end - item.frame_start) // item.frame_step
+        frame_count = (1 + node.frame_end - node.frame_start) // node.frame_step
         row.label(
-            text=f'{item.frame_start}~{item.frame_end}({frame_count})')
+            text=f'{node.frame_start}~{node.frame_end}({frame_count})')
 
         row.prop(item, "render", text="", icon="CHECKMARK")
 
@@ -92,9 +81,6 @@ class RSN_OT_UpdateTaskList(bpy.types.Operator):
                 # save render attribute
                 item = tree.root_node.task_list[i]
                 attrs = {'render': item.render,
-                         'frame_start': item.frame_start,
-                         'frame_end': item.frame_end,
-                         'frame_step': item.frame_step,
                          }
                 remain[key] = attrs
 
@@ -108,9 +94,6 @@ class RSN_OT_UpdateTaskList(bpy.types.Operator):
 
             attrs = remain[name]
             item.render = attrs['render']
-            item.frame_start = attrs['frame_start']
-            item.frame_end = attrs['frame_end']
-            item.frame_step = attrs['frame_step']
 
 
 def resize_node(self, context):
@@ -151,7 +134,7 @@ class RSNodeRenderListNode(RenderStackNode):
 
         # left
         split = layout.split(factor=0.5 if self.show_processor_bar else 1)
-        col = split.column(align=1)
+        col = split.column()
 
         col.operator("rsn.update_task_list", icon="FILE_REFRESH").render_list_name = self.name
 
@@ -161,14 +144,15 @@ class RSNodeRenderListNode(RenderStackNode):
             self, "task_list_index", )
 
         # properties
-        box = col.box().column(align=1)
+        box = col.box().column(align=1).box()
         item = self.task_list[self.task_list_index]
+        node = context.space_data.node_tree.nodes[item.name]
+
         box.label(text=item.name, icon='ALIGN_TOP')
-        box.label(text='Frame Range')
-        row = box.row(align=1)
-        row.prop(item, 'frame_start')
-        row.prop(item, 'frame_end')
-        row.prop(item, 'frame_step')
+        row = box.column(align=1)
+        row.prop(node, 'frame_start',text = "Frame Start")
+        row.prop(node, 'frame_end')
+        row.prop(node, 'frame_step')
 
         # bottom
         col.separator()
