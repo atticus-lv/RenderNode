@@ -15,11 +15,10 @@ class RenderNodeSceneCamera(RenderStackNode):
 
     def process(self):
         self.store_data()
-        cam = self.node_dict['camera']
 
-        if cam:
-            if cam.type == 'CAMERA':
-                self.compare(bpy.context.scene, 'camera', cam)
+        cam = self.node_dict['camera']
+        if cam: self.compare(bpy.context.scene, 'camera', cam)
+
 
 
 def register():
