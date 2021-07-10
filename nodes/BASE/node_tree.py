@@ -20,6 +20,7 @@ class RenderStackNodeTree(bpy.types.NodeTree):
     bl_icon = 'CAMERA_DATA'
 
 
+
 class RenderStackNode(bpy.types.Node):
     bl_label = "RenderStack Node"
 

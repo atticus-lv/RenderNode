@@ -30,7 +30,6 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
 
     ori_render_display_type = None  # correct display_type after render
 
-
     # render state
     ###############
     _timer = None
@@ -108,6 +107,8 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         # update task
         self.queue.force_update()
         self.frame_start, self.frame_end, self.frame_step = self.queue.get_frame_range()
+
+        if self.queue.is_empty(): return None
 
         if bpy.context.scene.frame_current >= self.frame_end:
             self.queue.pop()

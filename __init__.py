@@ -33,7 +33,7 @@ for path in py_paths:
                 not k]
     # combine path and make dict like this: 'name:folder.name'
     if 'preset' not in dir_list[-1]:
-        r_name_raw = __folder_name__ + '.' + '.'.join(addon_dir[-1])
+        r_name_raw = __folder_name__ + '.' + '.'.join(dir_list[-1])
         __dict__[name] = r_name_raw[:-3]
 
 # auto reload

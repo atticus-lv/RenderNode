@@ -17,9 +17,6 @@ class ProcessorBarProperty(bpy.types.PropertyGroup):
     wait_col: FloatVectorProperty(name='Wait Color', subtype='COLOR', default=(0, 0, 0), min=1, max=1)
 
 
-
-
-
 class TaskProperty(bpy.types.PropertyGroup):
     name: StringProperty(
         default="",
@@ -27,8 +24,6 @@ class TaskProperty(bpy.types.PropertyGroup):
         description="Name of the node")
 
     render: BoolProperty(name="Render", default=True, description="Use for render")
-
-
 
 
 # use uilist for visualization
@@ -150,7 +145,7 @@ class RSNodeRenderListNode(RenderStackNode):
 
         box.label(text=item.name, icon='ALIGN_TOP')
         row = box.column(align=1)
-        row.prop(node, 'frame_start',text = "Frame Start")
+        row.prop(node, 'frame_start', text="Frame Start")
         row.prop(node, 'frame_end')
         row.prop(node, 'frame_step')
 
@@ -187,41 +182,49 @@ class RSNodeRenderListNode(RenderStackNode):
 
     def draw_processor_bar(self, context, layout):
         bar = self.processor_bar
-
         task_list = bar.task_list.split(',')
-
         cur_id = task_list.index(bar.cur_task)
-        total_process = (cur_id + 1) / len(task_list)
+
+        total_frames = 0
+        done_frames = 0
 
         col = layout.column(align=1)
         col.alignment = "CENTER"
 
-        col.label(text=f'Process: {round(total_process * 100, 2)} %', icon='SORTTIME')
-        sub = col.split(factor=total_process, align=1)
-        sub.scale_y = 0.25
-        sub.prop(bar, "done_col", text='')
-        sub.prop(bar, "wait_col", text='')
-
         col = layout.column(align=1)
         # process of single task
-        for index, task_name in enumerate(task_list):
+        for index, item in enumerate(self.task_list):
+            node = context.space_data.node_tree.nodes[item.name]
+            total_frames += node.frame_end - node.frame_start + 1
+
+            task_name = node.name
             # finish list
             if index < cur_id:
                 col.box().label(text=task_name, icon="CHECKBOX_HLT")
+                done_frames += node.frame_end - node.frame_start + 1
             # current
             elif index == cur_id:
                 if not context.window_manager.rsn_running_modal:
                     box = col.box()
                     box.label(text=task_name, icon="CHECKBOX_HLT")
                     col.label(text='Render Finished!', icon='HEART')
+                    done_frames += 1
                 else:
                     row = col.box().row(align=1)
                     row.label(text=task_name, icon="RENDER_STILL")
-                    row.label(text="Process:{:.2f}%".format(
-                        context.scene.frame_current / (context.scene.frame_end + 1 - context.scene.frame_start)))
+                    row.label(text=f"{round((context.scene.frame_current - context.scene.frame_start)/(context.scene.frame_end + 1 - context.scene.frame_start)*100,2)}")
+
+                    done_frames += context.scene.frame_current - context.scene.frame_start + 1
             # waiting
             elif index > cur_id:
                 col.box().label(text=task_name, icon="CHECKBOX_DEHLT")
+
+        total_process = round(done_frames / total_frames, 2)
+        col.label(text=f'Process: {total_process * 100}%', icon='SORTTIME')
+        sub = col.split(factor=total_process, align=1)
+        sub.scale_y = 0.25
+        sub.prop(bar, "done_col", text='')
+        sub.prop(bar, "wait_col", text='')
 
 
 def register():
