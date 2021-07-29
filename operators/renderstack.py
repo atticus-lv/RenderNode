@@ -43,6 +43,13 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     frame_end = None
     frame_step = None
 
+    # poll
+    @classmethod
+    def poll(self, context):
+        if not context.window_manager.rsn_running_modal:
+            return context.scene.camera is not None
+
+
     # set render state
     def pre(self, dummy, thrd=None):
         self.rendering = True
@@ -68,7 +75,16 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         bpy.app.handlers.render_cancel.remove(self.cancelled)
         bpy.context.window_manager.event_timer_remove(self._timer)
 
+    def change_shading(self):
+        for area in bpy.context.screen.areas:
+            if area.type == 'VIEW_3D':
+                for space in area.spaces:
+                    if space.type == 'VIEW_3D' and space.shading.type == "RENDERED":
+                        space.shading.type = 'SOLID'
+
     def execute(self, context):
+        # stop viewport rendering
+        self.change_shading()
         context.window_manager.rsn_running_modal = True
         context.scene.render.use_file_extension = 1
         # set state
