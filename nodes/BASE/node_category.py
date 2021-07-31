@@ -27,6 +27,7 @@ node_categories = [
     ]),
     RSNCategory("OUTPUT", "Output", items=[
         nodeitems_utils.NodeItem("RenderNodeSceneFilePath"),
+        nodeitems_utils.NodeItem("RenderNodeSceneFrameRange"),
         nodeitems_utils.NodeItem("RenderNodeSceneImageFormat"),
         # nodeitems_utils.NodeItem("RenderNodeSceneFrameRange"),
         nodeitems_utils.NodeItem("RenderNodeSceneResolution"),  # performance is bad
