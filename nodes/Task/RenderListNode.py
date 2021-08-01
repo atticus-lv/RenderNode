@@ -183,6 +183,7 @@ class RSNodeRenderListNode(RenderStackNode):
     def update(self):
         self.auto_update_inputs('RSNodeSocketRenderList', "Task")
 
+    # TODO need to fix the processor bar in new type of render queue
     def draw_processor_bar(self, context, layout):
         bar = self.processor_bar
         task_list = bar.task_list.split(',')

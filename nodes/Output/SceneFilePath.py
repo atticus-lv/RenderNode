@@ -111,9 +111,11 @@ class RenderNodeSceneFilePath(RenderStackNode):
             c_frame = bpy.context.scene.frame_current
             for i, string in enumerate(STYLE):
                 format = f'0{STYLE[i][-1:]}d'
-                postfix = postfix.replace(STYLE[i], f'{c_frame:{format}}')
+                frame = f'{c_frame:{format}}' if not bpy.context.window_manager.rsn_running_modal else '#' * int(
+                    STYLE[i][-1:])
+                postfix = postfix.replace(STYLE[i], frame)
 
-        # time format
+                # time format
         TIME = re.findall(r'([$]T{.*?})', postfix)
         if len(TIME) > 0:
             for i, string in enumerate(TIME):
