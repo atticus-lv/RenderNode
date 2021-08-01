@@ -28,7 +28,7 @@ class RenderNodeObjectMaterial(RenderStackNode):
         self.create_prop('RenderNodeSocketMaterial', 'material', 'Mat')
 
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
-        self.width = 200
+        self.width = 175
 
     def process(self):
         self.store_data()

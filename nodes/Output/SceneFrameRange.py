@@ -36,6 +36,11 @@ class RenderNodeSceneFrameRange(RenderStackNode):
         self.compare(bpy.context.scene, 'frame_end', self.node_dict['frame_end'])
         self.compare(bpy.context.scene, 'frame_step', self.node_dict['frame_step'])
 
+        task_node = bpy.context.space_data.node_tree.nodes.get(bpy.context.window_manager.rsn_viewer_node)
+        if task_node:
+            task_node.frame_start = self.node_dict['frame_start']
+            task_node.frame_end = self.node_dict['frame_end']
+            task_node.frame_step = self.node_dict['frame_step']
 
 def register():
     bpy.utils.register_class(RenderNodeSceneFrameRange)

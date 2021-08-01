@@ -43,11 +43,18 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     frame_end = None
     frame_step = None
 
+    # poll
+    @classmethod
+    def poll(self, context):
+        if not context.window_manager.rsn_running_modal:
+            return context.scene.camera is not None
+
+
     # set render state
-    def pre(self, dummy, thrd=None):
+    def render_init(self, dummy, thrd=None):
         self.rendering = True
 
-    def post(self, dummy, thrd=None):
+    def render_complete(self, dummy, thrd=None):
         self.frame_check()
         self.rendering = False
 
@@ -56,19 +63,30 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
 
     # handles
     def append_handles(self):
-        bpy.app.handlers.render_pre.append(self.pre)  # 检测渲染状态
-        bpy.app.handlers.render_post.append(self.post)
+        bpy.app.handlers.render_init.append(self.render_init)
+        bpy.app.handlers.render_complete.append(self.render_complete)
         bpy.app.handlers.render_cancel.append(self.cancelled)
         self._timer = bpy.context.window_manager.event_timer_add(0.1, window=bpy.context.window)  # 添加计时器检测状态
         bpy.context.window_manager.modal_handler_add(self)
 
     def remove_handles(self):
-        bpy.app.handlers.render_pre.remove(self.pre)
-        bpy.app.handlers.render_post.remove(self.post)
+        bpy.app.handlers.render_init.remove(self.render_init)
+        bpy.app.handlers.render_complete.remove(self.render_complete)
         bpy.app.handlers.render_cancel.remove(self.cancelled)
         bpy.context.window_manager.event_timer_remove(self._timer)
 
+
+    def stop_viewport_render(self):
+        for area in bpy.context.screen.areas:
+            if area.type == 'VIEW_3D':
+                for space in area.spaces:
+                    if space.type == 'VIEW_3D' and space.shading.type == "RENDERED":
+                        space.shading.type = 'SOLID'
+
+    # init
     def execute(self, context):
+        # stop viewport rendering
+        self.stop_viewport_render()
         context.window_manager.rsn_running_modal = True
         context.scene.render.use_file_extension = 1
         # set state
@@ -104,27 +122,21 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
 
     # update
     def frame_check(self):
+        if self.queue.is_empty(): return None
+
+        self.queue.pop()
         # update task
         self.queue.force_update()
         self.frame_start, self.frame_end, self.frame_step = self.queue.get_frame_range()
 
-        if self.queue.is_empty(): return None
-
-        if bpy.context.scene.frame_current >= self.frame_end:
-            self.queue.pop()
-            self.queue.force_update()
-            self.frame_start, self.frame_end, self.frame_step = self.queue.get_frame_range()
-            bpy.context.scene.frame_current = self.frame_start
-        else:
-            bpy.context.scene.frame_current += self.frame_step
+        # set processor_bar
+        self.render_list_node.processor_bar.cur_task = bpy.context.window_manager.rsn_viewer_node
 
     def switch2task(self):
         # update task again
         self.queue.force_update()
         # set processor_bar
         self.render_list_node.processor_bar.cur_task = bpy.context.window_manager.rsn_viewer_node
-
-        bpy.context.scene.render.use_file_extension = 1
 
     # finish
     def finish(self):
@@ -159,7 +171,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
 
             elif self.rendering is False:
                 self.switch2task()
-                bpy.ops.render.render("INVOKE_DEFAULT", write_still=True)
+                bpy.ops.render.render("INVOKE_DEFAULT", write_still=True,animation=True,)
 
         return {"PASS_THROUGH"}
 

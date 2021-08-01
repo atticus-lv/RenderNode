@@ -15,12 +15,18 @@ class RenderNodeObjectInput(RenderStackNode):
 
     value: PointerProperty(type=bpy.types.Material,update=update_node)
 
+    mat_index:IntProperty()
+
     def init(self, context):
         self.outputs.new('NodeSocketMaterial', "Output")
 
     def draw_buttons(self, context, layout):
-        layout.prop(self, 'value',text='')
-
+        layout.scale_y = 0.75
+        layout.scale_x = 0.75
+        layout.template_ID_preview(
+            self, "value",
+            rows=3, cols=4, hide_buttons=False
+        )
 
 def register():
     bpy.utils.register_class(RenderNodeObjectInput)

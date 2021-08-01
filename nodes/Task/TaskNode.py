@@ -13,6 +13,7 @@ def update_node(self, context):
 def set_active_task(self, context):
     if self.is_active_task is True:
         bpy.context.window_manager.rsn_viewer_node = self.name
+        self.process()
         print(f"RenderNode:Set Active Task: {self.name}")
 
 
@@ -72,6 +73,12 @@ class RSNodeTaskNode(RenderStackNode):
             var_collect_data[i] = var_nodes
 
         return var_collect_data
+
+    # set frame range
+    def process(self):
+        bpy.context.scene.frame_start = self.frame_start
+        bpy.context.scene.frame_end = self.frame_end
+        bpy.context.scene.frame_step = self.frame_step
 
 
 class RSN_OT_AddViewerNode(bpy.types.Operator):

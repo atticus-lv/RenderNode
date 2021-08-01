@@ -121,6 +121,9 @@ class RSNodeRenderListNode(RenderStackNode):
     show_processor_bar: BoolProperty(name='Processor Bar', update=resize_node)
     processor_bar: PointerProperty(name="Processor Property", type=ProcessorBarProperty)
 
+    total_frames = 0
+    done_frames = 0
+
     def init(self, context):
         self.inputs.new('RSNodeSocketRenderList', "Task")
         self.width = 175
@@ -180,13 +183,14 @@ class RSNodeRenderListNode(RenderStackNode):
     def update(self):
         self.auto_update_inputs('RSNodeSocketRenderList', "Task")
 
+    # TODO need to fix the processor bar in new type of render queue
     def draw_processor_bar(self, context, layout):
         bar = self.processor_bar
         task_list = bar.task_list.split(',')
         cur_id = task_list.index(bar.cur_task)
 
-        total_frames = 0
-        done_frames = 0
+        self.total_frames = 0
+        self.done_frames = 0
 
         col = layout.column(align=1)
         col.alignment = "CENTER"
@@ -194,37 +198,48 @@ class RSNodeRenderListNode(RenderStackNode):
         col = layout.column(align=1)
         # process of single task
         for index, item in enumerate(self.task_list):
+            if not item.render: continue  # ignore the not render task
+
             node = context.space_data.node_tree.nodes[item.name]
-            total_frames += node.frame_end - node.frame_start + 1
+            self.total_frames += node.frame_end - node.frame_start + 1
 
             task_name = node.name
             # finish list
             if index < cur_id:
-                col.box().label(text=task_name, icon="CHECKBOX_HLT")
-                done_frames += node.frame_end - node.frame_start + 1
+                row = col.box().row(align=1)
+                row.label(text=task_name, icon="CHECKBOX_HLT")
+
+                finish = node.frame_end + 1 - node.frame_start
+                row.label(text=finish)
+                self.done_frames += finish
+
             # current
             elif index == cur_id:
                 if not context.window_manager.rsn_running_modal:
                     box = col.box()
                     box.label(text=task_name, icon="CHECKBOX_HLT")
                     col.label(text='Render Finished!', icon='HEART')
-                    done_frames += 1
+                    self.done_frames += 1
                 else:
                     row = col.box().row(align=1)
                     row.label(text=task_name, icon="RENDER_STILL")
-                    row.label(text=f"{round((context.scene.frame_current - context.scene.frame_start)/(context.scene.frame_end + 1 - context.scene.frame_start)*100,2)}")
+                    done = context.scene.frame_current - node.frame_start
+                    all = node.frame_end + 1 - node.frame_start
+                    row.label(text=f"{round(done / all * 100, 2)}% {done}/{all}")
 
-                    done_frames += context.scene.frame_current - context.scene.frame_start + 1
+                    self.done_frames += done + 1
             # waiting
             elif index > cur_id:
                 col.box().label(text=task_name, icon="CHECKBOX_DEHLT")
 
-        total_process = round(done_frames / total_frames, 2)
-        col.label(text=f'Process: {total_process * 100}%', icon='SORTTIME')
-        sub = col.split(factor=total_process, align=1)
-        sub.scale_y = 0.25
-        sub.prop(bar, "done_col", text='')
-        sub.prop(bar, "wait_col", text='')
+        total_process = round(self.done_frames / self.total_frames, 2)
+
+        if context.window_manager.rsn_running_modal:
+            col.label(text=f'Process: {total_process * 100}%', icon='SORTTIME')
+            sub = col.split(factor=total_process, align=1)
+            sub.scale_y = 0.25
+            sub.prop(bar, "done_col", text='')
+            sub.prop(bar, "wait_col", text='')
 
 
 def register():
