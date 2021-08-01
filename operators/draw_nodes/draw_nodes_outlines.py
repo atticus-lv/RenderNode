@@ -295,7 +295,7 @@ def draw_callback_nodeoutline(self, context):
             elif node.bl_idname in {'RenderNodeSceneFilePath', 'RSNodeFilePathInputNode'}:
                 draw_rounded_node_border(shader, node, radius=self.radius, colour=file_path_outer)
                 draw_rounded_node_border(shader, node, radius=self.radius - 1, colour=col_inner)
-            else:
+            elif node.bl_idname != 'NodeReroute':
                 draw_rounded_node_border(shader, node, radius=self.radius, colour=col_outer)
                 draw_rounded_node_border(shader, node, radius=self.radius - 1, colour=col_inner)
         except KeyError:
