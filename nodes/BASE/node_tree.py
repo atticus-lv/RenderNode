@@ -5,6 +5,7 @@ from mathutils import Color, Vector
 
 from ...utility import *
 from ...preferences import get_pref
+from .socket_type import cache_socket_links
 
 import logging
 
@@ -19,6 +20,8 @@ class RenderStackNodeTree(bpy.types.NodeTree):
     bl_label = 'Render Editor'
     bl_icon = 'CAMERA_DATA'
 
+
+cache_node_dependants = dict()
 
 
 class RenderStackNode(bpy.types.Node):
@@ -93,12 +96,36 @@ class RenderStackNode(bpy.types.Node):
     ## UPDATE METHOD
     #########################################
 
+    def get_dependant_nodes(self):
+        '''returns the nodes connected to the inputs of this node'''
+        dep_tree = cache_node_dependants.setdefault(self.id_data, {})
+        if self in dep_tree:
+            return dep_tree[self]
+        nodes = []
+        for input in self.inputs:
+            connected_socket = input.connected_socket
+
+            if connected_socket and connected_socket not in nodes:
+                nodes.append(connected_socket.node)
+        dep_tree[self] = nodes
+        print(nodes)
+        return nodes
+
+    def execute_dependants(self):
+        '''Responsible of executing the required nodes for the current node to work'''
+        for x in self.get_dependant_nodes():
+            self.execute_other(x)
+
+    def execute(self):
+        self.process()
+
+    def execute_other(self, other):
+        if hasattr(other, 'execute'):
+            other.execute()
+
     def update(self):
-        """
-        The viewer node have this method
-        Nodes that need add/remove inputs with have this method
-        """
-        pass
+        for input in self.inputs:
+            input.remove_incorrect_links()
 
     def auto_update_inputs(self, socket_type='RSNodeSocketTaskSettings', socket_name='Input'):
         """add or remove inputs automatically

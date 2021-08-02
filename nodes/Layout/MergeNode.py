@@ -43,7 +43,7 @@ class RSNodeSettingsMergeNode(RenderStackNode):
         else:
             layout.operator('rsn.switch_setting').node = self.name
 
-    def update(self):
+    def process(self):
         self.auto_update_inputs('RSNodeSocketTaskSettings', "Input")
 
     def auto_update_inputs(self, socket_type, socket_name):
