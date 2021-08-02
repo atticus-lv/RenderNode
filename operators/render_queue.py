@@ -15,16 +15,13 @@ logging.basicConfig(format=LOG_FORMAT)
 logger = logging.getLogger('mylogger')
 
 
-class RSN_OT_RenderStackTask(bpy.types.Operator):
+class RSN_OT_RenderQueue(bpy.types.Operator):
     """Render all input Tasks"""
-    bl_idname = "rsn.render_stack_task"
+    bl_idname = "rsn.render_queue"
     bl_label = "Render Queue"
-
-    render_list_node_name: StringProperty()
 
     # blender properties
     #####################
-
     render_list_node_name: StringProperty()
     render_list_node = None
 
@@ -39,16 +36,12 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
     # render queue
     ###############
     queue = None
-    frame_start = None
-    frame_end = None
-    frame_step = None
 
     # poll
     @classmethod
     def poll(self, context):
         if not context.window_manager.rsn_running_modal:
             return context.scene.camera is not None
-
 
     # set render state
     def render_init(self, dummy, thrd=None):
@@ -66,7 +59,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         bpy.app.handlers.render_init.append(self.render_init)
         bpy.app.handlers.render_complete.append(self.render_complete)
         bpy.app.handlers.render_cancel.append(self.cancelled)
-        self._timer = bpy.context.window_manager.event_timer_add(0.1, window=bpy.context.window)  # 添加计时器检测状态
+        self._timer = bpy.context.window_manager.event_timer_add(0.1, window=bpy.context.window)
         bpy.context.window_manager.modal_handler_add(self)
 
     def remove_handles(self):
@@ -74,7 +67,6 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         bpy.app.handlers.render_complete.remove(self.render_complete)
         bpy.app.handlers.render_cancel.remove(self.cancelled)
         bpy.context.window_manager.event_timer_remove(self._timer)
-
 
     def stop_viewport_render(self):
         for area in bpy.context.screen.areas:
@@ -127,8 +119,6 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
         self.queue.pop()
         # update task
         self.queue.force_update()
-        self.frame_start, self.frame_end, self.frame_step = self.queue.get_frame_range()
-
         # set processor_bar
         self.render_list_node.processor_bar.cur_task = bpy.context.window_manager.rsn_viewer_node
 
@@ -171,7 +161,7 @@ class RSN_OT_RenderStackTask(bpy.types.Operator):
 
             elif self.rendering is False:
                 self.switch2task()
-                bpy.ops.render.render("INVOKE_DEFAULT", write_still=True,animation=True,)
+                bpy.ops.render.render("INVOKE_DEFAULT", write_still=True, animation=True, )
 
         return {"PASS_THROUGH"}
 
@@ -216,7 +206,7 @@ class RSN_OT_ShowTaskDetails(bpy.types.Operator):
 
 
 classes = (
-    RSN_OT_RenderStackTask,
+    RSN_OT_RenderQueue,
     RSN_OT_ShowTaskDetails,
     RSN_OT_ClipBoard,
 )

@@ -148,6 +148,9 @@ class RSNodeRenderListNode(RenderStackNode):
 
         box.label(text=item.name, icon='ALIGN_TOP')
         row = box.column(align=1)
+        row.prop(node, 'path', text='')
+
+        row = box.column(align=1)
         row.prop(node, 'frame_start', text="Frame Start")
         row.prop(node, 'frame_end')
         row.prop(node, 'frame_step')
@@ -157,7 +160,7 @@ class RSNodeRenderListNode(RenderStackNode):
         row = col.row(align=1)
         row.scale_y = 1.25
 
-        render = row.operator("rsn.render_stack_task", text=f'Render!',
+        render = row.operator("rsn.render_queue", text=f'Render!',
                               icon='SHADING_RENDERED')  # icon_value=rsn_icon.get_image_icon_id()
         render.render_list_node_name = self.name
 
@@ -183,7 +186,7 @@ class RSNodeRenderListNode(RenderStackNode):
     def update(self):
         self.auto_update_inputs('RSNodeSocketRenderList', "Task")
 
-    # TODO need to fix the processor bar in new type of render queue
+    # TODO need to improve
     def draw_processor_bar(self, context, layout):
         bar = self.processor_bar
         task_list = bar.task_list.split(',')
@@ -210,14 +213,19 @@ class RSNodeRenderListNode(RenderStackNode):
                 row.label(text=task_name, icon="CHECKBOX_HLT")
 
                 finish = node.frame_end + 1 - node.frame_start
-                row.label(text=finish)
+                row.label(text=f'100% {finish}/{finish}')
                 self.done_frames += finish
 
             # current
             elif index == cur_id:
                 if not context.window_manager.rsn_running_modal:
                     box = col.box()
-                    box.label(text=task_name, icon="CHECKBOX_HLT")
+                    row = box.row(align=1)
+
+                    row.label(text=task_name, icon="CHECKBOX_HLT")
+                    finish = node.frame_end + 1 - node.frame_start
+                    row.label(text=f'100% {finish}/{finish}')
+
                     col.label(text='Render Finished!', icon='HEART')
                     self.done_frames += 1
                 else:

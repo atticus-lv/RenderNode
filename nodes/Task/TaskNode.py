@@ -29,6 +29,11 @@ class RSNodeTaskNode(RenderStackNode):
     bl_idname = "RSNodeTaskNode"
     bl_label = 'Task'
 
+    # get necessary props from some nodes
+    ##################
+    # path
+    path:StringProperty(name='File Path',default='/tmp/',subtype='FILE_PATH')
+    # frame
     frame_start: IntProperty(
         default=1,
         name="Start", description="Frame Start", update=correct_task_frame)
@@ -38,6 +43,7 @@ class RSNodeTaskNode(RenderStackNode):
     frame_step: IntProperty(
         default=1,
         name="Step", description="Frame Step", update=correct_task_frame)
+
     # set active and update
     ###############
     is_active_task: BoolProperty(default=False,
@@ -74,11 +80,14 @@ class RSNodeTaskNode(RenderStackNode):
 
         return var_collect_data
 
-    # set frame range
+    # set necessary props
     def process(self):
         bpy.context.scene.frame_start = self.frame_start
         bpy.context.scene.frame_end = self.frame_end
         bpy.context.scene.frame_step = self.frame_step
+
+        self.compare(bpy.context.scene.render, 'filepath', self.path)
+
 
 
 class RSN_OT_AddViewerNode(bpy.types.Operator):
