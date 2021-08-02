@@ -148,6 +148,9 @@ class RSNodeRenderListNode(RenderStackNode):
 
         box.label(text=item.name, icon='ALIGN_TOP')
         row = box.column(align=1)
+        row.prop(node, 'path', text='')
+
+        row = box.column(align=1)
         row.prop(node, 'frame_start', text="Frame Start")
         row.prop(node, 'frame_end')
         row.prop(node, 'frame_step')

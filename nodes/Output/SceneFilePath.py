@@ -22,7 +22,7 @@ class RenderNodeSceneFilePath(RenderStackNode):
                                   default=True, update=update_node)
 
     custom_path: StringProperty(name='Path',
-                                default='', update=update_node)
+                                default='', update=update_node,subtype='FILE_PATH')
 
     version: IntProperty(name='Version', default=1, min=1, soft_max=5, update=update_node)
 
@@ -46,7 +46,6 @@ class RenderNodeSceneFilePath(RenderStackNode):
             if not self.save_rel_folder:
                 row = layout.row(align=1)
                 row.prop(self, 'custom_path')
-                row.operator('buttons.directory_browse', icon='FILEBROWSER', text='')
 
             # viewer node tips
             pref = get_pref()
@@ -62,7 +61,9 @@ class RenderNodeSceneFilePath(RenderStackNode):
         postfix = self.get_postfix()
         path = os.path.join(directory_path, postfix)
 
-        self.compare(bpy.context.scene.render, 'filepath', path)
+        task_node = bpy.context.space_data.node_tree.nodes.get(bpy.context.window_manager.rsn_viewer_node)
+        if task_node:
+            task_node.path = path
 
     def make_path(self):
         """only save files will work"""
