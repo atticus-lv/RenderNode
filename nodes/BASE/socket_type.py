@@ -53,12 +53,12 @@ class SocketBase():
     def unlink(self):
         '''Unlinks the socket'''
         if self.links:
+            print('remove:',self.links[0].from_node,self.links[0].to_node)
             self.id_data.links.remove(self.links[0])
 
 def update_node(self, context):
     try:
         self.node.node_dict[self.name] = self.value
-        # update node tree
         self.node.update_parms()
     except Exception as e:
         print(e)

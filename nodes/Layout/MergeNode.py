@@ -19,6 +19,7 @@ def active_version(self, context):
 
     self.update_parms()
 
+
 class RSNodeSettingsMergeNode(RenderStackNode):
     """A simple input node"""
     bl_idname = 'RSNodeSettingsMergeNode'
@@ -43,8 +44,11 @@ class RSNodeSettingsMergeNode(RenderStackNode):
         else:
             layout.operator('rsn.switch_setting').node = self.name
 
-    def process(self):
+    def update(self):
         self.auto_update_inputs('RSNodeSocketTaskSettings', "Input")
+
+    def process(self):
+        pass
 
     def auto_update_inputs(self, socket_type, socket_name):
         if self.node_type != 'SWITCH':

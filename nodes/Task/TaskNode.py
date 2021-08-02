@@ -15,10 +15,6 @@ def set_active_task(self, context):
         self.execute_dependants()
         self.execute()
 
-        for node in self.id_data.nodes:
-            if node.bl_idname == self.bl_idname and node != self:
-                node.is_active_task = False
-
 
 def correct_task_frame(self, context):
     if self.is_active_task:
@@ -83,16 +79,20 @@ class RSNodeTaskNode(RenderStackNode):
 
         return var_collect_data
 
-    # set necessary props
     def process(self):
         # set necessary props
-
         bpy.context.scene.frame_start = self.frame_start
         bpy.context.scene.frame_end = self.frame_end
         bpy.context.scene.frame_step = self.frame_step
 
         self.compare(bpy.context.scene.render, 'filepath', self.path)
 
+        for node in self.id_data.nodes:
+            if node.bl_idname == self.bl_idname and node != self:
+                node.is_active_task = False
+
+        # set active task
+        bpy.context.window_manager.rsn_viewer_node = self.name
 
 class RSN_OT_AddViewerNode(bpy.types.Operator):
     bl_idname = 'rsn.add_viewer_node'

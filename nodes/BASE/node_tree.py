@@ -117,6 +117,7 @@ class RenderStackNode(bpy.types.Node):
             self.execute_other(x)
 
     def execute(self):
+        print(f'executing {self.name}')
         self.process()
 
     def execute_other(self, other):
@@ -124,8 +125,9 @@ class RenderStackNode(bpy.types.Node):
             other.execute()
 
     def update(self):
-        for input in self.inputs:
-            input.remove_incorrect_links()
+        pass
+        # for input in self.inputs:
+        #     input.remove_incorrect_links()
 
     def auto_update_inputs(self, socket_type='RSNodeSocketTaskSettings', socket_name='Input'):
         """add or remove inputs automatically
@@ -147,14 +149,11 @@ class RenderStackNode(bpy.types.Node):
     #########################################
 
     def update_parms(self):
-        """compare current node list"""
-        if bpy.context.window_manager.rsn_node_list != '':
-            node_list = bpy.context.window_manager.rsn_node_list.split(',')
-            if self.name in node_list:
-                pref = get_pref()
-                bpy.ops.rsn.update_parms(view_mode_handler=bpy.context.window_manager.rsn_viewer_node,
-                                         update_scripts=pref.node_task.update_scripts,
-                                         use_render_mode=False)
+        task_node = self.id_data.nodes.get(bpy.context.window_manager.rsn_viewer_node)
+        print(task_node)
+        if task_node:
+            task_node.execute_dependants()
+            task_node.execute()
 
     ### new method ###
 
