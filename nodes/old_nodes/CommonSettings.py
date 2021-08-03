@@ -1,7 +1,7 @@
 import bpy
 import os
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 from ...utility import get_pref
 
 def poll_camera(self, object):
@@ -12,7 +12,7 @@ def update_node(self, context):
     self.update_parms()
 
 
-class RSNodeCommonSettingsNode(RenderStackNode):
+class RSNodeCommonSettingsNode(RenderNodeBase):
     """A simple Task node"""
     bl_idname = "RSNodeCommonSettingsNode"
     bl_label = 'Common Settings'

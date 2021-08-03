@@ -1,13 +1,13 @@
 import bpy
 from bpy.props import IntProperty
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 
 
 def update_node(self, context):
     self.update_parms()
 
 
-class RenderNodeSceneRenderSlot(RenderStackNode):
+class RenderNodeSceneRenderSlot(RenderNodeBase):
     bl_idname = "RenderNodeSceneRenderSlot"
     bl_label = 'Scene Render Slot'
 

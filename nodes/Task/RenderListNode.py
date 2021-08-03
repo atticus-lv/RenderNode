@@ -1,6 +1,6 @@
 from bpy.props import *
 from ...utility import *
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 from ...ui.icon_utils import RSN_Preview
 
 from itertools import groupby
@@ -98,7 +98,7 @@ def resize_node(self, context):
         self.width *= 0.5
 
 
-class RSNodeRenderListNode(RenderStackNode):
+class RSNodeRenderListNode(RenderNodeBase):
     """Render List Node"""
     bl_idname = 'RSNodeRenderListNode'
     bl_label = 'Render List'
@@ -143,17 +143,20 @@ class RSNodeRenderListNode(RenderStackNode):
 
         # properties
         box = col.box().column(align=1).box()
-        item = self.task_list[self.task_list_index]
-        node = context.space_data.node_tree.nodes[item.name]
+        try:
+            item = self.task_list[self.task_list_index]
+            node = context.space_data.node_tree.nodes[item.name]
 
-        box.label(text=item.name, icon='ALIGN_TOP')
-        row = box.column(align=1)
-        row.prop(node, 'path', text='')
+            box.label(text=item.name, icon='ALIGN_TOP')
+            row = box.column(align=1)
+            row.prop(node, 'path', text='')
 
-        row = box.column(align=1)
-        row.prop(node, 'frame_start', text="Frame Start")
-        row.prop(node, 'frame_end')
-        row.prop(node, 'frame_step')
+            row = box.column(align=1)
+            row.prop(node, 'frame_start', text="Frame Start")
+            row.prop(node, 'frame_end')
+            row.prop(node, 'frame_step')
+        except IndexError:
+            pass
 
         # bottom
         col.separator()

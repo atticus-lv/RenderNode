@@ -1,9 +1,9 @@
 import bpy
 from bpy.props import *
-from ..BASE.node_tree import RenderStackNode
+from ..BASE.node_base import RenderNodeBase
 from ...utility import *
 
-class RSNodeVariantsNode(RenderStackNode):
+class RSNodeVariantsNode(RenderNodeBase):
     """A simple input node"""
     bl_idname = 'RSNodeVariantsNode'
     bl_label = 'Variants'

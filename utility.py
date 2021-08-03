@@ -396,7 +396,10 @@ class RenderQueue():
 
         # for processing visualization
         bpy.context.window_manager.rsn_cur_task_list = ','.join(self.task_list)
-        bpy.context.scene.frame_current = self.frame_range_queue[0][0]
+        try:
+            bpy.context.scene.frame_current = self.frame_range_queue[0][0]
+        except IndexError:
+            pass
 
     def is_empty(self):
         return len(self.task_queue) == 0

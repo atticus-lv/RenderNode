@@ -1,7 +1,7 @@
 import smtplib
 from email.mime.text import MIMEText
 from email.header import Header
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 from ...preferences import get_pref
 
 import bpy
@@ -70,7 +70,7 @@ class RSN_OT_SendEmail(bpy.types.Operator):
         return {'FINISHED'}
 
 
-class RSNodeSmtpEmailNode(RenderStackNode):
+class RSNodeSmtpEmailNode(RenderNodeBase):
     """A simple input node"""
     bl_idname = 'RSNodeSmtpEmailNode'
     bl_label = 'SMTP Email'

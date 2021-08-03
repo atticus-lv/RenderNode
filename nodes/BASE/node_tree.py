@@ -4,7 +4,7 @@ from bpy.props import *
 from mathutils import Color, Vector
 
 from ._runtime import cache_node_dependants, cache_socket_links, runtime_info, logger
-
+from .node_base import RenderNodeBase as RenderStackNode
 
 # some method comes from rigging_nodes
 class RenderStackNodeTree(bpy.types.NodeTree):

@@ -7,7 +7,7 @@ from bpy.types import Operator, Menu, Panel
 from bl_operators.presets import AddPresetBase
 from bl_ui.utils import PresetPanel
 
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 from ... import __folder_name__
 
 
@@ -15,7 +15,7 @@ def update_node(self, context):
     self.update_parms()
 
 
-class RSNodeResolutionInputNode(RenderStackNode):
+class RSNodeResolutionInputNode(RenderNodeBase):
     bl_idname = "RSNodeResolutionInputNode"
     bl_label = "Resolution"
 

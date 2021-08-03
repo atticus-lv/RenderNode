@@ -1,6 +1,6 @@
 import bpy
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 from ...utility import source_attr
 
 import re
@@ -11,7 +11,7 @@ def update_node(self, context):
     self.update_parms()
 
 
-class RSNodeObjectModifierNode(RenderStackNode):
+class RSNodeObjectModifierNode(RenderNodeBase):
     bl_idname = 'RSNodeObjectModifierNode'
     bl_label = 'Object Modifier'
 

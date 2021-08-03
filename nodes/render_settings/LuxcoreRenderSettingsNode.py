@@ -1,13 +1,13 @@
 import bpy
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 
 
 def update_node(self, context):
     self.update_parms()
 
 
-class RSNodeLuxcoreRenderSettingsNode(RenderStackNode):
+class RSNodeLuxcoreRenderSettingsNode(RenderNodeBase):
     """A simple input node"""
     bl_idname = 'RSNodeLuxcoreRenderSettingsNode'
     bl_label = 'Luxcore Settings'

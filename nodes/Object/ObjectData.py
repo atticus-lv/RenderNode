@@ -1,6 +1,6 @@
 import bpy
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 # from ...utility import source_attr
 from mathutils import Color, Vector
 
@@ -48,7 +48,7 @@ def source_attr(src_obj, scr_data_path):
     return get_obj_and_attr(src_obj, scr_data_path)
 
 
-class RenderNodeObjectData(RenderStackNode):
+class RenderNodeObjectData(RenderNodeBase):
     bl_idname = 'RenderNodeObjectData'
     bl_label = 'Object Data'
 

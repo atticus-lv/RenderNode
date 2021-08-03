@@ -1,6 +1,7 @@
 import bpy
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode,RenderStackNodeTree
+from ...nodes.BASE.node_base import RenderNodeBase
+from ...nodes.BASE.node_tree import RenderStackNodeTree
 
 
 

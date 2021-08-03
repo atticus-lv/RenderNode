@@ -1,6 +1,6 @@
 import bpy
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 
 from collections import defaultdict
 
@@ -47,7 +47,7 @@ def update_node(self, context):
     self.update_parms()
 
 
-class RenderNodeSceneRenderEngine(RenderStackNode):
+class RenderNodeSceneRenderEngine(RenderNodeBase):
     """A simple input node"""
     bl_idname = 'RenderNodeSceneRenderEngine'
     bl_label = 'Scene Render Engine'

@@ -1,6 +1,6 @@
 import bpy
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 
 
 class RN_OT_AcceptUpdate(bpy.types.Operator):
@@ -61,7 +61,7 @@ def update_node(self, context):
         self.update_parms()
 
 
-class RenderNodeObjectPSR(RenderStackNode):
+class RenderNodeObjectPSR(RenderNodeBase):
     bl_idname = 'RenderNodeObjectPSR'
     bl_label = 'Object PSR'
 

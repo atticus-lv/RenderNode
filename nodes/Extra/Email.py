@@ -1,4 +1,4 @@
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 from ...preferences import get_pref
 
 import bpy
@@ -11,7 +11,7 @@ def test_email(self, context):
         self.test_send = False
 
 
-class RenderNodeEmail(RenderStackNode):
+class RenderNodeEmail(RenderNodeBase):
     """A simple input node"""
     bl_idname = 'RenderNodeEmail'
     bl_label = 'Email'

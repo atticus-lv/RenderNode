@@ -1,6 +1,6 @@
 import bpy
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 # from ...utility import source_attr
 from mathutils import Color, Vector
 
@@ -9,7 +9,7 @@ def update_node(self, context):
     self.update_parms()
 
 
-class RenderNodeObjectInput(RenderStackNode):
+class RenderNodeObjectInput(RenderNodeBase):
     bl_idname = 'RenderNodeObjectInput'
     bl_label = 'Object Input'
 

@@ -1,6 +1,6 @@
 import bpy
 from bpy.props import *
-from ..BASE.node_tree import RenderStackNode
+from ..BASE.node_base import RenderNodeBase
 from ...utility import *
 
 
@@ -83,7 +83,7 @@ class RSN_OT_UpdateVarCollect(bpy.types.Operator):
             prop.active = item_list[i]["value"]
 
 
-class RSNodeSetVariantsNode(RenderStackNode):
+class RSNodeSetVariantsNode(RenderNodeBase):
     """A simple input node"""
     bl_idname = 'RSNodeSetVariantsNode'
     bl_label = 'Set Variants'

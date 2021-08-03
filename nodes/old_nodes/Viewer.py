@@ -1,6 +1,6 @@
 from bpy.props import *
 
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 from ...utility import *
 from ...preferences import get_pref
 
@@ -16,7 +16,7 @@ def reroute(node):
     return task_node_name
 
 
-class RSNodeViewerNode(RenderStackNode):
+class RSNodeViewerNode(RenderNodeBase):
     bl_idname = 'RSNodeViewerNode'
     bl_label = 'Viewer'
     bl_icon = 'HIDE_OFF'

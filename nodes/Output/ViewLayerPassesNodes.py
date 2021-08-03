@@ -1,7 +1,7 @@
 import bpy
 from bpy.props import *
 
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 from ...preferences import get_pref
 
 
@@ -9,7 +9,7 @@ def update_node(self, context):
     self.update_parms()
 
 
-class RSNodeViewLayerPassesNode(RenderStackNode):
+class RSNodeViewLayerPassesNode(RenderNodeBase):
     bl_idname = "RSNodeViewLayerPassesNode"
     bl_label = "View Layer Passes"
 

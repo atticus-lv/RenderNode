@@ -1,6 +1,6 @@
 import bpy
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 
 
 def poll_object(self, object):
@@ -18,7 +18,7 @@ def update_node(self, context):
     self.update_parms()
 
 
-class RenderNodeObjectMaterial(RenderStackNode):
+class RenderNodeObjectMaterial(RenderNodeBase):
     bl_idname = 'RenderNodeObjectMaterial'
     bl_label = 'Object Material'
 

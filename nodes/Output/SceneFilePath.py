@@ -1,7 +1,7 @@
 import bpy
 from bpy.props import *
 
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 from ...preferences import get_pref
 
 import os
@@ -13,7 +13,7 @@ def update_node(self, context):
     self.update_parms()
 
 
-class RenderNodeSceneFilePath(RenderStackNode):
+class RenderNodeSceneFilePath(RenderNodeBase):
     bl_idname = "RenderNodeSceneFilePath"
     bl_label = "Scene File Path"
 

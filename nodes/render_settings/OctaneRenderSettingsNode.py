@@ -1,13 +1,13 @@
 import bpy
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 
 
 def update_node(self, context):
     self.update_parms()
 
 
-class RSNodeOctaneRenderSettingsNode(RenderStackNode):
+class RSNodeOctaneRenderSettingsNode(RenderNodeBase):
     """A simple input node"""
     bl_idname = 'RSNodeOctaneRenderSettingsNode'
     bl_label = 'Octane Settings'

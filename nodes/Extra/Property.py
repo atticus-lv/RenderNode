@@ -1,6 +1,6 @@
 import bpy
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 from mathutils import Color, Vector
 
 
@@ -31,7 +31,7 @@ def update_node(self, context):
         print(e)
 
 
-class RenderNodeProperty(RenderStackNode):
+class RenderNodeProperty(RenderNodeBase):
     """A simple input node"""
     bl_idname = 'RenderNodeProperty'
     bl_label = 'Property'

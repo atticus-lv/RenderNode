@@ -3,7 +3,7 @@ import re
 
 import bpy
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 
 
 def get_render_preset_path():
@@ -76,7 +76,7 @@ class RSN_MT_NodeResolutionPresetsMenu(bpy.types.Menu):
             op.res_scale = value[2]
 
 
-class RenderNodeSceneResolution(RenderStackNode):
+class RenderNodeSceneResolution(RenderNodeBase):
     """A simple input node"""
     bl_idname = 'RenderNodeSceneResolution'
     bl_label = 'Scene Resolution'

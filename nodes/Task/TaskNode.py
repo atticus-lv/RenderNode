@@ -1,6 +1,6 @@
 import bpy
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 from ...utility import *
 from ...preferences import get_pref
 
@@ -23,7 +23,7 @@ def correct_task_frame(self, context):
         compare(context.scene, 'frame_step', self.frame_step)
 
 
-class RSNodeTaskNode(RenderStackNode):
+class RSNodeTaskNode(RenderNodeBase):
     """A simple Task node"""
     bl_idname = "RSNodeTaskNode"
     bl_label = 'Task'

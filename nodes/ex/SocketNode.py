@@ -1,11 +1,11 @@
 import bpy
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 
 import socket as st
 
 
-class RSNodeServerNode(RenderStackNode):
+class RSNodeServerNode(RenderNodeBase):
     """A simple input node"""
     bl_idname = 'RSNodeServerNode'
     bl_label = 'Server'
@@ -63,7 +63,7 @@ class RSNodeServerNode(RenderStackNode):
         print(self.binded, self.sended)
 
 
-class RSNodeClientNode(RenderStackNode):
+class RSNodeClientNode(RenderNodeBase):
     """A simple input node"""
     bl_idname = 'RSNodeClientNode'
     bl_label = 'Client'
