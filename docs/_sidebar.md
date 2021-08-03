@@ -12,7 +12,7 @@
     + [Obejct](NodeObject)
     + [Output Settings](NodeOutput)
     + [Render Settings](NodeRender)
-    + [Variants](/zh-cn/NodeVariants)
+    + [Variants](NodeVariants)
     + [Layout](NodeLayout)
     + [Scripts](NodeScripts)
 + **FAQ**
