@@ -52,8 +52,9 @@ class SocketBase():
     def unlink(self):
         '''Unlinks the socket'''
         if self.links:
-            print('remove:',self.links[0].from_node,self.links[0].to_node)
+            print('remove:', self.links[0].from_node, self.links[0].to_node)
             self.id_data.links.remove(self.links[0])
+
 
 def update_node(self, context):
     try:
@@ -73,7 +74,7 @@ class RenderNodeSocketInterface(bpy.types.NodeSocketInterface):
         return (0, 1, 1, 1)
 
 
-class RenderNodeSocket(bpy.types.NodeSocket,SocketBase):
+class RenderNodeSocket(bpy.types.NodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocket'
     bl_label = 'RenderNodeSocket'
 
@@ -91,7 +92,7 @@ class RenderNodeSocket(bpy.types.NodeSocket,SocketBase):
         return 0.5, 0.5, 0.5, 1
 
 
-class RenderNodeSocketBool(RenderNodeSocket,SocketBase):
+class RenderNodeSocketBool(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketBool'
     bl_label = 'RenderNodeSocketBool'
 
@@ -101,7 +102,7 @@ class RenderNodeSocketBool(RenderNodeSocket,SocketBase):
         return 0.9, 0.7, 1.0, 1
 
 
-class RenderNodeSocketInt(RenderNodeSocket,SocketBase):
+class RenderNodeSocketInt(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketInt'
     bl_label = 'RenderNodeSocketInt'
 
@@ -111,7 +112,7 @@ class RenderNodeSocketInt(RenderNodeSocket,SocketBase):
         return 0, 0.9, 0.1, 1
 
 
-class RenderNodeSocketFloat(RenderNodeSocket,SocketBase):
+class RenderNodeSocketFloat(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketFloat'
     bl_label = 'RenderNodeSocketFloat'
 
@@ -121,7 +122,7 @@ class RenderNodeSocketFloat(RenderNodeSocket,SocketBase):
         return 0.5, 0.5, 0.5, 1
 
 
-class RenderNodeSocketString(RenderNodeSocket,SocketBase):
+class RenderNodeSocketString(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketString'
     bl_label = 'RenderNodeSocketString'
 
@@ -134,7 +135,7 @@ class RenderNodeSocketString(RenderNodeSocket,SocketBase):
 # Vector and Subtype
 ####################
 
-class RenderNodeSocketVector(RenderNodeSocket,SocketBase):
+class RenderNodeSocketVector(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketVector'
     bl_label = 'RenderNodeSocketVector'
 
@@ -152,7 +153,7 @@ class RenderNodeSocketVector(RenderNodeSocket,SocketBase):
             col.prop(self, 'value', text=self.text)
 
 
-class RenderNodeSocketXYZ(RenderNodeSocketVector,SocketBase):
+class RenderNodeSocketXYZ(RenderNodeSocketVector, SocketBase):
     bl_idname = 'RenderNodeSocketXYZ'
     bl_label = 'RenderNodeSocketXYZ'
 
@@ -160,7 +161,7 @@ class RenderNodeSocketXYZ(RenderNodeSocketVector,SocketBase):
                                update=update_node)
 
 
-class RenderNodeSocketTranslation(RenderNodeSocketVector,SocketBase):
+class RenderNodeSocketTranslation(RenderNodeSocketVector, SocketBase):
     bl_idname = 'RenderNodeSocketTranslation'
     bl_label = 'RenderNodeSocketTranslation'
 
@@ -168,7 +169,7 @@ class RenderNodeSocketTranslation(RenderNodeSocketVector,SocketBase):
                                update=update_node)
 
 
-class RenderNodeSocketEuler(RenderNodeSocketVector,SocketBase):
+class RenderNodeSocketEuler(RenderNodeSocketVector, SocketBase):
     bl_idname = 'RenderNodeSocketEuler'
     bl_label = 'RenderNodeSocketEuler'
 
@@ -176,7 +177,7 @@ class RenderNodeSocketEuler(RenderNodeSocketVector,SocketBase):
                                update=update_node)
 
 
-class RenderNodeSocketColor(RenderNodeSocketVector,SocketBase):
+class RenderNodeSocketColor(RenderNodeSocketVector, SocketBase):
     bl_idname = 'RenderNodeSocketColor'
     bl_label = 'RenderNodeSocketColor'
 
@@ -191,7 +192,7 @@ class RenderNodeSocketColor(RenderNodeSocketVector,SocketBase):
 # Object and subtype
 ##################
 
-class RenderNodeSocketObject(RenderNodeSocket,SocketBase):
+class RenderNodeSocketObject(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketObject'
     bl_label = 'RenderNodeSocketObject'
 
@@ -214,7 +215,7 @@ def poll_camera(self, object):
     return object.type == 'CAMERA'
 
 
-class RenderNodeSocketCamera(RenderNodeSocket,SocketBase):
+class RenderNodeSocketCamera(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketCamera'
     bl_label = 'RenderNodeSocketCamera'
 
@@ -236,7 +237,7 @@ class RenderNodeSocketCamera(RenderNodeSocket,SocketBase):
 # other pointer property
 ###############
 
-class RenderNodeSocketMaterial(RenderNodeSocket,SocketBase):
+class RenderNodeSocketMaterial(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketMaterial'
     bl_label = 'RenderNodeSocketMaterial'
 
@@ -246,7 +247,7 @@ class RenderNodeSocketMaterial(RenderNodeSocket,SocketBase):
         return 1, 0.4, 0.4, 1
 
 
-class RenderNodeSocketWorld(RenderNodeSocket,SocketBase):
+class RenderNodeSocketWorld(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketWorld'
     bl_label = 'RenderNodeSocketWorld'
 
@@ -256,7 +257,17 @@ class RenderNodeSocketWorld(RenderNodeSocket,SocketBase):
         return 1, 0.4, 0.4, 1
 
 
-class RenderNodeSocketViewLayer(RenderNodeSocket,SocketBase):
+class RenderNodeSocketCollection(RenderNodeSocket, SocketBase):
+    bl_idname = 'RenderNodeSocketCollection'
+    bl_label = 'RenderNodeSocketCollection'
+
+    value: PointerProperty(type=bpy.types.Collection, update=update_node)
+
+    def draw_color(self, context, node):
+        return 1, 1, 1, 0.5
+
+
+class RenderNodeSocketViewLayer(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketViewLayer'
     bl_label = 'RenderNodeSocketViewLayer'
 
@@ -277,7 +288,7 @@ class RenderNodeSocketViewLayer(RenderNodeSocket,SocketBase):
 ### old types ###
 #################
 
-class RSNodeSocketTaskSettings(bpy.types.NodeSocket,SocketBase):
+class RSNodeSocketTaskSettings(bpy.types.NodeSocket, SocketBase):
     bl_idname = 'RSNodeSocketTaskSettings'
     bl_label = 'RSNodeSocketTaskSettings'
 
@@ -298,7 +309,7 @@ class RSNodeSocketTaskSettings(bpy.types.NodeSocket,SocketBase):
         return 0.6, 0.6, 0.6, 1.0
 
 
-class RSNodeSocketCamera(bpy.types.NodeSocket):
+class RSNodeSocketCamera(bpy.types.NodeSocket, SocketBase):
     bl_idname = 'RSNodeSocketCamera'
     bl_label = 'RSNodeSocketCamera'
 
@@ -309,7 +320,7 @@ class RSNodeSocketCamera(bpy.types.NodeSocket):
         return 0.6, 0.6, 0.6, 1.0
 
 
-class RSNodeSocketRenderSettings(bpy.types.NodeSocket):
+class RSNodeSocketRenderSettings(bpy.types.NodeSocket, SocketBase):
     bl_idname = 'RSNodeSocketRenderSettings'
     bl_label = 'RSNodeSocketRenderSettings'
 
@@ -320,7 +331,7 @@ class RSNodeSocketRenderSettings(bpy.types.NodeSocket):
         return 0, 1, 0.5, 1.0
 
 
-class RSNodeSocketOutputSettings(bpy.types.NodeSocket):
+class RSNodeSocketOutputSettings(bpy.types.NodeSocket, SocketBase):
     bl_idname = 'RSNodeSocketOutputSettings'
     bl_label = 'RSNod   eSocketOutputSettings'
 
@@ -331,7 +342,7 @@ class RSNodeSocketOutputSettings(bpy.types.NodeSocket):
         return 1, 0.8, 0.2, 1.0
 
 
-class RSNodeSocketRenderList(bpy.types.NodeSocket):
+class RSNodeSocketRenderList(bpy.types.NodeSocket, SocketBase):
     bl_idname = 'RSNodeSocketRenderList'
     bl_label = 'RSNodeSocketRenderList'
 
@@ -356,6 +367,7 @@ classes = (
     RenderNodeSocketCamera,
     RenderNodeSocketMaterial,
     RenderNodeSocketWorld,
+    RenderNodeSocketCollection,
     RenderNodeSocketViewLayer,
 
     RenderNodeSocketBool,

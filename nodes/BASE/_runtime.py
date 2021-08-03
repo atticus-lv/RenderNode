@@ -6,6 +6,12 @@ cache_socket_links = dict()
 # cache current node's dependants
 cache_node_dependants = dict()
 
+# runtime
+runtime_info = {
+    'updating': False,
+    'executing': False,
+}
+
 # LOG
 ##################
 import logging
