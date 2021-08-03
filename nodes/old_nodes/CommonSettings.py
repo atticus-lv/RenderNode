@@ -1,8 +1,8 @@
 import bpy
 import os
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode, get_pref
-
+from ...nodes.BASE.node_tree import RenderStackNode
+from ...utility import get_pref
 
 def poll_camera(self, object):
     return object.type == 'CAMERA'
