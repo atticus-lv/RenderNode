@@ -1,8 +1,7 @@
 import bpy
 from bpy.props import *
-from ...preferences import get_pref
 
-cache_socket_links = dict()
+from ._runtime import cache_socket_links
 
 
 class SocketBase():

@@ -1,17 +1,9 @@
 import bpy
-import nodeitems_utils
+
 from bpy.props import *
 from mathutils import Color, Vector
 
-from ...utility import *
-from ...preferences import get_pref
-from .socket_type import cache_socket_links
-
-import logging
-
-LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
-logging.basicConfig(format=LOG_FORMAT)
-logger = logging.getLogger('mylogger')
+from ._runtime import cache_node_dependants, logger
 
 
 class RenderStackNodeTree(bpy.types.NodeTree):
@@ -19,9 +11,6 @@ class RenderStackNodeTree(bpy.types.NodeTree):
     bl_idname = 'RenderStackNodeTree'
     bl_label = 'Render Editor'
     bl_icon = 'CAMERA_DATA'
-
-
-cache_node_dependants = dict()
 
 
 class RenderStackNode(bpy.types.Node):
@@ -99,6 +88,9 @@ class RenderStackNode(bpy.types.Node):
     def get_dependant_nodes(self):
         '''returns the nodes connected to the inputs of this node'''
         dep_tree = cache_node_dependants.setdefault(self.id_data, {})
+
+        # if self.bl_idname != 'RSNodeSetVariantsNode':
+
         if self in dep_tree:
             return dep_tree[self]
         nodes = []
@@ -108,7 +100,8 @@ class RenderStackNode(bpy.types.Node):
             if connected_socket and connected_socket not in nodes:
                 nodes.append(connected_socket.node)
         dep_tree[self] = nodes
-        print(nodes)
+
+
         return nodes
 
     def execute_dependants(self):

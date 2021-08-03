@@ -109,6 +109,7 @@ class RSN_OT_AddViewerNode(bpy.types.Operator):
 
         return {"FINISHED"}
 
+# TODO Need to fix variant nodes
 
 def update_viewer_tasks(self, context):
     try:
@@ -173,7 +174,7 @@ def register():
     bpy.utils.register_class(RSN_OT_AddViewerNode)
 
     bpy.types.WindowManager.rsn_node_list = StringProperty(default='')
-    bpy.types.WindowManager.rsn_viewer_node = StringProperty(name='Viewer task name', update=update_viewer_tasks)
+    bpy.types.WindowManager.rsn_viewer_node = StringProperty(name='Viewer task name')
 
 
 def unregister():

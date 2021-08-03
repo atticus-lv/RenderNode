@@ -420,6 +420,7 @@ class RenderQueue():
 
         bpy.context.window_manager.rsn_cur_task_list = ''
 
+# TODO move old update method to old nodes
 
 class RSN_OLD_TaskUpdater():
     def __init__(self, node_tree, task_data):
