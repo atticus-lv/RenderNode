@@ -27,7 +27,7 @@
 
 <!-- div:right-panel -->
 
-> This node allow you to assign a material into an obejct' material slot
+> This node allow you to assign a material into an object' material slot
 
 <!-- panels:end -->
 
@@ -43,7 +43,7 @@
 
 <!-- div:right-panel -->
 
-> This node can pick up and apply loacation, rotation euler, scale of the object
+> This node can pick up and apply location, rotation euler, scale of the object
 
 <!-- panels:end -->
 
@@ -65,11 +65,13 @@ First select the object<br>then right click on the property you want to pick<br>
 
 <!-- panels:end -->
 
+## Obsolete Nodes
+
 <!-- panels:start -->
 
 <!-- div:title-panel -->
 
-### Object Modifier
+### Object Modifier 
 
 <!-- div:left-panel -->
 
@@ -79,16 +81,6 @@ First select the object<br>then right click on the property you want to pick<br>
 
 > This node can changes object's modifiers' properties  ( The blue spanner icon in the properties panel 
 
-First select the object, thenright click on the property you want to pick<br>then **Copy data path**,paste it in the node's data path.<br>Now support most modifier(except for the geometry node modifier)<br><img src="media/img/nodeObject/5.5.png" width="360px">
+First select the object, then right click on the property you want to pick<br>then **Copy data path**, paste it in the node's data path.<br>Now support most modifier (except for the geometry node modifier)<br><img src="media/img/nodeObject/5.5.png" width="360px">
 
 <!-- panels:end -->
-
-
-
-
-
-
-
-
-
-

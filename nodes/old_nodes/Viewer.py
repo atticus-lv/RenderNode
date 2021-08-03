@@ -56,7 +56,7 @@ class RSNodeViewerNode(RenderStackNode):
         box = layout.box()
         col = box.column(align=True)
         col.label(text="TIPS:")
-        col.label(text='Not execute scripts node or email node')
+        col.label(text='Not execute ex node or email node')
         col.label(text='Use view operator in Task List Node to execute them')
 
 

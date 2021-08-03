@@ -8,7 +8,7 @@ from ...preferences import get_pref
 class RSN_OT_SearchAndLink(bpy.types.Operator):
     bl_idname = "rsn.search_and_link"
     bl_label = "Search Add"
-    bl_property = "node_item"
+    bl_property = "node_item"  # enum for search
     bl_options = {"REGISTER", "UNDO"}
 
     nt = None

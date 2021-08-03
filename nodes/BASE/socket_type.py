@@ -1,11 +1,25 @@
 import bpy
 from bpy.props import *
+from ...preferences import get_pref
 
 
 def update_node(self, context):
-    self.node.node_dict[self.name] = self.value
-    # update node tree
-    self.node.update_parms()
+    try:
+        self.node.node_dict[self.name] = self.value
+        # update node tree
+        self.node.update_parms()
+    except Exception as e:
+        print(e)
+
+
+class RenderNodeSocketInterface(bpy.types.NodeSocketInterface):
+    bl_socket_idname = 'RenderNodeSocket'
+
+    def draw(self, context, layout):
+        pass
+
+    def draw_color(self, context):
+        return (0, 1, 1, 1)
 
 
 class RenderNodeSocket(bpy.types.NodeSocket):
@@ -50,7 +64,7 @@ class RenderNodeSocketFloat(RenderNodeSocket):
     bl_idname = 'RenderNodeSocketFloat'
     bl_label = 'RenderNodeSocketFloat'
 
-    value: FloatProperty(default=10, update=update_node)
+    value: FloatProperty(default=0, update=update_node)
 
     def draw_color(self, context, node):
         return 0.5, 0.5, 0.5, 1
@@ -66,17 +80,52 @@ class RenderNodeSocketString(RenderNodeSocket):
         return 0.2, 0.7, 1.0, 1
 
 
+# Vector and Subtype
+####################
+
 class RenderNodeSocketVector(RenderNodeSocket):
     bl_idname = 'RenderNodeSocketVector'
     bl_label = 'RenderNodeSocketVector'
 
-    value: FloatVectorProperty(name='Vector', update=update_node)
+    value: FloatVectorProperty(name='Vector', default=(0, 0, 0), subtype='NONE',
+                               update=update_node)
 
     def draw_color(self, context, node):
         return 0.5, 0.3, 1.0, 1
 
+    def draw(self, context, layout, node, text):
+        col = layout.column(align=1)
+        if self.is_linked:
+            col.label(text=self.text)
+        else:
+            col.prop(self, 'value', text=self.text)
 
-class RenderNodeSocketColor(RenderNodeSocket):
+
+class RenderNodeSocketXYZ(RenderNodeSocketVector):
+    bl_idname = 'RenderNodeSocketXYZ'
+    bl_label = 'RenderNodeSocketXYZ'
+
+    value: FloatVectorProperty(name='Vector', default=(1.0, 1.0, 1.0), subtype='XYZ',
+                               update=update_node)
+
+
+class RenderNodeSocketTranslation(RenderNodeSocketVector):
+    bl_idname = 'RenderNodeSocketTranslation'
+    bl_label = 'RenderNodeSocketTranslation'
+
+    value: FloatVectorProperty(name='Vector', default=(0, 0, 0), subtype='TRANSLATION',
+                               update=update_node)
+
+
+class RenderNodeSocketEuler(RenderNodeSocketVector):
+    bl_idname = 'RenderNodeSocketEuler'
+    bl_label = 'RenderNodeSocketEuler'
+
+    value: FloatVectorProperty(name='Vector', default=(0, 0, 0), subtype='EULER',
+                               update=update_node)
+
+
+class RenderNodeSocketColor(RenderNodeSocketVector):
     bl_idname = 'RenderNodeSocketColor'
     bl_label = 'RenderNodeSocketColor'
 
@@ -85,8 +134,11 @@ class RenderNodeSocketColor(RenderNodeSocket):
                                min=0.0, max=1.0)
 
     def draw_color(self, context, node):
-        return 0.15, 1.0, 1.0, 1
+        return 0.9, 0.9, 0.3, 1
 
+
+# Object and subtype
+##################
 
 class RenderNodeSocketObject(RenderNodeSocket):
     bl_idname = 'RenderNodeSocketObject'
@@ -107,14 +159,68 @@ class RenderNodeSocketObject(RenderNodeSocket):
         return 1, 0.6, 0.3, 1
 
 
+def poll_camera(self, object):
+    return object.type == 'CAMERA'
+
+
+class RenderNodeSocketCamera(RenderNodeSocket):
+    bl_idname = 'RenderNodeSocketCamera'
+    bl_label = 'RenderNodeSocketCamera'
+
+    value: PointerProperty(type=bpy.types.Object, update=update_node, poll=poll_camera)
+
+    def draw(self, context, layout, node, text):
+        row = layout.row(align=1)
+        if self.is_linked:
+            row.label(text=self.text)
+        else:
+            row.prop(self, 'value', text='')
+            if self.value:
+                row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.value.name
+
+    def draw_color(self, context, node):
+        return 1, 0.6, 0.3, 1
+
+
+# other pointer property
+###############
+
 class RenderNodeSocketMaterial(RenderNodeSocket):
     bl_idname = 'RenderNodeSocketMaterial'
-    bl_label = 'RenderNodeSocketObject'
+    bl_label = 'RenderNodeSocketMaterial'
 
     value: PointerProperty(type=bpy.types.Material, update=update_node)
 
     def draw_color(self, context, node):
         return 1, 0.4, 0.4, 1
+
+
+class RenderNodeSocketWorld(RenderNodeSocket):
+    bl_idname = 'RenderNodeSocketWorld'
+    bl_label = 'RenderNodeSocketWorld'
+
+    value: PointerProperty(type=bpy.types.World, update=update_node)
+
+    def draw_color(self, context, node):
+        return 1, 0.4, 0.4, 1
+
+
+class RenderNodeSocketViewLayer(RenderNodeSocket):
+    bl_idname = 'RenderNodeSocketViewLayer'
+    bl_label = 'RenderNodeSocketViewLayer'
+
+    value: StringProperty(update=update_node)
+
+    def draw(self, context, layout, node, text):
+
+        row = layout.row(align=1)
+        if self.is_linked:
+            row.label(text=self.text)
+        else:
+            row.prop_search(self, "value", context.scene, "view_layers", text='')
+
+    def draw_color(self, context, node):
+        return 0.2, 0.7, 1.0, 1
 
 
 ### old types ###
@@ -149,7 +255,7 @@ class RSNodeSocketCamera(bpy.types.NodeSocket):
         layout.label(text=text)
 
     def draw_color(self, context, node):
-        return 0, 0.8, 1.0, 1.0
+        return 0.6, 0.6, 0.6, 1.0
 
 
 class RSNodeSocketRenderSettings(bpy.types.NodeSocket):
@@ -193,15 +299,24 @@ classes = (
     RSNodeSocketRenderList,
 
     # new
+    RenderNodeSocketInterface,
     RenderNodeSocket,
     RenderNodeSocketObject,
+    RenderNodeSocketCamera,
     RenderNodeSocketMaterial,
+    RenderNodeSocketWorld,
+    RenderNodeSocketViewLayer,
+
     RenderNodeSocketBool,
     RenderNodeSocketInt,
     RenderNodeSocketFloat,
     RenderNodeSocketString,
-    RenderNodeSocketColor,
     RenderNodeSocketVector,
+    RenderNodeSocketXYZ,
+    RenderNodeSocketTranslation,
+    RenderNodeSocketEuler,
+    RenderNodeSocketColor,
+
 )
 
 

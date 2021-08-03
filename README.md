@@ -43,7 +43,7 @@
 
 **Stable** *Ready for work*
 
-[Stable 📚 ](https://github.com/atticus-lv/RenderStackNode/releases/latest)
+[Stable 📚 ](https://github.com/atticus-lv/RenderStackNode/releases/tag/v1.2.4)
 
 ### Support me
 

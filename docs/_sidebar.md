@@ -9,11 +9,12 @@
 + **Nodes**
     + [Task](NodeTask)	
     + [Input](NodeInput)
+    + [Output](NodeOutput)
+    + [Scene](NodeScene)
     + [Obejct](NodeObject)
-    + [Output Settings](NodeOutput)
-    + [Render Settings](NodeRender)
+    + [Render Settings(Extra)](NodeRender)
     + [Variants](NodeVariants)
     + [Layout](NodeLayout)
-    + [Scripts](NodeScripts)
+    + [Extra](NodeExtra)
 + **FAQ**
     + [Frequently asked Questions](FAQ.md)

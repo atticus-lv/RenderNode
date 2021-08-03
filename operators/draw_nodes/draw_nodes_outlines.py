@@ -280,7 +280,7 @@ def draw_callback_nodeoutline(self, context):
     task_outer = (self.task_color[0], self.task_color[1], self.task_color[2], self.alpha)
     file_path_outer = (self.file_path_color[0], self.file_path_color[1], self.file_path_color[2], self.alpha)
 
-    col_outer = (self.settiings_color[0], self.settiings_color[1], self.settiings_color[2], self.alpha)
+    col_outer = (self.settings_color[0], self.settings_color[1], self.settings_color[2], self.alpha)
     col_inner = (0.0, 0.0, 0.0, self.alpha + 0.1)
 
     node_list = context.window_manager.rsn_node_list.split(',')
@@ -292,10 +292,10 @@ def draw_callback_nodeoutline(self, context):
             if node.bl_idname == 'RSNodeTaskNode':
                 draw_rounded_node_border(shader, node, radius=self.radius * 1.25, colour=task_outer)
                 draw_rounded_node_border(shader, node, radius=self.radius * 1.25 - 1.25, colour=col_inner)
-            elif node.bl_idname == 'RSNodeFilePathInputNode':
+            elif node.bl_idname in {'RenderNodeSceneFilePath', 'RSNodeFilePathInputNode'}:
                 draw_rounded_node_border(shader, node, radius=self.radius, colour=file_path_outer)
                 draw_rounded_node_border(shader, node, radius=self.radius - 1, colour=col_inner)
-            else:
+            elif node.bl_idname != 'NodeReroute':
                 draw_rounded_node_border(shader, node, radius=self.radius, colour=col_outer)
                 draw_rounded_node_border(shader, node, radius=self.radius - 1, colour=col_inner)
         except KeyError:
@@ -303,41 +303,43 @@ def draw_callback_nodeoutline(self, context):
 
     # draw text
     ##################
+    if self.show_text_info:
+        # properties text
+        task_text = "No Active Task!" if context.window_manager.rsn_viewer_node == '' else context.window_manager.rsn_viewer_node
+        camera = context.scene.camera.name if context.scene.camera else "No Scene camera"
+        is_save = True if bpy.data.filepath != '' else False
+        file_path_text = context.scene.render.filepath if is_save else "Save your file first!"
 
-    # properties text
-    task_text = "No Active Task!" if context.window_manager.rsn_viewer_node == '' else context.window_manager.rsn_viewer_node
-    camera = context.scene.camera.name if context.scene.camera else "No scene camera"
-    is_save = True if bpy.data.filepath != '' else False
-    file_path_text = bpy.path.relpath(context.scene.render.filepath) if is_save else "Save your file first!"
+        texts = [
+            f"Task: {task_text}",
+            f"Camera: {camera}",
+            f"Engine: {context.scene.render.engine}",
+            f"Frame: {context.scene.frame_start} - {context.scene.frame_end}",
+            f"FilePath: {file_path_text}",
+        ]
 
-    texts = [
-        f"Task: {task_text}",
-        f"Camera: {camera}",
-        f"Engine: {context.scene.render.engine}",
-        f"Frame: {context.scene.frame_start} - {context.scene.frame_end}",
-        f"FilePath: {file_path_text}",
-    ]
+        # text background
+        r, g, b = self.background_color
+        longest_text = max(texts, key=len, default='')
+        size = blf.dimensions(0, longest_text)  # get the longest text
+        size = [v * 1.5 / context.preferences.view.ui_scale for v in size]  # scale with the ui scale
 
-    # text background
-    r, g, b = self.background_color
-    longest_text = max(texts, key=len, default='')
-    size = blf.dimensions(0, longest_text)  # get the longest text
-    size = [v * 1.5 / context.preferences.view.ui_scale for v in size]  # scale with the ui scale
+        # set corner
+        top = 125
+        bottom = 25
+        step = 25
 
-    # set corner
-    top = 125
-    bottom = 25
-    step = 25
+        vertices = [(10 + size[0], top + size[1]), (20, top + size[1]), (20, 25), (10 + size[0], bottom), ]
 
-    vertices = [(10 + size[0], top + size[1]), (20, top + size[1]), (20, 25), (10 + size[0], bottom), ]
-    draw_round_rectangle(shader, vertices, radius=18, colour=(0, 0, 0, self.alpha))  # shadow
-    draw_round_rectangle(shader, vertices, radius=14, colour=(r, g, b, self.alpha))  # main box
+        draw_round_rectangle(shader, vertices, radius=18, colour=(0, 0, 0, self.alpha))  # shadow
+        draw_round_rectangle(shader, vertices, radius=14, colour=(r, g, b, self.alpha))  # main box
 
-    # draw texts
-    r, g, b = self.text_color
-    size = 20
-    for i, text in enumerate(texts):
-        draw_text_2d((r, g, b, self.alpha, size), text, 20, top - step * i)
+        # draw texts
+        r, g, b = self.text_color
+        size = 20
+
+        for i, text in enumerate(texts):
+            draw_text_2d((r, g, b, self.alpha, size), text, 20, top - step * i)
 
     # restore
     #####################
@@ -346,7 +348,7 @@ def draw_callback_nodeoutline(self, context):
 
 
 class RSN_OT_DrawNodes(Operator):
-    """"""
+    """Draw the active task's settings """
     bl_idname = "rsn.draw_nodes"
     bl_label = "Draw Nodes"
     bl_options = {'REGISTER', 'UNDO'}
@@ -380,17 +382,19 @@ class RSN_OT_DrawNodes(Operator):
 
         # init draw values
         #####################
-
+        pref = get_pref()
         self.alpha = 0
-        self.radius = get_pref().draw_nodes.border_radius
+        self.radius = pref.draw_nodes.border_radius
         # node color
-        self.settiings_color = get_pref().draw_nodes.settiings_color
-        self.task_color = get_pref().draw_nodes.task_color
-        self.file_path_color = get_pref().draw_nodes.file_path_color
+        self.settings_color = pref.draw_nodes.settings_color
+        self.task_color = pref.draw_nodes.task_color
+        self.file_path_color = pref.draw_nodes.file_path_color
+
+        self.show_text_info = pref.draw_nodes.show_text_info
         # background color
-        self.background_color = get_pref().draw_nodes.background_color
+        self.background_color = pref.draw_nodes.background_color
         # text color
-        self.text_color = get_pref().draw_nodes.text_color
+        self.text_color = pref.draw_nodes.text_color
 
         # set statue
         ##################

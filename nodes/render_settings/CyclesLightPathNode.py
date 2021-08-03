@@ -20,7 +20,7 @@ class RSNodeCyclesLightPathNode(RenderStackNode):
     volume_bounces: IntProperty(default=0, update=update_node)
 
     def init(self, context):
-        self.outputs.new('RSNodeSocketRenderSettings', "Render Settings")
+        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
     def draw_buttons(self, context, layout):
         col = layout.column(align=True)

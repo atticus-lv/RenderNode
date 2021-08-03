@@ -14,14 +14,16 @@ class PropsDrawNodes(bpy.types.PropertyGroup):
                                  description='Scale of the border when draw task nodes',
                                  default=5, min=2, soft_min=2, soft_max=8)
 
-    settiings_color: FloatVectorProperty(name='Border Color', subtype='COLOR',
-                                         default=(0.2, 1.0, 0.2))
+    settings_color: FloatVectorProperty(name='Border Color', subtype='COLOR',
+                                        default=(0.2, 1.0, 0.2))
 
     task_color: FloatVectorProperty(name='Task Color', subtype='COLOR',
                                     default=(0, 1.0, 1.0))
 
     file_path_color: FloatVectorProperty(name='File Path Color', subtype='COLOR',
                                          default=(1.0, 0.8, 0))
+
+    show_text_info: BoolProperty(name='Show Text Info', default=True)
 
     background_color: FloatVectorProperty(name='Background Color', subtype='COLOR',
                                           default=(0.2, 0.2, 0.4))
@@ -56,7 +58,7 @@ class NodeTaskProps(bpy.types.PropertyGroup):
     show: BoolProperty(name="Dropdown", default=True)
     # update_properties
     update_scripts: BoolProperty(name='Update Scripts',
-                                 description="Update scripts node when using viewer node",
+                                 description="Update ex node when using viewer node",
                                  default=False)
     update_path: BoolProperty(name='Update File Path',
                               description="Update File Path node when using viewer node",
@@ -159,7 +161,7 @@ class RSN_Preference(bpy.types.AddonPreferences):
         box = col.box().split().column(align=1)
         box.label(text="Draw Nodes")
         box.prop(self.draw_nodes, 'border_radius', slider=1)
-        box.prop(self.draw_nodes, 'settiings_color')
+        box.prop(self.draw_nodes, 'settings_color')
         box.separator(factor=1)
 
         box.prop(self.draw_nodes, 'task_color')
