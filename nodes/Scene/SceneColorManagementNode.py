@@ -83,11 +83,10 @@ class RSNodeColorManagementNode(RenderNodeBase):
         col.prop(self, 'look')
 
     def process(self):
-        self.store_data()
         vs = bpy.context.scene.view_settings
 
-        self.compare(vs, 'exposure', self.node_dict['exposure'])
-        self.compare(vs, 'gamma', self.node_dict['gamma'])
+        self.compare(vs, 'exposure', self.inputs['exposure'].get_value())
+        self.compare(vs, 'gamma', self.inputs['gamma'].get_value())
 
         self.compare(vs, 'view_transform', self.view_transform)
         self.compare(vs, 'look', self.look)

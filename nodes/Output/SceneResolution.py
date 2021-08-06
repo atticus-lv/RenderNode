@@ -98,18 +98,16 @@ class RenderNodeSceneResolution(RenderNodeBase):
 
     def process(self):
         # correct number
-        if self.inputs['resolution_x'].value < 4:
-            self.inputs['resolution_x'].value = 4
-        if self.inputs['resolution_y'].value < 4:
-            self.inputs['resolution_y'].value = 4
-        if self.inputs['resolution_percentage'].value < 1:
-            self.inputs['resolution_percentage'].value = 1
+        if self.inputs['resolution_x'].get_value() < 4:
+            self.inputs['resolution_x'].set_value(4)
+        if self.inputs['resolution_y'].get_value() < 4:
+            self.inputs['resolution_y'].set_value(4)
+        if self.inputs['resolution_percentage'].get_value() < 1:
+            self.inputs['resolution_percentage'].set_value(1)
 
-        self.store_data()
-
-        self.compare(bpy.context.scene.render, 'resolution_x', self.node_dict['resolution_x'])
-        self.compare(bpy.context.scene.render, 'resolution_y', self.node_dict['resolution_y'])
-        self.compare(bpy.context.scene.render, 'resolution_percentage', self.node_dict['resolution_percentage'])
+        bpy.context.scene.render.resolution_x = self.node_dict['resolution_x'].get_value()
+        bpy.context.scene.render.resolution_y = self.node_dict['resolution_y'].get_value()
+        bpy.context.scene.render.resolution_percentage = self.node_dict['resolution_percentage'].get_value()
 
 
 def register():

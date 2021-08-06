@@ -14,8 +14,7 @@ class RenderNodeSceneWorld(RenderNodeBase):
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
     def process(self):
-        self.store_data()
-        world = self.node_dict['world']
+        world = self.inputs['world'].get_value()
 
         if world:
             self.compare(bpy.context.scene, 'world', world)

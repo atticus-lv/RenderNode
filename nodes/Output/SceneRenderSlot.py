@@ -19,14 +19,13 @@ class RenderNodeSceneRenderSlot(RenderNodeBase):
         render_result = bpy.data.images.get('Render Result')
         if not render_result: return None
 
-        if self.inputs['slot_index'] < 1:
-            self.inputs['slot_index'] = 1
+        if self.inputs['slot_index'].get_value() < 1:
+            self.inputs['slot_index'].set_value(1)
 
-        elif self.inputs['slot_index'] > len(render_result.render_slots):
-            self.inputs['slot_index'] = len(render_result.render_slots)
+        if self.inputs['slot_index'].get_value() > len(render_result.render_slots):
+            self.inputs['slot_index'].set_value(len(render_result.render_slots))
 
-        self.store_data()
-        self.compare(render_result.render_slots, 'active_index', self.node_dict['slot_index'] - 1)
+        render_result.render_slots.active_index = self.inputs['slot_index'].get_value()
 
 
 def register():
