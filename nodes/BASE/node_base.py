@@ -34,23 +34,35 @@ class RenderNodeBase(bpy.types.Node):
 
     node_dict = {}
 
-    def create_prop(self, socket_type, socket_name, socket_label, default_value=None):
+    def creat_input(self, socket_type, socket_name, socket_label, default_value=None):
         if self.inputs.get(socket_name):
             return None
 
         input = self.inputs.new(socket_type, socket_name)
         input.text = socket_label
 
-        if default_value: input.value = default_value
+        if default_value: input.default_value = default_value
 
         # store to node_dict
-        self.node_dict[socket_name] = input.value
+        self.node_dict[socket_name] = input.default_value
 
-    def remove_prop(self, socket_name):
+    def remove_input(self, socket_name):
         input = self.inputs.get(socket_name)
         if input:
             self.inputs.remove(input)
             self.node_dict.pop(socket_name)  # remove from node dict
+
+    def creat_output(self, socket_type, socket_name, socket_label, default_value=None):
+        if self.outputs.get(socket_name):
+            return None
+
+        output = self.outputs.new(socket_type, socket_name)
+        output.text = socket_label
+
+        if default_value: output.default_value = default_value
+
+        # store to node_dict
+        self.node_dict[socket_name] = output.default_value
 
     ## STATE METHOD
     #########################################
@@ -91,7 +103,6 @@ class RenderNodeBase(bpy.types.Node):
         nodes = []
         for input in self.inputs:
             connected_socket = input.connected_socket
-
             if connected_socket and connected_socket not in nodes:
                 nodes.append(connected_socket.node)
         dep_tree[self] = nodes
@@ -104,7 +115,7 @@ class RenderNodeBase(bpy.types.Node):
             self.execute_other(x)
 
     def execute(self):
-        print(f'executing {self.name}')
+        self.execute_dependants()
         self.process()
 
     def execute_other(self, other):
@@ -137,24 +148,27 @@ class RenderNodeBase(bpy.types.Node):
     ## RSN DATA MANAGE
     #########################################
 
+    # update the build-in values
     def update_parms(self):
         task_node = self.id_data.nodes.get(bpy.context.window_manager.rsn_viewer_node)
         if task_node:
-            task_node.execute_dependants()
             task_node.execute()
 
-    ### new method ###
+    def get_input_value(self, socket_name):
+        ans = self.inputs.get(socket_name)
+        if ans: return ans.get_value()
 
+    #  store socket
     def store_data(self):
         for input in self.inputs:
             if input.is_linked:
                 node = self.reroute_socket_node(input, self)
                 print(f'accept result:{node}')
                 if hasattr(node, 'value'):
-                    self.node_dict[input.name] = self.transfer_value(node.value)
-                    self.node_dict[input.name] = self.transfer_value(node.value)
+                    self.node_dict[input.name] = self.transfer_value(node.default_value)
+                    self.node_dict[input.name] = self.transfer_value(node.default_value)
             else:
-                self.node_dict[input.name] = self.transfer_value(input.value)
+                self.node_dict[input.name] = self.transfer_value(input.default_value)
 
     def transfer_value(self, value):
 

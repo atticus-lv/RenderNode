@@ -23,9 +23,9 @@ class RenderNodeObjectMaterial(RenderNodeBase):
     bl_label = 'Object Material'
 
     def init(self, context):
-        self.create_prop('RenderNodeSocketObject', 'object', 'Object')
-        self.create_prop('RenderNodeSocketInt', 'slot_index', 'Slot Index')
-        self.create_prop('RenderNodeSocketMaterial', 'material', 'Mat')
+        self.creat_input('RenderNodeSocketObject', 'object', 'Object')
+        self.creat_input('RenderNodeSocketInt', 'slot_index', 'Slot Index')
+        self.creat_input('RenderNodeSocketMaterial', 'material', 'Mat')
 
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
         self.width = 175

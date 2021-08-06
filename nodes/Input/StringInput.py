@@ -13,13 +13,13 @@ class RenderNodeStringInput(RenderNodeBase):
     bl_idname = 'RenderNodeStringInput'
     bl_label = 'String Input'
 
-    value: StringProperty(update=update_node)
+    default_value: StringProperty(update=update_node)
 
     def init(self, context):
         self.outputs.new('NodeSocketString', "Output")
 
     def draw_buttons(self, context, layout):
-        layout.prop(self, 'value', text='')
+        layout.prop(self, 'default_value', text='')
 
 
 def register():

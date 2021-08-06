@@ -64,8 +64,8 @@ class RSNodeColorManagementNode(RenderNodeBase):
     gamma: FloatProperty(name="Gamma", default=1.0, update=update_node)
 
     def init(self, context):
-        self.create_prop('RenderNodeSocketFloat', 'exposure', 'Exposure', default_value=0.0)
-        self.create_prop('RenderNodeSocketFloat', 'gamma', 'Gamma', default_value=1.0)
+        self.creat_input('RenderNodeSocketFloat', 'exposure', 'Exposure', default_value=0.0)
+        self.creat_input('RenderNodeSocketFloat', 'gamma', 'Gamma', default_value=1.0)
 
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 

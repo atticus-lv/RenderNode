@@ -81,9 +81,9 @@ class RenderNodeSceneResolution(RenderNodeBase):
     bl_label = 'Scene Resolution'
 
     def init(self, context):
-        self.create_prop('RenderNodeSocketInt', "resolution_x", 'X', default_value=1920)
-        self.create_prop('RenderNodeSocketInt', "resolution_y", 'Y', default_value=1080)
-        self.create_prop('RenderNodeSocketInt', "resolution_percentage", '%', default_value=100)
+        self.creat_input('RenderNodeSocketInt', "resolution_x", 'X', default_value=1920)
+        self.creat_input('RenderNodeSocketInt', "resolution_y", 'Y', default_value=1080)
+        self.creat_input('RenderNodeSocketInt', "resolution_percentage", '%', default_value=100)
 
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 

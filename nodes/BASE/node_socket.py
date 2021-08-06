@@ -1,11 +1,14 @@
 import bpy
 from bpy.props import *
 
-from ._runtime import cache_socket_links
+from ._runtime import cache_socket_links, cache_socket_variables
 
 
+# some method from rigging_node
 class SocketBase():
-    # some method from rigging_node
+
+    # reroute method
+    ###########################
     @property
     def connected_socket(self):
         '''
@@ -14,8 +17,9 @@ class SocketBase():
         It takes O(len(nodetree.links)) time to iterate thought the links to check the connected socket
         To avoid doing the look up every time, the connections are cached in a dictionary
         The dictionary is emptied whenever a socket/connection/node changes in the nodetree
+        accessing links Takes O(len(nodetree.links)) time.
         '''
-        # accessing links Takes O(len(nodetree.links)) time.
+
         _nodetree_socket_connections = cache_socket_links.setdefault(self.id_data, {})
         _connected_socket = _nodetree_socket_connections.get(self, None)
 
@@ -24,18 +28,51 @@ class SocketBase():
 
         socket = self
         if socket.is_output:
-            while socket.links and socket.links[0].to_node.bl_rna.name == 'Reroute':
+            while socket.is_linked and socket.links[0].to_node.bl_rna.name == 'Reroute':
                 socket = socket.links[0].to_node.outputs[0]
-            if socket.links:
+            if socket.is_linked:
                 _connected_socket = socket.links[0].to_socket
         else:
-            while socket.links and socket.links[0].from_node.bl_rna.name == 'Reroute':
+            while socket.is_linked and socket.links[0].from_node.bl_rna.name == 'Reroute':
                 socket = socket.links[0].from_node.inputs[0]
-            if socket.links:
+            if socket.is_linked:
                 _connected_socket = socket.links[0].from_socket
 
         cache_socket_links[self.id_data][self] = _connected_socket
+
         return _connected_socket
+
+    # set and get method
+    #########################
+    def set_value(self, value):
+        '''Sets the value of an output socket'''
+        cache_socket_variables.setdefault(self.id_data, {})[self] = value
+        print(cache_socket_variables)
+
+    def get_self_value(self):
+        '''returns the stored value of an output socket'''
+        val = cache_socket_variables.setdefault(self.id_data, {}).get(self, None)
+        return val
+
+    def get_value(self):
+        '''
+        if the socket is an output it returns the stored value of that socket
+        if the socket is an input:
+            if it's connected, it returns the value of the connected output socket
+            if it's not it returns the default value of the socket
+        '''
+        _value = ''
+        if not self.is_output:
+            connected_socket = self.connected_socket
+
+            if not connected_socket:
+                _value = self.default_value
+            else:
+                _value = connected_socket.get_self_value()
+        else:
+            _value = self.get_self_value()
+
+        return _value
 
     def remove_incorrect_links(self):
         '''
@@ -58,7 +95,7 @@ class SocketBase():
 
 def update_node(self, context):
     try:
-        self.node.node_dict[self.name] = self.value
+        self.node.node_dict[self.name] = self.default_value
         self.node.update_parms()
     except Exception as e:
         print(e)
@@ -79,14 +116,14 @@ class RenderNodeSocket(bpy.types.NodeSocket, SocketBase):
     bl_label = 'RenderNodeSocket'
 
     text: StringProperty(default='custom text')
-    value: IntProperty(default=0, update=update_node)
+    default_value: IntProperty(default=0, update=update_node)
 
     def draw(self, context, layout, node, text):
         row = layout.row(align=1)
         if self.is_linked:
             row.label(text=self.text)
         else:
-            row.prop(self, 'value', text=self.text)
+            row.prop(self, 'default_value', text=self.text)
 
     def draw_color(self, context, node):
         return 0.5, 0.5, 0.5, 1
@@ -96,7 +133,7 @@ class RenderNodeSocketBool(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketBool'
     bl_label = 'RenderNodeSocketBool'
 
-    value: BoolProperty(default=False, update=update_node)
+    default_value: BoolProperty(default=False, update=update_node)
 
     def draw_color(self, context, node):
         return 0.9, 0.7, 1.0, 1
@@ -106,7 +143,7 @@ class RenderNodeSocketInt(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketInt'
     bl_label = 'RenderNodeSocketInt'
 
-    value: IntProperty(default=0, update=update_node)
+    default_value: IntProperty(default=0, update=update_node)
 
     def draw_color(self, context, node):
         return 0, 0.9, 0.1, 1
@@ -116,7 +153,7 @@ class RenderNodeSocketFloat(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketFloat'
     bl_label = 'RenderNodeSocketFloat'
 
-    value: FloatProperty(default=0, update=update_node)
+    default_value: FloatProperty(default=0, update=update_node)
 
     def draw_color(self, context, node):
         return 0.5, 0.5, 0.5, 1
@@ -126,7 +163,7 @@ class RenderNodeSocketString(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketString'
     bl_label = 'RenderNodeSocketString'
 
-    value: StringProperty(default='', update=update_node)
+    default_value: StringProperty(default='', update=update_node)
 
     def draw_color(self, context, node):
         return 0.2, 0.7, 1.0, 1
@@ -139,8 +176,8 @@ class RenderNodeSocketVector(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketVector'
     bl_label = 'RenderNodeSocketVector'
 
-    value: FloatVectorProperty(name='Vector', default=(0, 0, 0), subtype='NONE',
-                               update=update_node)
+    default_value: FloatVectorProperty(name='Vector', default=(0, 0, 0), subtype='NONE',
+                                       update=update_node)
 
     def draw_color(self, context, node):
         return 0.5, 0.3, 1.0, 1
@@ -150,40 +187,40 @@ class RenderNodeSocketVector(RenderNodeSocket, SocketBase):
         if self.is_linked:
             col.label(text=self.text)
         else:
-            col.prop(self, 'value', text=self.text)
+            col.prop(self, 'default_value', text=self.text)
 
 
 class RenderNodeSocketXYZ(RenderNodeSocketVector, SocketBase):
     bl_idname = 'RenderNodeSocketXYZ'
     bl_label = 'RenderNodeSocketXYZ'
 
-    value: FloatVectorProperty(name='Vector', default=(1.0, 1.0, 1.0), subtype='XYZ',
-                               update=update_node)
+    default_value: FloatVectorProperty(name='Vector', default=(1.0, 1.0, 1.0), subtype='XYZ',
+                                       update=update_node)
 
 
 class RenderNodeSocketTranslation(RenderNodeSocketVector, SocketBase):
     bl_idname = 'RenderNodeSocketTranslation'
     bl_label = 'RenderNodeSocketTranslation'
 
-    value: FloatVectorProperty(name='Vector', default=(0, 0, 0), subtype='TRANSLATION',
-                               update=update_node)
+    default_value: FloatVectorProperty(name='Vector', default=(0, 0, 0), subtype='TRANSLATION',
+                                       update=update_node)
 
 
 class RenderNodeSocketEuler(RenderNodeSocketVector, SocketBase):
     bl_idname = 'RenderNodeSocketEuler'
     bl_label = 'RenderNodeSocketEuler'
 
-    value: FloatVectorProperty(name='Vector', default=(0, 0, 0), subtype='EULER',
-                               update=update_node)
+    default_value: FloatVectorProperty(name='Vector', default=(0, 0, 0), subtype='EULER',
+                                       update=update_node)
 
 
 class RenderNodeSocketColor(RenderNodeSocketVector, SocketBase):
     bl_idname = 'RenderNodeSocketColor'
     bl_label = 'RenderNodeSocketColor'
 
-    value: FloatVectorProperty(update=update_node, subtype='COLOR',
-                               default=(1.0, 1.0, 1.0),
-                               min=0.0, max=1.0)
+    default_value: FloatVectorProperty(update=update_node, subtype='COLOR',
+                                       default=(1.0, 1.0, 1.0),
+                                       min=0.0, max=1.0)
 
     def draw_color(self, context, node):
         return 0.9, 0.9, 0.3, 1
@@ -196,16 +233,16 @@ class RenderNodeSocketObject(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketObject'
     bl_label = 'RenderNodeSocketObject'
 
-    value: PointerProperty(type=bpy.types.Object, update=update_node)
+    default_value: PointerProperty(type=bpy.types.Object, update=update_node)
 
     def draw(self, context, layout, node, text):
-        row = layout.row(align=1)
-        if self.is_linked:
-            row.label(text=self.text)
+        if self.is_linked or self.is_output:
+            layout.label(text=self.text)
         else:
-            row.prop(self, 'value', text=self.text)
-            if self.value:
-                row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.value.name
+            row = layout.row(align=1)
+            row.prop(self, 'default_value', text='self.text')
+            if self.default_value:
+                row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.default_value.name
 
     def draw_color(self, context, node):
         return 1, 0.6, 0.3, 1
@@ -219,16 +256,16 @@ class RenderNodeSocketCamera(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketCamera'
     bl_label = 'RenderNodeSocketCamera'
 
-    value: PointerProperty(type=bpy.types.Object, update=update_node, poll=poll_camera)
+    default_value: PointerProperty(type=bpy.types.Object, update=update_node, poll=poll_camera)
 
     def draw(self, context, layout, node, text):
         row = layout.row(align=1)
         if self.is_linked:
             row.label(text=self.text)
         else:
-            row.prop(self, 'value', text='')
-            if self.value:
-                row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.value.name
+            row.prop(self, 'default_value', text='')
+            if self.default_value:
+                row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.default_value.name
 
     def draw_color(self, context, node):
         return 1, 0.6, 0.3, 1
@@ -241,7 +278,7 @@ class RenderNodeSocketMaterial(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketMaterial'
     bl_label = 'RenderNodeSocketMaterial'
 
-    value: PointerProperty(type=bpy.types.Material, update=update_node)
+    default_value: PointerProperty(type=bpy.types.Material, update=update_node)
 
     def draw_color(self, context, node):
         return 1, 0.4, 0.4, 1
@@ -251,7 +288,7 @@ class RenderNodeSocketWorld(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketWorld'
     bl_label = 'RenderNodeSocketWorld'
 
-    value: PointerProperty(type=bpy.types.World, update=update_node)
+    default_value: PointerProperty(type=bpy.types.World, update=update_node)
 
     def draw_color(self, context, node):
         return 1, 0.4, 0.4, 1
@@ -261,7 +298,7 @@ class RenderNodeSocketCollection(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketCollection'
     bl_label = 'RenderNodeSocketCollection'
 
-    value: PointerProperty(type=bpy.types.Collection, update=update_node)
+    default_value: PointerProperty(type=bpy.types.Collection, update=update_node)
 
     def draw_color(self, context, node):
         return 1, 1, 1, 0.5
@@ -271,7 +308,7 @@ class RenderNodeSocketViewLayer(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketViewLayer'
     bl_label = 'RenderNodeSocketViewLayer'
 
-    value: StringProperty(update=update_node)
+    default_value: StringProperty(update=update_node)
 
     def draw(self, context, layout, node, text):
 
@@ -279,7 +316,7 @@ class RenderNodeSocketViewLayer(RenderNodeSocket, SocketBase):
         if self.is_linked:
             row.label(text=self.text)
         else:
-            row.prop_search(self, "value", context.scene, "view_layers", text='')
+            row.prop_search(self, "default_value", context.scene, "view_layers", text='')
 
     def draw_color(self, context, node):
         return 0.2, 0.7, 1.0, 1

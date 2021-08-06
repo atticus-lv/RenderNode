@@ -9,7 +9,7 @@ class RenderNodeSceneWorld(RenderNodeBase):
     bl_label = 'Scene World'
 
     def init(self, context):
-        self.create_prop('RenderNodeSocketWorld', "world", 'World')
+        self.creat_input('RenderNodeSocketWorld', "world", 'World')
 
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 

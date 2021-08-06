@@ -8,9 +8,9 @@ class RenderNodeObjectDisplay(RenderNodeBase):
     bl_label = 'Object Display'
 
     def init(self, context):
-        self.create_prop('RenderNodeSocketObject', 'object', 'Object')
-        self.create_prop('RenderNodeSocketBool', 'hide_viewport', 'Hide Viewport')
-        self.create_prop('RenderNodeSocketBool', 'hide_render', 'Hide Render')
+        self.creat_input('RenderNodeSocketObject', 'object', 'Object')
+        self.creat_input('RenderNodeSocketBool', 'hide_viewport', 'Hide Viewport')
+        self.creat_input('RenderNodeSocketBool', 'hide_render', 'Hide Render')
 
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 

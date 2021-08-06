@@ -14,20 +14,20 @@ def update_node(self, context):
 
         self.d_type = type(eval(full_data_path))
 
-        self.remove_prop('value')
+        self.remove_input('value')
 
         if self.d_type == int:
-            self.create_prop('RenderNodeSocketInt', 'value', "Int")
+            self.creat_input('RenderNodeSocketInt', 'value', "Int")
         elif self.d_type == float:
-            self.create_prop('RenderNodeSocketFloat', 'value', "Float")
+            self.creat_input('RenderNodeSocketFloat', 'value', "Float")
         elif self.d_type == str:
-            self.create_prop('RenderNodeSocketString', 'value', "String")
+            self.creat_input('RenderNodeSocketString', 'value', "String")
         elif self.d_type == bool:
-            self.create_prop('RenderNodeSocketBool', 'value', "Bool")
+            self.creat_input('RenderNodeSocketBool', 'value', "Bool")
         elif self.d_type == Color:
-            self.create_prop('RenderNodeSocketColor', 'value', "Color")
+            self.creat_input('RenderNodeSocketColor', 'value', "Color")
         elif self.d_type == Vector:
-            self.create_prop('RenderNodeSocketVector', 'value', "Vector")
+            self.creat_input('RenderNodeSocketVector', 'value', "Vector")
 
         self.update_parms()
 
@@ -59,7 +59,7 @@ class RenderNodeObjectData(RenderNodeBase):
     d_type = None
 
     def init(self, context):
-        self.create_prop('RenderNodeSocketObject', 'object', "Object")
+        self.creat_input('RenderNodeSocketObject', 'object', "Object")
 
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 

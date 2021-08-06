@@ -43,19 +43,19 @@ class RN_OT_AcceptUpdate(bpy.types.Operator):
 
 def update_node(self, context):
     if self.use_p:
-        self.create_prop('RenderNodeSocketTranslation', 'location', 'Location', default_value=(0, 0, 0))
+        self.creat_input('RenderNodeSocketTranslation', 'location', 'Location', default_value=(0, 0, 0))
     else:
-        self.remove_prop('location')
+        self.remove_input('location')
 
     if self.use_s:
-        self.create_prop('RenderNodeSocketXYZ', 'scale', 'Scale', default_value=(1, 1, 1))
+        self.creat_input('RenderNodeSocketXYZ', 'scale', 'Scale', default_value=(1, 1, 1))
     else:
-        self.remove_prop('scale')
+        self.remove_input('scale')
 
     if self.use_r:
-        self.create_prop('RenderNodeSocketEuler', 'rotation', 'Rotation', default_value=(0, 0, 0))
+        self.creat_input('RenderNodeSocketEuler', 'rotation', 'Rotation', default_value=(0, 0, 0))
     else:
-        self.remove_prop('rotation')
+        self.remove_input('rotation')
 
     if not self.accept_mode:
         self.update_parms()
@@ -72,7 +72,7 @@ class RenderNodeObjectPSR(RenderNodeBase):
     accept_mode: BoolProperty(name='Accept Mode', default=False)
 
     def init(self, context):
-        self.create_prop('RenderNodeSocketObject', 'object', 'Object')
+        self.creat_input('RenderNodeSocketObject', 'object', 'Object')
 
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
         self.width = 200

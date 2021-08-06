@@ -12,7 +12,6 @@ def update_node(self, context):
 
 def set_active_task(self, context):
     if self.is_active_task is True:
-        self.execute_dependants()
         self.execute()
 
 

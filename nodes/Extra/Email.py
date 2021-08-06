@@ -22,10 +22,10 @@ class RenderNodeEmail(RenderNodeBase):
     warning_msg: StringProperty(name='warning message', default='')
 
     def init(self, context):
-        self.create_prop('RenderNodeSocketString', 'subject', 'Subject')
-        self.create_prop('RenderNodeSocketString', 'content', 'Content')
-        self.create_prop('RenderNodeSocketString', 'sender_name', 'Sender Name')
-        self.create_prop('RenderNodeSocketString', 'email', 'Email')
+        self.creat_input('RenderNodeSocketString', 'subject', 'Subject')
+        self.creat_input('RenderNodeSocketString', 'content', 'Content')
+        self.creat_input('RenderNodeSocketString', 'sender_name', 'Sender Name')
+        self.creat_input('RenderNodeSocketString', 'email', 'Email')
 
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 

@@ -9,14 +9,13 @@ class RenderNodeSceneCamera(RenderNodeBase):
     bl_label = 'Scene Camera'
 
     def init(self, context):
-        self.create_prop('RenderNodeSocketCamera', "camera", 'Camera')
+        self.creat_input('RenderNodeSocketCamera', "camera", 'Camera')
 
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
     def process(self):
-        self.store_data()
+        cam = self.inputs[0].get_value()
 
-        cam = self.node_dict['camera']
         if cam: self.compare(bpy.context.scene, 'camera', cam)
 
 

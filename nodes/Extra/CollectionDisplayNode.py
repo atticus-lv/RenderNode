@@ -9,9 +9,9 @@ class RSNodeCollectionDisplayNode(RenderNodeBase):
 
     def init(self, context):
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
-        self.create_prop('RenderNodeSocketCollection', 'collection', '')
-        self.create_prop('RenderNodeSocketBool', 'hide_viewport', 'Hide Viewport')
-        self.create_prop('RenderNodeSocketBool', 'hide_render', 'Hide Render')
+        self.creat_input('RenderNodeSocketCollection', 'collection', '')
+        self.creat_input('RenderNodeSocketBool', 'hide_viewport', 'Hide Viewport')
+        self.creat_input('RenderNodeSocketBool', 'hide_render', 'Hide Render')
 
     def draw_buttons(self, context, layout):
         pass

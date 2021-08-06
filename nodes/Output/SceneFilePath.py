@@ -27,8 +27,8 @@ class RenderNodeSceneFilePath(RenderNodeBase):
     version: IntProperty(name='Version', default=1, min=1, soft_max=5, update=update_node)
 
     def init(self, context):
-        self.create_prop('RenderNodeSocketInt', 'version', 'Version')
-        self.create_prop('RenderNodeSocketString', 'path_expression', 'Path Exp')
+        self.creat_input('RenderNodeSocketInt', 'version', 'Version')
+        self.creat_input('RenderNodeSocketString', 'path_expression', 'Path Exp')
 
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 

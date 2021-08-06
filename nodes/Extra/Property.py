@@ -10,20 +10,20 @@ def update_node(self, context):
     try:
         self.d_type = type(eval(self.full_data_path))
 
-        self.remove_prop('value')
+        self.remove_input('value')
 
         if self.d_type == int:
-            self.create_prop('RenderNodeSocketInt', 'value', "Value")
+            self.creat_input('RenderNodeSocketInt', 'value', "Value")
         elif self.d_type == float:
-            self.create_prop('RenderNodeSocketFloat', 'value', "Value")
+            self.creat_input('RenderNodeSocketFloat', 'value', "Value")
         elif self.d_type == str:
-            self.create_prop('RenderNodeSocketString', 'value', "Value")
+            self.creat_input('RenderNodeSocketString', 'value', "Value")
         elif self.d_type == bool:
-            self.create_prop('RenderNodeSocketBool', 'value', "Value")
+            self.creat_input('RenderNodeSocketBool', 'value', "Value")
         elif self.d_type == Color:
-            self.create_prop('RenderNodeSocketColor', 'value', "")
+            self.creat_input('RenderNodeSocketColor', 'value', "")
         elif self.d_type == Vector:
-            self.create_prop('RenderNodeSocketVector', 'value', "Value")
+            self.creat_input('RenderNodeSocketVector', 'value', "Value")
 
         self.update_parms()
 
