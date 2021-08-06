@@ -13,17 +13,17 @@ def update_node(self, context):
         self.remove_prop('value')
 
         if self.d_type == int:
-            self.create_prop('RenderNodeSocketInt', 'value', "Int")
+            self.create_prop('RenderNodeSocketInt', 'value', "Value")
         elif self.d_type == float:
-            self.create_prop('RenderNodeSocketFloat', 'value', "Float")
+            self.create_prop('RenderNodeSocketFloat', 'value', "Value")
         elif self.d_type == str:
-            self.create_prop('RenderNodeSocketString', 'value', "String")
+            self.create_prop('RenderNodeSocketString', 'value', "Value")
         elif self.d_type == bool:
-            self.create_prop('RenderNodeSocketBool', 'value', "Bool")
+            self.create_prop('RenderNodeSocketBool', 'value', "Value")
         elif self.d_type == Color:
-            self.create_prop('RenderNodeSocketColor', 'value', "Color")
+            self.create_prop('RenderNodeSocketColor', 'value', "")
         elif self.d_type == Vector:
-            self.create_prop('RenderNodeSocketVector', 'value', "Vector")
+            self.create_prop('RenderNodeSocketVector', 'value', "Value")
 
         self.update_parms()
 
