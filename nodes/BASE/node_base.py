@@ -115,8 +115,8 @@ class RenderNodeBase(bpy.types.Node):
         if runtime_info['updating']:
             return
 
-        for input in self.inputs:
-            input.remove_incorrect_links()
+        # for input in self.inputs:
+        #     input.remove_incorrect_links()
 
     def auto_update_inputs(self, socket_type='RSNodeSocketTaskSettings', socket_name='Input'):
         """add or remove inputs automatically
@@ -139,7 +139,6 @@ class RenderNodeBase(bpy.types.Node):
 
     def update_parms(self):
         task_node = self.id_data.nodes.get(bpy.context.window_manager.rsn_viewer_node)
-        print(task_node)
         if task_node:
             task_node.execute_dependants()
             task_node.execute()
