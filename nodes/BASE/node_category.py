@@ -29,7 +29,7 @@ node_categories = [
         nodeitems_utils.NodeItem("RenderNodeSceneFilePath"),
         nodeitems_utils.NodeItem("RenderNodeSceneFrameRange"),
         nodeitems_utils.NodeItem("RenderNodeSceneImageFormat"),
-        # nodeitems_utils.NodeItem("RenderNodeSceneFrameRange"),
+        nodeitems_utils.NodeItem("RenderNodeSceneMovieFormat"),
         nodeitems_utils.NodeItem("RenderNodeSceneResolution"),  # performance is bad
         # nodeitems_utils.NodeItem("RSNodeResolutionInputNode"),
         # nodeitems_utils.NodeItem("RSNodeActiveRenderSlotNode"),

@@ -6,15 +6,14 @@ from bpy.props import *
 from ...nodes.BASE.node_base import RenderNodeBase
 
 
-def get_render_preset_path():
+def get_preset_folder():
     bl_path = os.getcwd()
     version = f'{bpy.app.version[0]}' + '.' + f'{bpy.app.version[1]}'
-    preset_folder = os.path.join(bl_path, version, 'scripts', 'presets')
-    return os.path.join(preset_folder, 'render')
+    return os.path.join(bl_path, version, 'scripts', 'presets')
 
 
 def get_all_preset_path():
-    folder = get_render_preset_path()
+    folder = os.path.join(get_preset_folder(), 'render')
     return [os.path.join(folder, filename) for filename in os.listdir(folder) if filename.endswith('.py')]
 
 
@@ -111,7 +110,6 @@ class RenderNodeSceneResolution(RenderNodeBase):
         self.compare(bpy.context.scene.render, 'resolution_x', self.node_dict['resolution_x'])
         self.compare(bpy.context.scene.render, 'resolution_y', self.node_dict['resolution_y'])
         self.compare(bpy.context.scene.render, 'resolution_percentage', self.node_dict['resolution_percentage'])
-
 
 
 def register():

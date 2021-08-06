@@ -2,11 +2,6 @@ import bpy
 from bpy.props import *
 
 from ...nodes.BASE.node_base import RenderNodeBase
-from ...preferences import get_pref
-
-import os
-import time
-import re
 
 
 def update_node(self, context):
@@ -80,12 +75,14 @@ class RenderNodeSceneImageFormat(RenderNodeBase):
         col.use_property_decorate = 0
 
         col.prop(self, 'file_format', icon='FILE_IMAGE')
-        col.prop(self, 'color_mode')
+        row = col.row(align=1)
+        row.prop(self, 'color_mode', expand=1)
 
         if self.file_format in ['PNG', 'TIFF',
                                 'JPEG2000',
                                 'DPX', 'OPEN_EXR_MULTILAYER', 'OPEN_EXR']:
-            col.prop(self, 'color_depth')
+            row = col.row(align=1)
+            row.prop(self, 'color_depth', expand=1)
 
         # extra
         if self.file_format == 'PNG':
@@ -111,14 +108,15 @@ class RenderNodeSceneImageFormat(RenderNodeBase):
     def process(self):
         attr_list = ['file_format',
                      'compression',
+                     'quality',
                      'jpeg2k_tiff_codec', 'use_jpeg2k_cinema_preset', 'use_jpeg2k_cinema_48',
                      'use_jpeg2k_ycc',
                      'use_cineon_log',
-                     'exr_codec', 'use_preview', 'use_zbuffer'
-                                                 'tiff_codec']
+                     'exr_codec', 'use_preview', 'use_zbuffer', 'tiff_codec']
+
         for attr in attr_list:
             try:
-                self.compare(bpy.context.scene.render.image_settings, "attr", getattr(self, attr))
+                self.compare(bpy.context.scene.render.image_settings, attr, getattr(self, attr))
             except Exception as e:
                 print(e)
 
