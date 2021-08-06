@@ -93,14 +93,12 @@ class RenderNodeObjectPSR(RenderNodeBase):
     def process(self):
         self.store_data()
 
-        ob = self.node_dict['object']
-        if not ob: return None
+        ob = self.inputs['object'].get_value()
 
-        if not self.accept_mode:
-
-            if self.use_p: ob.location = self.node_dict['location']
-            if self.use_s: ob.scale = self.node_dict['scale']
-            if self.use_r: ob.rotation_euler = self.node_dict['rotation']
+        if ob and not self.accept_mode:
+            if self.use_p: ob.location = self.inputs['location'].ge_value()
+            if self.use_s: ob.scale = self.inputs['scale']
+            if self.use_r: ob.rotation_euler = self.inputs['rotation']
 
 
 def register():

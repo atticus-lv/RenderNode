@@ -17,12 +17,12 @@ class RenderNodeObjectDisplay(RenderNodeBase):
         self.width = 175
 
     def process(self):
-        self.store_data()
-
-        ob = self.node_dict['object']
+        ob = self.inputs['object'].get_value()
+        hide_viewport = self.inputs['hide_viewport'].get_value()
+        hide_render = self.inputs['hide_render'].get_value()
         if ob:
-            self.compare(ob, 'hide_viewport', self.node_dict['hide_viewport'])
-            self.compare(ob, 'hide_render', self.node_dict['hide_render'])
+            self.compare(ob, 'hide_viewport', hide_viewport)
+            self.compare(ob, 'hide_render', hide_render)
 
 
 def register():

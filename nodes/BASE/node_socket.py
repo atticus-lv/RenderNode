@@ -240,7 +240,7 @@ class RenderNodeSocketObject(RenderNodeSocket, SocketBase):
             layout.label(text=self.text)
         else:
             row = layout.row(align=1)
-            row.prop(self, 'default_value', text='self.text')
+            row.prop(self, 'default_value', text=self.text)
             if self.default_value:
                 row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.default_value.name
 

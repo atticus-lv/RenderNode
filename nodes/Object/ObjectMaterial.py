@@ -31,12 +31,12 @@ class RenderNodeObjectMaterial(RenderNodeBase):
         self.width = 175
 
     def process(self):
-        self.store_data()
+        ob = self.inputs['object'].get_value()
+        index = self.inputs['slot_index'].get_value()
 
-        ob = self.node_dict['object']
         if ob:
             try:
-                curr_slot = ob.material_slots[self.node_dict['slot_index']]
+                curr_slot = ob.material_slots[index]
                 self.compare(curr_slot, 'material', self.node_dict['material'])
             except Exception as e:
                 print(e)

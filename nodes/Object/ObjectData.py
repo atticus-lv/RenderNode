@@ -71,13 +71,10 @@ class RenderNodeObjectData(RenderNodeBase):
             layout.label(text='Only support int, float, str, bool, Color, Vector')
 
     def process(self):
-        self.store_data()
-
-        ob = self.node_dict['object']
-        if not ob: return None
-
-        obj, attr = source_attr(ob.data, self.data_path)
-        self.compare(obj, attr, self.node_dict['value'])
+        ob = self.inputs['object'].get_value()
+        if ob:
+            obj, attr = source_attr(ob.data, self.data_path)
+            self.compare(obj, attr, self.node_dict['value'])
 
 
 def register():
