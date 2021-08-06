@@ -22,9 +22,7 @@ class RenderNodeSceneFilePath(RenderNodeBase):
                                   default=True, update=update_node)
 
     custom_path: StringProperty(name='Path',
-                                default='', update=update_node,subtype='FILE_PATH')
-
-    version: IntProperty(name='Version', default=1, min=1, soft_max=5, update=update_node)
+                                default='', update=update_node, subtype='FILE_PATH')
 
     def init(self, context):
         self.creat_input('RenderNodeSocketInt', 'version', 'Version')
@@ -53,12 +51,13 @@ class RenderNodeSceneFilePath(RenderNodeBase):
                 layout.label(text='Update is disable in task node', icon='ERROR')
 
     def process(self):
-        self.store_data()
-
         directory_path = self.make_path()
         if not directory_path: return None
 
-        postfix = self.get_postfix()
+        path_exp = self.inputs['path_expression'].get_value()
+        v = self.inputs['version'].get_value()
+
+        postfix = self.get_postfix(path_exp, v)
         path = os.path.join(directory_path, postfix)
 
         task_node = bpy.context.space_data.node_tree.nodes.get(bpy.context.window_manager.rsn_viewer_node)
@@ -81,7 +80,7 @@ class RenderNodeSceneFilePath(RenderNodeBase):
             print(e)
             return None
 
-    def get_postfix(self):
+    def get_postfix(self, path_exp, version):
         """path expression"""
         scn = bpy.context.scene
         cam = scn.camera
@@ -89,7 +88,7 @@ class RenderNodeSceneFilePath(RenderNodeBase):
 
         blend_name = ''
 
-        postfix = self.node_dict["path_expression"]
+        postfix = path_exp
         # replace camera name
         if cam:
             postfix = postfix.replace('$camera', cam.name)
@@ -104,7 +103,7 @@ class RenderNodeSceneFilePath(RenderNodeBase):
         # replace view_layer
         postfix = postfix.replace('$vl', bpy.context.view_layer.name)
         # version_
-        postfix = postfix.replace('$V', str(self.node_dict["version"]))
+        postfix = postfix.replace('$V', str(version))
 
         # frame completion
         STYLE = re.findall(r'([$]F\d)', postfix)

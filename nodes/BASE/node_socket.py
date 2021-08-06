@@ -47,7 +47,6 @@ class SocketBase():
     def set_value(self, value):
         '''Sets the value of an output socket'''
         cache_socket_variables.setdefault(self.id_data, {})[self] = value
-        print(cache_socket_variables)
 
     def get_self_value(self):
         '''returns the stored value of an output socket'''
@@ -120,10 +119,10 @@ class RenderNodeSocket(bpy.types.NodeSocket, SocketBase):
 
     def draw(self, context, layout, node, text):
         row = layout.row(align=1)
-        if self.is_linked:
-            row.label(text=self.text)
+        if self.is_linked or self.is_output:
+            layout.label(text=self.text)
         else:
-            row.prop(self, 'default_value', text=self.text)
+            layout.prop(self, 'default_value', text=self.text)
 
     def draw_color(self, context, node):
         return 0.5, 0.5, 0.5, 1

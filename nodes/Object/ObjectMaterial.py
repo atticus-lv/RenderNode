@@ -33,13 +33,14 @@ class RenderNodeObjectMaterial(RenderNodeBase):
     def process(self):
         ob = self.inputs['object'].get_value()
         index = self.inputs['slot_index'].get_value()
+        mat = self.inputs['material'].get_value()
 
         if ob:
             try:
                 curr_slot = ob.material_slots[index]
-                self.compare(curr_slot, 'material', self.node_dict['material'])
+                self.compare(curr_slot, 'material', mat)
             except Exception as e:
-                print(e)
+                raise ValueError('Slot index or Object error')
 
 
 def register():

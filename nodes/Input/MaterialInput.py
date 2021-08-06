@@ -13,20 +13,21 @@ class RenderNodeObjectInput(RenderNodeBase):
     bl_idname = 'RenderNodeMaterialInput'
     bl_label = 'Material Input'
 
-    default_value: PointerProperty(type=bpy.types.Material,update=update_node)
-
-    mat_index:IntProperty()
+    default_value: PointerProperty(type=bpy.types.Material, update=update_node)
 
     def init(self, context):
-        self.outputs.new('NodeSocketMaterial', "Output")
+        self.creat_output('RenderNodeSocketMaterial', 'output', "Output")
 
     def draw_buttons(self, context, layout):
         layout.scale_y = 0.75
         layout.scale_x = 0.75
         layout.template_ID_preview(
             self, "default_value",
-            rows=3, cols=4, hide_buttons=False
-        )
+            rows=3, cols=4, hide_buttons=False)
+
+    def process(self):
+        self.outputs[0].set_value(self.default_value)
+
 
 def register():
     bpy.utils.register_class(RenderNodeObjectInput)
