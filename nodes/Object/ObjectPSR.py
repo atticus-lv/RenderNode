@@ -43,17 +43,17 @@ class RN_OT_AcceptUpdate(bpy.types.Operator):
 
 def update_node(self, context):
     if self.use_p:
-        self.creat_input('RenderNodeSocketTranslation', 'location', 'Location', default_value=(0, 0, 0))
+        self.create_input('RenderNodeSocketTranslation', 'location', 'Location', default_value=(0, 0, 0))
     else:
         self.remove_input('location')
 
     if self.use_s:
-        self.creat_input('RenderNodeSocketXYZ', 'scale', 'Scale', default_value=(1, 1, 1))
+        self.create_input('RenderNodeSocketXYZ', 'scale', 'Scale', default_value=(1, 1, 1))
     else:
         self.remove_input('scale')
 
     if self.use_r:
-        self.creat_input('RenderNodeSocketEuler', 'rotation', 'Rotation', default_value=(0, 0, 0))
+        self.create_input('RenderNodeSocketEuler', 'rotation', 'Rotation', default_value=(0, 0, 0))
     else:
         self.remove_input('rotation')
 
@@ -72,10 +72,8 @@ class RenderNodeObjectPSR(RenderNodeBase):
     accept_mode: BoolProperty(name='Accept Mode', default=False)
 
     def init(self, context):
-        self.creat_input('RenderNodeSocketObject', 'object', 'Object')
-
+        self.create_input('RenderNodeSocketObject', 'object', '')
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
-        self.width = 200
 
     def draw_buttons(self, context, layout):
         row = layout.split(factor=0.5)
@@ -91,14 +89,12 @@ class RenderNodeObjectPSR(RenderNodeBase):
         sub.prop(self, "use_r")
 
     def process(self):
-        self.store_data()
-
         ob = self.inputs['object'].get_value()
 
         if ob and not self.accept_mode:
-            if self.use_p: ob.location = self.inputs['location'].ge_value()
-            if self.use_s: ob.scale = self.inputs['scale']
-            if self.use_r: ob.rotation_euler = self.inputs['rotation']
+            if self.use_p: ob.location = self.inputs['location'].get_value()
+            if self.use_s: ob.scale = self.inputs['scale'].get_value()
+            if self.use_r: ob.rotation_euler = self.inputs['rotation'].get_value()
 
 
 def register():

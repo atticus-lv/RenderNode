@@ -16,7 +16,7 @@ class RenderNodeStringInput(RenderNodeBase):
     default_value: StringProperty(update=update_node)
 
     def init(self, context):
-        self.creat_output('RenderNodeSocketString', 'output', "Output")
+        self.create_output('RenderNodeSocketString', 'output', "Output")
 
     def draw_buttons(self, context, layout):
         layout.prop(self, 'default_value', text='')

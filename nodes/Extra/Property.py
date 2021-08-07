@@ -13,17 +13,17 @@ def update_node(self, context):
         self.remove_input('value')
 
         if self.d_type == int:
-            self.creat_input('RenderNodeSocketInt', 'value', "Value")
+            self.create_input('RenderNodeSocketInt', 'value', "Value")
         elif self.d_type == float:
-            self.creat_input('RenderNodeSocketFloat', 'value', "Value")
+            self.create_input('RenderNodeSocketFloat', 'value', "Value")
         elif self.d_type == str:
-            self.creat_input('RenderNodeSocketString', 'value', "Value")
+            self.create_input('RenderNodeSocketString', 'value', "Value")
         elif self.d_type == bool:
-            self.creat_input('RenderNodeSocketBool', 'value', "Value")
+            self.create_input('RenderNodeSocketBool', 'value', "Value")
         elif self.d_type == Color:
-            self.creat_input('RenderNodeSocketColor', 'value', "")
+            self.create_input('RenderNodeSocketColor', 'value', "")
         elif self.d_type == Vector:
-            self.creat_input('RenderNodeSocketVector', 'value', "Value")
+            self.create_input('RenderNodeSocketVector', 'value', "Value")
 
         self.update_parms()
 

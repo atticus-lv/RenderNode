@@ -17,16 +17,10 @@ class RenderNodeSceneFilePath(RenderNodeBase):
     bl_idname = "RenderNodeSceneFilePath"
     bl_label = "Scene File Path"
 
-    save_rel_folder: BoolProperty(name="Save to Relative",
-                                  description='Save Image to Relative Folder(locate at .blend)',
-                                  default=True, update=update_node)
-
-    custom_path: StringProperty(name='Path',
-                                default='', update=update_node, subtype='FILE_PATH')
-
     def init(self, context):
-        self.creat_input('RenderNodeSocketInt', 'version', 'Version')
-        self.creat_input('RenderNodeSocketString', 'path_expression', 'Path Exp')
+        self.create_input('RenderNodeSocketFilePath', 'base_path', 'Path', default_value='//')
+        self.create_input('RenderNodeSocketInt', 'version', 'Version')
+        self.create_input('RenderNodeSocketString', 'path_expression', 'Postfix')
 
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
@@ -38,17 +32,6 @@ class RenderNodeSceneFilePath(RenderNodeBase):
         if bpy.data.filepath == '':
             layout.scale_y = 1.25
             layout.label(text='Save your file first', icon='ERROR')
-        else:
-            # custom path
-            layout.prop(self, 'save_rel_folder')
-            if not self.save_rel_folder:
-                row = layout.row(align=1)
-                row.prop(self, 'custom_path')
-
-            # viewer node tips
-            pref = get_pref()
-            if not pref.node_task.update_path:
-                layout.label(text='Update is disable in task node', icon='ERROR')
 
     def process(self):
         directory_path = self.make_path()
@@ -60,22 +43,18 @@ class RenderNodeSceneFilePath(RenderNodeBase):
         postfix = self.get_postfix(path_exp, v)
         path = os.path.join(directory_path, postfix)
 
-        task_node = bpy.context.space_data.node_tree.nodes.get(bpy.context.window_manager.rsn_viewer_node)
+        task_node = self.id_data.nodes.get(bpy.context.window_manager.rsn_viewer_node)
         if task_node:
             task_node.path = path
 
     def make_path(self):
         """only save files will work"""
-
-        if self.save_rel_folder:
-            directory_path = bpy.path.abspath('//')
-        else:
-            if self.custom_path == '': return '//unSaveFile'
-            directory_path = os.path.dirname(self.custom_path)
         try:
-            if not os.path.exists(directory_path):
-                os.makedirs(directory_path)
-            return directory_path
+            path = self.inputs['base_path'].get_value()
+            abs_path = bpy.path.abspath(path)
+            if not os.path.exists(abs_path):
+                os.makedirs(abs_path)
+            return abs_path
         except Exception as e:
             print(e)
             return None
@@ -84,7 +63,7 @@ class RenderNodeSceneFilePath(RenderNodeBase):
         """path expression"""
         scn = bpy.context.scene
         cam = scn.camera
-        active_task = bpy.context.space_data.node_tree.nodes.get(bpy.context.window_manager.rsn_viewer_node)
+        active_task = self.id_data.nodes.get(bpy.context.window_manager.rsn_viewer_node)
 
         blend_name = ''
 

@@ -43,7 +43,7 @@ class RSNodeFilePathInputNode(RenderNodeBase):
             layout.prop(self, 'use_blend_file_path')
             if not self.use_blend_file_path:
                 row = layout.row(align=1)
-                row.prop(self, 'custom_path')
+                row.prop(self, 'path_exp')
                 row.operator('buttons.directory_browse', icon='FILEBROWSER', text='')
 
             layout.prop(self, "version", slider=1)

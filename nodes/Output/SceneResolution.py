@@ -81,9 +81,9 @@ class RenderNodeSceneResolution(RenderNodeBase):
     bl_label = 'Scene Resolution'
 
     def init(self, context):
-        self.creat_input('RenderNodeSocketInt', "resolution_x", 'X', default_value=1920)
-        self.creat_input('RenderNodeSocketInt', "resolution_y", 'Y', default_value=1080)
-        self.creat_input('RenderNodeSocketInt', "resolution_percentage", '%', default_value=100)
+        self.create_input('RenderNodeSocketInt', "resolution_x", 'X', default_value=1920)
+        self.create_input('RenderNodeSocketInt', "resolution_y", 'Y', default_value=1080)
+        self.create_input('RenderNodeSocketInt', "resolution_percentage", '%', default_value=100)
 
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
@@ -105,9 +105,9 @@ class RenderNodeSceneResolution(RenderNodeBase):
         if self.inputs['resolution_percentage'].get_value() < 1:
             self.inputs['resolution_percentage'].set_value(1)
 
-        bpy.context.scene.render.resolution_x = self.node_dict['resolution_x'].get_value()
-        bpy.context.scene.render.resolution_y = self.node_dict['resolution_y'].get_value()
-        bpy.context.scene.render.resolution_percentage = self.node_dict['resolution_percentage'].get_value()
+        bpy.context.scene.render.resolution_x = self.inputs['resolution_x'].get_value()
+        bpy.context.scene.render.resolution_y = self.inputs['resolution_y'].get_value()
+        bpy.context.scene.render.resolution_percentage = self.inputs['resolution_percentage'].get_value()
 
 
 def register():

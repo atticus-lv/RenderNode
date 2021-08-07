@@ -112,7 +112,7 @@ class RSNodeCommonSettingsNode(RenderNodeBase):
                 col.prop(self, 'use_blend_file_path')
                 if not self.use_blend_file_path:
                     row = col.row(align=1)
-                    row.prop(self, 'custom_path')
+                    row.prop(self, 'path_exp')
                     row.operator('buttons.directory_browse', icon='FILEBROWSER', text='')
 
                 col.prop(self, "version", slider=1)

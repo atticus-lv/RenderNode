@@ -9,20 +9,15 @@ class RSNodeCollectionDisplayNode(RenderNodeBase):
 
     def init(self, context):
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
-        self.creat_input('RenderNodeSocketCollection', 'collection', '')
-        self.creat_input('RenderNodeSocketBool', 'hide_viewport', 'Hide Viewport')
-        self.creat_input('RenderNodeSocketBool', 'hide_render', 'Hide Render')
-
-    def draw_buttons(self, context, layout):
-        pass
+        self.create_input('RenderNodeSocketCollection', 'collection', '')
+        self.create_input('RenderNodeSocketBool', 'hide_viewport', 'Hide Viewport')
+        self.create_input('RenderNodeSocketBool', 'hide_render', 'Hide Render')
 
     def process(self):
-        self.store_data()
-
-        coll = self.node_dict['collection']
+        coll = self.inputs['collection'].get_value()
         if coll:
-            coll.hide_viewport = self.node_dict['hide_viewport']
-            coll.hide_render = self.node_dict['hide_render']
+            coll.hide_viewport = self.inputs['hide_viewport'].get_value()
+            coll.hide_render = self.inputs['hide_render'].get_value()
 
 
 def register():

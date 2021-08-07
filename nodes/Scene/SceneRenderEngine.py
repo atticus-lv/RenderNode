@@ -7,26 +7,26 @@ from collections import defaultdict
 
 def update_node(self, context):
     if self.engine == 'CYCLES':
-        self.creat_input('RenderNodeSocketInt', 'cycles_samples', 'Render', default_value=64)
-        self.creat_input('RenderNodeSocketInt', 'preview_samples', 'Viewport', default_value=64)
-        self.creat_input('RenderNodeSocketBool', 'use_adaptive_sampling', 'Adaptive Sampling', default_value=False)
+        self.create_input('RenderNodeSocketInt', 'cycles_samples', 'Render', default_value=64)
+        self.create_input('RenderNodeSocketInt', 'preview_samples', 'Viewport', default_value=64)
+        self.create_input('RenderNodeSocketBool', 'use_adaptive_sampling', 'Adaptive Sampling', default_value=False)
     else:
         self.remove_input('cycles_samples')
         self.remove_input('preview_samples')
         self.remove_input('use_adaptive_sampling')
 
     if self.engine == 'BLENDER_EEVEE':
-        self.creat_input('RenderNodeSocketInt', 'taa_render_samples', 'Render', default_value=64)
-        self.creat_input('RenderNodeSocketInt', 'taa_samples', 'Viewport', default_value=64)
+        self.create_input('RenderNodeSocketInt', 'taa_render_samples', 'Render', default_value=64)
+        self.create_input('RenderNodeSocketInt', 'taa_samples', 'Viewport', default_value=64)
     else:
         self.remove_input('taa_render_samples')
         self.remove_input('taa_samples')
 
     if self.engine == 'LUXCORE':
-        self.creat_input('RenderStackNodeBool', 'use_samples', 'Use Samples', default=True)
-        self.creat_input('RenderNodeSocketInt', 'luxcore_samples', 'Half Samples', default_value=64)
-        self.creat_input('RenderStackNodeBool', 'use_time', 'Use Time', default=True)
-        self.creat_input('RenderNodeSocketInt', 'luxcore_time', 'Half Time', default_value=64)
+        self.create_input('RenderStackNodeBool', 'use_samples', 'Use Samples', default=True)
+        self.create_input('RenderNodeSocketInt', 'luxcore_samples', 'Half Samples', default_value=64)
+        self.create_input('RenderStackNodeBool', 'use_time', 'Use Time', default=True)
+        self.create_input('RenderNodeSocketInt', 'luxcore_time', 'Half Time', default_value=64)
     else:
         self.remove_input('use_samples')
         self.remove_input('luxcore_samples')
@@ -34,10 +34,10 @@ def update_node(self, context):
         self.remove_input('luxcore_time')
 
     if self.engine == 'octane':
-        self.creat_input('RenderNodeSocketInt', 'max_samples', 'Max. samples', default_value=500)
-        self.creat_input('RenderNodeSocketInt', 'max_diffuse_depth', 'Max. diffuse depth', default_value=5)
-        self.creat_input('RenderNodeSocketInt', 'max_glossy_depth', 'Max. glossy depth', default_value=12)
-        self.creat_input('RenderNodeSocketInt', 'max_scatter_depth', 'Max. scatter depth', default_value=8)
+        self.create_input('RenderNodeSocketInt', 'max_samples', 'Max. samples', default_value=500)
+        self.create_input('RenderNodeSocketInt', 'max_diffuse_depth', 'Max. diffuse depth', default_value=5)
+        self.create_input('RenderNodeSocketInt', 'max_glossy_depth', 'Max. glossy depth', default_value=12)
+        self.create_input('RenderNodeSocketInt', 'max_scatter_depth', 'Max. scatter depth', default_value=8)
     else:
         self.remove_input('max_samples')
         self.remove_input('max_diffuse_depth')
@@ -75,8 +75,8 @@ class RenderNodeSceneRenderEngine(RenderNodeBase):
                             update=update_node)
 
     def init(self, context):
-        self.creat_input('RenderNodeSocketInt', 'taa_render_samples', 'Render', default_value=64)
-        self.creat_input('RenderNodeSocketInt', 'taa_samples', 'Viewport', default_value=64)
+        self.create_input('RenderNodeSocketInt', 'taa_render_samples', 'Render', default_value=64)
+        self.create_input('RenderNodeSocketInt', 'taa_samples', 'Viewport', default_value=64)
 
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 

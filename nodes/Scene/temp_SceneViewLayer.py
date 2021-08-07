@@ -9,8 +9,8 @@ class RenderNodeSceneViewLayer(RenderNodeBase):
     bl_label = 'Scene View Layer (experiment)'
 
     def init(self, context):
-        self.creat_input('RenderNodeSocketViewLayer', "view_layer", 'ViewLayer')
-        self.creat_input('RenderNodeSocketBool', 'use', 'Use for Rendering')
+        self.create_input('RenderNodeSocketViewLayer', "view_layer", 'ViewLayer')
+        self.create_input('RenderNodeSocketBool', 'use', 'Use for Rendering')
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
     def process(self):

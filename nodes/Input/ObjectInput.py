@@ -14,7 +14,7 @@ class RenderNodeObjectInput(RenderNodeBase):
     default_value: PointerProperty(type=bpy.types.Object, update=update_node)
 
     def init(self, context):
-        self.creat_output('RenderNodeSocketObject', "output", "Output")
+        self.create_output('RenderNodeSocketObject', "output", "Output")
 
     def draw_buttons(self, context, layout):
         row = layout.row(align=1)

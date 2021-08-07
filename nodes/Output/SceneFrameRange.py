@@ -14,9 +14,9 @@ class RenderNodeSceneFrameRange(RenderNodeBase):
     bl_label = "Scene Frame Range"
 
     def init(self, context):
-        self.creat_input('RenderNodeSocketInt', 'frame_start', 'Start')
-        self.creat_input('RenderNodeSocketInt', 'frame_end', 'End')
-        self.creat_input('RenderNodeSocketInt', 'frame_step', 'Step')
+        self.create_input('RenderNodeSocketInt', 'frame_start', 'Start')
+        self.create_input('RenderNodeSocketInt', 'frame_end', 'End')
+        self.create_input('RenderNodeSocketInt', 'frame_step', 'Step')
 
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 

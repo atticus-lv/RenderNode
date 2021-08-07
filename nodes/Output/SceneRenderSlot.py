@@ -12,7 +12,7 @@ class RenderNodeSceneRenderSlot(RenderNodeBase):
     bl_label = 'Scene Render Slot'
 
     def init(self, context):
-        self.creat_input('RenderNodeSocketInt', 'slot_index', 'Slot', default_value=1)
+        self.create_input('RenderNodeSocketInt', 'slot_index', 'Slot', default_value=1)
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
     def process(self):

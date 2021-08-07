@@ -9,7 +9,7 @@ class RenderNodeSceneCamera(RenderNodeBase):
     bl_label = 'Scene Camera'
 
     def init(self, context):
-        self.creat_input('RenderNodeSocketCamera', "camera", 'Camera')
+        self.create_input('RenderNodeSocketCamera', "camera", 'Camera')
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
     def process(self):
