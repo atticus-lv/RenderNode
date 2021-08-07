@@ -60,29 +60,31 @@ class RSN_OT_UpdateTaskList(bpy.types.Operator):
         return {"FINISHED"}
 
     def get_task_list(self):
-        tree = RSN_Nodes(node_tree=bpy.context.space_data.node_tree, root_node_name=self.render_list_name)
-        node_list = tree.get_children_from_node(root_node=tree.root_node)
+        tree = bpy.context.space_data.node_tree
+        render_list_node = tree.nodes.get(self.render_list_name)
 
-        task_list = [name for name in node_list if
-                     bpy.context.space_data.node_tree.nodes.get(name).bl_idname == 'RSNodeTaskNode']
+        node_list = render_list_node.get_dependant_nodes()
+
+        task_list = [node.name for node in node_list if
+                     node.bl_idname == 'RSNodeTaskNode']
 
         remain = {}  # dict for the remain nodes
 
-        for i, key in enumerate(tree.root_node.task_list.keys()):
+        for i, key in enumerate(render_list_node.task_list.keys()):
             if key not in task_list:
-                tree.root_node.task_list.remove(i)  # remove unlink nodes
-                tree.root_node.task_list_index -= 1 if tree.root_node.task_list_index != 0 else 0
+                render_list_node.task_list.remove(i)  # remove unlink nodes
+                render_list_node.task_list_index -= 1 if render_list_node.task_list_index > 0 else 0
             else:
                 # save render attribute
-                item = tree.root_node.task_list[i]
+                item = render_list_node.task_list[i]
                 attrs = {'render': item.render,
                          }
                 remain[key] = attrs
 
-        tree.root_node.task_list.clear()  # clear list then add it back
+        render_list_node.task_list.clear()  # clear list then add it back
 
         for name in task_list:
-            item = tree.root_node.task_list.add()
+            item = render_list_node.task_list.add()
             item.name = name
 
             if name not in remain: continue
@@ -125,7 +127,6 @@ class RSNodeRenderListNode(RenderNodeBase):
     done_frames = 0
 
     def init(self, context):
-        self.inputs.new('RSNodeSocketRenderList', "Task")
         self.width = 175
 
     def draw_buttons(self, context, layout):
@@ -134,20 +135,19 @@ class RSNodeRenderListNode(RenderNodeBase):
         split = layout.split(factor=0.5 if self.show_processor_bar else 1)
         col = split.column()
 
-        col.operator("rsn.update_task_list", icon="FILE_REFRESH").render_list_name = self.name
-
         col.template_list(
             "RSN_UL_RenderTaskList", "Task List",
             self, "task_list",
             self, "task_list_index", )
 
         # properties
-        box = col.box().column(align=1).box()
+        box = col.box().column(align=1)
         try:
+            box = box.box()
             item = self.task_list[self.task_list_index]
             node = context.space_data.node_tree.nodes[item.name]
 
-            box.label(text=item.name, icon='ALIGN_TOP')
+            box.label(text=f'{node.name} | {node.label}', icon='ALIGN_TOP')
             row = box.column(align=1)
             row.prop(node, 'path', text='')
 
@@ -156,7 +156,7 @@ class RSNodeRenderListNode(RenderNodeBase):
             row.prop(node, 'frame_end')
             row.prop(node, 'frame_step')
         except IndexError:
-            pass
+            box.label(text='Connect at least one task node!')
 
         # bottom
         col.separator()
@@ -188,6 +188,7 @@ class RSNodeRenderListNode(RenderNodeBase):
 
     def update(self):
         self.auto_update_inputs('RSNodeSocketRenderList', "Task")
+        bpy.ops.rsn.update_task_list(render_list_name=self.name)
 
     # TODO need to improve
     def draw_processor_bar(self, context, layout):
