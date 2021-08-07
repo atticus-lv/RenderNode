@@ -24,10 +24,14 @@ node_categories = [
         nodeitems_utils.NodeItem('RenderNodeStringInput'),
         nodeitems_utils.NodeItem('RenderNodeFloatInput'),
         nodeitems_utils.NodeItem('RenderNodeIntInput'),
+    ]),
+
+    RSNCategory("UTILITY", "Utility", items=[
         nodeitems_utils.NodeItem("RenderNodeStringOperate"),
         nodeitems_utils.NodeItem("RenderNodeMath"),
     ]),
-    RSNCategory("OUTPUT", "Output", items=[
+
+    RSNCategory("OUTPUT", "Scene Output", items=[
         nodeitems_utils.NodeItem("RenderNodeSceneFilePath"),
         nodeitems_utils.NodeItem("RenderNodeSceneFrameRange"),
         nodeitems_utils.NodeItem("RenderNodeSceneImageFormat"),
@@ -51,21 +55,8 @@ node_categories = [
         nodeitems_utils.NodeItem('RenderNodeObjectDisplay'),
         nodeitems_utils.NodeItem('RenderNodeObjectMaterial'),
         nodeitems_utils.NodeItem('RenderNodeObjectPSR'),
-        # nodeitems_utils.NodeItem('RenderNodeObjectPSR'),
         nodeitems_utils.NodeItem('RenderNodeObjectData'),
-        # nodeitems_utils.NodeItem('RSNodeObjectDisplayNode'),
-        # nodeitems_utils.NodeItem('RSNodeObjectMaterialNode'),
-        # nodeitems_utils.NodeItem('RSNodeObjectPSRNode'),
-        # nodeitems_utils.NodeItem('RSNodeObjectDataNode'),
-        # nodeitems_utils.NodeItem('RSNodeObjectModifierNode'),
     ]),
-
-    # RSNCategory("OUTPUT_SETTINGS", "Output Settings", items=[
-    #     nodeitems_utils.NodeItem("RSNodeFilePathInputNode"),
-    #     nodeitems_utils.NodeItem("RSNodeResolutionInputNode"),
-    #     nodeitems_utils.NodeItem("RSNodeFrameRangeInputNode"),
-    #     nodeitems_utils.NodeItem("RSNodeImageFormatInputNode"),
-    # ]),
 
     RSNCategory("VARIANTS", "Variants", items=[
         nodeitems_utils.NodeItem("RSNodeVariantsNode"),
@@ -82,7 +73,6 @@ node_categories = [
         nodeitems_utils.NodeItem("RSNodeOctaneRenderSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeLuxcoreRenderSettingsNode"),
     ]),
-
 
     RSNCategory("EXTRA", "Extra", items=[
         nodeitems_utils.NodeItem("RenderNodeProperty"),

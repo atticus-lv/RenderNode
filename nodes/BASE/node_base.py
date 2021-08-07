@@ -43,12 +43,10 @@ class RenderNodeBase(bpy.types.Node):
 
         if default_value: input.default_value = default_value
 
-
     def remove_input(self, socket_name):
         input = self.inputs.get(socket_name)
         if input:
             self.inputs.remove(input)
-            self.node_dict.pop(socket_name)  # remove from node dict
 
     def create_output(self, socket_type, socket_name, socket_label, default_value=None):
         if self.outputs.get(socket_name):
@@ -59,7 +57,6 @@ class RenderNodeBase(bpy.types.Node):
 
         if default_value: output.default_value = default_value
 
-
     ## STATE METHOD
     #########################################
 
@@ -67,14 +64,6 @@ class RenderNodeBase(bpy.types.Node):
         if self.warning is True:
             msg = layout.operator('rsn.show_task_details', icon='ERROR', text='Show Waring Message')
             msg.task_data = self.warning_msg
-
-    def debug(self):
-        # new method debug
-        msg = f'process "{self.name}"'
-        if hasattr(self, 'node_dict'):
-            msg += f'\n{self.node_dict}'
-
-        logger.debug(msg)
 
     def set_warning(self, msg=''):
         self.warning_msg = msg
@@ -113,6 +102,7 @@ class RenderNodeBase(bpy.types.Node):
     def execute(self):
         self.execute_dependants()
         self.process()
+        print(f'Execute: <{self.name}>')
 
     def execute_other(self, other):
         if hasattr(other, 'execute'):

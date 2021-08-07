@@ -26,7 +26,7 @@ class RenderNodeSceneFilePath(RenderNodeBase):
 
         self.inputs['path_expression'].value = get_pref().node_file_path.path_format
 
-        self.width = 250
+        self.width = 200
 
     def draw_buttons(self, context, layout):
         if bpy.data.filepath == '':
@@ -78,7 +78,7 @@ class RenderNodeSceneFilePath(RenderNodeBase):
         # replace res
         postfix = postfix.replace('$res', f"{scn.render.resolution_x}x{scn.render.resolution_y}")
         # replace label
-        postfix = postfix.replace('$label', active_task.label)
+        if active_task: postfix = postfix.replace('$label', active_task.label)
         # replace view_layer
         postfix = postfix.replace('$vl', bpy.context.view_layer.name)
         # version_
