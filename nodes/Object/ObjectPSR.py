@@ -16,16 +16,15 @@ class RN_OT_AcceptUpdate(bpy.types.Operator):
                 context.window_manager.event_timer_remove(self._timer)
                 return {"FINISHED"}
             else:
-                self.node.store_data()
-                ob = self.node.node_dict['object']
+                ob = self.node.inputs['object'].get_value()
                 if not ob:
                     return {'PASS_THROUGH'}
                 if 'location' in self.node.inputs:
-                    self.node.inputs['location'].value = ob.location
+                    self.node.inputs['location'].default_value = ob.location
                 if 'scale' in self.node.inputs:
-                    self.node.inputs['scale'].value = ob.scale
+                    self.node.inputs['scale'].default_value = ob.scale
                 if 'rotation' in self.node.inputs:
-                    self.node.inputs['rotation'].value = ob.rotation_euler
+                    self.node.inputs['rotation'].default_value = ob.rotation_euler
 
         return {'PASS_THROUGH'}
 
@@ -65,9 +64,9 @@ class RenderNodeObjectPSR(RenderNodeBase):
     bl_idname = 'RenderNodeObjectPSR'
     bl_label = 'Object PSR'
 
-    use_p: BoolProperty(name='P', update=update_node)
-    use_s: BoolProperty(name='S', update=update_node)
-    use_r: BoolProperty(name='R', update=update_node)
+    use_p: BoolProperty(name='Pos', update=update_node)
+    use_s: BoolProperty(name='Scale', update=update_node)
+    use_r: BoolProperty(name='Rotate', update=update_node)
 
     accept_mode: BoolProperty(name='Accept Mode', default=False)
 
@@ -75,18 +74,18 @@ class RenderNodeObjectPSR(RenderNodeBase):
         self.create_input('RenderNodeSocketObject', 'object', '')
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
+        self.width = 200
+
     def draw_buttons(self, context, layout):
-        row = layout.split(factor=0.5)
-
-        if self.accept_mode:
-            row.prop(self, 'accept_mode', text='Accept', icon='IMPORT')
-        else:
-            row.operator('rsn.accept_update', icon='IMPORT', text='Accept').node_name = self.name
-
-        sub = row.row(align=1)
+        sub = layout.row(align=1)
         sub.prop(self, "use_p")
         sub.prop(self, "use_s")
         sub.prop(self, "use_r")
+
+        if self.accept_mode:
+            layout.prop(self, 'accept_mode', text='Accept Mode', icon='IMPORT')
+        else:
+            layout.operator('rsn.accept_update', icon='IMPORT', text='Accept Mode').node_name = self.name
 
     def process(self):
         ob = self.inputs['object'].get_value()
