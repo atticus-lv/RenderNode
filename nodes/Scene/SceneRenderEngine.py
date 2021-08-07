@@ -92,15 +92,13 @@ class RenderNodeSceneRenderEngine(RenderNodeBase):
             col.prop(self, 'studio_light')
 
     def process(self):
-        self.store_data()
-
         # correct numbers
         for atrr in ['cycles_samples', 'preview_samples',
                      'taa_render_samples', 'taa_samples',
                      'luxcore_samples', 'luxcore_time',
                      'max_samples', 'max_diffuse_depth', 'max_glossy_depth', 'max_scatter_depth']:
 
-            if atrr in self.node_dict:
+            if atrr in self.inputs:
                 if self.inputs[atrr].get_value() < 1: self.inputs[atrr].set_value(1)
 
         # engine
