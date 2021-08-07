@@ -73,6 +73,21 @@ class SocketBase():
 
         return _value
 
+    @property
+    def ui_value(self):
+        '''use for output ui display'''
+        val = self.get_value()
+        if not val: return 'None'
+
+        if isinstance(val, bpy.types.Object) or isinstance(val, bpy.types.Material) or isinstance(val, bpy.types.World):
+            return val.name
+        elif isinstance(val, str) or isinstance(val, int) or isinstance(val, float):
+            return f'{val}'
+        elif isinstance(val, bool):
+            return 'True' if val else 'False'
+        else:
+            return f'{val}'
+
     def remove_incorrect_links(self):
         '''
         Removes the invalid links from the socket when the tree in updated
@@ -118,9 +133,8 @@ class RenderNodeSocket(bpy.types.NodeSocket, SocketBase):
     default_value: IntProperty(default=0, update=update_node)
 
     def draw(self, context, layout, node, text):
-        row = layout.row(align=1)
         if self.is_linked or self.is_output:
-            layout.label(text=self.text)
+            layout.label(text=self.text if not self.is_output else self.text + ': ' + self.ui_value)
         else:
             layout.prop(self, 'default_value', text=self.text)
 
@@ -163,6 +177,15 @@ class RenderNodeSocketString(RenderNodeSocket, SocketBase):
     bl_label = 'RenderNodeSocketString'
 
     default_value: StringProperty(default='', update=update_node)
+
+    def draw_color(self, context, node):
+        return 0.2, 0.7, 1.0, 1
+
+class RenderNodeSocketFilePath(RenderNodeSocket, SocketBase):
+    bl_idname = 'RenderNodeSocketFilePath'
+    bl_label = 'RenderNodeSocketFilePath'
+
+    default_value: StringProperty(default='', update=update_node,subtype='FILE_PATH')
 
     def draw_color(self, context, node):
         return 0.2, 0.7, 1.0, 1
@@ -236,7 +259,7 @@ class RenderNodeSocketObject(RenderNodeSocket, SocketBase):
 
     def draw(self, context, layout, node, text):
         if self.is_linked or self.is_output:
-            layout.label(text=self.text)
+            layout.label(text=self.text if not self.is_output else self.text + ': ' + self.ui_value)
         else:
             row = layout.row(align=1)
             row.prop(self, 'default_value', text=self.text)
@@ -410,6 +433,7 @@ classes = (
     RenderNodeSocketInt,
     RenderNodeSocketFloat,
     RenderNodeSocketString,
+    RenderNodeSocketFilePath,
     RenderNodeSocketVector,
     RenderNodeSocketXYZ,
     RenderNodeSocketTranslation,

@@ -34,7 +34,7 @@ class RenderNodeBase(bpy.types.Node):
 
     node_dict = {}
 
-    def creat_input(self, socket_type, socket_name, socket_label, default_value=None):
+    def create_input(self, socket_type, socket_name, socket_label, default_value=None):
         if self.inputs.get(socket_name):
             return None
 
@@ -43,8 +43,6 @@ class RenderNodeBase(bpy.types.Node):
 
         if default_value: input.default_value = default_value
 
-        # store to node_dict
-        self.node_dict[socket_name] = input.default_value
 
     def remove_input(self, socket_name):
         input = self.inputs.get(socket_name)
@@ -52,7 +50,7 @@ class RenderNodeBase(bpy.types.Node):
             self.inputs.remove(input)
             self.node_dict.pop(socket_name)  # remove from node dict
 
-    def creat_output(self, socket_type, socket_name, socket_label, default_value=None):
+    def create_output(self, socket_type, socket_name, socket_label, default_value=None):
         if self.outputs.get(socket_name):
             return None
 
@@ -61,8 +59,6 @@ class RenderNodeBase(bpy.types.Node):
 
         if default_value: output.default_value = default_value
 
-        # store to node_dict
-        self.node_dict[socket_name] = output.default_value
 
     ## STATE METHOD
     #########################################

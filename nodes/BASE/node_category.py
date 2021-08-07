@@ -20,10 +20,12 @@ node_categories = [
 
     RSNCategory("INPUT", "Input", items=[
         nodeitems_utils.NodeItem('RenderNodeObjectInput'),
-        nodeitems_utils.NodeItem('RenderNodeStringInput'),
         nodeitems_utils.NodeItem('RenderNodeMaterialInput'),
-        # nodeitems_utils.NodeItem("RSNodePropertyInputNode"),
-        # nodeitems_utils.NodeItem("RSNodeTaskInfoInputsNode"),
+        nodeitems_utils.NodeItem('RenderNodeStringInput'),
+        nodeitems_utils.NodeItem('RenderNodeFloatInput'),
+        nodeitems_utils.NodeItem('RenderNodeIntInput'),
+        nodeitems_utils.NodeItem("RenderNodeStringOperate"),
+        nodeitems_utils.NodeItem("RenderNodeMath"),
     ]),
     RSNCategory("OUTPUT", "Output", items=[
         nodeitems_utils.NodeItem("RenderNodeSceneFilePath"),
@@ -81,12 +83,14 @@ node_categories = [
         nodeitems_utils.NodeItem("RSNodeLuxcoreRenderSettingsNode"),
     ]),
 
+
     RSNCategory("EXTRA", "Extra", items=[
         nodeitems_utils.NodeItem("RenderNodeProperty"),
         nodeitems_utils.NodeItem('RSNodeCollectionDisplayNode'),
         nodeitems_utils.NodeItem("RSNodeCommonSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeScriptsNode"),
-        nodeitems_utils.NodeItem("RSNodeSmtpEmailNode"),
+        nodeitems_utils.NodeItem("RenderNodeEmailNode"),
+        # nodeitems_utils.NodeItem("RSNodeSmtpEmailNode"),
         nodeitems_utils.NodeItem("RSNodeLightStudioNode"),
         # nodeitems_utils.NodeItem("RSNodeServerNode"),
         # nodeitems_utils.NodeItem("RSNodeClientNode"),
