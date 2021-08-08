@@ -32,6 +32,7 @@ class RSN_OP_CreateGroup(bpy.types.Operator):
 class RenderNodeGroup(bpy.types.NodeCustomGroup, RenderNodeBase):
     bl_idname = 'RenderNodeGroup'
     bl_label = 'Render Node Group'
+
     # bl_icon = 'NODETREE'
 
     def nested_tree_filter(self, context):
@@ -75,7 +76,6 @@ class RenderNodeGroup(bpy.types.NodeCustomGroup, RenderNodeBase):
 
         outputs = set()
         path = path + [self.name]
-
         execute_id = str(uuid.uuid4())
 
         if self.node_tree not in cache_node_group_outputs:
@@ -85,7 +85,7 @@ class RenderNodeGroup(bpy.types.NodeCustomGroup, RenderNodeBase):
                     cache_node_group_outputs[self.node_tree].append(x)
 
         for x in cache_node_group_outputs[self.node_tree]:
-            self.execute_other(x)
+            self.execute_other(context, execute_id, path, x)
             for socket in x.inputs:
                 if socket.identifier not in outputs:
                     try:
