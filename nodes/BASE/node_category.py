@@ -60,12 +60,12 @@ node_categories = [
         nodeitems_utils.NodeItem('RenderNodeObjectData'),
     ]),
 
-    RSNCategory("VARIANTS", "Variants", items=[
-        nodeitems_utils.NodeItem("RSNodeVariantsNode"),
-        nodeitems_utils.NodeItem("RSNodeSetVariantsNode"),
-        nodeitems_utils.NodeItem("RSNodeNullNode"),
-
-    ]),
+    # RSNCategory("VARIANTS", "Variants", items=[
+    #     nodeitems_utils.NodeItem("RSNodeVariantsNode"),
+    #     nodeitems_utils.NodeItem("RSNodeSetVariantsNode"),
+    #     nodeitems_utils.NodeItem("RSNodeNullNode"),
+    #
+    # ]),
 
     RSNCategory("RENDER_SETTINGS", "Render Settings(Extra)", items=[
         # nodeitems_utils.NodeItem("RSNodeWorkBenchRenderSettingsNode"),

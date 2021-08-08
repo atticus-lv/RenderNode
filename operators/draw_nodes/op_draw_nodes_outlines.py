@@ -261,7 +261,7 @@ def draw_rounded_node_border(shader, node, radius=8, colour=(1.0, 1.0, 1.0, 0.7)
         shader.uniform_float("color", colour)
         batch.draw(shader)
 
-
+# TODO make draw outline when executing
 def draw_callback_nodeoutline(self, context):
     if context.window_manager.rsn_viewer_node == '':
         pass

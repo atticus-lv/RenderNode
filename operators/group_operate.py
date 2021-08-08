@@ -76,6 +76,7 @@ class RSN_OP_GroupNodes(bpy.types.Operator):
             group_output.location = Vector((loc_x_out + 200, loc_avg[1]))
 
             # Copy the selected nodes from current nodetree
+            # TODO Sometimes crash here
             # it seems to happen when sockets change when in the copy() or update() functions, makes sense
             if (nodes_len > 0):
                 bpy.ops.node.clipboard_copy()

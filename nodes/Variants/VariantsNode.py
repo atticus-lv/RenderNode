@@ -27,9 +27,9 @@ class RSNodeVariantsNode(RenderNodeBase):
     def get_active(self):
         pass
 
-def register():
-    bpy.utils.register_class(RSNodeVariantsNode)
-
-
-def unregister():
-    bpy.utils.unregister_class(RSNodeVariantsNode)
+# def register():
+#     bpy.utils.register_class(RSNodeVariantsNode)
+#
+#
+# def unregister():
+#     bpy.utils.unregister_class(RSNodeVariantsNode)
