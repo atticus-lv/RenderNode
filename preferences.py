@@ -278,6 +278,13 @@ def add_keybind():
         kmi.properties.name = "RSN_MT_PieMenu"
         addon_keymaps.append((km, kmi))
 
+        # group nodes
+        kmi = km.keymap_items.new("rsn.group_nodes", 'G', 'PRESS', ctrl=True)
+        addon_keymaps.append((km, kmi))
+
+        kmi = km.keymap_items.new("rsn.edit_group", 'TAB', 'PRESS', ctrl=True)
+        addon_keymaps.append((km, kmi))
+
 
 def remove_keybind():
     wm = bpy.context.window_manager

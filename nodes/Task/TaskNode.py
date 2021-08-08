@@ -2,7 +2,7 @@ import bpy
 from bpy.props import *
 from ...nodes.BASE.node_base import RenderNodeBase
 from ...utility import *
-from ...preferences import get_pref
+from ...nodes.BASE._runtime import runtime_info
 
 
 def update_node(self, context):
@@ -11,7 +11,7 @@ def update_node(self, context):
 
 
 def set_active_task(self, context):
-    if self.is_active_task is True:
+    if self.is_active_task and not runtime_info['updating']:
         self.execute()
 
 

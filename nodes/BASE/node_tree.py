@@ -3,8 +3,10 @@ import bpy
 from bpy.props import *
 from mathutils import Color, Vector
 
-from ._runtime import cache_node_dependants, cache_socket_links, runtime_info, logger
+from ._runtime import cache_node_dependants, cache_socket_links, cache_node_group_outputs, cache_tree_portals, \
+    runtime_info, logger
 from .node_base import RenderNodeBase as RenderStackNode
+
 
 # some method comes from rigging_nodes
 class RenderStackNodeTree(bpy.types.NodeTree):
@@ -50,11 +52,11 @@ class RenderStackNodeTree(bpy.types.NodeTree):
             if self in cache_socket_links:
                 del cache_socket_links[self]
                 # print(f'{self.name} - cleared connections')
-            # if self in cache_node_group_outputs:
-            #     del cache_node_group_outputs[self]
+            if self in cache_node_group_outputs:
+                del cache_node_group_outputs[self]
             #     # print(f'{self.name} - cleared group outputs')
-            # if self in cache_tree_portals:
-            #     del cache_tree_portals[self]
+            if self in cache_tree_portals:
+                del cache_tree_portals[self]
             #     # print(f'{self.name} - cleared portals')
             if self in cache_node_dependants:
                 del cache_node_dependants[self]
@@ -89,9 +91,22 @@ class RenderStackNodeTree(bpy.types.NodeTree):
                 # self.links.remove(link)
 
 
+class RenderStackNodeTreeGroup(RenderStackNodeTree):
+    bl_idname = 'RenderStackNodeTreeGroup'
+    bl_label = "Render Node (groups)"
+    bl_icon = 'NODETREE'
+
+    @classmethod
+    def poll(cls, context):
+        """Exclude this class from searching of node tree windows manager"""
+        return False
+
+
 def register():
     bpy.utils.register_class(RenderStackNodeTree)
+    bpy.utils.register_class(RenderStackNodeTreeGroup)
 
 
 def unregister():
     bpy.utils.unregister_class(RenderStackNodeTree)
+    bpy.utils.unregister_class(RenderStackNodeTreeGroup)

@@ -15,7 +15,7 @@ class RenderNodeBase(bpy.types.Node):
 
     @classmethod
     def poll(cls, ntree):
-        return ntree.bl_idname == 'RenderStackNodeTree'
+        return ntree.bl_idname in {'RenderStackNodeTree','RenderStackNodeTreeGroup'}
 
     ## BASE METHOD
     #########################################
@@ -56,6 +56,11 @@ class RenderNodeBase(bpy.types.Node):
         output.text = socket_label
 
         if default_value: output.default_value = default_value
+
+    def remove_output(self, socket_name):
+        output = self.outputs.get(socket_name)
+        if output:
+            self.outputs.remove(output)
 
     ## STATE METHOD
     #########################################
