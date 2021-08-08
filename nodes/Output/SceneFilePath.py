@@ -1,7 +1,7 @@
 import bpy
 from bpy.props import *
 
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 from ...preferences import get_pref
 
 import os
@@ -13,83 +13,61 @@ def update_node(self, context):
     self.update_parms()
 
 
-class RenderNodeSceneFilePath(RenderStackNode):
+class RenderNodeSceneFilePath(RenderNodeBase):
     bl_idname = "RenderNodeSceneFilePath"
     bl_label = "Scene File Path"
 
-    save_rel_folder: BoolProperty(name="Save to Relative",
-                                  description='Save Image to Relative Folder(locate at .blend)',
-                                  default=True, update=update_node)
-
-    custom_path: StringProperty(name='Path',
-                                default='', update=update_node,subtype='FILE_PATH')
-
-    version: IntProperty(name='Version', default=1, min=1, soft_max=5, update=update_node)
-
     def init(self, context):
-        self.create_prop('RenderNodeSocketInt', 'version', 'Version')
-        self.create_prop('RenderNodeSocketString', 'path_expression', 'Path Exp')
+        self.create_input('RenderNodeSocketFilePath', 'base_path', 'Path', default_value='//')
+        self.create_input('RenderNodeSocketInt', 'version', 'Version')
+        self.create_input('RenderNodeSocketString', 'path_expression', 'Postfix')
 
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
         self.inputs['path_expression'].value = get_pref().node_file_path.path_format
 
-        self.width = 250
+        self.width = 200
 
     def draw_buttons(self, context, layout):
         if bpy.data.filepath == '':
             layout.scale_y = 1.25
             layout.label(text='Save your file first', icon='ERROR')
-        else:
-            # custom path
-            layout.prop(self, 'save_rel_folder')
-            if not self.save_rel_folder:
-                row = layout.row(align=1)
-                row.prop(self, 'custom_path')
-
-            # viewer node tips
-            pref = get_pref()
-            if not pref.node_task.update_path:
-                layout.label(text='Update is disable in task node', icon='ERROR')
 
     def process(self):
-        self.store_data()
-
         directory_path = self.make_path()
         if not directory_path: return None
 
-        postfix = self.get_postfix()
+        path_exp = self.inputs['path_expression'].get_value()
+        v = self.inputs['version'].get_value()
+
+        postfix = self.get_postfix(path_exp, v)
         path = os.path.join(directory_path, postfix)
 
-        task_node = bpy.context.space_data.node_tree.nodes.get(bpy.context.window_manager.rsn_viewer_node)
+        task_node = self.id_data.nodes.get(bpy.context.window_manager.rsn_viewer_node)
         if task_node:
             task_node.path = path
 
     def make_path(self):
         """only save files will work"""
-
-        if self.save_rel_folder:
-            directory_path = bpy.path.abspath('//')
-        else:
-            if self.custom_path == '': return '//unSaveFile'
-            directory_path = os.path.dirname(self.custom_path)
         try:
-            if not os.path.exists(directory_path):
-                os.makedirs(directory_path)
-            return directory_path
+            path = self.inputs['base_path'].get_value()
+            abs_path = bpy.path.abspath(path)
+            if not os.path.exists(abs_path):
+                os.makedirs(abs_path)
+            return abs_path
         except Exception as e:
             print(e)
             return None
 
-    def get_postfix(self):
+    def get_postfix(self, path_exp, version):
         """path expression"""
         scn = bpy.context.scene
         cam = scn.camera
-        active_task = bpy.context.space_data.node_tree.nodes.get(bpy.context.window_manager.rsn_viewer_node)
+        active_task = self.id_data.nodes.get(bpy.context.window_manager.rsn_viewer_node)
 
         blend_name = ''
 
-        postfix = self.node_dict["path_expression"]
+        postfix = path_exp
         # replace camera name
         if cam:
             postfix = postfix.replace('$camera', cam.name)
@@ -100,11 +78,11 @@ class RenderNodeSceneFilePath(RenderStackNode):
         # replace res
         postfix = postfix.replace('$res', f"{scn.render.resolution_x}x{scn.render.resolution_y}")
         # replace label
-        postfix = postfix.replace('$label', active_task.label)
+        if active_task: postfix = postfix.replace('$label', active_task.label)
         # replace view_layer
         postfix = postfix.replace('$vl', bpy.context.view_layer.name)
         # version_
-        postfix = postfix.replace('$V', str(self.node_dict["version"]))
+        postfix = postfix.replace('$V', str(version))
 
         # frame completion
         STYLE = re.findall(r'([$]F\d)', postfix)

@@ -1,13 +1,13 @@
 import bpy
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 
 
 def update_node(self, context):
     self.update_parms()
 
 
-class RSNodeCyclesLightPathNode(RenderStackNode):
+class RSNodeCyclesLightPathNode(RenderNodeBase):
     """A simple input node"""
     bl_idname = 'RSNodeCyclesLightPathNode'
     bl_label = 'Cycles Light Path'

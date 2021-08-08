@@ -1,6 +1,6 @@
 import bpy
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 
 
 def poll_object(self, object):
@@ -18,28 +18,29 @@ def update_node(self, context):
     self.update_parms()
 
 
-class RenderNodeObjectMaterial(RenderStackNode):
+class RenderNodeObjectMaterial(RenderNodeBase):
     bl_idname = 'RenderNodeObjectMaterial'
     bl_label = 'Object Material'
 
     def init(self, context):
-        self.create_prop('RenderNodeSocketObject', 'object', 'Object')
-        self.create_prop('RenderNodeSocketInt', 'slot_index', 'Slot Index')
-        self.create_prop('RenderNodeSocketMaterial', 'material', 'Mat')
+        self.create_input('RenderNodeSocketObject', 'object', '')
+        self.create_input('RenderNodeSocketInt', 'slot_index', 'Slot Index')
+        self.create_input('RenderNodeSocketMaterial', 'material', '')
 
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
-        self.width = 175
+
 
     def process(self):
-        self.store_data()
+        ob = self.inputs['object'].get_value()
+        index = self.inputs['slot_index'].get_value()
+        mat = self.inputs['material'].get_value()
 
-        ob = self.node_dict['object']
         if ob:
             try:
-                curr_slot = ob.material_slots[self.node_dict['slot_index']]
-                self.compare(curr_slot, 'material', self.node_dict['material'])
+                curr_slot = ob.material_slots[index]
+                self.compare(curr_slot, 'material', mat)
             except Exception as e:
-                print(e)
+                raise ValueError('Slot index or Object error')
 
 
 def register():

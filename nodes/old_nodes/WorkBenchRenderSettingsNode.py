@@ -1,12 +1,12 @@
 import bpy
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 
 
 def update_node(self, context):
     self.update_parms()
 
 
-class WorkBenchRenderSettingsNode(RenderStackNode):
+class WorkBenchRenderSettingsNode(RenderNodeBase):
     '''A simple input node'''
     bl_idname = 'RSNodeWorkBenchRenderSettingsNode'
     bl_label = 'WorkBench Settings'

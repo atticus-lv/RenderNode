@@ -263,7 +263,7 @@ def draw_rounded_node_border(shader, node, radius=8, colour=(1.0, 1.0, 1.0, 0.7)
 
 
 def draw_callback_nodeoutline(self, context):
-    if context.window_manager.rsn_node_list == '':
+    if context.window_manager.rsn_viewer_node == '':
         pass
 
     bgl.glLineWidth(1)
@@ -283,16 +283,18 @@ def draw_callback_nodeoutline(self, context):
     col_outer = (self.settings_color[0], self.settings_color[1], self.settings_color[2], self.alpha)
     col_inner = (0.0, 0.0, 0.0, self.alpha + 0.1)
 
-    node_list = context.window_manager.rsn_node_list.split(',')
+    task_node = context.space_data.edit_tree.nodes.get(context.window_manager.rsn_viewer_node)
+    if not task_node: return
 
-    # draw all nodes
-    for node_name in node_list:
+    # draw task
+    draw_rounded_node_border(shader, task_node, radius=self.radius * 1.25, colour=task_outer)
+    draw_rounded_node_border(shader, task_node, radius=self.radius * 1.25 - 1.25, colour=col_inner)
+
+    # draw dependant
+    node_list = task_node.get_dependant_nodes()
+    for node in node_list:
         try:
-            node = context.space_data.edit_tree.nodes[node_name]
-            if node.bl_idname == 'RSNodeTaskNode':
-                draw_rounded_node_border(shader, node, radius=self.radius * 1.25, colour=task_outer)
-                draw_rounded_node_border(shader, node, radius=self.radius * 1.25 - 1.25, colour=col_inner)
-            elif node.bl_idname in {'RenderNodeSceneFilePath', 'RSNodeFilePathInputNode'}:
+            if node.bl_idname in {'RenderNodeSceneFilePath', 'RSNodeFilePathInputNode'}:
                 draw_rounded_node_border(shader, node, radius=self.radius, colour=file_path_outer)
                 draw_rounded_node_border(shader, node, radius=self.radius - 1, colour=col_inner)
             elif node.bl_idname != 'NodeReroute':

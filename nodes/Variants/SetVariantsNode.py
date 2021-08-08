@@ -1,19 +1,18 @@
 import bpy
 from bpy.props import *
-from ..BASE.node_tree import RenderStackNode
+from ..BASE.node_base import RenderNodeBase
 from ...utility import *
 
 
 def update_node(self, context):
-    if self.use:
-        nt = context.space_data.edit_tree
-        node = nt.nodes[self.name]
-        node.active = self.active
+    if not self.use: return None
+    task_node = context.space_data.node_tree.nodes.get(bpy.context.window_manager.rsn_viewer_node)
+    if task_node: task_node.update()
 
 
 class VariantsNodeProperty(bpy.types.PropertyGroup):
     name: StringProperty(name="The name of the variants node")
-    active: IntProperty(default=0, min=0, name="Active Input")
+    active: IntProperty(default=0, min=0, name="Active Input",update=update_node)
     use: BoolProperty(default=True, name="Use for render",
                       description="If enable, the active input of the variant node will be apply to the Scene,else it will apply the last input of the variant node")
 
@@ -84,7 +83,7 @@ class RSN_OT_UpdateVarCollect(bpy.types.Operator):
             prop.active = item_list[i]["value"]
 
 
-class RSNodeSetVariantsNode(RenderStackNode):
+class RSNodeSetVariantsNode(RenderNodeBase):
     """A simple input node"""
     bl_idname = 'RSNodeSetVariantsNode'
     bl_label = 'Set Variants'
@@ -118,10 +117,6 @@ class RSNodeSetVariantsNode(RenderStackNode):
 
     def get_data(self):
         pass
-        # for item in self.node_collect:
-        #     if item.use:
-        #         node = bpy.context.space_data.edit_tree.nodes[item.name]
-        #         if node.active != item.active: node.active = item.active
 
 
 def register():

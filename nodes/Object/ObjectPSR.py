@@ -1,6 +1,6 @@
 import bpy
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 
 
 class RN_OT_AcceptUpdate(bpy.types.Operator):
@@ -16,16 +16,15 @@ class RN_OT_AcceptUpdate(bpy.types.Operator):
                 context.window_manager.event_timer_remove(self._timer)
                 return {"FINISHED"}
             else:
-                self.node.store_data()
-                ob = self.node.node_dict['object']
+                ob = self.node.inputs['object'].get_value()
                 if not ob:
                     return {'PASS_THROUGH'}
                 if 'location' in self.node.inputs:
-                    self.node.inputs['location'].value = ob.location
+                    self.node.inputs['location'].default_value = ob.location
                 if 'scale' in self.node.inputs:
-                    self.node.inputs['scale'].value = ob.scale
+                    self.node.inputs['scale'].default_value = ob.scale
                 if 'rotation' in self.node.inputs:
-                    self.node.inputs['rotation'].value = ob.rotation_euler
+                    self.node.inputs['rotation'].default_value = ob.rotation_euler
 
         return {'PASS_THROUGH'}
 
@@ -43,64 +42,58 @@ class RN_OT_AcceptUpdate(bpy.types.Operator):
 
 def update_node(self, context):
     if self.use_p:
-        self.create_prop('RenderNodeSocketTranslation', 'location', 'Location', default_value=(0, 0, 0))
+        self.create_input('RenderNodeSocketTranslation', 'location', 'Location', default_value=(0, 0, 0))
     else:
-        self.remove_prop('location')
+        self.remove_input('location')
 
     if self.use_s:
-        self.create_prop('RenderNodeSocketXYZ', 'scale', 'Scale', default_value=(1, 1, 1))
+        self.create_input('RenderNodeSocketXYZ', 'scale', 'Scale', default_value=(1, 1, 1))
     else:
-        self.remove_prop('scale')
+        self.remove_input('scale')
 
     if self.use_r:
-        self.create_prop('RenderNodeSocketEuler', 'rotation', 'Rotation', default_value=(0, 0, 0))
+        self.create_input('RenderNodeSocketEuler', 'rotation', 'Rotation', default_value=(0, 0, 0))
     else:
-        self.remove_prop('rotation')
+        self.remove_input('rotation')
 
     if not self.accept_mode:
         self.update_parms()
 
 
-class RenderNodeObjectPSR(RenderStackNode):
+class RenderNodeObjectPSR(RenderNodeBase):
     bl_idname = 'RenderNodeObjectPSR'
     bl_label = 'Object PSR'
 
-    use_p: BoolProperty(name='P', update=update_node)
-    use_s: BoolProperty(name='S', update=update_node)
-    use_r: BoolProperty(name='R', update=update_node)
+    use_p: BoolProperty(name='Pos', update=update_node)
+    use_s: BoolProperty(name='Scale', update=update_node)
+    use_r: BoolProperty(name='Rotate', update=update_node)
 
     accept_mode: BoolProperty(name='Accept Mode', default=False)
 
     def init(self, context):
-        self.create_prop('RenderNodeSocketObject', 'object', 'Object')
-
+        self.create_input('RenderNodeSocketObject', 'object', '')
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
+
         self.width = 200
 
     def draw_buttons(self, context, layout):
-        row = layout.split(factor=0.5)
-
-        if self.accept_mode:
-            row.prop(self, 'accept_mode', text='Accept', icon='IMPORT')
-        else:
-            row.operator('rsn.accept_update', icon='IMPORT', text='Accept').node_name = self.name
-
-        sub = row.row(align=1)
+        sub = layout.row(align=1)
         sub.prop(self, "use_p")
         sub.prop(self, "use_s")
         sub.prop(self, "use_r")
 
+        if self.accept_mode:
+            layout.prop(self, 'accept_mode', text='Accept Mode', icon='IMPORT')
+        else:
+            layout.operator('rsn.accept_update', icon='IMPORT', text='Accept Mode').node_name = self.name
+
     def process(self):
-        self.store_data()
+        ob = self.inputs['object'].get_value()
 
-        ob = self.node_dict['object']
-        if not ob: return None
-
-        if not self.accept_mode:
-
-            if self.use_p: ob.location = self.node_dict['location']
-            if self.use_s: ob.scale = self.node_dict['scale']
-            if self.use_r: ob.rotation_euler = self.node_dict['rotation']
+        if ob and not self.accept_mode:
+            if self.use_p: ob.location = self.inputs['location'].get_value()
+            if self.use_s: ob.scale = self.inputs['scale'].get_value()
+            if self.use_r: ob.rotation_euler = self.inputs['rotation'].get_value()
 
 
 def register():

@@ -1,6 +1,6 @@
 import bpy
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 
 
 def update_node(self, context):
@@ -26,7 +26,7 @@ class RSN_OT_FillOriginPSR(bpy.types.Operator):
         return {'FINISHED'}
 
 
-class RSNodeObjectPSRNode(RenderStackNode):
+class RSNodeObjectPSRNode(RenderNodeBase):
     bl_idname = 'RSNodeObjectPSRNode'
     bl_label = 'Object PSR'
 

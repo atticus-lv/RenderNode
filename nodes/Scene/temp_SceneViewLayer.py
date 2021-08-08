@@ -1,26 +1,26 @@
 import bpy
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 
 
-class RenderNodeSceneViewLayer(RenderStackNode):
+class RenderNodeSceneViewLayer(RenderNodeBase):
     """A simple input node"""
     bl_idname = 'RenderNodeSceneViewLayer'
     bl_label = 'Scene View Layer (experiment)'
 
     def init(self, context):
-        self.create_prop('RenderNodeSocketViewLayer', "view_layer", 'ViewLayer')
-        self.create_prop('RenderNodeSocketBool', 'use', 'Use for Rendering')
+        self.create_input('RenderNodeSocketViewLayer', "view_layer", 'ViewLayer')
+        self.create_input('RenderNodeSocketBool', 'use', 'Use for Rendering')
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
     def process(self):
         self.store_data()
-        view_layer_name = self.node_dict['view_layer']
+        view_layer_name = self.inputs['view_layer'].get_value()
         view_layer = bpy.context.scene.view_layers.get(view_layer_name)
 
         if view_layer != '':
             self.compare(bpy.context.window, 'view_layer', view_layer)
-            self.compare(view_layer, 'use', self.node_dict['use'])
+            self.compare(view_layer, 'use', self.inputs['use'].get_value())
 
 
 # [

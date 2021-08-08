@@ -1,22 +1,20 @@
 import bpy
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 
 
-class RenderNodeSceneCamera(RenderStackNode):
+class RenderNodeSceneCamera(RenderNodeBase):
     """A simple input node"""
     bl_idname = 'RenderNodeSceneCamera'
     bl_label = 'Scene Camera'
 
     def init(self, context):
-        self.create_prop('RenderNodeSocketCamera', "camera", 'Camera')
-
+        self.create_input('RenderNodeSocketCamera', "camera", 'Camera')
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
     def process(self):
-        self.store_data()
+        cam = self.inputs[0].get_value()
 
-        cam = self.node_dict['camera']
         if cam: self.compare(bpy.context.scene, 'camera', cam)
 
 

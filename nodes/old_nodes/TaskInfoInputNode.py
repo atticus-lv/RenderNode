@@ -1,14 +1,14 @@
 import bpy
 import json
 from bpy.props import PointerProperty
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 
 
 def update_node(self, context):
     self.update_parms()
 
 
-class RSNodeTaskInfoInputsNode(RenderStackNode):
+class RSNodeTaskInfoInputsNode(RenderNodeBase):
     '''A simple input node'''
     bl_idname = 'RSNodeTaskInfoInputsNode'
     bl_label = 'Task Info(Experiment)'

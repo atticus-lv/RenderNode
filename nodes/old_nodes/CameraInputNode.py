@@ -1,6 +1,6 @@
 import bpy
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 
 
 def poll_camera(self, object):
@@ -11,7 +11,7 @@ def update_node(self, context):
     self.update_parms()
 
 
-class RSNodeCamInputNode(RenderStackNode):
+class RSNodeCamInputNode(RenderNodeBase):
     """A simple input node"""
     bl_idname = 'RSNodeCamInputNode'
     bl_label = 'Camera'

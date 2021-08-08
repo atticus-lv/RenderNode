@@ -1,6 +1,6 @@
 import bpy
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 
 import os
 import re
@@ -46,7 +46,7 @@ def update_node(self, context):
     self.update_parms()
 
 
-class RSNodeColorManagementNode(RenderStackNode):
+class RSNodeColorManagementNode(RenderNodeBase):
     '''A simple input node'''
     bl_idname = 'RenderNodeSceneColorManagement'
     bl_label = 'Scene Color Management'
@@ -64,8 +64,8 @@ class RSNodeColorManagementNode(RenderStackNode):
     gamma: FloatProperty(name="Gamma", default=1.0, update=update_node)
 
     def init(self, context):
-        self.create_prop('RenderNodeSocketFloat', 'exposure', 'Exposure', default_value=0.0)
-        self.create_prop('RenderNodeSocketFloat', 'gamma', 'Gamma', default_value=1.0)
+        self.create_input('RenderNodeSocketFloat', 'exposure', 'Exposure', default_value=0.0)
+        self.create_input('RenderNodeSocketFloat', 'gamma', 'Gamma', default_value=1.0)
 
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
@@ -83,11 +83,10 @@ class RSNodeColorManagementNode(RenderStackNode):
         col.prop(self, 'look')
 
     def process(self):
-        self.store_data()
         vs = bpy.context.scene.view_settings
 
-        self.compare(vs, 'exposure', self.node_dict['exposure'])
-        self.compare(vs, 'gamma', self.node_dict['gamma'])
+        self.compare(vs, 'exposure', self.inputs['exposure'].get_value())
+        self.compare(vs, 'gamma', self.inputs['gamma'].get_value())
 
         self.compare(vs, 'view_transform', self.view_transform)
         self.compare(vs, 'look', self.look)

@@ -1,5 +1,5 @@
 import bpy
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 
 
 def reroute(node):
@@ -13,7 +13,7 @@ def reroute(node):
     return task_node_name
 
 
-class RSNodeTaskListNode(RenderStackNode):
+class RSNodeTaskListNode(RenderNodeBase):
     """Render List Node"""
     bl_idname = 'RSNodeTaskListNode'
     bl_label = 'Task List'

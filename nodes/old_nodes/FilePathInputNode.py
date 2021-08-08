@@ -1,18 +1,15 @@
 import bpy
 from bpy.props import *
 
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 from ...preferences import get_pref
-
-import os
-import time
 
 
 def update_node(self, context):
     self.update_parms()
 
 
-class RSNodeFilePathInputNode(RenderStackNode):
+class RSNodeFilePathInputNode(RenderNodeBase):
     bl_idname = "RSNodeFilePathInputNode"
     bl_label = "File Path"
 
@@ -43,7 +40,7 @@ class RSNodeFilePathInputNode(RenderStackNode):
             layout.prop(self, 'use_blend_file_path')
             if not self.use_blend_file_path:
                 row = layout.row(align=1)
-                row.prop(self, 'custom_path')
+                row.prop(self, 'path_exp')
                 row.operator('buttons.directory_browse', icon='FILEBROWSER', text='')
 
             layout.prop(self, "version", slider=1)

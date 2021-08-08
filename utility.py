@@ -83,45 +83,6 @@ class RSN_NodeTree:
             self.set_wm_node_tree(tree_name)
 
 
-# class RSN_Gpaph:
-#     def __init__(self, node_tree, root_node_name):
-#         self.nt = node_tree
-#         self.root_node = self.get_node_from_name(root_node_name)
-#
-#     def get_children_from_node(self, root_node, pass_mute=True) -> list:
-#         """Depth first search
-#         :parm root_node: a blender node
-#         nodes append from left to right, from top to bottom
-#         """
-#         node_list = []
-#
-#         # @lru_cache(maxsize=None)
-#         def get_sub_node(node, pass_mute_node=True):
-#             """Recursion
-#             :parm node: a blender node
-#
-#             """
-#             for i, input in enumerate(node.inputs):
-#                 if input.is_linked:
-#                     try:
-#                         sub_node = input.links[0].from_node
-#                         if sub_node.mute and pass_mute_node: continue
-#
-#                         get_sub_node(sub_node)
-#                     # This error shows when the dragging the link off viewer node(Works well with knife tool)
-#                     # this seems to be a blender error
-#                     except IndexError:
-#                         pass
-#                 else:
-#                     continue
-#             # Skip the reroute node
-#             if node.bl_idname != 'NodeReroute':
-#                 if len(node_list) == 0 or (len(node_list) != 0 and node.name != node_list[-1]):
-#                     node_list.append(node.name)
-#
-#         get_sub_node(root_node, pass_mute)
-
-
 class RSN_Nodes:
     """Tree method"""
 
@@ -396,7 +357,10 @@ class RenderQueue():
 
         # for processing visualization
         bpy.context.window_manager.rsn_cur_task_list = ','.join(self.task_list)
-        bpy.context.scene.frame_current = self.frame_range_queue[0][0]
+        try:
+            bpy.context.scene.frame_current = self.frame_range_queue[0][0]
+        except IndexError:
+            pass
 
     def is_empty(self):
         return len(self.task_queue) == 0
@@ -420,6 +384,7 @@ class RenderQueue():
 
         bpy.context.window_manager.rsn_cur_task_list = ''
 
+# TODO move old update method to old nodes
 
 class RSN_OLD_TaskUpdater():
     def __init__(self, node_tree, task_data):

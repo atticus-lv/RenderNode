@@ -1,6 +1,6 @@
 import bpy
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 from mathutils import Color, Vector
 
 
@@ -10,20 +10,20 @@ def update_node(self, context):
     try:
         self.d_type = type(eval(self.full_data_path))
 
-        self.remove_prop('value')
+        self.remove_input('value')
 
         if self.d_type == int:
-            self.create_prop('RenderNodeSocketInt', 'value', "Int")
+            self.create_input('RenderNodeSocketInt', 'value', "Value")
         elif self.d_type == float:
-            self.create_prop('RenderNodeSocketFloat', 'value', "Float")
+            self.create_input('RenderNodeSocketFloat', 'value', "Value")
         elif self.d_type == str:
-            self.create_prop('RenderNodeSocketString', 'value', "String")
+            self.create_input('RenderNodeSocketString', 'value', "Value")
         elif self.d_type == bool:
-            self.create_prop('RenderNodeSocketBool', 'value', "Bool")
+            self.create_input('RenderNodeSocketBool', 'value', "Value")
         elif self.d_type == Color:
-            self.create_prop('RenderNodeSocketColor', 'value', "Color")
+            self.create_input('RenderNodeSocketColor', 'value', "")
         elif self.d_type == Vector:
-            self.create_prop('RenderNodeSocketVector', 'value', "Vector")
+            self.create_input('RenderNodeSocketVector', 'value', "Value")
 
         self.update_parms()
 
@@ -31,7 +31,7 @@ def update_node(self, context):
         print(e)
 
 
-class RenderNodeProperty(RenderStackNode):
+class RenderNodeProperty(RenderNodeBase):
     """A simple input node"""
     bl_idname = 'RenderNodeProperty'
     bl_label = 'Property'

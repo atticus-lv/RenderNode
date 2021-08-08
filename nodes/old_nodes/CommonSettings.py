@@ -1,8 +1,8 @@
 import bpy
 import os
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode, get_pref
-
+from ...nodes.BASE.node_base import RenderNodeBase
+from ...utility import get_pref
 
 def poll_camera(self, object):
     return object.type == 'CAMERA'
@@ -12,7 +12,7 @@ def update_node(self, context):
     self.update_parms()
 
 
-class RSNodeCommonSettingsNode(RenderStackNode):
+class RSNodeCommonSettingsNode(RenderNodeBase):
     """A simple Task node"""
     bl_idname = "RSNodeCommonSettingsNode"
     bl_label = 'Common Settings'
@@ -112,7 +112,7 @@ class RSNodeCommonSettingsNode(RenderStackNode):
                 col.prop(self, 'use_blend_file_path')
                 if not self.use_blend_file_path:
                     row = col.row(align=1)
-                    row.prop(self, 'custom_path')
+                    row.prop(self, 'path_exp')
                     row.operator('buttons.directory_browse', icon='FILEBROWSER', text='')
 
                 col.prop(self, "version", slider=1)

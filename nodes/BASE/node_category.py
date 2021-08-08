@@ -19,17 +19,25 @@ node_categories = [
     ]),
 
     RSNCategory("INPUT", "Input", items=[
-        nodeitems_utils.NodeItem('RenderNodeObjectInput'),
+        nodeitems_utils.NodeItem('RenderNodeFloatInput'),
+        nodeitems_utils.NodeItem('RenderNodeVectorInput'),
+        nodeitems_utils.NodeItem('RenderNodeIntInput'),
         nodeitems_utils.NodeItem('RenderNodeStringInput'),
+        nodeitems_utils.NodeItem('RenderNodeObjectInput'),
         nodeitems_utils.NodeItem('RenderNodeMaterialInput'),
-        # nodeitems_utils.NodeItem("RSNodePropertyInputNode"),
-        # nodeitems_utils.NodeItem("RSNodeTaskInfoInputsNode"),
     ]),
-    RSNCategory("OUTPUT", "Output", items=[
+
+    RSNCategory("UTILITY", "Utility", items=[
+        nodeitems_utils.NodeItem("RenderNodeMath"),
+        nodeitems_utils.NodeItem("RenderNodeVectorConvert"),
+        nodeitems_utils.NodeItem("RenderNodeStringOperate"),
+    ]),
+
+    RSNCategory("OUTPUT", "Scene Output", items=[
         nodeitems_utils.NodeItem("RenderNodeSceneFilePath"),
         nodeitems_utils.NodeItem("RenderNodeSceneFrameRange"),
         nodeitems_utils.NodeItem("RenderNodeSceneImageFormat"),
-        # nodeitems_utils.NodeItem("RenderNodeSceneFrameRange"),
+        nodeitems_utils.NodeItem("RenderNodeSceneMovieFormat"),
         nodeitems_utils.NodeItem("RenderNodeSceneResolution"),  # performance is bad
         # nodeitems_utils.NodeItem("RSNodeResolutionInputNode"),
         # nodeitems_utils.NodeItem("RSNodeActiveRenderSlotNode"),
@@ -49,45 +57,33 @@ node_categories = [
         nodeitems_utils.NodeItem('RenderNodeObjectDisplay'),
         nodeitems_utils.NodeItem('RenderNodeObjectMaterial'),
         nodeitems_utils.NodeItem('RenderNodeObjectPSR'),
-        # nodeitems_utils.NodeItem('RenderNodeObjectPSR'),
         nodeitems_utils.NodeItem('RenderNodeObjectData'),
-        # nodeitems_utils.NodeItem('RSNodeObjectDisplayNode'),
-        # nodeitems_utils.NodeItem('RSNodeObjectMaterialNode'),
-        # nodeitems_utils.NodeItem('RSNodeObjectPSRNode'),
-        # nodeitems_utils.NodeItem('RSNodeObjectDataNode'),
-        # nodeitems_utils.NodeItem('RSNodeObjectModifierNode'),
     ]),
 
-    # RSNCategory("OUTPUT_SETTINGS", "Output Settings", items=[
-    #     nodeitems_utils.NodeItem("RSNodeFilePathInputNode"),
-    #     nodeitems_utils.NodeItem("RSNodeResolutionInputNode"),
-    #     nodeitems_utils.NodeItem("RSNodeFrameRangeInputNode"),
-    #     nodeitems_utils.NodeItem("RSNodeImageFormatInputNode"),
+    # RSNCategory("VARIANTS", "Variants", items=[
+    #     nodeitems_utils.NodeItem("RSNodeVariantsNode"),
+    #     nodeitems_utils.NodeItem("RSNodeSetVariantsNode"),
+    #     nodeitems_utils.NodeItem("RSNodeNullNode"),
+    #
     # ]),
-
-    RSNCategory("VARIANTS", "Variants", items=[
-        nodeitems_utils.NodeItem("RSNodeVariantsNode"),
-        nodeitems_utils.NodeItem("RSNodeSetVariantsNode"),
-        nodeitems_utils.NodeItem("RSNodeNullNode"),
-
-    ]),
 
     RSNCategory("RENDER_SETTINGS", "Render Settings(Extra)", items=[
         # nodeitems_utils.NodeItem("RSNodeWorkBenchRenderSettingsNode"),
         # nodeitems_utils.NodeItem("RSNodeEeveeRenderSettingsNode"),
         # nodeitems_utils.NodeItem("RSNodeCyclesRenderSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeCyclesLightPathNode"),
-        nodeitems_utils.NodeItem("RSNodeOctaneRenderSettingsNode"),
-        nodeitems_utils.NodeItem("RSNodeLuxcoreRenderSettingsNode"),
+        # nodeitems_utils.NodeItem("RSNodeOctaneRenderSettingsNode"),
+        # nodeitems_utils.NodeItem("RSNodeLuxcoreRenderSettingsNode"),
     ]),
 
     RSNCategory("EXTRA", "Extra", items=[
         nodeitems_utils.NodeItem("RenderNodeProperty"),
         nodeitems_utils.NodeItem('RSNodeCollectionDisplayNode'),
-        nodeitems_utils.NodeItem("RSNodeCommonSettingsNode"),
-        nodeitems_utils.NodeItem("RSNodeScriptsNode"),
-        nodeitems_utils.NodeItem("RSNodeSmtpEmailNode"),
-        nodeitems_utils.NodeItem("RSNodeLightStudioNode"),
+        # nodeitems_utils.NodeItem("RSNodeCommonSettingsNode"),
+        # nodeitems_utils.NodeItem("RSNodeScriptsNode"),
+        # nodeitems_utils.NodeItem("RenderNodeEmailNode"),
+        # # nodeitems_utils.NodeItem("RSNodeSmtpEmailNode"),
+        # nodeitems_utils.NodeItem("RSNodeLightStudioNode"),
         # nodeitems_utils.NodeItem("RSNodeServerNode"),
         # nodeitems_utils.NodeItem("RSNodeClientNode"),
     ]),
@@ -95,10 +91,10 @@ node_categories = [
         nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Merge", settings={
             "node_type": repr("MERGE"),
         }),
-        nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Switch", settings={
-            "node_type": repr("SWITCH"),
-            "label": repr("Switch"),
-        }),
+        # nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Switch", settings={
+        #     "node_type": repr("SWITCH"),
+        #     "label": repr("Switch"),
+        # }),
         # nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Version", settings={
         #     "node_type": repr("VERSION"),
         #     "label"    : repr("Version"),

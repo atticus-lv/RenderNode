@@ -1,202 +1,97 @@
 import bpy
-import nodeitems_utils
+
 from bpy.props import *
 from mathutils import Color, Vector
 
-from ...utility import *
-from ...preferences import get_pref
+from ._runtime import cache_node_dependants, cache_socket_links, runtime_info, logger
+from .node_base import RenderNodeBase as RenderStackNode
 
-import logging
-
-LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
-logging.basicConfig(format=LOG_FORMAT)
-logger = logging.getLogger('mylogger')
-
-
+# some method comes from rigging_nodes
 class RenderStackNodeTree(bpy.types.NodeTree):
     """RenderStackNodeTree Node Tree"""
     bl_idname = 'RenderStackNodeTree'
     bl_label = 'Render Editor'
     bl_icon = 'CAMERA_DATA'
 
+    def get_other_socket(self, socket):
+        '''
+        Returns connected socket
 
+        It takes O(len(nodetree.links)) time to iterate thought the links to check the connected socket
+        To avoid doing the look up every time, the connections are cached in a dictionary
+        The dictionary is emptied whenever a socket/connection/node changes in the nodetree
+        '''
+        # accessing links Takes O(len(nodetree.links)) time.
+        _nodetree_socket_connections = cache_socket_links.setdefault(self, {})
+        _connected_socket = _nodetree_socket_connections.get(socket, None)
 
-class RenderStackNode(bpy.types.Node):
-    bl_label = "RenderStack Node"
+        if _connected_socket:
+            return _connected_socket
 
-    warning: BoolProperty(name='Is warning', default=False)
-    warning_msg: StringProperty(name='warning message', default='')
+        socket = socket
+        if socket.is_output:
+            while socket.links and socket.links[0].to_node.bl_rna.name == 'Reroute':
+                socket = socket.links[0].to_node.outputs[0]
+            if socket.links:
+                _connected_socket = socket.links[0].to_socket
+        else:
+            while socket.links and socket.links[0].from_node.bl_rna.name == 'Reroute':
+                socket = socket.links[0].from_node.inputs[0]
+            if socket.links:
+                _connected_socket = socket.links[0].from_socket
 
-    @classmethod
-    def poll(cls, ntree):
-        return ntree.bl_idname == 'RenderStackNodeTree'
-
-    ## BASE METHOD
-    #########################################
-
-    def copy(self, node):
-        if self.bl_idname == 'RSNodeTaskNode': self.label = self.name
-        print(f"RSN Copied {self.name} from {node.name}")
-
-    def free(self):
-        """Remove Node"""
-        print("RSN removed node", self.name)
-
-    ## INITIAL METHOD
-    #########################################
-
-    node_dict = {}
-
-    def create_prop(self, socket_type, socket_name, socket_label, default_value=None):
-        if self.inputs.get(socket_name):
-            return None
-
-        input = self.inputs.new(socket_type, socket_name)
-        input.text = socket_label
-
-        if default_value: input.value = default_value
-
-        # store to node_dict
-        self.node_dict[socket_name] = input.value
-
-    def remove_prop(self, socket_name):
-        input = self.inputs.get(socket_name)
-        if input:
-            self.inputs.remove(input)
-            self.node_dict.pop(socket_name)  # remove from node dict
-
-    ## STATE METHOD
-    #########################################
-
-    def draw_buttons(self, context, layout):
-        if self.warning is True:
-            msg = layout.operator('rsn.show_task_details', icon='ERROR', text='Show Waring Message')
-            msg.task_data = self.warning_msg
-
-    def debug(self):
-        # new method debug
-        msg = f'process "{self.name}"'
-        if hasattr(self, 'node_dict'):
-            msg += f'\n{self.node_dict}'
-
-        logger.debug(msg)
-
-    def set_warning(self, msg=''):
-        self.warning_msg = msg
-
-        self.use_custom_color = 1
-        self.color = (1, 0, 0)
-        self.warning = True
-
-        logger.warning(f'{self.name}')
-
-    ## UPDATE METHOD
-    #########################################
+        cache_socket_links[self][socket] = _connected_socket
+        return _connected_socket
 
     def update(self):
-        """
-        The viewer node have this method
-        Nodes that need add/remove inputs with have this method
-        """
-        pass
+        '''Called when the nodetree sockets or links change, socket pair cache is cleared here'''
+        if not runtime_info['executing']:
+            # print(f'UPDATING {self}')
+            if self in cache_socket_links:
+                del cache_socket_links[self]
+                # print(f'{self.name} - cleared connections')
+            # if self in cache_node_group_outputs:
+            #     del cache_node_group_outputs[self]
+            #     # print(f'{self.name} - cleared group outputs')
+            # if self in cache_tree_portals:
+            #     del cache_tree_portals[self]
+            #     # print(f'{self.name} - cleared portals')
+            if self in cache_node_dependants:
+                del cache_node_dependants[self]
+                # print(f'{self.name} - cleared dependants')
+        else:
+            print('TRIED TO UPDATE TREE, BUT ITS EXECUTING')
+        # change the socket of the reroute nodes
+        for node in self.nodes:
+            if node.bl_idname == 'NodeReroute':
+                connected = self.get_other_socket(node.inputs[0])
+                if connected and connected.bl_idname != node.inputs[
+                    0].bl_idname:
+                    new_input = node.inputs.new(connected.bl_idname, '')
+                    # new_input.init_from_socket(connected.node, connected)
+                    new_output = node.outputs.new(connected.bl_idname, '')
+                    # new_output.init_from_socket(connected.node, connected)
+                    self.relink_socket(node.inputs[0], new_input)
+                    self.relink_socket(node.outputs[0], new_output)
 
-    def auto_update_inputs(self, socket_type='RSNodeSocketTaskSettings', socket_name='Input'):
-        """add or remove inputs automatically
-        :parm socket_type: any socket type that is registered in blender
-        :parm socket_name: custom name for the socket
-        """
-        i = 0
-        for input in self.inputs:
-            if not input.is_linked:
-                # keep at least one input for links with py commands
-                if i == 0:
-                    i += 1
-                else:
-                    self.inputs.remove(input)
-        # auto add inputs
-        if i != 1: self.inputs.new(socket_type, socket_name)
+                    node.inputs.remove(node.inputs[0])
+                    node.outputs.remove(node.outputs[0])
 
-    ## RSN DATA MANAGE
-    #########################################
-
-    def update_parms(self):
-        """compare current node list"""
-        if bpy.context.window_manager.rsn_node_list != '':
-            node_list = bpy.context.window_manager.rsn_node_list.split(',')
-            if self.name in node_list:
-                pref = get_pref()
-                bpy.ops.rsn.update_parms(view_mode_handler=bpy.context.window_manager.rsn_viewer_node,
-                                         update_scripts=pref.node_task.update_scripts,
-                                         use_render_mode=False)
-
-    ### new method ###
-
-    def store_data(self):
-        for input in self.inputs:
-            if input.is_linked:
-                node = self.reroute_socket_node(input, self)
-                print(f'accept result:{node}')
-                if hasattr(node, 'value'):
-                    self.node_dict[input.name] = self.transfer_value(node.value)
-                    self.node_dict[input.name] = self.transfer_value(node.value)
-            else:
-                self.node_dict[input.name] = self.transfer_value(input.value)
-
-    def transfer_value(self, value):
-
-        return list(value) if type(value) in {Color, Vector} else value
-
-    def process(self):
-        pass
-
-    ### old method ###
-    def get_data(self):
-        """For get self date into rsn tree method"""
-        pass
-
-    ## Utility
-    #########################################
-    @staticmethod
-    def reroute_socket_node(socket, node, target_node_type=None):
-        def get_sub_node(socket, node):
-            if socket.is_linked:
-                sub_node = socket.links[0].from_node
-                if len(sub_node.inputs) == 0: return sub_node
-                return get_sub_node(sub_node.inputs[0], sub_node)
-
-        return get_sub_node(socket, node)
-
-    @staticmethod
-    def compare(obj: object, attr: str, val):
-        """Use for compare and apply attribute since some properties change may cause depsgraph changes"""
-        try:
-            if getattr(obj, attr) != val:
-                setattr(obj, attr, val)
-                logger.debug(f'Attribute "{attr}" SET “{val}”')
-        except AttributeError as e:
-            logger.info(e)
-
-
-class RenderStackNodeGroup(bpy.types.NodeCustomGroup):
-    bl_label = 'RenderStack Node Group'
-
-    @classmethod
-    def poll(cls, ntree):
-        return ntree.bl_idname == 'RenderStackNodeTree'
-
-
-classes = (
-    RenderStackNodeTree,
-    RenderStackNode,
-
-)
+    def relink_socket(self, old_socket, new_socket):
+        '''Utility function to relink sockets'''
+        if not old_socket.is_output and not new_socket.is_output and old_socket.links:
+            self.links.new(old_socket.links[0].from_socket, new_socket)
+            self.links.remove(old_socket.links[0])
+        elif old_socket.is_output and new_socket.is_output and old_socket.links:
+            links = list(old_socket.links[:])
+            for link in links:
+                self.links.new(new_socket, link.to_socket)
+                # self.links.remove(link)
 
 
 def register():
-    for cls in classes:
-        bpy.utils.register_class(cls)
+    bpy.utils.register_class(RenderStackNodeTree)
 
 
 def unregister():
-    for cls in classes:
-        bpy.utils.unregister_class(cls)
+    bpy.utils.unregister_class(RenderStackNodeTree)

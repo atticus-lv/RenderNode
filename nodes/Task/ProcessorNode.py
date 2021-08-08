@@ -1,9 +1,9 @@
 import bpy
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 
 
-class RSNodeProcessorNode(RenderStackNode):
+class RSNodeProcessorNode(RenderNodeBase):
     """A simple input node"""
     bl_idname = 'RSNodeProcessorNode'
     bl_label = 'Processor'

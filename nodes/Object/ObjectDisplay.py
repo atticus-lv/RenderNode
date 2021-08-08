@@ -1,28 +1,28 @@
 import bpy
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 
 
-class RenderNodeObjectDisplay(RenderStackNode):
+class RenderNodeObjectDisplay(RenderNodeBase):
     bl_idname = 'RenderNodeObjectDisplay'
     bl_label = 'Object Display'
 
     def init(self, context):
-        self.create_prop('RenderNodeSocketObject', 'object', 'Object')
-        self.create_prop('RenderNodeSocketBool', 'hide_viewport', 'Hide Viewport')
-        self.create_prop('RenderNodeSocketBool', 'hide_render', 'Hide Render')
+        self.create_input('RenderNodeSocketObject', 'object', '')
+        self.create_input('RenderNodeSocketBool', 'hide_viewport', 'Hide Viewport')
+        self.create_input('RenderNodeSocketBool', 'hide_render', 'Hide Render')
 
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
         self.width = 175
 
     def process(self):
-        self.store_data()
-
-        ob = self.node_dict['object']
+        ob = self.inputs['object'].get_value()
+        hide_viewport = self.inputs['hide_viewport'].get_value()
+        hide_render = self.inputs['hide_render'].get_value()
         if ob:
-            self.compare(ob, 'hide_viewport', self.node_dict['hide_viewport'])
-            self.compare(ob, 'hide_render', self.node_dict['hide_render'])
+            self.compare(ob, 'hide_viewport', hide_viewport)
+            self.compare(ob, 'hide_render', hide_render)
 
 
 def register():

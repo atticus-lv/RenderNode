@@ -1,4 +1,4 @@
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 from mathutils import Color, Vector
 
 import bpy
@@ -21,7 +21,7 @@ def source_attr(src_obj, scr_data_path):
     return get_obj_and_attr(src_obj, scr_data_path)
 
 
-class RSNodeObjectDataNode(RenderStackNode):
+class RSNodeObjectDataNode(RenderNodeBase):
     bl_idname = 'RSNodeObjectDataNode'
     bl_label = 'Object Data'
 

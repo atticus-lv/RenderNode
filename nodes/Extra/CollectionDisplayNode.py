@@ -1,43 +1,23 @@
 import bpy
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 
 
-def update_node(self, context):
-    self.update_parms()
-
-
-class RSNodeCollectionDisplayNode(RenderStackNode):
+class RSNodeCollectionDisplayNode(RenderNodeBase):
     bl_idname = 'RSNodeCollectionDisplayNode'
     bl_label = 'Collection Display'
 
-    collection: PointerProperty(type=bpy.types.Collection, name='Collection', update=update_node)
-    hide_viewport: BoolProperty(name='Hide Viewport', default=False, update=update_node)
-    hide_render: BoolProperty(name='Hide Render', default=False, update=update_node)
-
     def init(self, context):
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
-        self.width = 200
+        self.create_input('RenderNodeSocketCollection', 'collection', '')
+        self.create_input('RenderNodeSocketBool', 'hide_viewport', 'Hide Viewport')
+        self.create_input('RenderNodeSocketBool', 'hide_render', 'Hide Render')
 
-    def draw_buttons(self, context, layout):
-        col = layout.column(align=1)
-
-        row = col.row(align=1)
-        row.prop(self, "collection", text='')
-
-        row.prop(self, 'hide_viewport', text='',
-                 icon='HIDE_OFF' if not self.hide_viewport else 'HIDE_ON')
-        row.prop(self, 'hide_render', text='',
-                 icon='RESTRICT_RENDER_OFF' if not self.hide_render else 'RESTRICT_RENDER_ON')
-
-    def get_data(self):
-        task_data_obj = {}
-        if self.collection:
-            task_data_obj[self.name] = {'collection'   : f"bpy.data.collections['{self.collection.name}']",
-                                        'hide_viewport': self.hide_viewport,
-                                        'hide_render'  : self.hide_render}
-
-        return task_data_obj
+    def process(self):
+        coll = self.inputs['collection'].get_value()
+        if coll:
+            coll.hide_viewport = self.inputs['hide_viewport'].get_value()
+            coll.hide_render = self.inputs['hide_render'].get_value()
 
 
 def register():

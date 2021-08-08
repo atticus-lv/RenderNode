@@ -1,21 +1,20 @@
 import bpy
 from bpy.props import *
-from ...nodes.BASE.node_tree import RenderStackNode
+from ...nodes.BASE.node_base import RenderNodeBase
 
 
-class RenderNodeSceneWorld(RenderStackNode):
+class RenderNodeSceneWorld(RenderNodeBase):
     """A simple input node"""
     bl_idname = 'RenderNodeSceneWorld'
     bl_label = 'Scene World'
 
     def init(self, context):
-        self.create_prop('RenderNodeSocketWorld', "world", 'World')
+        self.create_input('RenderNodeSocketWorld', "world", 'World')
 
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
     def process(self):
-        self.store_data()
-        world = self.node_dict['world']
+        world = self.inputs['world'].get_value()
 
         if world:
             self.compare(bpy.context.scene, 'world', world)

@@ -9,14 +9,14 @@ def update_node(self, context):
     self.update_parms()
 
 
-class RenderNodeStringInput(RenderNodeBase):
-    bl_idname = 'RenderNodeStringInput'
-    bl_label = 'String Input'
+class RenderNodeFloatInput(RenderNodeBase):
+    bl_idname = 'RenderNodeFloatInput'
+    bl_label = 'Float Input'
 
-    default_value: StringProperty(update=update_node)
+    default_value: FloatProperty(update=update_node)
 
     def init(self, context):
-        self.create_output('RenderNodeSocketString', 'output', "Output")
+        self.create_output('RenderNodeSocketFloat', 'output', "Output")
 
     def draw_buttons(self, context, layout):
         layout.prop(self, 'default_value', text='')
@@ -26,8 +26,8 @@ class RenderNodeStringInput(RenderNodeBase):
 
 
 def register():
-    bpy.utils.register_class(RenderNodeStringInput)
+    bpy.utils.register_class(RenderNodeFloatInput)
 
 
 def unregister():
-    bpy.utils.unregister_class(RenderNodeStringInput)
+    bpy.utils.unregister_class(RenderNodeFloatInput)

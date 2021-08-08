@@ -22,7 +22,7 @@ class RSN_OT_SearchAndLink(bpy.types.Operator):
         new_node = context.space_data.edit_tree.nodes.new(type=self.node_item)
 
         # get the socket type is input/output
-        # define in socket_type.py, 666 is just a number that much larger than the number of inputs
+        # define in node_socket.py, 666 is just a number that much larger than the number of inputs
         try:
             if self.input_id != 666:
                 context.space_data.edit_tree.links.new(
