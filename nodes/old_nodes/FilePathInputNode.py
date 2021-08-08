@@ -4,9 +4,6 @@ from bpy.props import *
 from ...nodes.BASE.node_base import RenderNodeBase
 from ...preferences import get_pref
 
-import os
-import time
-
 
 def update_node(self, context):
     self.update_parms()

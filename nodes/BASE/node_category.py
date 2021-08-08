@@ -19,16 +19,18 @@ node_categories = [
     ]),
 
     RSNCategory("INPUT", "Input", items=[
+        nodeitems_utils.NodeItem('RenderNodeFloatInput'),
+        nodeitems_utils.NodeItem('RenderNodeVectorInput'),
+        nodeitems_utils.NodeItem('RenderNodeIntInput'),
+        nodeitems_utils.NodeItem('RenderNodeStringInput'),
         nodeitems_utils.NodeItem('RenderNodeObjectInput'),
         nodeitems_utils.NodeItem('RenderNodeMaterialInput'),
-        nodeitems_utils.NodeItem('RenderNodeStringInput'),
-        nodeitems_utils.NodeItem('RenderNodeFloatInput'),
-        nodeitems_utils.NodeItem('RenderNodeIntInput'),
     ]),
 
     RSNCategory("UTILITY", "Utility", items=[
-        nodeitems_utils.NodeItem("RenderNodeStringOperate"),
         nodeitems_utils.NodeItem("RenderNodeMath"),
+        nodeitems_utils.NodeItem("RenderNodeVectorConvert"),
+        nodeitems_utils.NodeItem("RenderNodeStringOperate"),
     ]),
 
     RSNCategory("OUTPUT", "Scene Output", items=[

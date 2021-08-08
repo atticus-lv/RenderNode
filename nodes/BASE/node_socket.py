@@ -1,5 +1,6 @@
 import bpy
 from bpy.props import *
+from mathutils import Vector
 
 from ._runtime import cache_socket_links, cache_socket_variables
 
@@ -81,8 +82,13 @@ class SocketBase():
 
         if isinstance(val, bpy.types.Object) or isinstance(val, bpy.types.Material) or isinstance(val, bpy.types.World):
             return val.name
-        elif isinstance(val, str) or isinstance(val, int) or isinstance(val, float):
+        elif isinstance(val, str) or isinstance(val, int):
             return f'{val}'
+        elif isinstance(val, float):
+            return f'{round(val, 2)}'
+        elif isinstance(val, tuple) or isinstance(val, Vector):
+            d_val = [round(num, 2) for num in list(val)]
+            return f'{d_val}'
         elif isinstance(val, bool):
             return 'True' if val else 'False'
         else:
@@ -129,12 +135,18 @@ class RenderNodeSocket(bpy.types.NodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocket'
     bl_label = 'RenderNodeSocket'
 
-    text: StringProperty(default='custom text')
+    text: StringProperty(default='display name')
     default_value: IntProperty(default=0, update=update_node)
 
     def draw(self, context, layout, node, text):
         if self.is_linked or self.is_output:
-            layout.label(text=self.text if not self.is_output else self.text + ': ' + self.ui_value)
+            if self.text != '':
+                label = self.text
+            else:
+                label = self.name
+            if self.is_output:
+                label += ': ' + self.ui_value
+            layout.label(text=label)
         else:
             layout.prop(self, 'default_value', text=self.text)
 
@@ -181,11 +193,12 @@ class RenderNodeSocketString(RenderNodeSocket, SocketBase):
     def draw_color(self, context, node):
         return 0.2, 0.7, 1.0, 1
 
+
 class RenderNodeSocketFilePath(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketFilePath'
     bl_label = 'RenderNodeSocketFilePath'
 
-    default_value: StringProperty(default='', update=update_node,subtype='FILE_PATH')
+    default_value: StringProperty(default='', update=update_node, subtype='FILE_PATH')
 
     def draw_color(self, context, node):
         return 0.2, 0.7, 1.0, 1
@@ -201,15 +214,22 @@ class RenderNodeSocketVector(RenderNodeSocket, SocketBase):
     default_value: FloatVectorProperty(name='Vector', default=(0, 0, 0), subtype='NONE',
                                        update=update_node)
 
-    def draw_color(self, context, node):
-        return 0.5, 0.3, 1.0, 1
-
     def draw(self, context, layout, node, text):
         col = layout.column(align=1)
-        if self.is_linked:
-            col.label(text=self.text)
+        if self.is_linked or self.is_output:
+            if self.text != '':
+                label = self.text
+            else:
+                label = self.name
+
+            if self.is_output:
+                label += ': ' + self.ui_value
+            layout.label(text=label)
         else:
             col.prop(self, 'default_value', text=self.text)
+
+    def draw_color(self, context, node):
+        return 0.5, 0.3, 1.0, 1
 
 
 class RenderNodeSocketXYZ(RenderNodeSocketVector, SocketBase):
@@ -259,7 +279,12 @@ class RenderNodeSocketObject(RenderNodeSocket, SocketBase):
 
     def draw(self, context, layout, node, text):
         if self.is_linked or self.is_output:
-            layout.label(text=self.text if not self.is_output else self.text + ': ' + self.ui_value)
+            label = self.name
+            if self.text != '':
+                label = self.text
+            if self.is_output:
+                label += ': ' + self.ui_value
+            layout.label(text=label)
         else:
             row = layout.row(align=1)
             row.prop(self, 'default_value', text=self.text)
@@ -335,7 +360,7 @@ class RenderNodeSocketViewLayer(RenderNodeSocket, SocketBase):
     def draw(self, context, layout, node, text):
 
         row = layout.row(align=1)
-        if self.is_linked:
+        if self.is_linked or self.is_output:
             row.label(text=self.text)
         else:
             row.prop_search(self, "default_value", context.scene, "view_layers", text='')
@@ -434,6 +459,7 @@ classes = (
     RenderNodeSocketFloat,
     RenderNodeSocketString,
     RenderNodeSocketFilePath,
+
     RenderNodeSocketVector,
     RenderNodeSocketXYZ,
     RenderNodeSocketTranslation,

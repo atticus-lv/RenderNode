@@ -22,7 +22,7 @@ class RenderNodeFloatInput(RenderNodeBase):
         layout.prop(self, 'default_value', text='')
 
     def process(self):
-        self.outputs[0].set_value(round(self.default_value,2))
+        self.outputs[0].set_value(self.default_value)
 
 
 def register():
