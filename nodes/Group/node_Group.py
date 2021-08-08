@@ -70,7 +70,7 @@ class RenderNodeGroup(bpy.types.NodeCustomGroup, RenderNodeBase):
         if self.node_tree:
             layout.prop(self.node_tree, 'name', text='Name')
         else:
-            row.operator('rsn.create_group', text='', icon='ADD').node = self.name
+            layout.operator('rsn.create_group', text='Creat Group', icon='ADD').node = self.name
 
     def process_group(self, context, id, path):
 

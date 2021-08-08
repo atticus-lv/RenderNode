@@ -63,11 +63,8 @@ class RSN_OT_UpdateTaskList(bpy.types.Operator):
         tree = bpy.context.space_data.node_tree
         render_list_node = tree.nodes.get(self.render_list_name)
 
-        node_list = render_list_node.get_dependant_nodes()
-        # print(node_list)
-        task_list = [node.name for node in node_list if
-                     node.bl_idname == 'RSNodeTaskNode']
-
+        task_list = render_list_node.get_dependant_tasks()
+        print(task_list)
         remain = {}  # dict for the remain nodes
 
         for i, key in enumerate(render_list_node.task_list.keys()):
@@ -128,6 +125,33 @@ class RSNodeRenderListNode(RenderNodeBase):
 
     def init(self, context):
         self.width = 175
+
+    def get_dependant_tasks(self):
+        node_list = []
+
+        def append_node_to_list(node):
+            """Skip the reroute node"""
+            if len(node_list) == 0 or (len(node_list) != 0 and node.name != node_list[-1]):
+                node_list.append(node.name)
+
+        # @lru_cache(maxsize=None)
+        def get_sub_node(node, pass_mute_node=True):
+            for i, input in enumerate(node.inputs):
+                if input.is_linked:
+                    try:
+                        sub_node = input.links[0].from_node
+                        if sub_node.mute and pass_mute_node:
+                            continue
+                        else:
+                            get_sub_node(sub_node)
+                    except IndexError:  # This error shows when the dragging the link off a node(Works well with knife tool)
+                        pass  # this seems to be a blender error
+            # nodes append from left to right, from top to bottom
+            if node.bl_idname == 'RSNodeTaskNode': append_node_to_list(node)
+
+        get_sub_node(self, True)
+
+        return node_list
 
     def draw_buttons(self, context, layout):
 

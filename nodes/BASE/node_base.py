@@ -3,7 +3,8 @@ import bpy
 from bpy.props import *
 from mathutils import Color, Vector
 
-from ._runtime import cache_node_dependants, cache_socket_links, cache_socket_variables, cache_node_group_outputs, runtime_info, logger
+from ._runtime import cache_node_dependants, cache_socket_links, cache_socket_variables, cache_node_group_outputs, \
+    runtime_info, logger
 import uuid
 
 
@@ -153,7 +154,7 @@ class RenderNodeBase(bpy.types.Node):
                             nodes.add(node)
 
     def update(self):
-        if runtime_info['updating']:
+        if runtime_info['updating'] is True:
             return
 
         # for input in self.inputs:
@@ -180,29 +181,7 @@ class RenderNodeBase(bpy.types.Node):
 
     # update the build-in values with update the hole tree
     def execute_tree(self):
-        task_node = self.id_data.nodes.get(bpy.context.window_manager.rsn_viewer_node)
-        if not task_node: return
-
-        cache_socket_variables.clear()
-        runtime_info['executing'] = True
-
-        id = str(uuid.uuid4())
-        path = []
-
-        try:
-            path.append(bpy.context.space_data.node_tree.name)
-            # Execute all the parent trees first up to their active node
-            for i in range(0, len(bpy.context.space_data.path) - 1):
-                node = bpy.context.space_data.path[i].node_tree.nodes.active
-                node.execute_dependants(bpy.context, id, path)
-                path.append(node.name)
-
-            task_node.execute(bpy.context, id, path)
-        except Exception as e:
-            print(e)
-
-        finally:
-            runtime_info['executing'] = False
+        self.id_data.execute(bpy.context)
 
     def get_input_value(self, socket_name):
         ans = self.inputs.get(socket_name)
