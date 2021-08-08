@@ -60,30 +60,30 @@ node_categories = [
         nodeitems_utils.NodeItem('RenderNodeObjectData'),
     ]),
 
-    RSNCategory("VARIANTS", "Variants", items=[
-        nodeitems_utils.NodeItem("RSNodeVariantsNode"),
-        nodeitems_utils.NodeItem("RSNodeSetVariantsNode"),
-        nodeitems_utils.NodeItem("RSNodeNullNode"),
-
-    ]),
+    # RSNCategory("VARIANTS", "Variants", items=[
+    #     nodeitems_utils.NodeItem("RSNodeVariantsNode"),
+    #     nodeitems_utils.NodeItem("RSNodeSetVariantsNode"),
+    #     nodeitems_utils.NodeItem("RSNodeNullNode"),
+    #
+    # ]),
 
     RSNCategory("RENDER_SETTINGS", "Render Settings(Extra)", items=[
         # nodeitems_utils.NodeItem("RSNodeWorkBenchRenderSettingsNode"),
         # nodeitems_utils.NodeItem("RSNodeEeveeRenderSettingsNode"),
         # nodeitems_utils.NodeItem("RSNodeCyclesRenderSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeCyclesLightPathNode"),
-        nodeitems_utils.NodeItem("RSNodeOctaneRenderSettingsNode"),
-        nodeitems_utils.NodeItem("RSNodeLuxcoreRenderSettingsNode"),
+        # nodeitems_utils.NodeItem("RSNodeOctaneRenderSettingsNode"),
+        # nodeitems_utils.NodeItem("RSNodeLuxcoreRenderSettingsNode"),
     ]),
 
     RSNCategory("EXTRA", "Extra", items=[
         nodeitems_utils.NodeItem("RenderNodeProperty"),
         nodeitems_utils.NodeItem('RSNodeCollectionDisplayNode'),
-        nodeitems_utils.NodeItem("RSNodeCommonSettingsNode"),
-        nodeitems_utils.NodeItem("RSNodeScriptsNode"),
-        nodeitems_utils.NodeItem("RenderNodeEmailNode"),
-        # nodeitems_utils.NodeItem("RSNodeSmtpEmailNode"),
-        nodeitems_utils.NodeItem("RSNodeLightStudioNode"),
+        # nodeitems_utils.NodeItem("RSNodeCommonSettingsNode"),
+        # nodeitems_utils.NodeItem("RSNodeScriptsNode"),
+        # nodeitems_utils.NodeItem("RenderNodeEmailNode"),
+        # # nodeitems_utils.NodeItem("RSNodeSmtpEmailNode"),
+        # nodeitems_utils.NodeItem("RSNodeLightStudioNode"),
         # nodeitems_utils.NodeItem("RSNodeServerNode"),
         # nodeitems_utils.NodeItem("RSNodeClientNode"),
     ]),
@@ -91,10 +91,10 @@ node_categories = [
         nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Merge", settings={
             "node_type": repr("MERGE"),
         }),
-        nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Switch", settings={
-            "node_type": repr("SWITCH"),
-            "label": repr("Switch"),
-        }),
+        # nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Switch", settings={
+        #     "node_type": repr("SWITCH"),
+        #     "label": repr("Switch"),
+        # }),
         # nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Version", settings={
         #     "node_type": repr("VERSION"),
         #     "label"    : repr("Version"),
