@@ -1,20 +1,14 @@
 import bpy
 
 from bpy.props import *
-from mathutils import Color, Vector
 
-from ._runtime import cache_node_dependants, cache_socket_links, cache_node_group_outputs, cache_tree_portals, \
-    runtime_info, logger
-from .node_base import RenderNodeBase as RenderStackNode
+from ._runtime import cache_node_dependants, cache_socket_links, cache_node_group_outputs, cache_tree_portals
+from ._runtime import runtime_info, logger
+
 
 
 # some method comes from rigging_nodes
-class RenderStackNodeTree(bpy.types.NodeTree):
-    """RenderStackNodeTree Node Tree"""
-    bl_idname = 'RenderStackNodeTree'
-    bl_label = 'Render Editor'
-    bl_icon = 'CAMERA_DATA'
-
+class NodeTreeBase(bpy.types.NodeTree):
     def get_other_socket(self, socket):
         '''
         Returns connected socket
@@ -91,14 +85,19 @@ class RenderStackNodeTree(bpy.types.NodeTree):
                 # self.links.remove(link)
 
 
-class RenderStackNodeTreeGroup(RenderStackNodeTree):
+class RenderStackNodeTree(NodeTreeBase):
+    bl_idname = 'RenderStackNodeTree'
+    bl_label = 'Render Editor'
+    bl_icon = 'CAMERA_DATA'
+
+
+class RenderStackNodeTreeGroup(NodeTreeBase):
     bl_idname = 'RenderStackNodeTreeGroup'
     bl_label = "Render Node (groups)"
     bl_icon = 'NODETREE'
 
     @classmethod
     def poll(cls, context):
-        """Exclude this class from searching of node tree windows manager"""
         return False
 
 
