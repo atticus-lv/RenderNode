@@ -6,7 +6,7 @@ from mathutils import Color, Vector
 
 
 def update_node(self, context):
-    self.update_parms()
+    self.execute_tree()
 
 
 class RenderNodeIntInput(RenderNodeBase):
@@ -21,7 +21,7 @@ class RenderNodeIntInput(RenderNodeBase):
     def draw_buttons(self, context, layout):
         layout.prop(self, 'default_value', text='')
 
-    def process(self):
+    def process(self,context,id,path):
         self.outputs[0].set_value(round(self.default_value,2))
 
 

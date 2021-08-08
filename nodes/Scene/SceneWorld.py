@@ -13,7 +13,7 @@ class RenderNodeSceneWorld(RenderNodeBase):
 
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
-    def process(self):
+    def process(self,context,id,path):
         world = self.inputs['world'].get_value()
 
         if world:

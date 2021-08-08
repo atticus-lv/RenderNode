@@ -5,7 +5,7 @@ import bpy
 from bpy.props import *
 
 def update_node(self, context):
-    self.update_parms()
+    self.execute_tree()
 
 
 def source_attr(src_obj, scr_data_path):

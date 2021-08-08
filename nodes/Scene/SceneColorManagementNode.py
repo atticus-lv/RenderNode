@@ -43,7 +43,7 @@ enum_look = [(name, name, '') for name in list_look]
 
 
 def update_node(self, context):
-    self.update_parms()
+    self.execute_tree()
 
 
 class RSNodeColorManagementNode(RenderNodeBase):
@@ -82,7 +82,7 @@ class RSNodeColorManagementNode(RenderNodeBase):
         col.prop(self, 'view_transform')
         col.prop(self, 'look')
 
-    def process(self):
+    def process(self,context,id,path):
         vs = bpy.context.scene.view_settings
 
         self.compare(vs, 'exposure', self.inputs['exposure'].get_value())

@@ -17,7 +17,7 @@ def active_version(self, context):
     dg = context.evaluated_depsgraph_get()
     dg.update()
 
-    self.update_parms()
+    self.execute_tree()
 
 
 class RSNodeSettingsMergeNode(RenderNodeBase):
@@ -47,7 +47,7 @@ class RSNodeSettingsMergeNode(RenderNodeBase):
     def update(self):
         self.auto_update_inputs('RSNodeSocketTaskSettings', "Input")
 
-    def process(self):
+    def process(self,context,id,path):
         pass
 
     def auto_update_inputs(self, socket_type, socket_name):

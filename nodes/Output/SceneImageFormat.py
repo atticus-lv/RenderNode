@@ -5,7 +5,7 @@ from ...nodes.BASE.node_base import RenderNodeBase
 
 
 def update_node(self, context):
-    self.update_parms()
+    self.execute_tree()
 
 
 class RenderNodeSceneImageFormat(RenderNodeBase):
@@ -105,7 +105,7 @@ class RenderNodeSceneImageFormat(RenderNodeBase):
         elif self.file_format == 'TIFF':
             col.prop(self, 'tiff_codec')
 
-    def process(self):
+    def process(self,context,id,path):
         attr_list = ['file_format',
                      'compression',
                      'quality',

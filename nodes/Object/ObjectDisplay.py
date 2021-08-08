@@ -16,7 +16,7 @@ class RenderNodeObjectDisplay(RenderNodeBase):
 
         self.width = 175
 
-    def process(self):
+    def process(self,context,id,path):
         ob = self.inputs['object'].get_value()
         hide_viewport = self.inputs['hide_viewport'].get_value()
         hide_render = self.inputs['hide_render'].get_value()

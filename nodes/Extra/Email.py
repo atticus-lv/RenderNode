@@ -30,7 +30,7 @@ class RenderNodeEmailNode(RenderNodeBase):
         # layout.prop(self, 'test_send', toggle=True)
         pass
 
-    def process(self):
+    def process(self,context,id,path):
         use = self.inputs['only_render'].get_value()
         if not use or (use and bpy.context.window_manager.rsn_running_modal):
             bpy.ops.rsn.send_email(subject=self.inputs['subject'].get_value(),

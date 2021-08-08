@@ -6,7 +6,7 @@ from ...preferences import get_pref
 
 
 def update_node(self, context):
-    self.update_parms()
+    self.execute_tree()
 
 
 class RenderNodeSceneFrameRange(RenderNodeBase):
@@ -24,7 +24,7 @@ class RenderNodeSceneFrameRange(RenderNodeBase):
         self.inputs['frame_end'].default_value = bpy.context.scene.frame_end
         self.inputs['frame_step'].default_value = 1
 
-    def process(self):
+    def process(self,context,id,path):
         # correct input
         start = self.inputs['frame_start'].get_value()
         end = self.inputs['frame_end'].get_value()

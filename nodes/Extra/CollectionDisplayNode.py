@@ -13,7 +13,7 @@ class RSNodeCollectionDisplayNode(RenderNodeBase):
         self.create_input('RenderNodeSocketBool', 'hide_viewport', 'Hide Viewport')
         self.create_input('RenderNodeSocketBool', 'hide_render', 'Hide Render')
 
-    def process(self):
+    def process(self,context,id,path):
         coll = self.inputs['collection'].get_value()
         if coll:
             coll.hide_viewport = self.inputs['hide_viewport'].get_value()

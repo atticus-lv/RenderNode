@@ -10,7 +10,7 @@ import re
 
 
 def update_node(self, context):
-    self.update_parms()
+    self.execute_tree()
 
 
 class RenderNodeSceneFilePath(RenderNodeBase):
@@ -33,19 +33,18 @@ class RenderNodeSceneFilePath(RenderNodeBase):
             layout.scale_y = 1.25
             layout.label(text='Save your file first', icon='ERROR')
 
-    def process(self):
+    def process(self, context, id, path):
         directory_path = self.make_path()
         if not directory_path: return None
-
         path_exp = self.inputs['path_expression'].get_value()
         v = self.inputs['version'].get_value()
+        if path_exp and v:
+            postfix = self.get_postfix(path_exp, v)
+            path_to_task = os.path.join(directory_path, postfix)
+            task_node = context.space_data.node_tree.nodes.get(context.window_manager.rsn_viewer_node)
+            if task_node:
+                task_node.path = path_to_task
 
-        postfix = self.get_postfix(path_exp, v)
-        path = os.path.join(directory_path, postfix)
-
-        task_node = self.id_data.nodes.get(bpy.context.window_manager.rsn_viewer_node)
-        if task_node:
-            task_node.path = path
 
     def make_path(self):
         """only save files will work"""

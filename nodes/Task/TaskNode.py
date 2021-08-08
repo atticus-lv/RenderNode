@@ -7,12 +7,19 @@ from ...nodes.BASE._runtime import runtime_info
 
 def update_node(self, context):
     if len(self.var_collect_list) != 0:
-        self.update_parms()
+        self.execute_tree()
 
 
 def set_active_task(self, context):
-    if self.is_active_task and not runtime_info['updating']:
-        self.execute()
+    if self.is_active_task:
+        for node in self.id_data.nodes:
+            if node.bl_idname == self.bl_idname and node != self:
+                node.is_active_task = False
+
+        # set active task
+        bpy.context.window_manager.rsn_viewer_node = self.name
+
+        self.execute_tree()
 
 
 def correct_task_frame(self, context):
@@ -62,20 +69,13 @@ class RSNodeTaskNode(RenderNodeBase):
         self.auto_update_inputs('RSNodeSocketTaskSettings', "Settings")
         set_active_task(self, bpy.context)
 
-    def process(self):
+    def process(self, context, id, path):
         # set necessary props
         bpy.context.scene.frame_start = self.frame_start
         bpy.context.scene.frame_end = self.frame_end
         bpy.context.scene.frame_step = self.frame_step
 
         self.compare(bpy.context.scene.render, 'filepath', self.path)
-
-        for node in self.id_data.nodes:
-            if node.bl_idname == self.bl_idname and node != self:
-                node.is_active_task = False
-
-        # set active task
-        bpy.context.window_manager.rsn_viewer_node = self.name
 
 
 class RSN_OT_AddViewerNode(bpy.types.Operator):
@@ -100,8 +100,8 @@ class RSN_OT_AddViewerNode(bpy.types.Operator):
 def register():
     bpy.utils.register_class(RSNodeTaskNode)
     bpy.utils.register_class(RSN_OT_AddViewerNode)
-
     bpy.types.WindowManager.rsn_viewer_node = StringProperty(name='Viewer task name')
+
 
 
 def unregister():

@@ -6,7 +6,7 @@ from ...preferences import get_pref
 
 
 def update_node(self, context):
-    self.update_parms()
+    self.execute_tree()
 
 
 class RSNodeViewLayerPassesNode(RenderNodeBase):

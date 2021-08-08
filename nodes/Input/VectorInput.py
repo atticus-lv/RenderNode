@@ -6,7 +6,7 @@ from mathutils import Color, Vector
 
 
 def update_node(self, context):
-    self.update_parms()
+    self.execute_tree()
 
 
 class RenderNodeVectorInput(RenderNodeBase):
@@ -22,8 +22,8 @@ class RenderNodeVectorInput(RenderNodeBase):
         col = layout.column(align=1)
         col.prop(self, 'default_value', text='')
 
-    def process(self):
-        self.outputs[0].set_value(Vector(self.default_value))
+    def process(self,context,id,path):
+        self.outputs[0].set_value(Vector((self.default_value[0],self.default_value[1],self.default_value[2])))
 
 
 def register():

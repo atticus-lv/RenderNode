@@ -13,8 +13,7 @@ class RenderNodeSceneViewLayer(RenderNodeBase):
         self.create_input('RenderNodeSocketBool', 'use', 'Use for Rendering')
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
-    def process(self):
-        self.store_data()
+    def process(self,context,id,path):
         view_layer_name = self.inputs['view_layer'].get_value()
         view_layer = bpy.context.scene.view_layers.get(view_layer_name)
 

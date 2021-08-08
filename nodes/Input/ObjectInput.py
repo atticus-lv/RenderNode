@@ -4,7 +4,7 @@ from ...nodes.BASE.node_base import RenderNodeBase
 
 
 def update_node(self, context):
-    self.update_parms()
+    self.execute_tree()
 
 
 class RenderNodeObjectInput(RenderNodeBase):
@@ -22,7 +22,7 @@ class RenderNodeObjectInput(RenderNodeBase):
         if self.default_value:
             row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.default_value.name
 
-    def process(self):
+    def process(self,context,id,path):
         self.outputs[0].set_value(self.default_value)
 
 

@@ -25,7 +25,7 @@ def update_node(self, context):
         elif self.d_type == Vector:
             self.create_input('RenderNodeSocketVector', 'value', "Value")
 
-        self.update_parms()
+        self.execute_tree()
 
     except Exception as e:
         print(e)
@@ -51,8 +51,7 @@ class RenderNodeProperty(RenderNodeBase):
         if self.d_type not in {int, float, str, bool, Color, Vector, None}:
             layout.label(text='Only support int, float, str, bool, Color, Vector')
 
-    def process(self):
-        self.store_data()
+    def process(self,context,id,path):
         if 'value' not in self.node_dict: return None
 
         try:

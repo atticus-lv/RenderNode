@@ -8,7 +8,7 @@ from mathutils import Color, Vector
 
 
 def update_node(self, context):
-    self.update_parms()
+    self.execute_tree()
 
 
 class RSNodeObjectModifierNode(RenderNodeBase):

@@ -8,7 +8,7 @@ def poll_camera(self, object):
 
 
 def update_node(self, context):
-    self.update_parms()
+    self.execute_tree()
 
 
 class RSNodeCamInputNode(RenderNodeBase):

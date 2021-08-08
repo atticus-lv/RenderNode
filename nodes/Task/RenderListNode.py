@@ -64,7 +64,7 @@ class RSN_OT_UpdateTaskList(bpy.types.Operator):
         render_list_node = tree.nodes.get(self.render_list_name)
 
         node_list = render_list_node.get_dependant_nodes()
-
+        # print(node_list)
         task_list = [node.name for node in node_list if
                      node.bl_idname == 'RSNodeTaskNode']
 
@@ -134,6 +134,8 @@ class RSNodeRenderListNode(RenderNodeBase):
         # left
         split = layout.split(factor=0.5 if self.show_processor_bar else 1)
         col = split.column()
+
+        # col.operator('rsn.update_task_list').render_list_name = self.name
 
         col.template_list(
             "RSN_UL_RenderTaskList", "Task List",
@@ -259,8 +261,8 @@ def register():
 
     bpy.utils.register_class(ProcessorBarProperty)
     bpy.utils.register_class(TaskProperty)
-    bpy.utils.register_class(RSN_UL_RenderTaskList)
     bpy.utils.register_class(RSN_OT_UpdateTaskList)
+    bpy.utils.register_class(RSN_UL_RenderTaskList)
     bpy.utils.register_class(RSNodeRenderListNode)
 
 
