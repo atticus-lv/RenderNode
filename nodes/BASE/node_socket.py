@@ -115,7 +115,6 @@ class SocketBase():
 
 def update_node(self, context):
     try:
-        self.node.node_dict[self.name] = self.default_value
         self.node.execute_tree()
     except Exception as e:
         print(e)

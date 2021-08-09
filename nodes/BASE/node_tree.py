@@ -3,9 +3,8 @@ import uuid
 
 from bpy.props import *
 
-from ._runtime import cache_node_dependants, cache_socket_links, cache_node_group_outputs, cache_tree_portals, \
-    cache_socket_variables
-from ._runtime import runtime_info, logger
+from ._runtime import cache_node_dependants, cache_socket_links, cache_node_group_outputs, cache_socket_variables
+from ._runtime import runtime_info, logger, cache_executed_nodes
 
 
 # some method comes from rigging_nodes
@@ -43,19 +42,14 @@ class NodeTreeBase(bpy.types.NodeTree):
     def update(self):
         '''Called when the nodetree sockets or links change, socket pair cache is cleared here'''
         if not runtime_info['executing']:
-            # print(f'UPDATING {self}')
             if self in cache_socket_links:
                 del cache_socket_links[self]
-                # print(f'{self.name} - cleared connections')
             if self in cache_node_group_outputs:
                 del cache_node_group_outputs[self]
-            #     # print(f'{self.name} - cleared group outputs')
-            if self in cache_tree_portals:
-                del cache_tree_portals[self]
-            #     # print(f'{self.name} - cleared portals')
+            # if self in cache_tree_portals:
+            #     del cache_tree_portals[self]
             if self in cache_node_dependants:
                 del cache_node_dependants[self]
-                # print(f'{self.name} - cleared dependants')
         else:
             print('TRIED TO UPDATE TREE, BUT ITS EXECUTING')
         # change the socket of the reroute nodes

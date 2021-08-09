@@ -4,7 +4,7 @@ from bpy.props import *
 from mathutils import Color, Vector
 
 from ._runtime import cache_node_dependants, cache_socket_links, cache_socket_variables, cache_node_group_outputs, \
-    runtime_info, logger
+    runtime_info, logger, MeasureTime, cache_executed_nodes
 import uuid
 
 
@@ -109,16 +109,20 @@ class RenderNodeBase(bpy.types.Node):
             self.execute_other(context, id, path, x)
 
     def execute(self, context, id, path):
-        if self.last_ex_id == id:
-            return
+        if self.last_ex_id == id: return
 
         self.last_ex_id = id
 
-        self.execute_dependants(context, id, path)
-        self.process_group(context, id, path)
-        self.process(context, id, path)
+        with MeasureTime(self, 'Dependants'):
+            self.execute_dependants(context, id, path)
+        with MeasureTime(self, 'Group'):
+            self.process_group(context, id, path)
+            if self not in cache_executed_nodes: cache_executed_nodes.append(self)
+        with MeasureTime(self, 'Execution'):
+            self.process(context, id, path)
+            if self not in cache_executed_nodes: cache_executed_nodes.append(self)
 
-        print(f'Execute: <{self.name}>')
+        logger.debug(f'Execute: <{self.name}>')
 
     def path_to_node(self, path):
         node_tree = bpy.data.node_groups.get(path[0])
@@ -181,6 +185,7 @@ class RenderNodeBase(bpy.types.Node):
 
     # update the build-in values with update the hole tree
     def execute_tree(self):
+        cache_executed_nodes.clear()
         self.id_data.execute(bpy.context)
 
     def get_input_value(self, socket_name):
