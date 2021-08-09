@@ -24,7 +24,7 @@ class RenderNodeSceneFrameRange(RenderNodeBase):
         self.inputs['frame_end'].default_value = bpy.context.scene.frame_end
         self.inputs['frame_step'].default_value = 1
 
-    def process(self,context,id,path):
+    def process(self, context, id, path):
         # correct input
         start = self.inputs['frame_start'].get_value()
         end = self.inputs['frame_end'].get_value()
@@ -37,7 +37,7 @@ class RenderNodeSceneFrameRange(RenderNodeBase):
         frame_end = self.inputs['frame_end'].get_value()
         frame_step = self.inputs['frame_step'].get_value()
 
-        task_node = bpy.context.space_data.node_tree.nodes.get(bpy.context.window_manager.rsn_viewer_node)
+        task_node = context.space_data.node_tree.nodes.get(context.window_manager.rsn_viewer_node)
         if task_node:
             task_node.frame_start = frame_start
             task_node.frame_end = frame_end

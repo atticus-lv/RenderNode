@@ -74,7 +74,7 @@ class RenderNodeObjectData(RenderNodeBase):
         ob = self.inputs['object'].get_value()
         if ob:
             obj, attr = source_attr(ob.data, self.data_path)
-            self.compare(obj, attr, self.node_dict['value'])
+            self.compare(obj, attr, self.inputs['value'].get_value())
 
 
 def register():
