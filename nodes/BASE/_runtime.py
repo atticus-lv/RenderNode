@@ -52,18 +52,12 @@ class MeasureTime():
 
     def __exit__(self, type, value, traceback):
         end_time = time.perf_counter_ns()
-        # get time nanosecond
+        # get time second
         total_time = (float((end_time - self.start_time))) / 1000000000
 
         node_dict = cache_node_times.setdefault(self.node.id_data, {}).setdefault(self.node, {})
 
         if self.name in {'Execution'}:
-            if self.name in cache_nodetree_times:
-                cache_nodetree_times[self.name] += total_time
-            else:
-                cache_nodetree_times[self.name] = total_time
+            cache_nodetree_times[self.name] = total_time
 
-        if self.name in node_dict:
-            node_dict[self.name] += total_time
-        else:
-            node_dict[self.name] = total_time
+        node_dict[self.name] = total_time

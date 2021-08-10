@@ -78,7 +78,7 @@ class SocketBase():
     def ui_value(self):
         '''use for output ui display'''
         val = self.get_value()
-        if not val: return 'None'
+        if val is None: return 'None'
 
         if isinstance(val, bpy.types.Object) or isinstance(val, bpy.types.Material) or isinstance(val, bpy.types.World):
             return val.name

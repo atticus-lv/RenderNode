@@ -276,8 +276,7 @@ def draw_rounded_node_border(shader, node, radius=8, colour=(1.0, 1.0, 1.0, 0.7)
 
 # TODO make draw outline when executing
 def draw_callback_nodeoutline(self, context):
-    if context.window_manager.rsn_viewer_node == '':
-        pass
+
 
     bgl.glLineWidth(1)
     bgl.glEnable(bgl.GL_BLEND)
@@ -289,82 +288,77 @@ def draw_callback_nodeoutline(self, context):
     # draw outline
     ########################
     # set color
-    white = (1, 1, 1, 1)
-    orange = (0, 1, 0, 1)
-    red = (1, 0, 0, 1)
-
-    task_outer = (self.task_color[0], self.task_color[1], self.task_color[2], self.alpha)
-    col_outer = (self.settings_color[0], self.settings_color[1], self.settings_color[2], self.alpha)
-    col_inner = (0.0, 0.0, 0.0, self.alpha + 0.1)
+    green = (0, 1, 0, self.alpha * 2)
+    white = (1, 1, 1, self.alpha * 2)
+    red = (1, 0, 0, self.alpha * 2)
 
     task_node = context.space_data.edit_tree.nodes.get(context.window_manager.rsn_viewer_node)
     if not task_node: return
 
     node_list = [node for node in context.space_data.edit_tree.nodes if node in cache_executed_nodes]
-    for node in node_list:
-        if node == task_node:
-            draw_rounded_node_border(shader, task_node, radius=self.radius * 1.25, colour=task_outer)
-            draw_rounded_node_border(shader, task_node, radius=self.radius * 1.25 - 1.25, colour=col_inner)
-        else:
-            draw_rounded_node_border(shader, node, radius=self.radius, colour=col_outer)
-            draw_rounded_node_border(shader, node, radius=self.radius - 1, colour=col_inner)
-        # draw time
-        if node.id_data in cache_node_times:
-            if node in cache_node_times[node.id_data]:
-                times = cache_node_times[node.id_data][node]
-                t = times['Execution'] if node.bl_idname != 'RenderNodeGroup' else times['Group']
-                if t < 0.01:
-                    col = white
-                elif t < 0.1:
-                    col = orange
-                else:
-                    col = red
-                draw_text_on_node(col, f"{t:.2f} ns", node, size=15, corner_index=0)
+    try:
+        for node in node_list:
+            # TODO Seems draw outline will repeat many times on some nodes
 
+            # draw time
+            if node.id_data in cache_node_times:
+                if node in cache_node_times[node.id_data]:
+                    times = cache_node_times[node.id_data][node]
+                    t = times['Execution'] if node.bl_idname != 'RenderNodeGroup' else times['Group']
+                    t = t * 1000
+                    if t < 0.1:
+                        col = white
+                    elif t < 1:
+                        col = green
+                    else:
+                        col = red
+                    draw_text_on_node(col, f"{t:.2f}ms", node, size=17, corner_index=0)
+    except:
+        pass
 
     # draw text
     ##################
-    # if self.show_text_info:
-    #     # properties text
-    #     task_text = "No Active Task!" if context.window_manager.rsn_viewer_node == '' else context.window_manager.rsn_viewer_node
-    #     camera = context.scene.camera.name if context.scene.camera else "No Scene camera"
-    #     is_save = True if bpy.data.filepath != '' else False
-    #     file_path_text = context.scene.render.filepath if is_save else "Save your file first!"
-    #
-    #     texts = [
-    #         f"Task: {task_text}",
-    #         f"Camera: {camera}",
-    #         f"Engine: {context.scene.render.engine}",
-    #         f"Frame: {context.scene.frame_start} - {context.scene.frame_end}",
-    #         f"FilePath: {file_path_text}",
-    #     ]
-    #
-    #     # text background
-    #     r, g, b = self.background_color
-    #     longest_text = max(texts, key=len, default='')
-    #     size = blf.dimensions(0, longest_text)  # get the longest text
-    #     size = [v * 1.5 / context.preferences.view.ui_scale for v in size]  # scale with the ui scale
-    #
-    #     # set corner
-    #     top = 125
-    #     bottom = 25
-    #     step = 25
-    #
-    #     vertices = [(10 + size[0], top + size[1]), (20, top + size[1]), (20, 25), (10 + size[0], bottom), ]
-    #
-    #     draw_round_rectangle(shader, vertices, radius=18, colour=(0, 0, 0, self.alpha))  # shadow
-    #     draw_round_rectangle(shader, vertices, radius=14, colour=(r, g, b, self.alpha))  # main box
-    #
-    #     # draw texts
-    #     r, g, b = self.text_color
-    #     size = 20
-    #
-    #     for i, text in enumerate(texts):
-    #         draw_text_2d((r, g, b, self.alpha, size), text, 20, top - step * i)
+    if self.show_text_info:
+        # properties text
+        task_text = "No Active Task!" if context.window_manager.rsn_viewer_node == '' else context.window_manager.rsn_viewer_node
+        camera = context.scene.camera.name if context.scene.camera else "No Scene camera"
+        is_save = True if bpy.data.filepath != '' else False
+        file_path_text = context.scene.render.filepath if is_save else "Save your file first!"
+
+        texts = [
+            f"Task: {task_text}",
+            f"Camera: {camera}",
+            f"Engine: {context.scene.render.engine}",
+            f"Frame: {context.scene.frame_start} - {context.scene.frame_end}",
+            f"FilePath: {file_path_text}",
+        ]
+
+        # text background
+        r, g, b = self.background_color
+        longest_text = max(texts, key=len, default='')
+        size = blf.dimensions(0, longest_text)  # get the longest text
+        size = [v * 1.5 / context.preferences.view.ui_scale for v in size]  # scale with the ui scale
+
+        # set corner
+        top = 125
+        bottom = 25
+        step = 25
+
+        vertices = [(10 + size[0], top + size[1]), (20, top + size[1]), (20, 25), (10 + size[0], bottom), ]
+
+        # draw_round_rectangle(shader, vertices, radius=14, colour=(r, g, b, self.alpha))  # main box
+
+        # draw texts
+        r, g, b = self.text_color
+        size = 20
+
+        for i, text in enumerate(texts):
+            draw_text_2d((r, g, b, self.alpha * 1.5, size), text, 20, top - step * i)
     # restore
     #####################
     bgl.glDisable(bgl.GL_BLEND)
     bgl.glDisable(bgl.GL_LINE_SMOOTH)
+
 
 class RSN_OT_DrawNodes(Operator):
     """Draw the active task's settings """
@@ -378,7 +372,8 @@ class RSN_OT_DrawNodes(Operator):
         if event.type == 'TIMER':
             # show draw
             if context.scene.RSNBusyDrawing:
-                if self.alpha < 0.5: self.alpha += 0.02  # show
+                if self.alpha < 0.5:
+                    self.alpha += 0.02  # show
 
             # close draw
             else:
@@ -395,19 +390,15 @@ class RSN_OT_DrawNodes(Operator):
     def invoke(self, context, event):
         if True in {context.area.type != 'NODE_EDITOR',
                     context.space_data.edit_tree is None,
-                    context.space_data.edit_tree.bl_idname != 'RenderStackNodeTree'}:
+                    context.space_data.edit_tree.bl_idname not in {'RenderStackNodeTree','RenderStackNodeTreeGroup'}}:
             self.report({'WARNING'}, "NodeEditor not found, cannot run operator")
             return {'CANCELLED'}
 
         # init draw values
         #####################
         pref = get_pref()
-        self.alpha = 0
+        self.alpha = 0.5
         self.radius = pref.draw_nodes.border_radius
-        # node color
-        self.settings_color = pref.draw_nodes.settings_color
-        self.task_color = pref.draw_nodes.task_color
-        self.file_path_color = pref.draw_nodes.file_path_color
 
         self.show_text_info = pref.draw_nodes.show_text_info
         # background color
