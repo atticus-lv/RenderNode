@@ -290,13 +290,13 @@ class RSN_OLD_TaskUpdater():
         if 'view_layer_passes' in self.task_data:
             for node_name, dict in self.task_data['view_layer_passes'].items():
                 try:
-                    bpy.ops.rsn.creat_compositor_node(
+                    bpy.ops.rsn.create_compositor_node(
                         view_layer=self.task_data['view_layer_passes'][node_name]['view_layer'],
                         use_passes=self.task_data['view_layer_passes'][node_name]['use_passes'])
                 except Exception as e:
                     logger.warning(f'View Layer Passes {node_name} error', exc_info=e)
         else:
-            bpy.ops.rsn.creat_compositor_node(use_passes=0, view_layer=bpy.context.window.view_layer.name)
+            bpy.ops.rsn.create_compositor_node(use_passes=0, view_layer=bpy.context.window.view_layer.name)
 
     def update_property(self):
         if 'property' in self.task_data:
