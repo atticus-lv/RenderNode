@@ -34,6 +34,7 @@ node_categories = [
     ]),
 
     RSNCategory("OUTPUT", "Scene Output", items=[
+        nodeitems_utils.NodeItem("RenderNodeSceneViewLayer"),
         nodeitems_utils.NodeItem("RenderNodeSceneFilePath"),
         nodeitems_utils.NodeItem("RenderNodeSceneFrameRange"),
         nodeitems_utils.NodeItem("RenderNodeSceneImageFormat"),
@@ -42,14 +43,13 @@ node_categories = [
         # nodeitems_utils.NodeItem("RSNodeResolutionInputNode"),
         # nodeitems_utils.NodeItem("RSNodeActiveRenderSlotNode"),
         nodeitems_utils.NodeItem("RenderNodeSceneRenderSlot"),
-        nodeitems_utils.NodeItem("RSNodeViewLayerPassesNode"),
+        # nodeitems_utils.NodeItem("RSNodeViewLayerPassesNode"),
     ]),
 
     RSNCategory("SCENE", "Scene", items=[
         nodeitems_utils.NodeItem("RenderNodeSceneCamera"),
         nodeitems_utils.NodeItem("RenderNodeSceneWorld"),
         nodeitems_utils.NodeItem("RenderNodeSceneRenderEngine"),
-        nodeitems_utils.NodeItem("RenderNodeSceneViewLayer"),
         nodeitems_utils.NodeItem("RenderNodeSceneColorManagement"),
     ]),
 

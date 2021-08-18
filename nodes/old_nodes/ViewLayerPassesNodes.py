@@ -1,8 +1,8 @@
 import bpy
 from bpy.props import *
 
-from ...nodes.BASE.node_base import RenderNodeBase
-from ...preferences import get_pref
+from nodes.BASE.node_base import RenderNodeBase
+from preferences import get_pref
 
 
 def update_node(self, context):
