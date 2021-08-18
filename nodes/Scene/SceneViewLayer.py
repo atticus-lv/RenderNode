@@ -10,7 +10,8 @@ class RenderNodeSceneViewLayer(RenderNodeBase):
 
     def init(self, context):
         self.create_input('RenderNodeSocketViewLayer', "view_layer", 'ViewLayer')
-        self.create_input('RenderNodeSocketBool', 'use', 'Use for Rendering')
+        self.create_input('RenderNodeSocketBool', 'use_for_render', 'Use for Rendering')
+        self.create_input('RenderNodeSocketBool','output_composite_passes','Output Composite Passes')
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
     def process(self,context,id,path):
@@ -19,7 +20,7 @@ class RenderNodeSceneViewLayer(RenderNodeBase):
 
         if view_layer != '':
             self.compare(bpy.context.window, 'view_layer', view_layer)
-            self.compare(view_layer, 'use', self.inputs['use'].get_value())
+            self.compare(view_layer, 'use', self.inputs['use_for_render'].get_value())
 
 
 # [

@@ -3,10 +3,11 @@ from bpy.props import BoolProperty, StringProperty
 import os
 
 from ..preferences import get_pref
+from ..nodes.BASE._runtime import runtime_info
 
 
 class RSN_OT_CreatCompositorNode(bpy.types.Operator):
-    bl_idname = "rsn.creat_compositor_node"
+    bl_idname = "rsn.create_compositor_node"
     bl_label = "Separate Passes"
 
     use_passes: BoolProperty(default=False)
@@ -18,6 +19,8 @@ class RSN_OT_CreatCompositorNode(bpy.types.Operator):
         for node in bpy.context.scene.node_tree.nodes:
             if node.name == f'RSN {bpy.context.window.view_layer.name} Render Layers':
                 context_layer = node
+                break
+
         if not context_layer:
             context_layer = nt.nodes.new(type="CompositorNodeRLayers")
             context_layer.name = f'RSN {bpy.context.window.view_layer.name} Render Layers'
@@ -38,6 +41,8 @@ class RSN_OT_CreatCompositorNode(bpy.types.Operator):
             nt.links.new(context_layer.outputs[0], com.inputs[0])
 
     def execute(self, context):
+        runtime_info['updating'] = True
+
         scn = context.scene
         scn.use_nodes = True
 
@@ -77,6 +82,8 @@ class RSN_OT_CreatCompositorNode(bpy.types.Operator):
                 if output_name not in file_output_node.file_slots:
                     file_output_node.file_slots.new(name=output_name)
                 nt.links.new(render_layer_node.outputs[name], file_output_node.inputs[output_name])
+
+        runtime_info['updating'] = False
 
         return {"FINISHED"}
 
