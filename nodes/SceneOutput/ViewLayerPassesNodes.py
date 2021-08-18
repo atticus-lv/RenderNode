@@ -17,21 +17,19 @@ class RSNodeViewLayerPassesNode(RenderNodeBase):
     view_layer: StringProperty(name="View Layer", default="", update=update_node)
 
     def init(self, context):
-        self.outputs.new('RSNodeSocketOutputSettings', "Output Settings")
+        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
     def draw_buttons(self, context, layout):
         layout.prop_search(self, "view_layer", context.scene, "view_layers", icon="RENDERLAYERS", text='')
         layout.prop(self, 'use_passes', toggle=1)
 
-        pref = get_pref()
-        if not pref.node_task.update_view_layer_passes:
-            layout.label(text='Update is disable in viewer node', icon='ERROR')
-
-    def get_data(self):
-        task_data_obj = {}
-        task_data_obj[self.name] = {'view_layer': self.view_layer,
-                                    'use_passes': self.use_passes}
-        return task_data_obj
+    def process(self, context, id, path):
+        try:
+            bpy.ops.rsn.create_compositor_node(
+                view_layer=self.view_layer,
+                use_passes=self.use_passes)
+        except Exception as e:
+            print(f'View Layer Passes {self.name} error:{e}')
 
 
 def register():

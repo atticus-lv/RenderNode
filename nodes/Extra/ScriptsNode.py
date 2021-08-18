@@ -25,17 +25,11 @@ class RSNodeScriptsNode(RenderNodeBase):
         default='SINGLE'
     )
 
-    warning: BoolProperty(name='Is warning', default=False)
-    warning_msg: StringProperty(name='warning message', default='')
-
     def init(self, context):
-        self.warning = False
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
         self.width = 200
 
     def draw_buttons(self, context, layout):
-        super().draw_buttons(context, layout)
-
         layout.prop(self, "type", expand=1)
         if self.type == 'SINGLE':
             layout.prop(self, "code", text="")
@@ -46,11 +40,12 @@ class RSNodeScriptsNode(RenderNodeBase):
         if not pref.node_task.update_scripts:
             layout.label(text='Update is disable in viewer node', icon='ERROR')
 
-    def get_data(self):
-        task_data_obj = {}
-        task_data_obj[self.name] = self.code if self.type == 'SINGLE' else self.file.name
-
-        return task_data_obj
+    def process(self, context, id, path):
+        value = self.code if self.type == 'SINGLE' else self.file.name
+        try:
+            exec(value)
+        except Exception as e:
+            print(e)
 
 
 def register():
