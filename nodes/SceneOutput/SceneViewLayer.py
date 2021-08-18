@@ -1,6 +1,6 @@
 import bpy
 from bpy.props import *
-from nodes.BASE.node_base import RenderNodeBase
+from ...nodes.BASE.node_base import RenderNodeBase
 
 
 class RenderNodeSceneViewLayer(RenderNodeBase):
