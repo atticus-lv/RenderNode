@@ -78,7 +78,7 @@ class SocketBase():
     def ui_value(self):
         '''use for output ui display'''
         val = self.get_value()
-        if not val: return 'None'
+        if val is None: return 'None'
 
         if isinstance(val, bpy.types.Object) or isinstance(val, bpy.types.Material) or isinstance(val, bpy.types.World):
             return val.name
@@ -115,8 +115,7 @@ class SocketBase():
 
 def update_node(self, context):
     try:
-        self.node.node_dict[self.name] = self.default_value
-        self.node.update_parms()
+        self.node.execute_tree()
     except Exception as e:
         print(e)
 
@@ -135,20 +134,23 @@ class RenderNodeSocket(bpy.types.NodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocket'
     bl_label = 'RenderNodeSocket'
 
-    text: StringProperty(default='display name')
+    text: StringProperty(default='')
     default_value: IntProperty(default=0, update=update_node)
+
+    @property
+    def display_name(self):
+        label = self.name
+        if self.text != '':
+            label = self.text
+        if self.is_output:
+            label += ': ' + self.ui_value
+        return label
 
     def draw(self, context, layout, node, text):
         if self.is_linked or self.is_output:
-            if self.text != '':
-                label = self.text
-            else:
-                label = self.name
-            if self.is_output:
-                label += ': ' + self.ui_value
-            layout.label(text=label)
+            layout.label(text=self.display_name)
         else:
-            layout.prop(self, 'default_value', text=self.text)
+            layout.prop(self, 'default_value', text=self.display_name)
 
     def draw_color(self, context, node):
         return 0.5, 0.5, 0.5, 1
@@ -217,16 +219,9 @@ class RenderNodeSocketVector(RenderNodeSocket, SocketBase):
     def draw(self, context, layout, node, text):
         col = layout.column(align=1)
         if self.is_linked or self.is_output:
-            if self.text != '':
-                label = self.text
-            else:
-                label = self.name
-
-            if self.is_output:
-                label += ': ' + self.ui_value
-            layout.label(text=label)
+            layout.label(text=self.display_name)
         else:
-            col.prop(self, 'default_value', text=self.text)
+            col.prop(self, 'default_value', text=self.display_name)
 
     def draw_color(self, context, node):
         return 0.5, 0.3, 1.0, 1
@@ -279,15 +274,10 @@ class RenderNodeSocketObject(RenderNodeSocket, SocketBase):
 
     def draw(self, context, layout, node, text):
         if self.is_linked or self.is_output:
-            label = self.name
-            if self.text != '':
-                label = self.text
-            if self.is_output:
-                label += ': ' + self.ui_value
-            layout.label(text=label)
+            layout.label(text=self.display_name)
         else:
             row = layout.row(align=1)
-            row.prop(self, 'default_value', text=self.text)
+            row.prop(self, 'default_value', text=self.display_name)
             if self.default_value:
                 row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.default_value.name
 
@@ -307,10 +297,10 @@ class RenderNodeSocketCamera(RenderNodeSocket, SocketBase):
 
     def draw(self, context, layout, node, text):
         row = layout.row(align=1)
-        if self.is_linked:
-            row.label(text=self.text)
+        if self.is_linked or self.is_output:
+            layout.label(text=self.display_name)
         else:
-            row.prop(self, 'default_value', text='')
+            row.prop(self, 'default_value', text=self.display_name)
             if self.default_value:
                 row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.default_value.name
 
@@ -361,7 +351,7 @@ class RenderNodeSocketViewLayer(RenderNodeSocket, SocketBase):
 
         row = layout.row(align=1)
         if self.is_linked or self.is_output:
-            row.label(text=self.text)
+            row.label(text=self.display_name)
         else:
             row.prop_search(self, "default_value", context.scene, "view_layers", text='')
 

@@ -26,7 +26,7 @@ def update_node(self, context):
         self.create_output('RenderNodeSocketFloat', 'y', 'Y')
         self.create_output('RenderNodeSocketFloat', 'z', 'Z')
 
-    self.update_parms()
+    self.execute_tree()
 
 
 class RenderNodeVectorConvert(RenderNodeBase):
@@ -51,13 +51,13 @@ class RenderNodeVectorConvert(RenderNodeBase):
     def draw_buttons(self, context, layout):
         layout.prop(self, 'operate_type')
 
-    def process(self):
+    def process(self,context,id,path):
         if self.operate_type == 'COMBINE':
-            res = (
+            res = Vector((
                 self.inputs[0].get_value(),
                 self.inputs[1].get_value(),
                 self.inputs[2].get_value(),
-            )
+            ))
             self.outputs[0].set_value(res)
         else:
             input_value = list(self.inputs[0].get_value())

@@ -13,7 +13,7 @@ def update_node(self, context):
         self.remove_input('value2')
         self.create_input('RenderNodeSocketInt', 'count', 'Count')
 
-    self.update_parms()
+    self.execute_tree()
 
 
 class RenderNodeStringOperate(RenderNodeBase):
@@ -38,7 +38,7 @@ class RenderNodeStringOperate(RenderNodeBase):
     def draw_buttons(self, context, layout):
         layout.prop(self, 'operate_type')
 
-    def process(self):
+    def process(self,context,id,path):
         s1 = self.inputs['value1'].get_value()
 
         if self.operate_type == 'ADD':

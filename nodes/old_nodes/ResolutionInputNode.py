@@ -12,7 +12,7 @@ from ... import __folder_name__
 
 
 def update_node(self, context):
-    self.update_parms()
+    self.execute_tree()
 
 
 class RSNodeResolutionInputNode(RenderNodeBase):

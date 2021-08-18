@@ -11,11 +11,11 @@ def update_slot_index(self, context):
     if self.object:
         if self.slot_index > len(self.object.material_slots) - 1:
             self.slot_index = len(self.object.material_slots) - 1
-    self.update_parms()
+    self.execute_tree()
 
 
 def update_node(self, context):
-    self.update_parms()
+    self.execute_tree()
 
 
 class RenderNodeObjectMaterial(RenderNodeBase):
@@ -30,7 +30,7 @@ class RenderNodeObjectMaterial(RenderNodeBase):
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
 
-    def process(self):
+    def process(self,context,id,path):
         ob = self.inputs['object'].get_value()
         index = self.inputs['slot_index'].get_value()
         mat = self.inputs['material'].get_value()

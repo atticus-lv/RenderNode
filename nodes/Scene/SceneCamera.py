@@ -12,7 +12,7 @@ class RenderNodeSceneCamera(RenderNodeBase):
         self.create_input('RenderNodeSocketCamera', "camera", 'Camera')
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
-    def process(self):
+    def process(self,context,id,path):
         cam = self.inputs[0].get_value()
 
         if cam: self.compare(bpy.context.scene, 'camera', cam)

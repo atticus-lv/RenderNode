@@ -25,7 +25,7 @@ def update_node(self, context):
         elif self.d_type == Vector:
             self.create_input('RenderNodeSocketVector', 'value', "Value")
 
-        self.update_parms()
+        self.execute_tree()
 
     except Exception as e:
         print(e)
@@ -51,15 +51,11 @@ class RenderNodeProperty(RenderNodeBase):
         if self.d_type not in {int, float, str, bool, Color, Vector, None}:
             layout.label(text='Only support int, float, str, bool, Color, Vector')
 
-    def process(self):
-        self.store_data()
-        if 'value' not in self.node_dict: return None
-
+    def process(self, context, id, path):
         try:
             obj = eval(self.full_data_path)
-            if obj == self.node_dict['value']: return None
-
-            exec(f'{self.full_data_path} = {self.node_dict["value"]}')
+            if obj == self.inputs['value'].get_value(): return None
+            exec(f'{self.full_data_path} = {self.inputs["value"].get_value()}')
 
         except Exception as e:
             print(e)

@@ -96,7 +96,7 @@ class RenderNodeSceneResolution(RenderNodeBase):
         except Exception:
             pass
 
-    def process(self):
+    def process(self,context,id,path):
         # correct number
         if self.inputs['resolution_x'].get_value() < 4:
             self.inputs['resolution_x'].set_value(4)

@@ -4,7 +4,7 @@ from ...nodes.BASE.node_base import RenderNodeBase
 
 
 def update_node(self, context):
-    self.update_parms()
+    self.execute_tree()
 
 
 class RSNodeLightStudioNode(RenderNodeBase):
@@ -33,10 +33,12 @@ class RSNodeLightStudioNode(RenderNodeBase):
 
         layout.prop(self, "light_studio_index", text='Index')
 
-    def get_data(self):
-        task_data = {}
-        task_data['ssm_light_studio'] = self.light_studio_index
-        return task_data
+    def process(self, context, id, path):
+        index = self.light_studio_index
+        try:
+            self.compare(bpy.context.scene.ssm, 'light_studio_index', index)
+        except Exception as e:
+            print(f'SSM LightStudio node error:{e}')
 
 
 def register():

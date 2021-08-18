@@ -1,18 +1,14 @@
 import bpy
+import uuid
 
 from bpy.props import *
-from mathutils import Color, Vector
 
-from ._runtime import cache_node_dependants, cache_socket_links, runtime_info, logger
-from .node_base import RenderNodeBase as RenderStackNode
+from ._runtime import cache_node_dependants, cache_socket_links, cache_node_group_outputs, cache_socket_variables
+from ._runtime import runtime_info, logger, cache_executed_nodes
+
 
 # some method comes from rigging_nodes
-class RenderStackNodeTree(bpy.types.NodeTree):
-    """RenderStackNodeTree Node Tree"""
-    bl_idname = 'RenderStackNodeTree'
-    bl_label = 'Render Editor'
-    bl_icon = 'CAMERA_DATA'
-
+class NodeTreeBase(bpy.types.NodeTree):
     def get_other_socket(self, socket):
         '''
         Returns connected socket
@@ -46,19 +42,14 @@ class RenderStackNodeTree(bpy.types.NodeTree):
     def update(self):
         '''Called when the nodetree sockets or links change, socket pair cache is cleared here'''
         if not runtime_info['executing']:
-            # print(f'UPDATING {self}')
             if self in cache_socket_links:
                 del cache_socket_links[self]
-                # print(f'{self.name} - cleared connections')
-            # if self in cache_node_group_outputs:
-            #     del cache_node_group_outputs[self]
-            #     # print(f'{self.name} - cleared group outputs')
+            if self in cache_node_group_outputs:
+                del cache_node_group_outputs[self]
             # if self in cache_tree_portals:
             #     del cache_tree_portals[self]
-            #     # print(f'{self.name} - cleared portals')
             if self in cache_node_dependants:
                 del cache_node_dependants[self]
-                # print(f'{self.name} - cleared dependants')
         else:
             print('TRIED TO UPDATE TREE, BUT ITS EXECUTING')
         # change the socket of the reroute nodes
@@ -88,10 +79,53 @@ class RenderStackNodeTree(bpy.types.NodeTree):
                 self.links.new(new_socket, link.to_socket)
                 # self.links.remove(link)
 
+    def execute(self, context):
+        task_node = self.nodes.get(bpy.context.window_manager.rsn_viewer_node)
+        if not task_node: return
+
+        runtime_info['executing'] = True
+        cache_socket_variables.clear()
+
+        id = str(uuid.uuid4())
+        path = []
+
+        try:
+            path.append(bpy.context.space_data.node_tree.name)
+            # Execute all the parent trees first up to their active node
+            for i in range(0, len(bpy.context.space_data.path) - 1):
+                node = bpy.context.space_data.path[i].node_tree.nodes.active
+                node.execute_dependants(bpy.context, id, path)
+                path.append(node.name)
+
+            task_node.execute(bpy.context, id, path)
+        except Exception as e:
+            print(e)
+
+        finally:
+            runtime_info['executing'] = False
+
+
+class RenderStackNodeTree(NodeTreeBase):
+    bl_idname = 'RenderStackNodeTree'
+    bl_label = 'Render Editor'
+    bl_icon = 'CAMERA_DATA'
+
+
+class RenderStackNodeTreeGroup(NodeTreeBase):
+    bl_idname = 'RenderStackNodeTreeGroup'
+    bl_label = "Render Node (groups)"
+    bl_icon = 'NODETREE'
+
+    @classmethod
+    def poll(cls, context):
+        return False
+
 
 def register():
     bpy.utils.register_class(RenderStackNodeTree)
+    bpy.utils.register_class(RenderStackNodeTreeGroup)
 
 
 def unregister():
     bpy.utils.unregister_class(RenderStackNodeTree)
+    bpy.utils.unregister_class(RenderStackNodeTreeGroup)

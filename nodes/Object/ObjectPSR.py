@@ -57,7 +57,7 @@ def update_node(self, context):
         self.remove_input('rotation')
 
     if not self.accept_mode:
-        self.update_parms()
+        self.execute_tree()
 
 
 class RenderNodeObjectPSR(RenderNodeBase):
@@ -87,7 +87,7 @@ class RenderNodeObjectPSR(RenderNodeBase):
         else:
             layout.operator('rsn.accept_update', icon='IMPORT', text='Accept Mode').node_name = self.name
 
-    def process(self):
+    def process(self,context,id,path):
         ob = self.inputs['object'].get_value()
 
         if ob and not self.accept_mode:

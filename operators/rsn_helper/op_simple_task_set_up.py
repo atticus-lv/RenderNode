@@ -1,7 +1,7 @@
 import bpy
 from bpy.props import IntProperty
 
-
+# TODO change it with the new group node
 class RSN_OT_SimpleTask(bpy.types.Operator):
     """A simple task example"""
     bl_idname = 'rsn.simple_task'

@@ -3,19 +3,23 @@ import bpy
 from bpy.props import *
 from mathutils import Color, Vector
 
-from ._runtime import cache_node_dependants, cache_socket_links, runtime_info, logger
+from ._runtime import cache_node_dependants, cache_socket_links, cache_socket_variables, cache_node_group_outputs, \
+    runtime_info, logger, MeasureTime, cache_executed_nodes
+import uuid
 
 
 # some method comes from rigging_nodes
 class RenderNodeBase(bpy.types.Node):
     bl_label = "RenderStack Node"
 
+    last_ex_id: StringProperty()
+
     warning: BoolProperty(name='Is warning', default=False)
     warning_msg: StringProperty(name='warning message', default='')
 
     @classmethod
     def poll(cls, ntree):
-        return ntree.bl_idname == 'RenderStackNodeTree'
+        return ntree.bl_idname in {'RenderStackNodeTree', 'RenderStackNodeTreeGroup'}
 
     ## BASE METHOD
     #########################################
@@ -57,6 +61,11 @@ class RenderNodeBase(bpy.types.Node):
 
         if default_value: output.default_value = default_value
 
+    def remove_output(self, socket_name):
+        output = self.outputs.get(socket_name)
+        if output:
+            self.outputs.remove(output)
+
     ## STATE METHOD
     #########################################
 
@@ -94,22 +103,62 @@ class RenderNodeBase(bpy.types.Node):
 
         return nodes
 
-    def execute_dependants(self):
+    def execute_dependants(self, context, id, path):
         '''Responsible of executing the required nodes for the current node to work'''
         for x in self.get_dependant_nodes():
-            self.execute_other(x)
+            self.execute_other(context, id, path, x)
 
-    def execute(self):
-        self.execute_dependants()
-        self.process()
-        print(f'Execute: <{self.name}>')
+    def execute(self, context, id, path):
+        if self.last_ex_id == id: return
 
-    def execute_other(self, other):
+        self.last_ex_id = id
+
+        with MeasureTime(self, 'Dependants'):
+            self.execute_dependants(context, id, path)
+        with MeasureTime(self, 'Group'):
+            self.process_group(context, id, path)
+            if self not in cache_executed_nodes: cache_executed_nodes.append(self)
+        with MeasureTime(self, 'Execution'):
+            self.process(context, id, path)
+            if self not in cache_executed_nodes: cache_executed_nodes.append(self)
+
+        logger.debug(f'Execute: <{self.name}>')
+
+    def path_to_node(self, path):
+        node_tree = bpy.data.node_groups.get(path[0])
+        for x in path[1:-1]:
+            node_tree = node_tree.nodes.get(x).node_tree
+        node = node_tree.nodes.get(path[-1])
+        return node
+
+    def execute_other(self, context, id, path, other):
         if hasattr(other, 'execute'):
-            other.execute()
+            other.execute(context, id, path)
+        else:
+            if other.bl_rna.identifier == 'NodeGroupInput':
+                if len(path) < 2:
+                    raise ValueError(f'trying to setup the values of a nodegroup input on the upper level')
+                node = self.path_to_node(path)
+                assert node, f'{path} cannot be resolved to a node'
+                for i, output in enumerate(other.outputs):
+                    if output.bl_rna.identifier != 'NodeSocketVirtual':
+                        if self.id_data.bl_idname == 'RenderStackNodeTreeGroup':
+                            other_socket = node.inputs[i]
+                            output.set_value(other_socket.get_value())
+
+            elif other.bl_rna.identifier == 'NodeGroupOutput':
+                nodes = set()
+                for input in other.inputs:
+                    if input.bl_rna.identifier != 'NodeSocketVirtual':
+                        connected_socket = input.connected_socket
+
+                        if connected_socket and connected_socket not in nodes:
+                            node = connected_socket.node
+                            self.execute_other(context, id, path, node)
+                            nodes.add(node)
 
     def update(self):
-        if runtime_info['updating']:
+        if runtime_info['updating'] is True:
             return
 
         # for input in self.inputs:
@@ -134,33 +183,19 @@ class RenderNodeBase(bpy.types.Node):
     ## RSN DATA MANAGE
     #########################################
 
-    # update the build-in values
-    def update_parms(self):
-        task_node = self.id_data.nodes.get(bpy.context.window_manager.rsn_viewer_node)
-        if task_node:
-            task_node.execute()
+    # update the build-in values with update the hole tree
+    def execute_tree(self):
+        cache_executed_nodes.clear()
+        self.id_data.execute(bpy.context)
 
     def get_input_value(self, socket_name):
         ans = self.inputs.get(socket_name)
         if ans: return ans.get_value()
 
-    #  store socket
-    def store_data(self):
-        for input in self.inputs:
-            if input.is_linked:
-                node = self.reroute_socket_node(input, self)
-                print(f'accept result:{node}')
-                if hasattr(node, 'value'):
-                    self.node_dict[input.name] = self.transfer_value(node.default_value)
-                    self.node_dict[input.name] = self.transfer_value(node.default_value)
-            else:
-                self.node_dict[input.name] = self.transfer_value(input.default_value)
+    def process(self, context, id, path):
+        pass
 
-    def transfer_value(self, value):
-
-        return list(value) if type(value) in {Color, Vector} else value
-
-    def process(self):
+    def process_group(self, context, id, path):
         pass
 
     ### old method ###
@@ -170,16 +205,6 @@ class RenderNodeBase(bpy.types.Node):
 
     ## Utility
     #########################################
-    @staticmethod
-    def reroute_socket_node(socket, node, target_node_type=None):
-        def get_sub_node(socket, node):
-            if socket.is_linked:
-                sub_node = socket.links[0].from_node
-                if len(sub_node.inputs) == 0: return sub_node
-                return get_sub_node(sub_node.inputs[0], sub_node)
-
-        return get_sub_node(socket, node)
-
     @staticmethod
     def compare(obj: object, attr: str, val):
         """Use for compare and apply attribute since some properties change may cause depsgraph changes"""

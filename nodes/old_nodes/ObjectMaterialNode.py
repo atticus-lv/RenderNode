@@ -11,11 +11,11 @@ def update_slot_index(self, context):
     if self.object:
         if self.slot_index > len(self.object.material_slots) - 1:
             self.slot_index = len(self.object.material_slots) - 1
-    self.update_parms()
+    self.execute_tree()
 
 
 def update_node(self, context):
-    self.update_parms()
+    self.execute_tree()
 
 
 class RSNodeObjectMaterialNode(RenderNodeBase):

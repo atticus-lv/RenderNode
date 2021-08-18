@@ -3,7 +3,7 @@ from bpy.props import *
 from ..BASE.node_base import RenderNodeBase
 from ...utility import *
 
-
+# TODO fix variant or remove it
 def update_node(self, context):
     if not self.use: return None
     task_node = context.space_data.node_tree.nodes.get(bpy.context.window_manager.rsn_viewer_node)
@@ -28,59 +28,59 @@ class RSN_UL_VarCollectNodeList(bpy.types.UIList):
         row.prop(item, "use", text="", icon="CHECKMARK")
 
 
-class RSN_OT_UpdateVarCollect(bpy.types.Operator):
-    """ADD/REMOVE List item"""
-    bl_idname = "rsn.update_var_collect"
-    bl_label = "Update Collect"
-
-    action: EnumProperty(name="Edit", items=[('ADD', 'Add', ''), ('REMOVE', 'Remove', '')])
-
-    sort: BoolProperty(name="Sort", description="Sort when update collect", default=True)
-
-    node_name: StringProperty(default='')
-    node = None
-
-    def execute(self, context):
-        self.node = context.space_data.edit_tree.nodes[self.node_name]
-        if self.action == "ADD":
-            self.get_var_nodes()
-            self.node.node_collect_index = len(self.node.node_collect) - 1
-
-            if self.sort:
-                self.sort_items()
-
-        return {"FINISHED"}
-
-    def get_var_nodes(self):
-        nt = bpy.context.space_data.edit_tree
-
-        RSN = RSN_Nodes(node_tree=nt, root_node_name=self.node.name)
-        nodes = RSN.get_children_from_node(root_node=self.node)
-        node_list = ','.join(
-            [node_name for node_name in nodes if nt.nodes[node_name].bl_idname == "RSNodeVariantsNode"])
-
-        for i, src_node in enumerate(self.node.node_collect.keys()):
-            if src_node not in node_list.split(','):
-                self.node.node_collect.remove(i)
-                self.node.node_collect_index -= 1 if self.node.node_collect_index != 0 else 0
-
-        for node_name in node_list.split(','):
-            if node_name != '' and node_name not in self.node.node_collect.keys():
-                prop = self.node.node_collect.add()
-                prop.name = node_name
-                prop.active = 0
-
-    def sort_items(self):
-        item_list = [{"name": k, "value": v.active} for k, v in self.node.node_collect.items()]
-
-        sort_list = sorted(item_list, key=lambda x: x["name"])
-
-        self.node.node_collect.clear()
-
-        for i, item in enumerate(sort_list):
-            prop = self.node.node_collect.add()
-            prop.name = item_list[i]["name"]
-            prop.active = item_list[i]["value"]
+# class RSN_OT_UpdateVarCollect(bpy.types.Operator):
+#     """ADD/REMOVE List item"""
+#     bl_idname = "rsn.update_var_collect"
+#     bl_label = "Update Collect"
+#
+#     action: EnumProperty(name="Edit", items=[('ADD', 'Add', ''), ('REMOVE', 'Remove', '')])
+#
+#     sort: BoolProperty(name="Sort", description="Sort when update collect", default=True)
+#
+#     node_name: StringProperty(default='')
+#     node = None
+#
+#     def execute(self, context):
+#         self.node = context.space_data.edit_tree.nodes[self.node_name]
+#         if self.action == "ADD":
+#             self.get_var_nodes()
+#             self.node.node_collect_index = len(self.node.node_collect) - 1
+#
+#             if self.sort:
+#                 self.sort_items()
+#
+#         return {"FINISHED"}
+#
+#     def get_var_nodes(self):
+#         nt = bpy.context.space_data.edit_tree
+#
+#         RSN = RSN_Nodes(node_tree=nt, root_node_name=self.node.name)
+#         nodes = RSN.get_children_from_node(root_node=self.node)
+#         node_list = ','.join(
+#             [node_name for node_name in nodes if nt.nodes[node_name].bl_idname == "RSNodeVariantsNode"])
+#
+#         for i, src_node in enumerate(self.node.node_collect.keys()):
+#             if src_node not in node_list.split(','):
+#                 self.node.node_collect.remove(i)
+#                 self.node.node_collect_index -= 1 if self.node.node_collect_index != 0 else 0
+#
+#         for node_name in node_list.split(','):
+#             if node_name != '' and node_name not in self.node.node_collect.keys():
+#                 prop = self.node.node_collect.add()
+#                 prop.name = node_name
+#                 prop.active = 0
+#
+#     def sort_items(self):
+#         item_list = [{"name": k, "value": v.active} for k, v in self.node.node_collect.items()]
+#
+#         sort_list = sorted(item_list, key=lambda x: x["name"])
+#
+#         self.node.node_collect.clear()
+#
+#         for i, item in enumerate(sort_list):
+#             prop = self.node.node_collect.add()
+#             prop.name = item_list[i]["name"]
+#             prop.active = item_list[i]["value"]
 
 
 class RSNodeSetVariantsNode(RenderNodeBase):
@@ -119,19 +119,19 @@ class RSNodeSetVariantsNode(RenderNodeBase):
         pass
 
 
-def register():
-    bpy.utils.register_class(VariantsNodeProperty)
-    bpy.utils.register_class(RSN_UL_VarCollectNodeList)
-
-    bpy.utils.register_class(RSN_OT_UpdateVarCollect)
-
-    bpy.utils.register_class(RSNodeSetVariantsNode)
-
-
-def unregister():
-    bpy.utils.unregister_class(VariantsNodeProperty)
-    bpy.utils.unregister_class(RSN_UL_VarCollectNodeList)
-
-    bpy.utils.unregister_class(RSN_OT_UpdateVarCollect)
-
-    bpy.utils.unregister_class(RSNodeSetVariantsNode)
+# def register():
+#     bpy.utils.register_class(VariantsNodeProperty)
+#     bpy.utils.register_class(RSN_UL_VarCollectNodeList)
+#
+#     bpy.utils.register_class(RSN_OT_UpdateVarCollect)
+#
+#     bpy.utils.register_class(RSNodeSetVariantsNode)
+#
+#
+# def unregister():
+#     bpy.utils.unregister_class(VariantsNodeProperty)
+#     bpy.utils.unregister_class(RSN_UL_VarCollectNodeList)
+#
+#     bpy.utils.unregister_class(RSN_OT_UpdateVarCollect)
+#
+#     bpy.utils.unregister_class(RSNodeSetVariantsNode)

@@ -4,7 +4,7 @@ from ...nodes.BASE.node_base import RenderNodeBase
 
 
 def update_node(self, context):
-    self.update_parms()
+    self.execute_tree()
 
 
 class RSNodeActiveRenderSlotNode(RenderNodeBase):

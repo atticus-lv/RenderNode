@@ -4,7 +4,7 @@ from ...nodes.BASE.node_base import RenderNodeBase
 
 
 def update_node(self, context):
-    self.update_parms()
+    self.execute_tree()
 
 
 class RenderNodeSceneRenderSlot(RenderNodeBase):
@@ -15,7 +15,7 @@ class RenderNodeSceneRenderSlot(RenderNodeBase):
         self.create_input('RenderNodeSocketInt', 'slot_index', 'Slot', default_value=1)
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
-    def process(self):
+    def process(self,context,id,path):
         render_result = bpy.data.images.get('Render Result')
         if not render_result: return None
 

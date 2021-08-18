@@ -6,7 +6,7 @@ from mathutils import Color, Vector
 
 
 def update_node(self, context):
-    self.update_parms()
+    self.execute_tree()
 
 
 class RenderNodeMath(RenderNodeBase):
@@ -32,7 +32,7 @@ class RenderNodeMath(RenderNodeBase):
     def draw_buttons(self, context, layout):
         layout.prop(self, 'operate_type')
 
-    def process(self):
+    def process(self,context,id,path):
         s1 = self.inputs['value1'].get_value()
         s2 = self.inputs['value2'].get_value()
 

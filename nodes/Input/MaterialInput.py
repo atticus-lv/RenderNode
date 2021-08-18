@@ -6,7 +6,7 @@ from mathutils import Color, Vector
 
 
 def update_node(self, context):
-    self.update_parms()
+    self.execute_tree()
 
 
 class RenderNodeObjectInput(RenderNodeBase):
@@ -25,7 +25,7 @@ class RenderNodeObjectInput(RenderNodeBase):
             self, "default_value",
             rows=3, cols=4, hide_buttons=False)
 
-    def process(self):
+    def process(self,context,id,path):
         self.outputs[0].set_value(self.default_value)
 
 

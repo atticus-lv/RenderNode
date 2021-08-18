@@ -44,7 +44,7 @@ def update_node(self, context):
         self.remove_input('max_glossy_depth')
         self.remove_input('max_scatter_depth')
 
-    self.update_parms()
+    self.execute_tree()
 
 
 class RenderNodeSceneRenderEngine(RenderNodeBase):
@@ -91,7 +91,7 @@ class RenderNodeSceneRenderEngine(RenderNodeBase):
             col.prop(self, 'light')
             col.prop(self, 'studio_light')
 
-    def process(self):
+    def process(self,context,id,path):
         # correct numbers
         for atrr in ['cycles_samples', 'preview_samples',
                      'taa_render_samples', 'taa_samples',

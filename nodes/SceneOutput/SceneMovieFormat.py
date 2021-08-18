@@ -23,7 +23,7 @@ def enum_ffmpeg_preset():
 
 
 def update_node(self, context):
-    self.update_parms()
+    self.execute_tree()
 
 
 class RenderNodeSceneMovieFormat(RenderNodeBase):
@@ -75,7 +75,7 @@ class RenderNodeSceneMovieFormat(RenderNodeBase):
             col.prop(self, 'use_ffmpeg_preset')
             if self.use_ffmpeg_preset: col.prop(self, 'ffmpeg_preset')
 
-    def process(self):
+    def process(self,context,id,path):
         attr_list = ['file_format',
                      'quality', ]
         for attr in attr_list:
