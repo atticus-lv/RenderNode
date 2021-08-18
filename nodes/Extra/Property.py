@@ -55,7 +55,6 @@ class RenderNodeProperty(RenderNodeBase):
         try:
             obj = eval(self.full_data_path)
             if obj == self.inputs['value'].get_value(): return None
-
             exec(f'{self.full_data_path} = {self.inputs["value"].get_value()}')
 
         except Exception as e:
