@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://atticus-lv.github.io/RenderStackNode/#/">
-    <img src="docs/media/cover.png" alt="logo" width="1080px"/>
+    <img src="res/logo.png" alt="logo" width="1080px"/>
   </a>
 </p>
 <h4 align="center">
@@ -31,8 +31,7 @@
 
 **Preview**
 
-<img src="docs/media/img/feature.gif" width="1080px" />
-
+<img src="res/feature.gif" width="1080px" />
 
 ### Download ![![](docs/media/logo/blender%20logo.png)](https://img.shields.io/badge/blender-2.93%2B-red)
 
