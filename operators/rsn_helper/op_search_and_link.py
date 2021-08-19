@@ -47,6 +47,8 @@ class RSN_OT_SearchAndLink(bpy.types.Operator):
         if not get_pref().quick_place:
             bpy.ops.transform.translate('INVOKE_DEFAULT')
 
+        self.node_name = ''
+
         return {'FINISHED'}
 
     def invoke(self, context, event):
