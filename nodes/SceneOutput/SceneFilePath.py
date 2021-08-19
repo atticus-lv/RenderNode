@@ -38,7 +38,7 @@ class RenderNodeSceneFilePath(RenderNodeBase):
         if not directory_path: return None
         path_exp = self.inputs['path_expression'].get_value()
         v = self.inputs['version'].get_value()
-        if path_exp and v:
+        if path_exp and v is not None:
             postfix = self.get_postfix(path_exp, v)
             path_to_task = os.path.join(directory_path, postfix)
             task_node = context.space_data.node_tree.nodes.get(context.window_manager.rsn_viewer_node)
