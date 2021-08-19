@@ -15,10 +15,10 @@ def set_active_task(self, context):
         for node in self.id_data.nodes:
             if node.bl_idname == self.bl_idname and node != self:
                 node.is_active_task = False
-
+                node.set_active_color(node.is_active_task)
         # set active task
         bpy.context.window_manager.rsn_viewer_node = self.name
-
+        self.set_active_color(self.is_active_task)
         self.execute_tree()
 
 
@@ -69,6 +69,10 @@ class RSNodeTaskNode(RenderNodeBase):
         self.auto_update_inputs('RSNodeSocketTaskSettings', "Settings")
         set_active_task(self, bpy.context)
 
+    def set_active_color(self, active):
+        self.use_custom_color = active
+        self.color = (0, 0.6, 0.8)
+
     def process(self, context, id, path):
         # set necessary props
         bpy.context.scene.frame_start = self.frame_start
@@ -101,7 +105,6 @@ def register():
     bpy.utils.register_class(RSNodeTaskNode)
     bpy.utils.register_class(RSN_OT_AddViewerNode)
     bpy.types.WindowManager.rsn_viewer_node = StringProperty(name='Viewer task name')
-
 
 
 def unregister():

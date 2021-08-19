@@ -56,14 +56,14 @@ def draw_text_2d(color, text, x, y, size=20):
     blf.draw(font_id, text)
 
 
-def draw_text_on_node(color, text, node, size=15, corner_index=1):
+def draw_text_on_node(color, text, node, size=15, corner_index=1, offset=(0, 0)):
     '''index 0,1,2,3: top_left, top_right, bottom_left, bottom_right'''
     nlocx, nlocy, ndimx, ndimy = get_node_location(node)
     corners = get_node_vertices(nlocx, nlocy, ndimx, ndimy)
     pos = corners[corner_index]
 
     loc_x, loc_y = bpy.context.region.view2d.view_to_region(pos[0], pos[1], clip=False)
-    draw_text_2d(color, text, loc_x, loc_y, size)
+    draw_text_2d(color, text, loc_x + offset[0], loc_y + offset[1], size)
 
 
 def draw_round_rectangle(shader, points, radius=8, colour=(1.0, 1.0, 1.0, 0.7)):
@@ -276,8 +276,6 @@ def draw_rounded_node_border(shader, node, radius=8, colour=(1.0, 1.0, 1.0, 0.7)
 
 # TODO make draw outline when executing
 def draw_callback_nodeoutline(self, context):
-
-
     bgl.glLineWidth(1)
     bgl.glEnable(bgl.GL_BLEND)
     bgl.glEnable(bgl.GL_LINE_SMOOTH)
@@ -288,9 +286,9 @@ def draw_callback_nodeoutline(self, context):
     # draw outline
     ########################
     # set color
-    green = (0, 1, 0, self.alpha * 2)
-    white = (1, 1, 1, self.alpha * 2)
-    red = (1, 0, 0, self.alpha * 2)
+    green = (0, 1, 0, self.alpha)
+    white = (1, 1, 1, self.alpha)
+    red = (1, 0, 0, self.alpha)
 
     task_node = context.space_data.edit_tree.nodes.get(context.window_manager.rsn_viewer_node)
     if not task_node: return
@@ -312,7 +310,8 @@ def draw_callback_nodeoutline(self, context):
                         col = green
                     else:
                         col = red
-                    draw_text_on_node(col, f"{t:.2f}ms", node, size=17, corner_index=0)
+                    draw_text_on_node(white, node.name, node, size=17, corner_index=0, offset=(0, 3))
+                    draw_text_on_node(col, f"{t:.2f}ms", node, size=17, corner_index=0, offset=(0, 20))
     except:
         pass
 
@@ -390,7 +389,7 @@ class RSN_OT_DrawNodes(Operator):
     def invoke(self, context, event):
         if True in {context.area.type != 'NODE_EDITOR',
                     context.space_data.edit_tree is None,
-                    context.space_data.edit_tree.bl_idname not in {'RenderStackNodeTree','RenderStackNodeTreeGroup'}}:
+                    context.space_data.edit_tree.bl_idname not in {'RenderStackNodeTree', 'RenderStackNodeTreeGroup'}}:
             self.report({'WARNING'}, "NodeEditor not found, cannot run operator")
             return {'CANCELLED'}
 
