@@ -34,7 +34,7 @@ class RSNodeEeveeRenderSettingsNode(RenderNodeBase):
     def process(self, context, id, path):
         task_data = self.get_data()
         if task_data['engine'] == "BLENDER_EEVEE":
-            compare(bpy.context.scene.eevee, 'taa_render_samples', task_data['samples'])
+            self.compare(bpy.context.scene.eevee, 'taa_render_samples', task_data['samples'])
 
     def get_data(self):
         task_data = {}

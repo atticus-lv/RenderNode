@@ -49,7 +49,31 @@ class RSNodeColorManagementNode(RenderNodeBase):
 
         col.prop(self, 'ev', slider=1)
         col.prop(self, 'gamma')
-
+    
+    def process(self, context, id, path):
+        task_data = self.get_data()
+        vs = bpy.context.scene.view_settings
+        compare(vs, 'exposure', task_data['ev'])
+        compare(vs, 'gamma', task_data['gamma'])
+        try:
+            compare(vs, 'view_transform', task_data['view_transform'])
+            compare(vs, 'look', task_data['look'])
+        except: 
+            pass
+    
+    def process_group(self, context, id, path):
+        task_data = self.get_data()
+        if 'image_settings' in task_data:
+            rn = bpy.context.scene.render
+            image_settings = task_data['image_settings']
+            self.compare(rn.image_settings, 'file_format', image_settings['file_format'])
+            self.compare(rn.image_settings, 'color_mode', image_settings['color_mode'])
+            self.compare(rn.image_settings, 'color_depth', image_settings['color_depth'])
+            self.compare(rn.image_settings, 'use_preview', image_settings['use_preview'])
+            self.compare(rn.image_settings, 'compression', image_settings['compression'])
+            self.compare(rn.image_settings, 'quality', image_settings['quality'])
+            self.compare(rn, 'film_transparent', image_settings['transparent'])
+    
     def get_data(self):
         task_data = {}
         task_data['view_transform'] = self.view_transform

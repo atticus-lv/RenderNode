@@ -48,7 +48,7 @@ class RSNodeCyclesRenderSettingsNode(RenderNodeBase):
     def process(self, context, id, path):
         task_data = self.get_data()
         if task_data['engine'] == "CYCLES":
-            compare(context.scene.cycles, 'samples', task_data['samples'])
+            self.compare(context.scene.cycles, 'samples', task_data['samples'])
 
     def get_data(self):
         task_data = {}
