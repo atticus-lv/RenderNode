@@ -59,13 +59,13 @@ class RSNodeResolutionInputNode(RenderNodeBase):
         task_data['res_scale'] = self.res_scale
         return task_data
 
-    def apply_data(self, task_data):
-        pass
-        # if 'res_x' in task_data:
-        #     rn = bpy.context.Scene.render
-        #     self.compare(rn, 'resolution_x', task_data['res_x'])
-        #     self.compare(rn, 'resolution_y', task_data['res_y'])
-        #     self.compare(rn, 'resolution_percentage', task_data['res_scale'])
+    def process(self, context, id, path):
+        task_data = self.get_data()
+        if 'res_x' in task_data:
+            rn = bpy.context.Scene.render
+            self.compare(rn, 'resolution_x', task_data['res_x'])
+            self.compare(rn, 'resolution_y', task_data['res_y'])
+            self.compare(rn, 'resolution_percentage', task_data['res_scale'])
 
 
 class RSN_MT_ResolutionPresetsMenu(Menu):
