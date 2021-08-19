@@ -11,14 +11,14 @@
 
 [comment]: <> (    + [Object Placement & Material]&#40;/develop/Example2.md&#41;)
   
-+ **Nodes**
++ **Node Categories**
     + [Task](/develop/NodeTask)	
     + [Input](/develop/NodeInput)
-    + [SceneOutput](/develop/NodeSceneOutput)
+    + [Scene Output](/develop/NodeSceneOutput)
     + [Scene](/develop/NodeScene)
     + [Object](/develop/NodeObject)
-    + [Layout](/develop/NodeLayout)
     + [Extra](/develop/NodeExtra)
+    + [Layout](/develop/NodeLayout)
   
 [comment]: <> (    + [Render Settings&#40;Extra&#41;]&#40;/develop/NodeRender&#41;)
 [comment]: <> (    + [Variants]&#40;/develop/NodeVariants&#41;)
