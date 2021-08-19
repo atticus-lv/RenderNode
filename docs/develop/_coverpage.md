@@ -2,9 +2,9 @@
 
 <img src="media/logo/logo no_text.svg" alt="cover" width="200px" />
 
-# **RenderStackNode**
+# **RenderNode**
 
-> Develop version
+> Develop Version
 
 [GitHub](https://github.com/atticus-lv/RenderStackNode)
 [Get Started](/develop/Intro.md)
