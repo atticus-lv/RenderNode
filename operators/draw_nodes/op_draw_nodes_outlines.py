@@ -397,7 +397,7 @@ class RSN_OT_DrawNodes(Operator):
         # init draw values
         #####################
         pref = get_pref()
-        self.alpha = 0.5
+        self.alpha = 0
         self.radius = pref.draw_nodes.border_radius
 
         self.show_text_info = pref.draw_nodes.show_text_info
