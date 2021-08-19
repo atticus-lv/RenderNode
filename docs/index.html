@@ -13,6 +13,7 @@
 <nav>
     <a href="#/">English</a>
     <a href="#/zh-cn/">中文</a>
+    <a href="#/develop/">Develop</a>
 </nav>
 
 <div id="app"></div>
@@ -35,7 +36,7 @@
 
         // 封面
         onlyCover: true,
-        coverpage: ['/', '/zh-cn/'],
+        coverpage: ['/', '/zh-cn/','/develop/'],
 
         // 搜索栏
         search: {
@@ -46,11 +47,13 @@
             pathNamespaces: ['/zh-cn',],
             placeholder: {
                 '/zh-cn/': '🔍 搜索',
-                '/': '🔍 Search'
+                '/': '🔍 Search',
+                '/develop/': '🔍 Search'
             },
             noData: {
                 '/zh-cn/': '我是真找不到 😅',
-                '/': 'No Results 😅'
+                '/': 'No Results 😅',
+                '/develop/': 'No Results 😅',
             }
         },
 
@@ -59,25 +62,29 @@
             note: {
                 label: {
                     '/zh-cn/': '注意',
-                    '/': 'Note'
+                    '/': 'Note',
+                    '/develop/':: 'Note'
                 }
             },
             tip: {
                 label: {
                     '/zh-cn/': '提示',
-                    '/': 'Tip'
+                    '/': 'Tip',
+                    '/develop/': 'Tip',
                 }
             },
             warning: {
                 label: {
                     '/zh-cn/': '警告',
-                    '/': 'Warning'
+                    '/': 'Warning',
+                    '/develop/': 'Warning'
                 }
             },
             attention: {
                 label: {
                     '/zh-cn/': '危险',
-                    '/': 'Attention'
+                    '/': 'Attention',
+                    '/develop/': 'Attention',
                 }
             }
         },
