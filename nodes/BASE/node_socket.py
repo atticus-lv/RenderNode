@@ -206,6 +206,16 @@ class RenderNodeSocketFilePath(RenderNodeSocket, SocketBase):
         return 0.2, 0.7, 1.0, 1
 
 
+class RenderNodeSocketText(RenderNodeSocket, SocketBase):
+    bl_idname = 'RenderNodeSocketText'
+    bl_label = 'RenderNodeSocketText'
+
+    default_value: PointerProperty(update=update_node, type=bpy.types.Text)
+
+    def draw_color(self, context, node):
+        return 0.2, 0.7, 1.0, 1
+
+
 # Vector and Subtype
 ####################
 
@@ -449,6 +459,7 @@ classes = (
     RenderNodeSocketFloat,
     RenderNodeSocketString,
     RenderNodeSocketFilePath,
+    RenderNodeSocketText,
 
     RenderNodeSocketVector,
     RenderNodeSocketXYZ,

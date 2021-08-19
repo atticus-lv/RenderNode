@@ -79,6 +79,7 @@ node_categories = [
     RSNCategory("EXTRA", "Extra", items=[
         nodeitems_utils.NodeItem("RenderNodeProperty"),
         nodeitems_utils.NodeItem('RSNodeCollectionDisplayNode'),
+        nodeitems_utils.NodeItem('RenderNodeScripts'),
         # nodeitems_utils.NodeItem("RSNodeCommonSettingsNode"),
         # nodeitems_utils.NodeItem("RSNodeScriptsNode"),
         # nodeitems_utils.NodeItem("RenderNodeEmailNode"),
