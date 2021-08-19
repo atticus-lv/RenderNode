@@ -64,7 +64,6 @@ class RSN_OT_UpdateTaskList(bpy.types.Operator):
         render_list_node = tree.nodes.get(self.render_list_name)
 
         task_list = render_list_node.get_dependant_tasks()
-        print(task_list)
         remain = {}  # dict for the remain nodes
 
         for i, key in enumerate(render_list_node.task_list.keys()):
