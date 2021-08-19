@@ -23,7 +23,7 @@ class RSN_OT_SearchNodes(bpy.types.Operator):
             if not get_pref().quick_place:
                 bpy.ops.node.add_search('INVOKE_DEFAULT', use_transform=True)
             else:
-                bpy.ops.node.add_search('INVOKE_DEFAULT', use_transform=False)
+                bpy.ops.node.rsn.search_and_link('INVOKE_DEFAULT', use_transform=False)
         except RuntimeError:
             self.report({"ERROR"}, "No Node Tree here!")
 

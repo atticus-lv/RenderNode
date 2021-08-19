@@ -40,10 +40,9 @@ node_categories = [
         nodeitems_utils.NodeItem("RenderNodeSceneImageFormat"),
         nodeitems_utils.NodeItem("RenderNodeSceneMovieFormat"),
         nodeitems_utils.NodeItem("RenderNodeSceneResolution"),  # performance is bad
-        # nodeitems_utils.NodeItem("RSNodeResolutionInputNode"),
-        # nodeitems_utils.NodeItem("RSNodeActiveRenderSlotNode"),
+
         nodeitems_utils.NodeItem("RenderNodeSceneRenderSlot"),
-        # nodeitems_utils.NodeItem("RSNodeViewLayerPassesNode"),
+
     ]),
 
     RSNCategory("SCENE", "Scene", items=[
@@ -68,24 +67,16 @@ node_categories = [
     # ]),
 
     RSNCategory("RENDER_SETTINGS", "Render Settings(Extra)", items=[
-        # nodeitems_utils.NodeItem("RSNodeWorkBenchRenderSettingsNode"),
-        # nodeitems_utils.NodeItem("RSNodeEeveeRenderSettingsNode"),
-        # nodeitems_utils.NodeItem("RSNodeCyclesRenderSettingsNode"),
-        # nodeitems_utils.NodeItem("RSNodeCyclesLightPathNode"),
+
         nodeitems_utils.NodeItem("RenderNodeCyclesLightPath"),
-        # nodeitems_utils.NodeItem("RSNodeOctaneRenderSettingsNode"),
-        # nodeitems_utils.NodeItem("RSNodeLuxcoreRenderSettingsNode"),
+
     ]),
 
     RSNCategory("EXTRA", "Extra", items=[
         nodeitems_utils.NodeItem("RenderNodeProperty"),
         nodeitems_utils.NodeItem('RSNodeCollectionDisplayNode'),
         nodeitems_utils.NodeItem('RenderNodeScripts'),
-        # nodeitems_utils.NodeItem("RSNodeCommonSettingsNode"),
-        # nodeitems_utils.NodeItem("RSNodeScriptsNode"),
-        # nodeitems_utils.NodeItem("RenderNodeEmailNode"),
-        # # nodeitems_utils.NodeItem("RSNodeSmtpEmailNode"),
-        # nodeitems_utils.NodeItem("RSNodeLightStudioNode"),
+
         # nodeitems_utils.NodeItem("RSNodeServerNode"),
         # nodeitems_utils.NodeItem("RSNodeClientNode"),
     ]),
@@ -102,6 +93,22 @@ node_categories = [
         #     "label"    : repr("Version"),
         # }),
 
+    ]),
+    RSNCategory("OLD", "Old Nodes", items=[
+        nodeitems_utils.NodeItem("RSNodeCommonSettingsNode"),
+        nodeitems_utils.NodeItem("RSNodeScriptsNode"),
+        nodeitems_utils.NodeItem("RenderNodeEmailNode"),
+        nodeitems_utils.NodeItem("RSNodeSmtpEmailNode"),
+        nodeitems_utils.NodeItem("RSNodeLightStudioNode"),
+        nodeitems_utils.NodeItem("RSNodeWorkBenchRenderSettingsNode"),
+        nodeitems_utils.NodeItem("RSNodeEeveeRenderSettingsNode"),
+        nodeitems_utils.NodeItem("RSNodeCyclesRenderSettingsNode"),
+        nodeitems_utils.NodeItem("RSNodeCyclesLightPathNode"),
+        nodeitems_utils.NodeItem("RSNodeOctaneRenderSettingsNode"),
+        nodeitems_utils.NodeItem("RSNodeLuxcoreRenderSettingsNode"),
+        nodeitems_utils.NodeItem("RSNodeResolutionInputNode"),
+        nodeitems_utils.NodeItem("RSNodeActiveRenderSlotNode"),
+        nodeitems_utils.NodeItem("RSNodeViewLayerPassesNode"),
     ]),
 ]
 

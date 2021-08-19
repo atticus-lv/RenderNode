@@ -268,7 +268,7 @@ def add_keybind():
         kmi = km.keymap_items.new('rsn.add_viewer_node', 'V', 'PRESS')
         addon_keymaps.append((km, kmi))
         # tab search
-        kmi = km.keymap_items.new('rsn.search_nodes', 'TAB', 'PRESS')
+        kmi = km.keymap_items.new('rsn.search_and_link', 'TAB', 'PRESS')
         addon_keymaps.append((km, kmi))
         # mute node
         kmi = km.keymap_items.new('rsn.mute_nodes', 'M', 'PRESS')
