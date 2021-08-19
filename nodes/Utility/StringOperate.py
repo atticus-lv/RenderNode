@@ -80,7 +80,7 @@ class RenderNodeStringOperate(RenderNodeBase):
 
         elif self.operate_type == 'REPLACE':
             old = self.inputs['replace_old'].get_value()
-            new = self.inputs['replace'].get_value()
+            new = self.inputs['replace_new'].get_value()
             res = s1.replace(old, new)
             self.outputs[0].set_value(res)
 

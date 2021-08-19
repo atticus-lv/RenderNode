@@ -26,7 +26,6 @@ class RSNodeScriptsNode(RenderNodeBase):
     )
 
     def init(self, context):
-        self.create_input('RenderNodeSocketString','code','Code')
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
         self.width = 200
 

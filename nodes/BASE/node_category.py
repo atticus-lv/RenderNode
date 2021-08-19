@@ -31,6 +31,7 @@ node_categories = [
         nodeitems_utils.NodeItem("RenderNodeMath"),
         nodeitems_utils.NodeItem("RenderNodeVectorConvert"),
         nodeitems_utils.NodeItem("RenderNodeStringOperate"),
+        nodeitems_utils.NodeItem("RenderNodeSwitch"),
     ]),
 
     RSNCategory("OUTPUT", "Scene Output", items=[
