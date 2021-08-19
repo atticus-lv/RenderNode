@@ -34,16 +34,15 @@
 <img src="docs/media/img/feature.gif" width="1080px" />
 
 
-
 ### Download ![![](docs/media/logo/blender%20logo.png)](https://img.shields.io/badge/blender-2.93%2B-red)
 
-**Latest** *New features and fixes*:
+**Develop** *New features, change any time before stable*:
 
-[https://github.com/atticus-lv/RenderStackNode/archive/main.zip](https://github.com/atticus-lv/RenderStackNode/archive/main.zip)
+[https://github.com/atticus-lv/RenderStackNode/archive/develop.zip](https://github.com/atticus-lv/RenderStackNode/archive/develop.zip)
 
 **Stable** *Ready for work*
 
-[Stable 📚 ](https://github.com/atticus-lv/RenderStackNode/releases/tag/v1.2.4)
+[Stable 1.2.4.1 📚 ](https://github.com/atticus-lv/RenderStackNode/releases/tag/v1.2.4)
 
 ### Support me
 
