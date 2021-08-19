@@ -12,7 +12,7 @@
 + Path Expression
 
 [GitHub](https://github.com/atticus-lv/RenderStackNode)
-[Get Started](/Intro.md)
+[Get Started](/develop/Intro.md)
 
 ![title2](media/img/title2.png)
 
