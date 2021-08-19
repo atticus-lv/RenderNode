@@ -94,7 +94,7 @@ node_categories = [
         # }),
 
     ]),
-    RSNCategory("OLD", "Old Nodes", items=[
+    RSNCategory("OLD", "Old(Not fully support now)", items=[
         nodeitems_utils.NodeItem("RSNodeCommonSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeScriptsNode"),
         nodeitems_utils.NodeItem("RenderNodeEmailNode"),
