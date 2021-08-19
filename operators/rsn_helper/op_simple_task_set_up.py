@@ -1,7 +1,24 @@
 import bpy
-from bpy.props import IntProperty
+import os
 
-# TODO change it with the new group node
+from bpy.props import IntProperty
+from ... import __folder_name__
+from ...nodes.BASE._runtime import runtime_info
+
+default_value = {
+    'Base Path': '//',
+    'Camera': None,
+    'Frame End': 1,
+    'Frame Start': 1,
+    'Frame Step': 1,
+    'Path Exp': '$blend/$V/$camera.$F4',
+    'Resolution %': 100,
+    'Resolution Radio': 1.778,
+    'Resolution Y': 1080,
+    'Version': 0,
+}
+
+
 class RSN_OT_SimpleTask(bpy.types.Operator):
     """A simple task example"""
     bl_idname = 'rsn.simple_task'
@@ -11,47 +28,78 @@ class RSN_OT_SimpleTask(bpy.types.Operator):
     def poll(self, context):
         return context.space_data.edit_tree and bpy.context.space_data.edit_tree.bl_idname == 'RenderStackNodeTree'
 
+    def get_preset(self):
+        base_dir = os.path.join(bpy.utils.user_resource('SCRIPTS'), 'addons', __folder_name__, 'preset',
+                                'node_groups',
+                                'simple_task.blend')
+
+        node_group_dir = os.path.join(base_dir, 'NodeTree') + '/'
+        node_preset_name = 'Simple Setting'
+
+        if node_preset_name in bpy.data.node_groups:
+            preset_node = bpy.data.node_groups[node_preset_name]
+        else:
+            bpy.ops.wm.append(filename=node_preset_name, directory=node_group_dir)
+            preset_node = bpy.data.node_groups[node_preset_name]
+
+        text_dir = os.path.join(base_dir, 'Text') + '/'
+        text_name = 'RSN_tips'
+        if text_name in bpy.data.texts:
+            preset_tips = bpy.data.texts[text_name]
+        else:
+            bpy.ops.wm.append(filename=text_name, directory=text_dir)
+            preset_tips = bpy.data.texts[text_name]
+
+        return preset_node, preset_tips
+
     def execute(self, context):
-        nt = context.space_data.edit_tree
-        x = 0
-        y = 0
+        runtime_info['executing'] = True
+        try:
+            preset_node, preset_tips = self.get_preset()
+            nt = context.space_data.edit_tree
+            x = 0
+            y = 0
 
-        task = nt.nodes.new('RSNodeTaskNode')
-        cam = nt.nodes.new('RenderNodeSceneCamera')
-        engine = nt.nodes.new('RenderNodeSceneRenderEngine')
-        path = nt.nodes.new('RenderNodeSceneFilePath')
-        res = nt.nodes.new('RenderNodeSceneResolution')
-        # range = nt.nodes.new('RSNodeFrameRangeInputNode')
-        merge_output = nt.nodes.new('RSNodeSettingsMergeNode')
+            task = nt.nodes.new('RSNodeTaskNode')
+            engine = nt.nodes.new('RenderNodeSceneRenderEngine')
 
-        task.location = (x + 10, y)
-        cam.location = (x - 200, y + 50)
-        engine.location = (x - 200, y - 50)
-        path.location = (x - 500, y - 100)
-        res.location = (x - 450, y - 250)
-        # range.location = (x - 450, y - 380)
-        merge_output.location = (x - 200, y - 200)
+            tips = nt.nodes.new('NodeFrame')
+            tips.label = 'Tips'
+            tips.text = preset_tips
+            tips.width = 220
+            tips.height = 360
 
-        for node in nt.nodes:
-            node.select = 0
-        task.select = 1
-        cam.select = 1
-        engine.select = 1
-        path.select = 1
-        res.select = 1
-        # range.select = 1
-        merge_output.select = 1
+            node_group = nt.nodes.new('RenderNodeGroup')
+            node_group.node_tree_selection = preset_node
+            node_group.width = 200
 
-        nt.links.new(cam.outputs[0], task.inputs[0])
-        nt.links.new(engine.outputs[0], task.inputs[1])
-        nt.links.new(merge_output.outputs[0], task.inputs[2])
-        nt.links.new(path.outputs[0], merge_output.inputs[0])
-        nt.links.new(res.outputs[0], merge_output.inputs[1])
-        # nt.links.new(range.outputs[0], merge_output.inputs[2])
+            for input in node_group.inputs:
+                input.default_value = default_value[input.name]
 
-        bpy.ops.node.join()
-        frame = nt.nodes.active
-        frame.label = 'Simple Task'
+            task.location = (x + 10, y)
+            engine.location = (x - 160, y)
+            node_group.location = (x - 220, y - 150)
+            tips.location = (x + 10, y - 180)
+
+            for node in nt.nodes:
+                node.select = 0
+
+            task.select = 1
+            engine.select = 1
+            tips.select = 1
+            node_group.select = 1
+
+            nt.links.new(engine.outputs[0], task.inputs[0])
+            nt.links.new(node_group.outputs[0], task.inputs[1])
+
+            bpy.ops.node.join()
+            frame = nt.nodes.active
+            frame.label = 'Simple Task'
+
+        except Exception as e:
+            print(e)
+        finally:
+            runtime_info['executing'] = False
 
         return {"FINISHED"}
 
@@ -74,7 +122,6 @@ class RSN_OT_MoveNode(bpy.types.Operator):
         self.frame = nt.nodes.active
         self.frame.location = context.space_data.cursor_location
         bpy.ops.node.translate_attach_remove_on_cancel('INVOKE_DEFAULT')
-
         return {'FINISHED'}
 
 
