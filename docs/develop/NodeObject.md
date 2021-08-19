@@ -21,7 +21,7 @@
 ### Object PSR
 
 
-<img src="media/img/nodeObject/3.png" width="720px">
+<img src="media/img/develop/nodeObject/3.png" width="720px">
 
 
 
@@ -30,7 +30,7 @@
 
 ### Object Data
 
-<img src="media/img/nodeObject/4.png" width="720px">
+<img src="media/img/develop/nodeObject/4.png" width="720px">
 
 > This node can changes object's data properties ( The green icon in the properties panel )
 
