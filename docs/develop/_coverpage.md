@@ -4,17 +4,12 @@
 
 # **RenderStackNode**
 
-> Node based design and render workflow in blender (Develop vesion)
-
-+ Render queue
-+ Custom Overwrite
-+ Version Control
-+ Path Expression
+> Develop version
 
 [GitHub](https://github.com/atticus-lv/RenderStackNode)
 [Get Started](/develop/Intro.md)
 
-![title2](media/img/title2.png)
+![title2](media/img/develop_title.png)
 
 
 
