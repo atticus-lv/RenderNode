@@ -9,11 +9,13 @@ def update_node(self, context):
     if self.engine == 'CYCLES':
         self.create_input('RenderNodeSocketInt', 'cycles_samples', 'Render', default_value=64)
         self.create_input('RenderNodeSocketInt', 'preview_samples', 'Viewport', default_value=64)
+        self.create_input('RenderNodeSocketFloat', 'time_limit', 'Time Limit-CyclesX', default_value=0)
         self.create_input('RenderNodeSocketBool', 'use_adaptive_sampling', 'Adaptive Sampling', default_value=False)
     else:
         self.remove_input('cycles_samples')
         self.remove_input('preview_samples')
         self.remove_input('use_adaptive_sampling')
+        self.remove_input('time_limit')
 
     if self.engine == 'BLENDER_EEVEE':
         self.create_input('RenderNodeSocketInt', 'taa_render_samples', 'Render', default_value=64)
@@ -91,22 +93,17 @@ class RenderNodeSceneRenderEngine(RenderNodeBase):
             col.prop(self, 'light')
             col.prop(self, 'studio_light')
 
-    def process(self,context,id,path):
-        # correct numbers
-        for atrr in ['cycles_samples', 'preview_samples',
-                     'taa_render_samples', 'taa_samples',
-                     'luxcore_samples', 'luxcore_time',
-                     'max_samples', 'max_diffuse_depth', 'max_glossy_depth', 'max_scatter_depth']:
-
-            if atrr in self.inputs:
-                if self.inputs[atrr].get_value() < 1: self.inputs[atrr].set_value(1)
-
+    def process(self, context, id, path):
         # engine
         if self.engine == 'CYCLES':
             self.compare(bpy.context.scene.cycles, 'samples', self.inputs['cycles_samples'].get_value())
             self.compare(bpy.context.scene.cycles, 'preview_samples', self.inputs['preview_samples'].get_value())
-            self.compare(bpy.context.scene.cycles, 'use_adaptive_sampling', self.inputs['use_adaptive_sampling'].get_value())
+            self.compare(bpy.context.scene.cycles, 'use_adaptive_sampling',
+                         self.inputs['use_adaptive_sampling'].get_value())
             self.compare(bpy.context.scene.cycles, 'device', self.cycles_device)
+
+            self.compare(bpy.context.scene.cycles, 'time_limit', self.inputs['time_limit'].get_value())
+
 
         elif self.engine == 'BLENDER_EEVEE':
             self.compare(bpy.context.scene.eevee, 'taa_render_samples', self.inputs['taa_render_samples'].get_value())

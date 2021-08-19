@@ -36,7 +36,7 @@ class RSNodeCyclesLightPathNode(RenderNodeBase):
     def process(self, context, id, path):
         task_data = self.get_data()
         if 'cycles_light_path' in task_data:
-            for key, value in self.task_data['cycles_light_path'].items():
+            for key, value in task_data['cycles_light_path'].items():
                 self.compare(context.scene.cycles, key, value)
 
     def get_data(self):

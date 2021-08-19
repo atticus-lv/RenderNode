@@ -47,6 +47,15 @@ class RSNodeCyclesRenderSettingsNode(RenderNodeBase):
 
     def process(self, context, id, path):
         task_data = self.get_data()
+
+        engines = ['BLENDER_EEVEE', 'BLENDER_WORKBENCH'] + [engine.bl_idname for engine in
+                                                            bpy.types.RenderEngine.__subclasses__()]
+
+        # engine settings
+        if 'engine' in task_data:
+            if task_data['engine'] in engines:
+                self.compare(bpy.context.scene.render, 'engine', task_data['engine'])
+
         if task_data['engine'] == "CYCLES":
             self.compare(context.scene.cycles, 'samples', task_data['samples'])
 

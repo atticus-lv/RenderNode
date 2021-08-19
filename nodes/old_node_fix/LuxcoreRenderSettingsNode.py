@@ -41,6 +41,14 @@ class RSNodeLuxcoreRenderSettingsNode(RenderNodeBase):
     
     def process(self, context, id, path):
         task_data = self.get_data()
+
+        engines = ['BLENDER_EEVEE', 'BLENDER_WORKBENCH'] + [engine.bl_idname for engine in
+                                                            bpy.types.RenderEngine.__subclasses__()]
+        # engine settings
+        if 'engine' in task_data:
+            if task_data['engine'] in engines:
+                self.compare(bpy.context.scene.render, 'engine', task_data['engine'])
+
         if 'luxcore_half' in task_data and 'BlendLuxCore' in bpy.context.preferences.addons:
             if not bpy.context.scene.luxcore.halt.enable:
                 bpy.context.scene.luxcore.halt.enable = True
