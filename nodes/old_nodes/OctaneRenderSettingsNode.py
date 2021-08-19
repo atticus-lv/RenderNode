@@ -125,6 +125,11 @@ class RSNodeOctaneRenderSettingsNode(RenderNodeBase):
             self.warning_msg = 'Octane Engine is not enable!'
         return task_data
 
+    def process(self, context, id, path):
+        task_data = self.get_data()
+        if 'octane' in task_data and 'octane' in bpy.context.preferences.addons:
+            for key, value in task_data['octane'].items():
+                self.compare(bpy.context.scene.octane, key, value)
 
 def register():
     bpy.utils.register_class(RSNodeOctaneRenderSettingsNode)

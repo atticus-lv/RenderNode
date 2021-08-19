@@ -38,7 +38,35 @@ class RSNodeLuxcoreRenderSettingsNode(RenderNodeBase):
         row = col.row(align=True)
         row.prop(self, 'use_time')
         row.prop(self, 'time')
+    
+    def process(self, context, id, path):
+        task_data = self.get_data()
+        if 'luxcore_half' in task_data and 'BlendLuxCore' in bpy.context.preferences.addons:
+            if not bpy.context.scene.luxcore.halt.enable:
+                bpy.context.scene.luxcore.halt.enable = True
 
+            if task_data['luxcore_half']['use_samples'] is False and task_data['luxcore_half'][
+                'use_time'] is False:
+                bpy.context.scene.luxcore.halt.use_samples = True
+
+            elif task_data['luxcore_half']['use_samples'] is True and task_data['luxcore_half'][
+                'use_time'] is False:
+                if not bpy.context.scene.luxcore.halt.use_samples:
+                    bpy.context.scene.luxcore.halt.use_samples = True
+                if bpy.context.scene.luxcore.halt.use_time:
+                    bpy.context.scene.luxcore.halt.use_time = False
+
+                self.compare(bpy.context.scene.luxcore.halt, 'samples', task_data['luxcore_half']['samples'])
+
+            elif task_data['luxcore_half']['use_samples'] is False and task_data['luxcore_half'][
+                'use_time'] is True:
+                if bpy.context.scene.luxcore.halt.use_samples:
+                    bpy.context.scene.luxcore.halt.use_samples = False
+                if not bpy.context.scene.luxcore.halt.use_time:
+                    bpy.context.scene.luxcore.halt.use_time = True
+
+                self.compare(bpy.context.scene.luxcore.halt, 'time', task_data['luxcore_half']['time'])
+                
     def get_data(self):
         task_data = {}
         if 'BlendLuxCore' in bpy.context.preferences.addons:

@@ -37,7 +37,7 @@ class RSNodeCyclesLightPathNode(RenderNodeBase):
         task_data = self.get_data()
         if 'cycles_light_path' in task_data:
             for key, value in self.task_data['cycles_light_path'].items():
-                compare(bpy.context.scene.cycles, key, value)
+                self.compare(context.scene.cycles, key, value)
 
     def get_data(self):
         task_data = {}

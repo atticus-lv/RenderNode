@@ -33,9 +33,15 @@ class RSNodeCamInputNode(RenderNodeBase):
         if self.camera:
             row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.camera.name
 
+    def process(self, context, id, path):
+        task_data = self.get_data()
+        if 'camera' in task_data and task_data['camera']:
+            cam = eval(task_data['camera'])
+            if cam: self.compare(bpy.context.scene, 'camera', cam)
+
     def get_data(self):
+        task_data = {}
         if self.camera:
-            task_data = {}
             task_data["camera"] = f"bpy.data.objects['{self.camera.name}']"
             return task_data
 
