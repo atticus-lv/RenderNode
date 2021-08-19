@@ -4,7 +4,7 @@
 
 # **RenderStackNode**
 
-> Node based design and render workflow in blender
+> Node based design and render workflow in blender (Develop vesion)
 
 + Render queue
 + Custom Overwrite

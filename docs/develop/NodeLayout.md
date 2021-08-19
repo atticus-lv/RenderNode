@@ -14,23 +14,6 @@
 
 <!-- panels:end -->
 
-<!-- panels:start -->
-
-<!-- div:title-panel -->
-
-### Switch
-
-<!-- div:left-panel -->
-
-<img src="media/img/nodeLayout/2.png" width="720px">
-
-<!-- div:right-panel -->
-
->
-> This node allow you to switch input order<br>You use it on some toggle operations
-
-<!-- panels:end -->
-
 
 
 
