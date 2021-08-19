@@ -26,6 +26,7 @@ class RSNodeScriptsNode(RenderNodeBase):
     )
 
     def init(self, context):
+        self.create_input('RenderNodeSocketString','code','Code')
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
         self.width = 200
 
@@ -36,12 +37,8 @@ class RSNodeScriptsNode(RenderNodeBase):
         else:
             layout.prop(self, "file", text="")
 
-        pref = get_pref()
-        if not pref.node_task.update_scripts:
-            layout.label(text='Update is disable in viewer node', icon='ERROR')
-
     def process(self, context, id, path):
-        value = self.code if self.type == 'SINGLE' else self.file.name
+        value = self.code if self.type == 'SINGLE' else self.file.as_string()
         try:
             exec(value)
         except Exception as e:
