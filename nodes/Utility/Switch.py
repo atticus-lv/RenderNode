@@ -38,7 +38,7 @@ class RenderNodeSwitch(RenderNodeBase):
         self.create_output('RenderNodeSocketFloat', 'output', "Output")
 
     def draw_buttons(self, context, layout):
-        layout.prop(self, 'operate_type')
+        layout.prop(self, 'operate_type',text='')
 
     def process(self, context, id, path):
         switch = self.inputs['switch'].get_value()

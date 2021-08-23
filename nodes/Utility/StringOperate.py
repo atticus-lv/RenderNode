@@ -6,6 +6,13 @@ from mathutils import Color, Vector
 
 
 def update_node(self, context):
+    if self.operate_type == 'TEXT_2_STR':
+        self.remove_input('value1')
+        self.create_input('RenderNodeSocketText', 'text', 'Text')
+    else:
+        self.remove_input('text')
+        self.create_input('RenderNodeSocketString', 'value1', 'Value')
+
     if self.operate_type == 'MULTIPLY':
         self.create_input('RenderNodeSocketInt', 'count', 'Count')
     else:
@@ -23,13 +30,6 @@ def update_node(self, context):
     else:
         self.remove_input('replace_old')
         self.remove_input('replace_new')
-
-    if self.operate_type == 'TEXT_2_STR':
-        self.remove_input('value1')
-        self.create_input('RenderNodeSocketText', 'text', 'Text')
-    else:
-        self.remove_input('text')
-        self.create_input('RenderNodeSocketString', 'value1', 'Value')
 
     self.execute_tree()
 
@@ -60,8 +60,12 @@ class RenderNodeStringOperate(RenderNodeBase):
         self.create_input('RenderNodeSocketString', 'value2', 'Value')
         self.create_output('RenderNodeSocketString', 'output', "Output")
 
+    def draw_label(self):
+        name = self.bl_rna.properties['operate_type'].enum_items[self.operate_type].name
+        return name
+
     def draw_buttons(self, context, layout):
-        layout.prop(self, 'operate_type')
+        layout.prop(self, 'operate_type',text='')
 
     def process(self, context, id, path):
         s1 = self.inputs['value1'].get_value() if 'value1' in self.inputs else None

@@ -36,8 +36,8 @@ class RenderNodeVectorConvert(RenderNodeBase):
     operate_type: EnumProperty(
         name='Type',
         items=[
-            ('COMBINE', 'Combine', ''),
-            ('SEPARATE', 'Separate', ''),
+            ('COMBINE', 'Combine XYZ', ''),
+            ('SEPARATE', 'Separate XYZ', ''),
         ],
         update=update_node
     )
@@ -48,8 +48,12 @@ class RenderNodeVectorConvert(RenderNodeBase):
         self.create_input('RenderNodeSocketFloat', 'z', 'Z')
         self.create_output('RenderNodeSocketXYZ', 'output', "Output")
 
+    def draw_label(self):
+        name = self.bl_rna.properties['operate_type'].enum_items[self.operate_type].name
+        return name
+
     def draw_buttons(self, context, layout):
-        layout.prop(self, 'operate_type')
+        layout.prop(self, 'operate_type',text='')
 
     def process(self,context,id,path):
         if self.operate_type == 'COMBINE':
