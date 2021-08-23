@@ -39,11 +39,31 @@ def get_node_location(node):
     return nlocx, nlocy, ndimx, ndimy
 
 
-def get_node_vertices(nlocx, nlocy, ndimx, ndimy):
-    top_left = (nlocx, nlocy)
-    top_right = (nlocx + ndimx, nlocy)
-    bottom_left = (nlocx, nlocy - ndimy)
-    bottom_right = (nlocx + ndimx, nlocy - ndimy)
+def get_node_vertices(node):
+    nlocx = (node.location.x + 1) * dpifac()
+    nlocy = (node.location.y + 1) * dpifac()
+    ndimx = node.dimensions.x
+    ndimy = node.dimensions.y
+
+    if node.hide:
+        nlocx += -1
+        nlocy -= 10
+    if node.type == 'REROUTE':
+        # nlocx += 1
+        nlocy -= 1
+        ndimx = 0
+        ndimy = 0
+
+    if node.hide is True:
+        top_left = (nlocx, nlocy + ndimy / 2)
+        top_right = (nlocx + ndimx, nlocy + ndimy / 2)
+        bottom_left = (nlocx, nlocy - ndimy / 2)
+        bottom_right = (nlocx + ndimx, nlocy - ndimy - ndimy / 2)
+    else:
+        top_left = (nlocx, nlocy)
+        top_right = (nlocx + ndimx, nlocy)
+        bottom_left = (nlocx, nlocy - ndimy)
+        bottom_right = (nlocx + ndimx, nlocy - ndimy)
 
     return top_left, top_right, bottom_left, bottom_right
 
@@ -58,8 +78,7 @@ def draw_text_2d(color, text, x, y, size=20):
 
 def draw_text_on_node(color, text, node, size=15, corner_index=1, offset=(0, 0)):
     '''index 0,1,2,3: top_left, top_right, bottom_left, bottom_right'''
-    nlocx, nlocy, ndimx, ndimy = get_node_location(node)
-    corners = get_node_vertices(nlocx, nlocy, ndimx, ndimy)
+    corners = get_node_vertices( node)
     pos = corners[corner_index]
 
     loc_x, loc_y = bpy.context.region.view2d.view_to_region(pos[0], pos[1], clip=False)
@@ -163,13 +182,13 @@ def draw_rounded_node_border(shader, node, radius=8, colour=(1.0, 1.0, 1.0, 0.7)
         nlocx += -1
         nlocy += 5
     if node.type == 'REROUTE':
-        # nlocx += 1
+        nlocx += 1
         nlocy -= 1
         ndimx = 0
         ndimy = 0
         radius += 6
 
-    top_left, top_right, bottom_left, bottom_right = get_node_vertices(nlocx, nlocy, ndimx, ndimy)
+    top_left, top_right, bottom_left, bottom_right = get_node_vertices(node)
 
     # Top left corner
     mx, my = bpy.context.region.view2d.view_to_region(top_left[0], top_left[1], clip=False)
@@ -311,7 +330,7 @@ def draw_callback_nodeoutline(self, context):
                     else:
                         col = red
                     draw_text_on_node(white, node.name, node, size=17, corner_index=0, offset=(0, 3))
-                    draw_text_on_node(col, f"{t:.2f}ms", node, size=17, corner_index=0, offset=(0, 20))
+                    draw_text_on_node(col, f"{t:.2f}ms", node, size=12, corner_index=0, offset=(0, 20))
     except:
         pass
 
