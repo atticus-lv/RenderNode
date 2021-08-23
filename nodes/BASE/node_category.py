@@ -63,7 +63,8 @@ node_categories = [
     ]),
 
     RSNCategory("VARIANTS", "Variants", items=[
-        nodeitems_utils.NodeItem("RSNodeVariantsNode"),
+        nodeitems_utils.NodeItem("RenderNodeVariants"),
+        # nodeitems_utils.NodeItem("RSNodeVariantsNode"),
         # nodeitems_utils.NodeItem("RSNodeSetVariantsNode"),
         # nodeitems_utils.NodeItem("RSNodeNullNode"),
 

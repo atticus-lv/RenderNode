@@ -14,8 +14,8 @@ class RSNodeVariantsNode(RenderNodeBase):
         self.inputs.new('RSNodeSocketTaskSettings', "Settings")
         self.outputs.new('RSNodeSocketTaskSettings', "Output")
 
-    def draw_buttons(self, context, layout):
-        layout.prop(self, 'name')
+    # def draw_buttons(self, context, layout):
+    #     layout.prop(self, 'name')
 
     def update(self):
         self.auto_update_inputs('RSNodeSocketTaskSettings', "Settings")
