@@ -109,9 +109,14 @@ class RenderNodeBase(bpy.types.Node):
             self.execute_other(context, id, path, x)
 
     def execute(self, context, id, path):
-        if self.last_ex_id == id: return
+        if self.last_ex_id == id or self.mute: return
 
         self.last_ex_id = id
+
+        if self.bl_idname == 'RSNodeVariantsNode':
+            runtime_info['executing'] = True
+            self.process(context, id, path)
+            runtime_info['executing'] = False
 
         with MeasureTime(self, 'Dependants'):
             self.execute_dependants(context, id, path)
@@ -158,7 +163,7 @@ class RenderNodeBase(bpy.types.Node):
                             nodes.add(node)
 
     def update(self):
-        if runtime_info['updating'] is True:
+        if runtime_info['executing'] is True:
             return
 
         # for input in self.inputs:
@@ -171,11 +176,11 @@ class RenderNodeBase(bpy.types.Node):
         """
         i = 0
         for input in self.inputs:
-            if not input.is_linked:
+            if not input.is_linked and input.bl_idname == socket_type:
                 # keep at least one input for links with py commands
                 if i == 0:
                     i += 1
-                else:
+                elif input.bl_idname == socket_type:
                     self.inputs.remove(input)
         # auto add inputs
         if i != 1: self.inputs.new(socket_type, socket_name)
