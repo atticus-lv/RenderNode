@@ -38,7 +38,7 @@ class RSN_OT_SearchAndLink(bpy.types.Operator):
             print(e)
 
         # get the location for the new node
-        context.space_data.edit_tree.active = new_node
+        # context.space_data.edit_tree.active = new_node
         new_node.location = context.space_data.cursor_location[0] - new_node.width / 2, \
                             context.space_data.cursor_location[1]
         bpy.ops.node.select_all(action='DESELECT')
