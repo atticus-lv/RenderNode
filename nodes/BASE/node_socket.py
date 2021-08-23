@@ -158,6 +158,9 @@ class RenderNodeSocket(bpy.types.NodeSocket, SocketBase):
         else:
             layout.prop(self, 'default_value', text=self.display_name)
 
+    def draw_color(self, context):
+        return self.color
+
 
 class RenderNodeSocketBool(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketBool'
