@@ -12,7 +12,7 @@ class RenderNodeVariants(RenderNodeBase):
     def init(self, context):
         self.create_input('RenderNodeSocketInt', 'active', "Active Input")
         self.inputs.new('RSNodeSocketTaskSettings', "Settings")
-        self.outputs.new('RSNodeSocketTaskSettings', "Output")
+        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
     # def draw_buttons(self, context, layout):
     #     layout.prop(self, 'name')
@@ -29,7 +29,11 @@ class RenderNodeVariants(RenderNodeBase):
         for i, input in enumerate(self.inputs):
             _connected_socket = input.connected_socket
             if _connected_socket and _connected_socket.node is not None:
-                _connected_socket.node.mute = False if i == active else True
+                if i == active:
+                    _connected_socket.node.mute = False
+                    if hasattr(_connected_socket.node, 'execute'): _connected_socket.node.execute(context, id, path)
+                else:
+                    _connected_socket.node.mute = True
 
 
 def register():

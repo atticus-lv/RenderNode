@@ -146,11 +146,6 @@ class RenderNodeBase(bpy.types.Node):
 
         self.last_ex_id = id
 
-        if self.bl_idname == 'RSNodeVariantsNode':
-            runtime_info['executing'] = True
-            self.process(context, id, path)
-            runtime_info['executing'] = False
-
         with MeasureTime(self, 'Dependants'):
             self.execute_dependants(context, id, path)
         with MeasureTime(self, 'Group'):
@@ -159,6 +154,9 @@ class RenderNodeBase(bpy.types.Node):
         with MeasureTime(self, 'Execution'):
             self.process(context, id, path)
             if self not in cache_executed_nodes: cache_executed_nodes.append(self)
+
+        # if self.bl_idname == 'RSNodeVariantsNode':
+        #     self.execute_dependants(context, id, path)
 
         logger.debug(f'Execute: <{self.name}>')
 
