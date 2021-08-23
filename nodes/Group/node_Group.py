@@ -37,7 +37,7 @@ class RenderNodeGroup(bpy.types.NodeCustomGroup, RenderNodeBase):
 
     def nested_tree_filter(self, context):
         """Define which tree we would like to use as nested trees."""
-        if context.bl_idname != 'RenderStackNodeGroup':  # It should be our dedicated to this class
+        if context.bl_idname != 'RenderStackNodeTreeGroup':  # It should be our dedicated to this class
             return False
         else:
             # to avoid circular dependencies
