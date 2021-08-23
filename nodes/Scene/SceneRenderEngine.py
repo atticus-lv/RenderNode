@@ -94,6 +94,8 @@ class RenderNodeSceneRenderEngine(RenderNodeBase):
             col.prop(self, 'studio_light')
 
     def process(self, context, id, path):
+        # switch engine
+        self.compare(bpy.context.scene.render, 'engine', self.engine)
         # engine
         if self.engine == 'CYCLES':
             self.compare(bpy.context.scene.cycles, 'samples', self.inputs['cycles_samples'].get_value())
@@ -125,9 +127,6 @@ class RenderNodeSceneRenderEngine(RenderNodeBase):
             self.compare(bpy.context.scene.octane, 'max_diffuse_depth', self.inputs['max_diffuse_depth'].get_value())
             self.compare(bpy.context.scene.octane, 'max_glossy_depth', self.inputs['max_glossy_depth'].get_value())
             self.compare(bpy.context.scene.octane, 'max_scatter_depth', self.inputs['max_scatter_depth'].get_value())
-
-        # switch engine
-        self.compare(bpy.context.scene.render, 'engine', self.engine)
 
     def enum_studio_light(self, context):
         studio_lights = defaultdict(list)
