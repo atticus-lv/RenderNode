@@ -36,7 +36,40 @@ class RenderNodeBase(bpy.types.Node):
     ## INITIAL METHOD
     #########################################
 
-    node_dict = {}
+    # behaviors = [
+    #     ('NONE', 'None', '')
+    # ]
+    #
+    # ip_sockets = {
+    #     'name': {
+    #         'type': None,
+    #         'behaviors': None,
+    #         'text': None,
+    #     }
+    # }
+    #
+    # op_sockets = {
+    #     'name': {
+    #         'behaviors': None,
+    #         'type': None,
+    #         'text': None,
+    #     }
+    # }
+    #
+    # def update_sockets(self):
+    #     for name, info in self.ip_sockets.items():
+    #         if info['type'] == None or not hasattr(self,'operate_type'): continue
+    #         if self.operate_type in info['behaviors']:
+    #             self.create_input(info['type'], name, info['text'])
+    #         else:
+    #             self.remove_input(name)
+    #
+    #     for name, info in self.op_sockets.items():
+    #         if info['type'] == None or not hasattr(self,'operate_type'): continue
+    #         if self.operate_type in info['behaviors']:
+    #             self.create_output(info['type'], name, info['text'])
+    #         else:
+    #             self.remove_output(name)
 
     def create_input(self, socket_type, socket_name, socket_label, default_value=None):
         if self.inputs.get(socket_name):
