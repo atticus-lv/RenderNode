@@ -80,6 +80,8 @@ class RenderNodeBase(bpy.types.Node):
 
         if default_value: input.default_value = default_value
 
+        return input
+
     def remove_input(self, socket_name):
         input = self.inputs.get(socket_name)
         if input:
@@ -93,6 +95,8 @@ class RenderNodeBase(bpy.types.Node):
         output.text = socket_label
 
         if default_value: output.default_value = default_value
+
+        return output
 
     def remove_output(self, socket_name):
         output = self.outputs.get(socket_name)
@@ -200,21 +204,22 @@ class RenderNodeBase(bpy.types.Node):
         # for input in self.inputs:
         #     input.remove_incorrect_links()
 
-    def auto_update_inputs(self, socket_type='RSNodeSocketTaskSettings', socket_name='Input'):
+    def auto_update_inputs(self, socket_type='RSNodeSocketTaskSettings', socket_name='Input', start_update_index=0):
         """add or remove inputs automatically
         :parm socket_type: any socket type that is registered in blender
         :parm socket_name: custom name for the socket
         """
-        i = 0
-        for input in self.inputs:
+        count = 0
+        for index, input in enumerate(self.inputs):
+            if index < start_update_index: continue
             if not input.is_linked and input.bl_idname == socket_type:
                 # keep at least one input for links with py commands
-                if i == 0:
-                    i += 1
+                if count == 0:
+                    count += 1
                 elif input.bl_idname == socket_type:
                     self.inputs.remove(input)
         # auto add inputs
-        if i != 1: self.inputs.new(socket_type, socket_name)
+        if count != 1: self.inputs.new(socket_type, socket_name)
 
     ## RSN DATA MANAGE
     #########################################

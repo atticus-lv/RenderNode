@@ -21,7 +21,7 @@ class RenderNodeVariants(RenderNodeBase):
         self.auto_update_inputs('RSNodeSocketTaskSettings', "Settings")
 
     def auto_update_inputs(self, socket_type, socket_name):
-        super().auto_update_inputs(socket_type, socket_name)
+        super().auto_update_inputs(socket_type, socket_name, start_update_index=1)
 
     def process(self, context, id, path):
         active = self.inputs['active'].get_value()
