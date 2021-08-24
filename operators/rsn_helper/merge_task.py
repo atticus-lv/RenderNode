@@ -50,8 +50,10 @@ class RSN_OT_MergeSelectedNodes(bpy.types.Operator):
         list_node.location = loc_x + width * 1.5, loc_y
 
         for i, node in enumerate(need_to_sort):
-            nt.links.new(node.outputs[0], list_node.inputs[i])
-
+            if not self.make_version:
+                nt.links.new(node.outputs[0], list_node.inputs[i])
+            else:
+                nt.links.new(node.outputs[0], list_node.inputs[i + 1])
         return {"FINISHED"}
 
 
