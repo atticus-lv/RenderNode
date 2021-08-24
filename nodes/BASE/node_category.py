@@ -33,7 +33,6 @@ node_categories = [
         nodeitems_utils.NodeItem("RenderNodeBooleanMath"),
         nodeitems_utils.NodeItem("RenderNodeStringOperate"),
         nodeitems_utils.NodeItem("RenderNodeVectorConvert"),
-        nodeitems_utils.NodeItem("RenderNodeSwitch"),
     ]),
 
     RSNCategory("OUTPUT", "Scene Output", items=[
@@ -63,6 +62,7 @@ node_categories = [
     ]),
 
     RSNCategory("VARIANTS", "Variants", items=[
+        nodeitems_utils.NodeItem("RenderNodeSwitch"),
         nodeitems_utils.NodeItem("RenderNodeVariants"),
         # nodeitems_utils.NodeItem("RSNodeVariantsNode"),
         # nodeitems_utils.NodeItem("RSNodeSetVariantsNode"),
