@@ -14,6 +14,13 @@ from ...preferences import get_pref
 from ...nodes.BASE._runtime import cache_node_times, cache_node_dependants
 from ...nodes.BASE.node_base import cache_executed_nodes
 
+easy_name = {
+    'BLENDER_EEVEE': 'Eevee',
+    'BLENDER_WORKBENCH': 'WorkBench',
+    'octane': 'Octane',
+    'LUXCORE': 'Luxcore',
+}
+
 
 def find_node_parent(node):
     def get_parent(obj):
@@ -78,7 +85,7 @@ def draw_text_2d(color, text, x, y, size=20):
 
 def draw_text_on_node(color, text, node, size=15, corner_index=1, offset=(0, 0)):
     '''index 0,1,2,3: top_left, top_right, bottom_left, bottom_right'''
-    corners = get_node_vertices( node)
+    corners = get_node_vertices(node)
     pos = corners[corner_index]
 
     loc_x, loc_y = bpy.context.region.view2d.view_to_region(pos[0], pos[1], clip=False)
@@ -342,13 +349,16 @@ def draw_callback_nodeoutline(self, context):
         camera = context.scene.camera.name if context.scene.camera else "No Scene camera"
         is_save = True if bpy.data.filepath != '' else False
         file_path_text = context.scene.render.filepath if is_save else "Save your file first!"
+        engine = context.scene.render.engine if context.scene.render.engine not in easy_name else easy_name[
+            context.scene.render.engine]
+        frame_count = context.scene.frame_end - context.scene.frame_start + 1
 
         texts = [
             f"Task: {task_text}",
+            f"Frame: {context.scene.frame_start} - {context.scene.frame_end} ({frame_count})",
             f"Camera: {camera}",
-            f"Engine: {context.scene.render.engine}",
-            f"Frame: {context.scene.frame_start} - {context.scene.frame_end}",
-            f"FilePath: {file_path_text}",
+            f"Engine: {engine}",
+            f"Path: {file_path_text}",
         ]
 
         # text background
