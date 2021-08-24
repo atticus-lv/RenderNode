@@ -8,7 +8,7 @@ class RenderNodeObjectDisplay(RenderNodeBase):
     bl_label = 'Object Display'
 
     def init(self, context):
-        self.create_input('RenderNodeSocketObject', 'object', '')
+        self.create_input('RenderNodeSocketObject', 'object', 'Object')
         self.create_input('RenderNodeSocketBool', 'hide_viewport', 'Hide Viewport')
         self.create_input('RenderNodeSocketBool', 'hide_render', 'Hide Render')
 

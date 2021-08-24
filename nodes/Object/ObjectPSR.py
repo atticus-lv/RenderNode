@@ -71,7 +71,7 @@ class RenderNodeObjectPSR(RenderNodeBase):
     accept_mode: BoolProperty(name='Accept Mode', default=False)
 
     def init(self, context):
-        self.create_input('RenderNodeSocketObject', 'object', '')
+        self.create_input('RenderNodeSocketObject', 'object', 'Object')
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
         self.width = 200

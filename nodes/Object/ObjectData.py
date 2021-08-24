@@ -6,7 +6,7 @@ from mathutils import Color, Vector
 
 
 def update_node(self, context):
-    ob = self.inputs['object'].value
+    ob = self.inputs['object'].get_value()
     if self.data_path == '' or not ob: return None
     try:
 
@@ -23,7 +23,7 @@ def update_node(self, context):
         elif self.d_type == str:
             self.create_input('RenderNodeSocketString', 'value', "String")
         elif self.d_type == bool:
-            self.create_input('RenderNodeSocketBool', 'value', "Bool")
+            self.create_input('RenderNodeSocketBool', 'value', "Boolean")
         elif self.d_type == Color:
             self.create_input('RenderNodeSocketColor', 'value', "Color")
         elif self.d_type == Vector:
@@ -52,15 +52,14 @@ class RenderNodeObjectData(RenderNodeBase):
     bl_idname = 'RenderNodeObjectData'
     bl_label = 'Object Data'
 
-    data_path: StringProperty(name='Path',
+    data_path: StringProperty(name='Data Path',
                               description='Data Path (Object Data Tab)',
                               default='', update=update_node)
     full_data_path = None
     d_type = None
 
     def init(self, context):
-        self.create_input('RenderNodeSocketObject', 'object', "")
-
+        self.create_input('RenderNodeSocketObject', 'object', "Object")
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
         self.width = 200

@@ -23,9 +23,9 @@ class RenderNodeObjectMaterial(RenderNodeBase):
     bl_label = 'Object Material'
 
     def init(self, context):
-        self.create_input('RenderNodeSocketObject', 'object', '')
+        self.create_input('RenderNodeSocketObject', 'object', 'Object')
         self.create_input('RenderNodeSocketInt', 'slot_index', 'Slot Index')
-        self.create_input('RenderNodeSocketMaterial', 'material', '')
+        self.create_input('RenderNodeSocketMaterial', 'material', 'Mat')
 
         self.outputs.new('RSNodeSocketTaskSettings', "Settings")
 
