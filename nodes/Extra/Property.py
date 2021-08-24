@@ -13,17 +13,17 @@ def update_node(self, context):
         self.remove_input('value')
 
         if self.d_type == int:
-            self.create_input('RenderNodeSocketInt', 'value', "Value")
+            self.create_input('RenderNodeSocketInt', 'value', "Int")
         elif self.d_type == float:
-            self.create_input('RenderNodeSocketFloat', 'value', "Value")
+            self.create_input('RenderNodeSocketFloat', 'value', "Float")
         elif self.d_type == str:
-            self.create_input('RenderNodeSocketString', 'value', "Value")
+            self.create_input('RenderNodeSocketString', 'value', "String")
         elif self.d_type == bool:
-            self.create_input('RenderNodeSocketBool', 'value', "Value")
+            self.create_input('RenderNodeSocketBool', 'value', "Boolean")
         elif self.d_type == Color:
-            self.create_input('RenderNodeSocketColor', 'value', "")
+            self.create_input('RenderNodeSocketColor', 'value', "Color")
         elif self.d_type == Vector:
-            self.create_input('RenderNodeSocketVector', 'value', "Value")
+            self.create_input('RenderNodeSocketXYZ', 'value', "Vector")
 
         self.execute_tree()
 
@@ -55,7 +55,10 @@ class RenderNodeProperty(RenderNodeBase):
         try:
             obj = eval(self.full_data_path)
             if obj == self.inputs['value'].get_value(): return None
-            exec(f'{self.full_data_path} = {self.inputs["value"].get_value()}')
+
+            value = self.inputs["value"].get_value()
+            if type(value) in {Color,Vector}:value = list(value)
+            exec(f'{self.full_data_path} = {value}')
 
         except Exception as e:
             print(e)
