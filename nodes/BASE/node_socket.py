@@ -122,19 +122,45 @@ def update_node(self, context):
         print('Not able to update in a node group yet')
 
 
-class RenderNodeSocketInterface(bpy.types.NodeSocketInterface):
+class RenderNodeSocketmixin():
+    '''Used by nodesocket and nodesocketinterface'''
+
+    def init_from_socket(self, node, socket):
+        self.display_shape = socket.shape
+
+        if hasattr(self, 'default_value') and hasattr(socket, 'default_value'):
+            if hasattr(self, 'set_default_value'):
+                self.set_default_value(socket.default_value)
+            else:
+                self.default_value = socket.default_value
+
+
+class RenderNodeSocketInterface():
     bl_socket_idname = 'RenderNodeSocket'
 
-    def draw(self, context, layout):
-        pass
+    def from_socket(self, node, socket):
+        # https://docs.blender.org/api/current/bpy.types.NodeSocketInterface.html#bpy.types.NodeSocketInterface.from_socket
+        self.init_from_socket(node, socket)
+
+    def init_socket(self, node, socket, data_path):
+        # https://docs.blender.org/api/current/bpy.types.NodeSocketInterface.html#bpy.types.NodeSocketInterface.init_socket
+        socket.init_from_socket(node, self)
 
     def draw_color(self, context):
-        return (0, 1, 1, 1)
+        '''Color of the socket icon'''
+        return self.color
+
+    def draw(self, context, layout):
+        if hasattr(self, 'default_value'):
+            layout.prop(self, 'default_value', text='Default')
 
 
 class RenderNodeSocket(bpy.types.NodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocket'
     bl_label = 'RenderNodeSocket'
+
+    shape = 'CIRCLE'
+    color = 0.5, 0.5, 0.5, 1
 
     text: StringProperty(default='')
     default_value: IntProperty(default=0, update=update_node)
@@ -155,9 +181,4 @@ class RenderNodeSocket(bpy.types.NodeSocket, SocketBase):
             layout.prop(self, 'default_value', text=self.display_name)
 
     def draw_color(self, context, node):
-        return 0.5, 0.5, 0.5, 1
-
-
-
-
-
+        return self.color
