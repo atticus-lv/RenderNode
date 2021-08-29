@@ -10,26 +10,19 @@ def get_pref():
 
 
 class PropsDrawNodes(bpy.types.PropertyGroup):
-    border_radius: FloatProperty(name='Border Radius',
-                                 description='Scale of the border when draw task nodes',
-                                 default=5, min=2, soft_min=2, soft_max=8)
-
-    settings_color: FloatVectorProperty(name='Border Color', subtype='COLOR',
-                                        default=(0.2, 1.0, 0.2))
+    show_text_info: BoolProperty(name='Show Text Info', default=True)
 
     task_color: FloatVectorProperty(name='Task Color', subtype='COLOR',
                                     default=(0, 1.0, 1.0))
 
-    file_path_color: FloatVectorProperty(name='File Path Color', subtype='COLOR',
-                                         default=(1.0, 0.8, 0))
+    text_color1: FloatVectorProperty(name='Text Color 1', subtype='COLOR',
+                                     default=(1, 1, 1))
 
-    show_text_info: BoolProperty(name='Show Text Info', default=True)
+    text_color2: FloatVectorProperty(name='Text Color 2', subtype='COLOR',
+                                     default=(0, 1, 0))
 
-    background_color: FloatVectorProperty(name='Background Color', subtype='COLOR',
-                                          default=(0.2, 0.2, 0.4))
-
-    text_color: FloatVectorProperty(name='Text Color', subtype='COLOR',
-                                    default=(1, 1, 1))
+    text_color3: FloatVectorProperty(name='Text Color 3', subtype='COLOR',
+                                     default=(1, 0, 0))
 
 
 class NodeViewLayerPassedProps(bpy.types.PropertyGroup):
@@ -52,20 +45,6 @@ class NodeSmtpProps(bpy.types.PropertyGroup):
         name="SMTP Password",
         description="The SMTP Password for your receiver email",
         subtype='PASSWORD')
-
-
-class NodeTaskProps(bpy.types.PropertyGroup):
-    show: BoolProperty(name="Dropdown", default=True)
-    # update_properties
-    update_scripts: BoolProperty(name='Update Scripts',
-                                 description="Update ex node when using viewer node",
-                                 default=False)
-    update_path: BoolProperty(name='Update File Path',
-                              description="Update File Path node when using viewer node",
-                              default=True)
-    update_view_layer_passes: BoolProperty(name='Update ViewLayer Passes',
-                                           description="Update ViewLayer Passes node when using viewer node",
-                                           default=False)
 
 
 class NodeFilePathProps(bpy.types.PropertyGroup):
@@ -114,7 +93,6 @@ class RSN_Preference(bpy.types.AddonPreferences):
 
     node_view_layer_passes: PointerProperty(type=NodeViewLayerPassedProps)
     node_smtp: PointerProperty(type=NodeSmtpProps)
-    node_task: PointerProperty(type=NodeTaskProps)
     node_file_path: PointerProperty(type=NodeFilePathProps)
 
     def draw(self, context):
@@ -130,9 +108,6 @@ class RSN_Preference(bpy.types.AddonPreferences):
     def draw_nodes_option(self):
         layout = self.layout
         col = layout.column(align=1)
-
-        box = col.box().split().column(align=1)
-        self.viewer_node(box)
 
         col.separator(factor=0.2)
         box = col.box().split().column(align=1)
@@ -160,25 +135,17 @@ class RSN_Preference(bpy.types.AddonPreferences):
 
         box = col.box().split().column(align=1)
         box.label(text="Draw Nodes")
-        box.prop(self.draw_nodes, 'border_radius', slider=1)
-        box.prop(self.draw_nodes, 'settings_color')
-        box.separator(factor=1)
-
         box.prop(self.draw_nodes, 'task_color')
-        box.prop(self.draw_nodes, 'file_path_color')
         box.separator(factor=1)
 
         box.prop(self.draw_nodes, 'background_color')
-        box.prop(self.draw_nodes, 'text_color')
+        box.prop(self.draw_nodes, 'text_color1')
+        box.prop(self.draw_nodes, 'text_color2')
+        box.prop(self.draw_nodes, 'text_color3')
 
         layout.separator(factor=0.5)
 
         layout.prop(self, 'log_level', text='Debug')
-
-        # row = layout.split(factor=0.7)
-        # row.separator()
-        # row.operator('rsn.check_update', icon='URL',
-        #              text='Check Update' if not self.need_update else f"New Version {''.join(str(self.latest_version).split())}!")
 
     def view_layer_passes_node(self, box):
         box.prop(self.node_view_layer_passes, 'show', text="View Layer Passes Node", emboss=False,
@@ -186,7 +153,6 @@ class RSN_Preference(bpy.types.AddonPreferences):
         if self.node_view_layer_passes.show:
             box.use_property_split = True
             box.prop(self.node_view_layer_passes, "comp_node_name")
-            # box.prop(self.node_file_path, "time_behaviour")
 
     def filepath_node(self, box):
         box.prop(self.node_file_path, 'show', text="File Path Node", emboss=False,
@@ -194,7 +160,6 @@ class RSN_Preference(bpy.types.AddonPreferences):
         if self.node_file_path.show:
             box.use_property_split = True
             box.prop(self.node_file_path, "path_format")
-            # box.prop(self.node_file_path, "time_behaviour")
 
     def smtp_node(self, box):
         box.prop(self.node_smtp, 'show', text="SMTP Email Node", emboss=False,
@@ -203,16 +168,6 @@ class RSN_Preference(bpy.types.AddonPreferences):
             box.use_property_split = True
             box.prop(self.node_smtp, "server", text='Server')
             box.prop(self.node_smtp, "password", text='Password')
-
-    def viewer_node(self, box):
-        box.prop(self.node_task, 'show', text="Task Node (Update Option)", emboss=False,
-                 icon='TRIA_DOWN' if self.node_task.show else 'TRIA_RIGHT')
-        if self.node_task.show:
-            box.use_property_split = True
-
-            box.prop(self.node_task, 'update_scripts')
-            box.prop(self.node_task, 'update_path')
-            box.prop(self.node_task, 'update_view_layer_passes')
 
     def drawKeymap(self):
         col = self.layout.box().column()
@@ -254,7 +209,6 @@ classes = (
     NodeViewLayerPassedProps,
     NodeSmtpProps,
     NodeFilePathProps,
-    NodeTaskProps,
     # pref
     RSN_Preference,
 )

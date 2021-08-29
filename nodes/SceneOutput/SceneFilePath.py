@@ -40,7 +40,7 @@ class RenderNodeSceneFilePath(RenderNodeBase):
         v = self.inputs['version'].get_value()
         if path_exp and v is not None:
             postfix = self.get_postfix(path_exp, v)
-            path_to_task = os.path.join(directory_path, postfix)
+            path_to_task = os.path.join(directory_path, postfix) if postfix != '' else directory_path + '/'
             task_node = context.space_data.node_tree.nodes.get(context.window_manager.rsn_viewer_node)
             if task_node:
                 task_node.path = path_to_task
@@ -62,7 +62,7 @@ class RenderNodeSceneFilePath(RenderNodeBase):
         scn = bpy.context.scene
         cam = scn.camera
         active_task = self.id_data.nodes.get(bpy.context.window_manager.rsn_viewer_node)
-        if not active_task: return
+        if active_task == '' or path_exp == '': return ''
         blend_name = ''
 
         postfix = path_exp
