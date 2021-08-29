@@ -76,9 +76,10 @@ class RenderNodeBase(bpy.types.Node):
             return None
 
         input = self.inputs.new(socket_type, socket_name)
-        input.text = socket_label
+        if hasattr(input, 'text'): input.text = socket_label
 
         if default_value: input.default_value = default_value
+        if hasattr(input, 'shape'): input.change_shape()
 
         return input
 
@@ -92,9 +93,10 @@ class RenderNodeBase(bpy.types.Node):
             return None
 
         output = self.outputs.new(socket_type, socket_name)
-        output.text = socket_label
+        if hasattr(output, 'text'): output.text = socket_label
 
         if default_value: output.default_value = default_value
+        if hasattr(output, 'shape'): output.change_shape()
 
         return output
 
@@ -219,7 +221,7 @@ class RenderNodeBase(bpy.types.Node):
                 elif input.bl_idname == socket_type:
                     self.inputs.remove(input)
         # auto add inputs
-        if count != 1: self.inputs.new(socket_type, socket_name)
+        if count != 1: self.create_input(socket_type, socket_name, socket_name)
 
     ## RSN DATA MANAGE
     #########################################

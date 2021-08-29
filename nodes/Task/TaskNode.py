@@ -56,8 +56,8 @@ class RSNodeTaskNode(RenderNodeBase):
                                  description='Set as active Task')
 
     def init(self, context):
-        self.inputs.new('RSNodeSocketTaskSettings', "Settings")
-        self.outputs.new('RSNodeSocketRenderList', "Task")
+        self.create_input('RSNodeSocketTaskSettings','Settings','Settings')
+        self.create_output('RSNodeSocketRenderList','Task','Task')
         self.label = self.name
 
     def draw_buttons(self, context, layout):

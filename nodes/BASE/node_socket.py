@@ -182,3 +182,6 @@ class RenderNodeSocket(bpy.types.NodeSocket, SocketBase):
 
     def draw_color(self, context, node):
         return self.color
+
+    def change_shape(self):
+        self.display_shape = self.shape

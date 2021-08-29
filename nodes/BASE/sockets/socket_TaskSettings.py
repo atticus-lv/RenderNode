@@ -5,10 +5,13 @@ from ..node_socket import update_node
 
 
 class RenderNodeSocketInterfaceTaskSettings(RenderNodeSocketmixin, RenderNodeSocketInterface,
-                                          bpy.types.NodeSocketInterface):
+                                            bpy.types.NodeSocketInterface):
     bl_idname = 'RSNodeSocketTaskSettings'
     bl_socket_idname = 'RSNodeSocketTaskSettings'
     bl_label = 'TaskSettings (RenderNode)'
+
+    shape = 'SQUARE'
+    default_value = None
 
     def draw(self, context, layout):
         pass
@@ -20,6 +23,9 @@ class RenderNodeSocketInterfaceTaskSettings(RenderNodeSocketmixin, RenderNodeSoc
 class RSNodeSocketTaskSettings(bpy.types.NodeSocket, SocketBase):
     bl_idname = 'RSNodeSocketTaskSettings'
     bl_label = 'RSNodeSocketTaskSettings'
+
+    shape = 'SQUARE'
+    default_value = None
 
     def draw(self, context, layout, node, text):
         if not self.is_linked:
@@ -37,6 +43,8 @@ class RSNodeSocketTaskSettings(bpy.types.NodeSocket, SocketBase):
     def draw_color(self, context, node):
         return 0.6, 0.6, 0.6, 1.0
 
+    def change_shape(self):
+        self.display_shape = self.shape
 
 classes = (
     RenderNodeSocketInterfaceTaskSettings,
