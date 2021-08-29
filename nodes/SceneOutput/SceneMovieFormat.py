@@ -58,7 +58,7 @@ class RenderNodeSceneMovieFormat(RenderNodeBase):
                                 update=update_node)
 
     def init(self, context):
-        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
+        self.create_output('RSNodeSocketTaskSettings','Settings','Settings')
         self.width = 200
 
     def draw_buttons(self, context, layout):

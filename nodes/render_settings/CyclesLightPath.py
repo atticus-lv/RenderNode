@@ -20,7 +20,7 @@ class RenderNodeCyclesLightPath(RenderNodeBase):
         self.create_input('RenderNodeSocketInt', 'transmission_bounces', 'Transmission', default_value=12)
         self.create_input('RenderNodeSocketInt', 'volume_bounces', 'Volume', default_value=0)
 
-        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
+        self.create_output('RSNodeSocketTaskSettings', 'Settings', 'Settings')
 
     def process(self, context, id, path):
         for input in self.inputs:

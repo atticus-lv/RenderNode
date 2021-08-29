@@ -60,7 +60,7 @@ class RenderNodeObjectData(RenderNodeBase):
 
     def init(self, context):
         self.create_input('RenderNodeSocketObject', 'object', "Object")
-        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
+        self.create_output('RSNodeSocketTaskSettings', 'Settings', 'Settings')
 
         self.width = 200
 

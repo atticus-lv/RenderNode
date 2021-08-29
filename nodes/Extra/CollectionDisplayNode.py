@@ -8,7 +8,7 @@ class RSNodeCollectionDisplayNode(RenderNodeBase):
     bl_label = 'Collection Display'
 
     def init(self, context):
-        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
+        self.create_output('RSNodeSocketTaskSettings', 'Settings', 'Settings')
         self.create_input('RenderNodeSocketCollection', 'collection', '')
         self.create_input('RenderNodeSocketBool', 'hide_viewport', 'Hide Viewport')
         self.create_input('RenderNodeSocketBool', 'hide_render', 'Hide Render')

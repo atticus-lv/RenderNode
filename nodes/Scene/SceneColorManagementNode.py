@@ -67,7 +67,7 @@ class RSNodeColorManagementNode(RenderNodeBase):
         self.create_input('RenderNodeSocketFloat', 'exposure', 'Exposure', default_value=0.0)
         self.create_input('RenderNodeSocketFloat', 'gamma', 'Gamma', default_value=1.0)
 
-        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
+        self.create_output('RSNodeSocketTaskSettings','Settings','Settings')
 
         self.width = 200
 

@@ -14,7 +14,7 @@ class RSNodeLightStudioNode(RenderNodeBase):
     light_studio_index: IntProperty(name='light studio index', update=update_node)
 
     def init(self, context):
-        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
+        self.create_output('RSNodeSocketTaskSettings', 'Settings', 'Settings')
 
     def get_name(self):
         if hasattr(bpy.context.scene, "ssm"):

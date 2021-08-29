@@ -13,7 +13,7 @@ class RenderNodeSceneRenderSlot(RenderNodeBase):
 
     def init(self, context):
         self.create_input('RenderNodeSocketInt', 'slot_index', 'Slot', default_value=1)
-        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
+        self.create_output('RSNodeSocketTaskSettings','Settings','Settings')
 
     def process(self,context,id,path):
         render_result = bpy.data.images.get('Render Result')

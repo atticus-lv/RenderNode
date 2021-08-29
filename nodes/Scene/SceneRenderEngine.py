@@ -80,7 +80,7 @@ class RenderNodeSceneRenderEngine(RenderNodeBase):
         self.create_input('RenderNodeSocketInt', 'taa_render_samples', 'Render', default_value=64)
         self.create_input('RenderNodeSocketInt', 'taa_samples', 'Viewport', default_value=64)
 
-        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
+        self.create_output('RSNodeSocketTaskSettings','Settings','Settings')
 
     def draw_buttons(self, context, layout):
         col = layout.column(align=1)

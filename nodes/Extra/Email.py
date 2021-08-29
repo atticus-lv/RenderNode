@@ -22,7 +22,7 @@ class RenderNodeEmailNode(RenderNodeBase):
         self.create_input('RenderNodeSocketString', 'content', 'Content')
         self.create_input('RenderNodeSocketString', 'sender_name', 'Sender Name')
         self.create_input('RenderNodeSocketString', 'email', 'Email')
-        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
+        self.create_output('RSNodeSocketTaskSettings', 'Settings', 'Settings')
 
         self.width = 200
 

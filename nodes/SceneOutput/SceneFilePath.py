@@ -22,7 +22,7 @@ class RenderNodeSceneFilePath(RenderNodeBase):
         self.create_input('RenderNodeSocketInt', 'version', 'Version')
         self.create_input('RenderNodeSocketString', 'path_expression', 'Postfix')
 
-        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
+        self.create_output('RSNodeSocketTaskSettings','Settings','Settings')
 
         self.inputs['path_expression'].value = get_pref().node_file_path.path_format
 

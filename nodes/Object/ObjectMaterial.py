@@ -27,7 +27,7 @@ class RenderNodeObjectMaterial(RenderNodeBase):
         self.create_input('RenderNodeSocketInt', 'slot_index', 'Slot Index')
         self.create_input('RenderNodeSocketMaterial', 'material', 'Mat')
 
-        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
+        self.create_output('RSNodeSocketTaskSettings', 'Settings', 'Settings')
 
 
     def process(self,context,id,path):

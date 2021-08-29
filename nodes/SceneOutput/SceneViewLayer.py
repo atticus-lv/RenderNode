@@ -13,7 +13,7 @@ class RenderNodeSceneViewLayer(RenderNodeBase):
         self.create_input('RenderNodeSocketBool', 'set_as_active_layer', 'Set as active Layer')
         self.create_input('RenderNodeSocketBool', 'use_for_render', 'Use for Rendering')
         self.create_input('RenderNodeSocketBool','output_composite_passes','Output Composite Passes')
-        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
+        self.create_output('RSNodeSocketTaskSettings','Settings','Settings')
 
     def process(self,context,id,path):
         view_layer_name = self.inputs['view_layer'].get_value()

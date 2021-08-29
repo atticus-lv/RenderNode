@@ -10,7 +10,7 @@ class RenderNodeSceneCamera(RenderNodeBase):
 
     def init(self, context):
         self.create_input('RenderNodeSocketCamera', "camera", 'Camera')
-        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
+        self.create_output('RSNodeSocketTaskSettings','Settings','Settings')
 
     def process(self,context,id,path):
         cam = self.inputs[0].get_value()

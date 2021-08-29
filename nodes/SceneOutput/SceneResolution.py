@@ -85,7 +85,7 @@ class RenderNodeSceneResolution(RenderNodeBase):
         self.create_input('RenderNodeSocketInt', "resolution_y", 'Y', default_value=1080)
         self.create_input('RenderNodeSocketInt', "resolution_percentage", '%', default_value=100)
 
-        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
+        self.create_output('RSNodeSocketTaskSettings','Settings','Settings')
 
     def draw_buttons(self, context, layout):
         try:

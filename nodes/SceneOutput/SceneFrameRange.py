@@ -18,7 +18,7 @@ class RenderNodeSceneFrameRange(RenderNodeBase):
         self.create_input('RenderNodeSocketInt', 'frame_end', 'End')
         self.create_input('RenderNodeSocketInt', 'frame_step', 'Step')
 
-        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
+        self.create_output('RSNodeSocketTaskSettings','Settings','Settings')
 
         self.inputs['frame_start'].default_value = bpy.context.scene.frame_start
         self.inputs['frame_end'].default_value = bpy.context.scene.frame_end

@@ -92,7 +92,7 @@ class RSNodeSmtpEmailNode(RenderNodeBase):
 
     def init(self, context):
         self.warning = False
-        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
+        self.create_output('RSNodeSocketTaskSettings', 'Settings', 'Settings')
         self.width = 150
 
     def draw_buttons(self, context, layout):

@@ -11,7 +11,7 @@ class RenderNodeSceneWorld(RenderNodeBase):
     def init(self, context):
         self.create_input('RenderNodeSocketWorld', "world", 'World')
 
-        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
+        self.create_output('RSNodeSocketTaskSettings','Settings','Settings')
 
     def process(self,context,id,path):
         world = self.inputs['world'].get_value()

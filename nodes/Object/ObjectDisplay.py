@@ -12,7 +12,7 @@ class RenderNodeObjectDisplay(RenderNodeBase):
         self.create_input('RenderNodeSocketBool', 'hide_viewport', 'Hide Viewport')
         self.create_input('RenderNodeSocketBool', 'hide_render', 'Hide Render')
 
-        self.outputs.new('RSNodeSocketTaskSettings', "Settings")
+        self.create_output('RSNodeSocketTaskSettings', 'Settings', 'Settings')
 
         self.width = 175
 
