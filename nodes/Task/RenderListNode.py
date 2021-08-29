@@ -119,8 +119,8 @@ class RSNodeRenderListNode(RenderNodeBase):
     show_processor_bar: BoolProperty(name='Processor Bar', update=resize_node)
     processor_bar: PointerProperty(name="Processor Property", type=ProcessorBarProperty)
 
-    total_frames = 0
-    done_frames = 0
+    total_frames: IntProperty(default=0, min=0)
+    done_frames: IntProperty(default=0, min=0)
 
     def init(self, context):
         self.width = 175
@@ -221,8 +221,8 @@ class RSNodeRenderListNode(RenderNodeBase):
         task_list = bar.task_list.split(',')
         cur_id = task_list.index(bar.cur_task)
 
-        self.total_frames = 0
-        self.done_frames = 0
+        total_frames = 0
+        done_frames = 0
 
         col = layout.column(align=1)
         col.alignment = "CENTER"
@@ -233,7 +233,7 @@ class RSNodeRenderListNode(RenderNodeBase):
             if not item.render: continue  # ignore the not render task
 
             node = context.space_data.node_tree.nodes[item.name]
-            self.total_frames += node.frame_end - node.frame_start + 1
+            total_frames += node.frame_end - node.frame_start + 1
 
             task_name = node.name
             # finish list
@@ -243,7 +243,7 @@ class RSNodeRenderListNode(RenderNodeBase):
 
                 finish = node.frame_end + 1 - node.frame_start
                 row.label(text=f'100% {finish}/{finish}')
-                self.done_frames += finish
+                done_frames += finish
 
             # current
             elif index == cur_id:
@@ -256,7 +256,7 @@ class RSNodeRenderListNode(RenderNodeBase):
                     row.label(text=f'100% {finish}/{finish}')
 
                     col.label(text='Render Finished!', icon='HEART')
-                    self.done_frames += 1
+                    done_frames += 1
                 else:
                     row = col.box().row(align=1)
                     row.label(text=task_name, icon="RENDER_STILL")
@@ -264,12 +264,12 @@ class RSNodeRenderListNode(RenderNodeBase):
                     all = node.frame_end + 1 - node.frame_start
                     row.label(text=f"{round(done / all * 100, 2)}% {done}/{all}")
 
-                    self.done_frames += done + 1
+                    done_frames += done + 1
             # waiting
             elif index > cur_id:
                 col.box().label(text=task_name, icon="CHECKBOX_DEHLT")
 
-        total_process = round(self.done_frames / self.total_frames, 2)
+        total_process = round(done_frames / total_frames, 2)
 
         if context.window_manager.rsn_running_modal:
             col.label(text=f'Process: {total_process * 100}%', icon='SORTTIME')

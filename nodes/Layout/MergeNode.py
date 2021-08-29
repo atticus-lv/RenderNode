@@ -34,7 +34,7 @@ class RSNodeSettingsMergeNode(RenderNodeBase):
     active: IntProperty(name='Active Version', default=1, update=active_version)
 
     def init(self, context):
-        self.create_Input('RSNodeSocketTaskSettings', 'Input', 'Input')
+        self.create_input('RSNodeSocketTaskSettings', 'Input', 'Input')
         self.create_output('RSNodeSocketTaskSettings', 'Output', 'Output')
 
     def draw_buttons(self, context, layout):
