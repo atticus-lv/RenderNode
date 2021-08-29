@@ -1,8 +1,23 @@
 import bpy
 from bpy.props import *
-from ..node_socket import RenderNodeSocket, SocketBase
+from ..node_socket import RenderNodeSocket, SocketBase, RenderNodeSocketmixin, RenderNodeSocketInterface
 from ..node_socket import update_node
 
+
+class RenderNodeSocketInterfaceString(RenderNodeSocketmixin, RenderNodeSocketInterface, bpy.types.NodeSocketInterface):
+    bl_idname = 'RenderNodeSocketString'
+    bl_socket_idname = 'RenderNodeSocketString'
+    bl_label = 'String (RenderNode)'
+
+    default_value: StringProperty(name='Default Value')
+
+    def draw(self, context, layout):
+        layout.use_property_split = True
+        layout.use_property_decorate = False
+        layout.prop(self, 'default_value')
+
+    def draw_color(self, context):
+        return 0.2, 0.7, 1.0, 1
 
 
 class RenderNodeSocketString(RenderNodeSocket, SocketBase):
@@ -15,6 +30,24 @@ class RenderNodeSocketString(RenderNodeSocket, SocketBase):
         return 0.2, 0.7, 1.0, 1
 
 
+class RenderNodeSocketInterfaceFilePath(RenderNodeSocketmixin, RenderNodeSocketInterface,
+                                        bpy.types.NodeSocketInterface):
+    bl_idname = 'RenderNodeSocketFilePath'
+    bl_socket_idname = 'RenderNodeSocketFilePath'
+    bl_label = 'FilePath (RenderNode)'
+
+    default_value: StringProperty(name='Default Value')
+
+    def draw(self, context, layout):
+        layout.use_property_split = True
+        layout.use_property_decorate = False
+        layout.prop(self, 'default_value')
+        layout.prop(self, 'hide_value')
+
+    def draw_color(self, context):
+        return 0.2, 0.7, 1.0, 1
+
+
 class RenderNodeSocketFilePath(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketFilePath'
     bl_label = 'RenderNodeSocketFilePath'
@@ -24,6 +57,23 @@ class RenderNodeSocketFilePath(RenderNodeSocket, SocketBase):
     def draw_color(self, context, node):
         return 0.2, 0.7, 1.0, 1
 
+
+class RenderNodeSocketInterfaceViewLayer(RenderNodeSocketmixin, RenderNodeSocketInterface,
+                                         bpy.types.NodeSocketInterface):
+    bl_idname = 'RenderNodeSocketViewLayer'
+    bl_socket_idname = 'RenderNodeSocketViewLayer'
+    bl_label = 'ViewLayer (RenderNode)'
+
+    default_value: StringProperty(name='Default Value')
+
+    def draw(self, context, layout):
+        layout.use_property_split = True
+        layout.use_property_decorate = False
+        layout.prop(self, 'default_value')
+        layout.prop(self, 'hide_value')
+
+    def draw_color(self, context):
+        return 0.2, 0.7, 1.0, 1
 
 
 class RenderNodeSocketViewLayer(RenderNodeSocket, SocketBase):
@@ -44,10 +94,12 @@ class RenderNodeSocketViewLayer(RenderNodeSocket, SocketBase):
         return 0.2, 0.7, 1.0, 1
 
 
-
 classes = (
+    RenderNodeSocketInterfaceViewLayer,
     RenderNodeSocketViewLayer,
+    RenderNodeSocketInterfaceString,
     RenderNodeSocketString,
+    RenderNodeSocketInterfaceFilePath,
     RenderNodeSocketFilePath,
 )
 

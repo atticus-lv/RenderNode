@@ -1,7 +1,23 @@
 import bpy
 from bpy.props import *
-from ..node_socket import RenderNodeSocket, SocketBase
+from ..node_socket import RenderNodeSocket, SocketBase, RenderNodeSocketmixin, RenderNodeSocketInterface
 from ..node_socket import update_node
+
+
+class RenderNodeSocketInterfaceInt(RenderNodeSocketmixin, RenderNodeSocketInterface, bpy.types.NodeSocketInterface):
+    bl_idname = 'RenderNodeSocketInt'
+    bl_socket_idname = 'RenderNodeSocketInt'
+    bl_label = 'Int (RenderNode)'
+
+    default_value: IntProperty(name='Default Value')
+
+    def draw(self, context, layout):
+        layout.use_property_split = True
+        layout.use_property_decorate = False
+        layout.prop(self, 'default_value')
+
+    def draw_color(self, context):
+        return 0, 0.9, 0.1, 1
 
 
 class RenderNodeSocketInt(RenderNodeSocket, SocketBase):
@@ -13,7 +29,9 @@ class RenderNodeSocketInt(RenderNodeSocket, SocketBase):
     def draw_color(self, context, node):
         return 0, 0.9, 0.1, 1
 
+
 classes = (
+    RenderNodeSocketInterfaceInt,
     RenderNodeSocketInt,
 )
 

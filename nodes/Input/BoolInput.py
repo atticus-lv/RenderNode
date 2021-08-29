@@ -26,8 +26,8 @@ class RenderNodeBoolInput(RenderNodeBase):
 
 
 def register():
-    bpy.utils.register_class(RenderNodeIntInput)
+    bpy.utils.register_class(RenderNodeBoolInput)
 
 
 def unregister():
-    bpy.utils.unregister_class(RenderNodeIntInput)
+    bpy.utils.unregister_class(RenderNodeBoolInput)

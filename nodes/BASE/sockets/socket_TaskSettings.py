@@ -1,7 +1,20 @@
 import bpy
 from bpy.props import *
-from ..node_socket import RenderNodeSocket, SocketBase
+from ..node_socket import RenderNodeSocket, SocketBase, RenderNodeSocketmixin, RenderNodeSocketInterface
 from ..node_socket import update_node
+
+
+class RenderNodeSocketInterfaceTaskSettings(RenderNodeSocketmixin, RenderNodeSocketInterface,
+                                          bpy.types.NodeSocketInterface):
+    bl_idname = 'RSNodeSocketTaskSettings'
+    bl_socket_idname = 'RSNodeSocketTaskSettings'
+    bl_label = 'TaskSettings (RenderNode)'
+
+    def draw(self, context, layout):
+        pass
+
+    def draw_color(self, context):
+        return 0.6, 0.6, 0.6, 1.0
 
 
 class RSNodeSocketTaskSettings(bpy.types.NodeSocket, SocketBase):
@@ -25,9 +38,8 @@ class RSNodeSocketTaskSettings(bpy.types.NodeSocket, SocketBase):
         return 0.6, 0.6, 0.6, 1.0
 
 
-
-
 classes = (
+    RenderNodeSocketInterfaceTaskSettings,
     RSNodeSocketTaskSettings,
 )
 

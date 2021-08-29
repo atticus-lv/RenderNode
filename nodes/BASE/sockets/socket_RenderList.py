@@ -1,8 +1,19 @@
 import bpy
 from bpy.props import *
-from ..node_socket import RenderNodeSocket, SocketBase
+from ..node_socket import RenderNodeSocket, SocketBase, RenderNodeSocketmixin, RenderNodeSocketInterface
 from ..node_socket import update_node
 
+class RenderNodeSocketInterfaceRenderList(RenderNodeSocketmixin, RenderNodeSocketInterface, bpy.types.NodeSocketInterface):
+    bl_idname = 'RSNodeSocketRenderList'
+    bl_socket_idname = 'RSNodeSocketRenderList'
+    bl_label = 'RenderList (RenderNode)'
+
+
+    def draw(self, context, layout):
+        pass
+
+    def draw_color(self, context):
+        return 0.95, 0.95, 0.95, 1.0
 
 class RSNodeSocketRenderList(bpy.types.NodeSocket, SocketBase):
     bl_idname = 'RSNodeSocketRenderList'
@@ -16,6 +27,7 @@ class RSNodeSocketRenderList(bpy.types.NodeSocket, SocketBase):
 
 
 classes = (
+    RenderNodeSocketInterfaceRenderList,
     RSNodeSocketRenderList,
 
 )
