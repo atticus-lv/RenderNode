@@ -18,6 +18,7 @@ def set_active_task(self, context):
                 node.set_active_color(node.is_active_task)
         # set active task
         bpy.context.window_manager.rsn_viewer_node = self.name
+        bpy.context.scene.rsn_bind_tree = self.id_data  # bind tree
         self.set_active_color(self.is_active_task)
         self.execute_tree()
 
@@ -56,8 +57,8 @@ class RSNodeTaskNode(RenderNodeBase):
                                  description='Set as active Task')
 
     def init(self, context):
-        self.create_input('RSNodeSocketTaskSettings','Settings','Settings')
-        self.create_output('RSNodeSocketRenderList','Task','Task')
+        self.create_input('RSNodeSocketTaskSettings', 'Settings', 'Settings')
+        self.create_output('RSNodeSocketRenderList', 'Task', 'Task')
         self.label = self.name
 
     def draw_buttons(self, context, layout):

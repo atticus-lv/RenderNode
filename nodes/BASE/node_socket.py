@@ -20,6 +20,7 @@ class SocketBase():
         The dictionary is emptied whenever a socket/connection/node changes in the nodetree
         accessing links Takes O(len(nodetree.links)) time.
         '''
+        self.update_shape()
 
         _nodetree_socket_connections = cache_socket_links.setdefault(self.id_data, {})
         _connected_socket = _nodetree_socket_connections.get(self, None)
@@ -93,6 +94,10 @@ class SocketBase():
             return 'True' if val else 'False'
         else:
             return f'{val}'
+
+    def update_shape(self):
+        if hasattr(self, 'shape'):
+            if self.display_shape != self.shape: self.display_shape = self.shape
 
     def remove_incorrect_links(self):
         '''

@@ -24,7 +24,7 @@ class RenderNodeSceneFilePath(RenderNodeBase):
 
         self.create_output('RSNodeSocketTaskSettings', 'Settings', 'Settings')
 
-        self.inputs['path_expression'].value = get_pref().node_file_path.path_format
+        self.inputs['path_expression'].default_value = get_pref().node_file_path.path_format
 
         self.width = 200
 
