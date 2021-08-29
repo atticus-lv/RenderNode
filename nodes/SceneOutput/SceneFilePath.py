@@ -22,7 +22,7 @@ class RenderNodeSceneFilePath(RenderNodeBase):
         self.create_input('RenderNodeSocketInt', 'version', 'Version')
         self.create_input('RenderNodeSocketString', 'path_expression', 'Postfix')
 
-        self.create_output('RSNodeSocketTaskSettings','Settings','Settings')
+        self.create_output('RSNodeSocketTaskSettings', 'Settings', 'Settings')
 
         self.inputs['path_expression'].value = get_pref().node_file_path.path_format
 
@@ -45,7 +45,6 @@ class RenderNodeSceneFilePath(RenderNodeBase):
             if task_node:
                 task_node.path = path_to_task
 
-
     def make_path(self):
         """only save files will work"""
         try:
@@ -63,7 +62,7 @@ class RenderNodeSceneFilePath(RenderNodeBase):
         scn = bpy.context.scene
         cam = scn.camera
         active_task = self.id_data.nodes.get(bpy.context.window_manager.rsn_viewer_node)
-
+        if not active_task: return
         blend_name = ''
 
         postfix = path_exp
