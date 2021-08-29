@@ -21,6 +21,7 @@ node_categories = [
     RSNCategory("INPUT", "Input", items=[
         nodeitems_utils.NodeItem('RenderNodeFloatInput'),
         nodeitems_utils.NodeItem('RenderNodeVectorInput'),
+        nodeitems_utils.NodeItem('RenderNodeBoolInput'),
         nodeitems_utils.NodeItem('RenderNodeIntInput'),
         nodeitems_utils.NodeItem('RenderNodeStringInput'),
         nodeitems_utils.NodeItem('RenderNodeObjectInput'),
