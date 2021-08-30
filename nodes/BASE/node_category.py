@@ -26,6 +26,7 @@ node_categories = [
         nodeitems_utils.NodeItem('RenderNodeStringInput'),
         nodeitems_utils.NodeItem('RenderNodeObjectInput'),
         nodeitems_utils.NodeItem('RenderNodeMaterialInput'),
+        nodeitems_utils.NodeItem('RenderNodeInfoInput'),
     ]),
 
     RSNCategory("UTILITY", "Utility", items=[
