@@ -57,14 +57,14 @@ class RSNodeTaskNode(RenderNodeBase):
                                  description='Set as active Task')
 
     def init(self, context):
+        self.create_input('RenderNodeSocketString', 'label', 'Label')
         self.create_input('RSNodeSocketTaskSettings', 'Settings', 'Settings')
         self.create_output('RSNodeSocketRenderList', 'Task', 'Task')
         self.label = self.name
 
     def draw_buttons(self, context, layout):
         row = layout.row()
-        row.prop(self, 'label', text='')
-        row.prop(self, 'is_active_task', text='', icon="HIDE_OFF" if self.is_active_task else "HIDE_ON")
+        row.prop(self, 'is_active_task', text='Set Active', icon="HIDE_OFF" if self.is_active_task else "HIDE_ON")
 
     def update(self):
         self.auto_update_inputs('RSNodeSocketTaskSettings', "Settings")
@@ -76,6 +76,11 @@ class RSNodeTaskNode(RenderNodeBase):
 
     def process(self, context, id, path):
         # set necessary props
+        label = self.inputs['label'].get_value()
+        if label:
+            self.label = label
+            print(label)
+
         bpy.context.scene.frame_start = self.frame_start
         bpy.context.scene.frame_end = self.frame_end
         bpy.context.scene.frame_step = self.frame_step

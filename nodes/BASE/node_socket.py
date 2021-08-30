@@ -1,6 +1,6 @@
 import bpy
 from bpy.props import *
-from mathutils import Vector
+from mathutils import Vector,Euler
 
 from ._runtime import cache_socket_links, cache_socket_variables
 
@@ -87,7 +87,7 @@ class SocketBase():
             return f'{val}'
         elif isinstance(val, float):
             return f'{round(val, 2)}'
-        elif isinstance(val, tuple) or isinstance(val, Vector):
+        elif len(val) > 1:
             d_val = [round(num, 2) for num in list(val)]
             return f'{d_val}'
         elif isinstance(val, bool):

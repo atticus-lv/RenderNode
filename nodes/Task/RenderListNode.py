@@ -39,7 +39,7 @@ class RSN_UL_RenderTaskList(bpy.types.UIList):
         else:
             row.label(text='', icon='ERROR')
 
-        row.label(text=item.name)
+        row.label(text=f'{item.name} | {node.label}')
 
         frame_count = (1 + node.frame_end - node.frame_start) // node.frame_step
         row.label(
@@ -123,7 +123,7 @@ class RSNodeRenderListNode(RenderNodeBase):
     done_frames: IntProperty(default=0, min=0)
 
     def init(self, context):
-        self.width = 175
+        self.width = 200
 
     def get_dependant_tasks(self):
         node_list = []
