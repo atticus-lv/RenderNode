@@ -75,8 +75,6 @@ class RenderNodeSceneFilePath(RenderNodeBase):
         postfix = postfix.replace('$engine', bpy.context.scene.render.engine)
         # replace res
         postfix = postfix.replace('$res', f"{scn.render.resolution_x}x{scn.render.resolution_y}")
-        # replace label
-        if active_task: postfix = postfix.replace('$label', active_task.label)
         # replace view_layer
         postfix = postfix.replace('$vl', bpy.context.view_layer.name)
         # version_
@@ -112,7 +110,6 @@ class RenderNodeSceneFilePath(RenderNodeBase):
 format_names = {
     'File Name': '$blend',
     'Version': '$V',
-    'Task Label': '$label',
     'Render Engine': '$engine',
     'Camera Name': '$camera',
     'Resolution: XxY': '$res',
