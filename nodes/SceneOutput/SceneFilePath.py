@@ -107,19 +107,6 @@ class RenderNodeSceneFilePath(RenderNodeBase):
         return postfix
 
 
-format_names = {
-    'File Name': '$blend',
-    'Version': '$V',
-    'Render Engine': '$engine',
-    'Camera Name': '$camera',
-    'Resolution: XxY': '$res',
-    'Exposure Value': '$ev',
-    'View Layer': '$vl',
-    'Date: month-day': '$T{%m-%d}',
-    'Time: Hour-Minute': '$T{%H-%M}',
-}
-
-
 def register():
     bpy.utils.register_class(RenderNodeSceneFilePath)
 

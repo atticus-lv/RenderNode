@@ -221,7 +221,7 @@ class RenderNodeBase(bpy.types.Node):
                 elif input.bl_idname == socket_type:
                     self.inputs.remove(input)
         # auto add inputs
-        if count != 1:
+        if count == 0:
             input = self.inputs.new(socket_type, socket_name)
             if hasattr(input, 'shape'): input.display_shape = input.shape
 

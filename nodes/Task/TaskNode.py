@@ -5,11 +5,6 @@ from ...utility import *
 from ...nodes.BASE._runtime import runtime_info
 
 
-def update_node(self, context):
-    if len(self.var_collect_list) != 0:
-        self.execute_tree()
-
-
 def set_active_task(self, context):
     if self.is_active_task:
         for node in self.id_data.nodes:
@@ -57,17 +52,20 @@ class RSNodeTaskNode(RenderNodeBase):
                                  description='Set as active Task')
 
     def init(self, context):
+        runtime_info['executing'] = True
         self.create_input('RenderNodeSocketString', 'label', 'Label')
-        self.create_input('RSNodeSocketTaskSettings', 'Settings', 'Settings')
+        self.create_input('RenderNodeSocketFilePath', 'path', 'Path', default_value='//')
         self.create_output('RSNodeSocketRenderList', 'Task', 'Task')
         self.label = self.name
+        runtime_info['executing'] = False
 
     def draw_buttons(self, context, layout):
         row = layout.row()
         row.prop(self, 'is_active_task', text='Set Active', icon="HIDE_OFF" if self.is_active_task else "HIDE_ON")
 
     def update(self):
-        self.auto_update_inputs('RSNodeSocketTaskSettings', "Settings")
+        if runtime_info['executing'] is True: return
+        self.auto_update_inputs('RSNodeSocketTaskSettings', "Settings", start_update_index=2)
         set_active_task(self, bpy.context)
 
     def set_active_color(self, active):
@@ -79,11 +77,14 @@ class RSNodeTaskNode(RenderNodeBase):
         label = self.inputs['label'].get_value()
         if label:
             self.label = label
-            print(label)
 
         bpy.context.scene.frame_start = self.frame_start
         bpy.context.scene.frame_end = self.frame_end
         bpy.context.scene.frame_step = self.frame_step
+
+        p = self.inputs['path'].get_value()
+        if p:
+            self.path = p
 
         self.compare(bpy.context.scene.render, 'filepath', self.path)
 

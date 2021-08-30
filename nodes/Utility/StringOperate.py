@@ -13,13 +13,20 @@ def update_node(self, context):
         self.remove_input('text')
         self.create_input('RenderNodeSocketString', 'value1', 'Value')
 
+    if self.operate_type == 'INT_2_STR':
+        self.remove_input('value1')
+        self.create_input('RenderNodeSocketInt', 'int', 'Int')
+    else:
+        self.remove_input('int')
+        self.create_input('RenderNodeSocketString', 'value1', 'Value')
+
     if self.operate_type == 'MULTIPLY':
         self.create_input('RenderNodeSocketInt', 'count', 'Count')
     else:
         self.remove_input('count')
         self.create_input('RenderNodeSocketString', 'value2', 'Value')
 
-    if self.operate_type in {'JOIN', 'ADD'}:
+    if self.operate_type in {'SUB', 'JOIN', 'SPACE', 'DOT', 'UNDERSCORE'}:
         self.create_input('RenderNodeSocketString', 'value2', 'Value')
     else:
         self.remove_input('value2')
@@ -41,18 +48,23 @@ class RenderNodeStringOperate(RenderNodeBase):
     operate_type: EnumProperty(
         name='Type',
         items=[
-            ('', 'Combine', ''),
+            ('', 'Concat', ''),
+            ('JOIN', 'Join', ''),
+            ('SUB', 'Sub Folder', ''),
+            ('SPACE', 'Space', ''),
+            ('DOT', 'Dot', ''),
+            ('UNDERSCORE', 'Underscore', ''),
 
-            ('JOIN', 'Join Path', ''),
-            ('ADD', 'Add', ''),
+            ('', 'Special', ''),
+            ('REPLACE', 'Replace', ''),
             ('MULTIPLY', 'Multiply', ''),
 
             ('', 'Conversion', ''),
-            ('REPLACE', 'Replace', ''),
+            ('INT_2_STR', 'Int to String', ''),
             ('TEXT_2_STR', 'Text to String', ''),
         ],
         update=update_node,
-        default='JOIN'
+        default='SUB'
     )
 
     def init(self, context):
@@ -65,18 +77,30 @@ class RenderNodeStringOperate(RenderNodeBase):
         return name
 
     def draw_buttons(self, context, layout):
-        layout.prop(self, 'operate_type',text='')
+        layout.prop(self, 'operate_type', text='')
 
     def process(self, context, id, path):
         s1 = self.inputs['value1'].get_value() if 'value1' in self.inputs else None
 
-        if self.operate_type == 'ADD':
+        if self.operate_type == 'JOIN':
             s2 = self.inputs['value2'].get_value()
             self.outputs[0].set_value(s1 + s2)
 
-        elif self.operate_type == 'JOIN':
+        elif self.operate_type == 'SUB':
             s2 = self.inputs['value2'].get_value()
             self.outputs[0].set_value(s1 + '/' + s2)
+
+        elif self.operate_type == 'SPACE':
+            s2 = self.inputs['value2'].get_value()
+            self.outputs[0].set_value(s1 + ' ' + s2)
+
+        elif self.operate_type == 'DOT':
+            s2 = self.inputs['value2'].get_value()
+            self.outputs[0].set_value(s1 + '.' + s2)
+
+        elif self.operate_type == 'UNDERSCORE':
+            s2 = self.inputs['value2'].get_value()
+            self.outputs[0].set_value(s1 + '_' + s2)
 
         elif self.operate_type == 'MULTIPLY':
             s2 = self.inputs['count'].get_value()
@@ -93,6 +117,13 @@ class RenderNodeStringOperate(RenderNodeBase):
             text = self.inputs['text'].get_value()
             if text:
                 res = text.as_string()
+            self.outputs[0].set_value(res)
+
+        elif self.operate_type == 'INT_2_STR':
+            res = None
+            i = self.inputs['int'].get_value()
+            if i is not None:
+                res = str(i)
             self.outputs[0].set_value(res)
 
 
