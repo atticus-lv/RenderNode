@@ -15,8 +15,10 @@ format_names = {
     'Resolution: XxY': '$res',
     'Exposure Value': '$ev',
     'View Layer': '$vl',
-    'Date: month-day': '$T{%m-%d}',
-    'Time: Hour-Minute': '$T{%H-%M}',
+    'Date: month': '$T{%m}',
+    'Date: day': '$T{%d}',
+    'Time: hour': '$T{%H}',
+    'Time: minute': '$T{%M}',
 }
 
 enum_path_exp = [(v, k, '') for k, v in format_names.items()]
@@ -57,8 +59,8 @@ def update_node(self, context):
         self.create_output('RenderNodeSocketInt', 'frame_end', 'Frame End')
     else:
         self.remove_input('action')
-        self.remove_output('RenderNodeSocketInt', 'frame_start', 'Start')
-        self.remove_output('RenderNodeSocketInt', 'frame_end', 'End')
+        self.remove_output('frame_start')
+        self.remove_output('frame_end')
 
     # if self.operate_type == 'PathExp':
     #     self.create_output('RenderNodeSocketString', 'path_exp', 'Path Expression')
