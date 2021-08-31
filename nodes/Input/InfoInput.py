@@ -53,8 +53,12 @@ def update_node(self, context):
 
     if self.operate_type == 'Action':
         self.create_input('RenderNodeSocketAction', 'action', 'Action')
+        self.create_output('RenderNodeSocketInt', 'frame_start', 'Frame Start')
+        self.create_output('RenderNodeSocketInt', 'frame_end', 'Frame End')
     else:
         self.remove_input('action')
+        self.remove_output('RenderNodeSocketInt', 'frame_start', 'Start')
+        self.remove_output('RenderNodeSocketInt', 'frame_end', 'End')
 
     # if self.operate_type == 'PathExp':
     #     self.create_output('RenderNodeSocketString', 'path_exp', 'Path Expression')
@@ -111,6 +115,10 @@ class RenderNodeInfoInput(RenderNodeBase):
                 return
             elif self.operate_type == 'Collection':
                 self.outputs['count'].set_value(len(pointer.objects))
+
+            elif self.operate_type == 'Action':
+                self.outputs['frame_start'].set_value(round(pointer.frame_range[0]))
+                self.outputs['frame_end'].set_value(round(pointer.frame_range[1]))
 
     def get_postfix(self, path_exp):
         """path expression"""
