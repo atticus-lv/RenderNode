@@ -19,21 +19,6 @@ logging.basicConfig(format=LOG_FORMAT)
 logger = logging.getLogger('mylogger')
 
 
-# get the update time
-def timefn(fn):
-    @wraps(fn)
-    def measure_time(*args, **kwargs):
-        t1 = time.time()
-        result = fn(*args, **kwargs)
-        t2 = time.time()
-        s = f'{(t2 - t1) * 1000: .4f} ms'
-        bpy.context.window_manager.rsn_tree_time = s
-        logger.info(f"RSN Tree: update took{s}\n")
-        return result
-
-    return measure_time
-
-
 def source_attr(src_obj, scr_data_path):
     def get_obj_and_attr(obj, data_path):
         path = data_path.split('.')

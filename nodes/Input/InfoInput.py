@@ -8,20 +8,24 @@ from ...nodes.BASE.node_base import RenderNodeBase
 # from ...utility import source_attr
 from mathutils import Color, Vector
 
-format_names = {
-    'File Name': '$blend',
-    'Render Engine': '$engine',
-    'Scene Camera': '$camera',
-    'Resolution: XxY': '$res',
-    'Exposure Value': '$ev',
-    'View Layer': '$vl',
-    'Date: month': '$T{%m}',
-    'Date: day': '$T{%d}',
-    'Time: hour': '$T{%H}',
-    'Time: minute': '$T{%M}',
-}
-
-enum_path_exp = [(v, k, '') for k, v in format_names.items()]
+enum_path_exp = [
+    ('', 'File', ''),
+    ('$path', 'File Path', ''),
+    ('$blend', 'File Name', ''),
+    ('', 'Context', ''),
+    ('$label', 'Task Label', ''),
+    ('$engine', 'Render Engine', ''),
+    ('$camera', 'Scene Camera', ''),
+    ('$res_x', 'Resolution X', ''),
+    ('$res_y', 'Resolution Y', ''),
+    ('$ev', 'Exposure Value', ''),
+    ('$vl', 'View Layer', ''),
+    ('', 'Time', ''),
+    ('$T{%m}', 'Date: month', ''),
+    ('$T{%d}', 'Date: day', ''),
+    ('$T{%H}', 'Time: hour', ''),
+    ('$T{%M}', 'Time: minute', ''),
+]
 
 
 def update_node(self, context):
@@ -62,10 +66,10 @@ def update_node(self, context):
         self.remove_output('frame_start')
         self.remove_output('frame_end')
 
-    # if self.operate_type == 'PathExp':
-    #     self.create_output('RenderNodeSocketString', 'path_exp', 'Path Expression')
-    # else:
-    #     self.remove_output('path_exp')
+    if self.operate_type == 'Custom':
+        self.create_input('RenderNodeSocketString', 'data_path', 'Data Path(Full)')
+    else:
+        self.remove_input('data_path')
 
     self.execute_tree()
 
@@ -75,12 +79,13 @@ class RenderNodeInfoInput(RenderNodeBase):
     bl_label = 'Information Input'
 
     operate_type: EnumProperty(name='Type', items=[
+        ('PathExp', 'Path Expression', ''),
         ('Object', 'Object', ''),
         ('Material', 'Material', ''),
         ('World', 'World', ''),
         ('Collection', 'Collection', ''),
         ('Action', 'Action', ''),
-        ('PathExp', 'Path Expression', ''),
+        ('Custom', 'Custom', ''),
     ], default='Object', update=update_node)
 
     path_exp: EnumProperty(name='Path Exp', items=enum_path_exp, update=update_node, default='$blend')
@@ -101,6 +106,13 @@ class RenderNodeInfoInput(RenderNodeBase):
         if self.operate_type == 'PathExp':
             postfix = self.get_postfix(self.path_exp)
             self.outputs['name'].set_value(postfix)
+
+        elif self.operate_type == 'Custom':
+            dp = self.inputs['data_path'].get_value()
+            if dp:
+                obj = eval(dp)
+                self.outputs['name'].set_value(str(obj))
+
         else:
             pointer = self.inputs[0].get_value()
             if pointer is None: return
@@ -125,49 +137,47 @@ class RenderNodeInfoInput(RenderNodeBase):
     def get_postfix(self, path_exp):
         """path expression"""
         scn = bpy.context.scene
-        cam = scn.camera
-        active_task = self.id_data.nodes.get(bpy.context.window_manager.rsn_viewer_node)
-        if active_task == '' or path_exp == '': return ''
-        blend_name = ''
 
-        postfix = path_exp
-        # replace camera name
-        if cam:
-            postfix = postfix.replace('$camera', cam.name)
-        else:
-            postfix = postfix
-        # replace engine
-        postfix = postfix.replace('$engine', bpy.context.scene.render.engine)
-        # replace res
-        postfix = postfix.replace('$res', f"{scn.render.resolution_x}x{scn.render.resolution_y}")
-        # replace view_layer
-        postfix = postfix.replace('$vl', bpy.context.view_layer.name)
+        if path_exp == '$path':
+            return bpy.data.filepath
 
-        # frame completion
-        STYLE = re.findall(r'([$]F\d)', postfix)
-        if len(STYLE) > 0:
-            c_frame = bpy.context.scene.frame_current
-            for i, string in enumerate(STYLE):
-                format = f'0{STYLE[i][-1:]}d'
-                frame = f'{c_frame:{format}}' if not bpy.context.window_manager.rsn_running_modal else '#' * int(
-                    STYLE[i][-1:])
-                postfix = postfix.replace(STYLE[i], frame)
+        elif path_exp == '$blend':
+            try:
+                return bpy.path.basename(bpy.data.filepath)[:-6]
+            except Exception:
+                return 'unsaved'
 
-                # time format
-        TIME = re.findall(r'([$]T{.*?})', postfix)
-        if len(TIME) > 0:
-            for i, string in enumerate(TIME):
-                format = time.strftime(TIME[i][3:-1], time.localtime())
-                postfix = postfix.replace(TIME[i], format)
+        elif path_exp == '$label':
+            active_task = self.id_data.nodes.get(bpy.context.window_manager.rsn_viewer_node)
+            return active_task.label if active_task else ''
 
-        # replace filename
-        try:
-            blend_name = bpy.path.basename(bpy.data.filepath)[:-6]
-            postfix = postfix.replace('$blend', blend_name)
-        except Exception:
-            return 'untitled'
+        elif path_exp == '$camera':
+            cam = scn.camera
+            return cam.name if cam else ''
 
-        return postfix
+        elif path_exp == '$engine':
+            return scn.render.engine
+
+        elif path_exp == '$res_x':
+            return str(scn.render.resolution_x)
+
+        elif path_exp == '$res_y':
+            return str(scn.render.resolution_y)
+
+        elif path_exp == '$vl':
+            return bpy.context.view_layer.name
+
+        elif path_exp == '$ev':
+            return bpy.context.scene.view_settings.exposure
+
+        elif path_exp in {'$T{%m}', '$T{%d}', '$T{%H}', '$T{%M}'}:
+            postfix = ''
+            TIME = re.findall(r'([$]T{.*?})', path_exp)
+            if len(TIME) > 0:
+                for i, string in enumerate(TIME):
+                    format = time.strftime(TIME[i][3:-1], time.localtime())
+                    postfix = postfix.replace(TIME[i], format)
+            return postfix
 
 
 def register():

@@ -20,6 +20,13 @@ def update_node(self, context):
         self.remove_input('int')
         self.create_input('RenderNodeSocketString', 'value1', 'Value')
 
+    if self.operate_type == 'STR_2_INT':
+        self.remove_output('output')
+        self.create_output('RenderNodeSocketInt', 'int', 'Int')
+    else:
+        self.remove_output('int')
+        self.create_output('RenderNodeSocketString', 'output', 'Output')
+
     if self.operate_type == 'MULTIPLY':
         self.create_input('RenderNodeSocketInt', 'count', 'Count')
     else:
@@ -38,6 +45,14 @@ def update_node(self, context):
         self.remove_input('replace_old')
         self.remove_input('replace_new')
 
+    if self.operate_type == 'SLICE':
+        self.create_input('RenderNodeSocketString', 'value1', 'Value')
+        self.create_input('RenderNodeSocketInt', 'slice_from', 'From')
+        self.create_input('RenderNodeSocketInt', 'slice_to', 'To')
+    else:
+        self.remove_input('slice_from')
+        self.remove_input('slice_to')
+
     self.execute_tree()
 
 
@@ -55,12 +70,14 @@ class RenderNodeStringOperate(RenderNodeBase):
             ('DOT', 'Dot', ''),
             ('UNDERSCORE', 'Underscore', ''),
 
-            ('', 'Special', ''),
+            ('', 'Function', ''),
             ('REPLACE', 'Replace', ''),
             ('MULTIPLY', 'Multiply', ''),
+            ('SLICE', 'Slice', ''),
 
             ('', 'Conversion', ''),
             ('INT_2_STR', 'Int to String', ''),
+            ('STR_2_INT', 'String to Int', ''),
             ('TEXT_2_STR', 'Text to String', ''),
         ],
         update=update_node,
@@ -112,6 +129,17 @@ class RenderNodeStringOperate(RenderNodeBase):
             res = s1.replace(old, new)
             self.outputs[0].set_value(res)
 
+        elif self.operate_type == 'SLICE':
+            from_id = self.inputs['slice_from'].get_value()
+            to_id = self.inputs['slice_to'].get_value()
+
+            try:
+                res = s1[from_id:to_id]
+            except IndexError:
+                res = None
+
+            self.outputs[0].set_value(res)
+
         elif self.operate_type == 'TEXT_2_STR':
             res = None
             text = self.inputs['text'].get_value()
@@ -125,6 +153,14 @@ class RenderNodeStringOperate(RenderNodeBase):
             if i is not None:
                 res = str(i)
             self.outputs[0].set_value(res)
+
+        elif self.operate_type == 'STR_2_INT':
+            s = self.inputs['value1'].get_value()
+            try:
+                ans = int(s)
+            except:
+                ans = 0
+            self.outputs[0].set_value(ans)
 
 
 def register():
