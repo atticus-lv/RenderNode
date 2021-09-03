@@ -1,7 +1,6 @@
 import bpy
 from bpy.props import *
 from ...nodes.BASE.node_base import RenderNodeBase
-# from ...utility import source_attr
 from mathutils import Color, Vector
 
 
@@ -53,9 +52,9 @@ class RenderNodeVectorConvert(RenderNodeBase):
         return name
 
     def draw_buttons(self, context, layout):
-        layout.prop(self, 'operate_type',text='')
+        layout.prop(self, 'operate_type', text='')
 
-    def process(self,context,id,path):
+    def process(self, context, id, path):
         if self.operate_type == 'COMBINE':
             res = Vector((
                 self.inputs[0].get_value(),
