@@ -148,6 +148,8 @@ def draw_callback_nodeoutline(self, context):
         # draw texts
         r, g, b = c1
         size = 20
+        top = 125
+        step = 20
 
         for i, text in enumerate(texts):
             draw_text_2d((r, g, b, self.alpha * 1.5, size), text, 20, top - step * i)

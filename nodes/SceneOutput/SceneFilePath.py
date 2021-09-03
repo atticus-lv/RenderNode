@@ -23,6 +23,8 @@ class RenderNodeSceneFilePath(RenderNodeBase):
         self.create_input('RenderNodeSocketString', 'path_expression', 'Postfix')
 
         self.create_output('RSNodeSocketTaskSettings', 'Settings', 'Settings')
+        self.create_output('RenderNodeSocketString', 'abs_path', 'Absolute')
+        self.create_output('RenderNodeSocketString', 'rel_path', 'Relative')
 
         self.inputs['path_expression'].default_value = get_pref().node_file_path.path_format
 
@@ -40,10 +42,19 @@ class RenderNodeSceneFilePath(RenderNodeBase):
         v = self.inputs['version'].get_value()
         if path_exp and v is not None:
             postfix = self.get_postfix(path_exp, v)
-            path_to_task = os.path.join(directory_path, postfix) if postfix != '' else directory_path + '/'
+            rel_path = os.path.join(bpy.path.relpath(directory_path), postfix) if postfix != '' else bpy.path.relpath(
+                directory_path) + '/'
+            abs_path = os.path.join(directory_path, postfix) if postfix != '' else directory_path + '/'
+
+            op_abs_path = self.outputs.get('abs_path')
+            op_rel_path = self.outputs.get('rel_path')
+
+            if op_abs_path: op_abs_path.set_value(abs_path)
+            if op_rel_path: op_rel_path.set_value(rel_path)
+
             task_node = context.space_data.node_tree.nodes.get(context.window_manager.rsn_viewer_node)
             if task_node:
-                task_node.path = path_to_task
+                task_node.path = abs_path
 
     def make_path(self):
         """only save files will work"""
