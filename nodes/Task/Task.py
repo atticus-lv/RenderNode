@@ -3,12 +3,12 @@ from bpy.props import *
 from ...nodes.BASE.node_base import RenderNodeBase
 from ...utility import *
 from ...nodes.BASE._runtime import runtime_info
-
+from ...preferences import get_pref
 
 def set_active_task(self, context):
     if self.is_active_task:
         for node in self.id_data.nodes:
-            if node.bl_idname == self.bl_idname and node != self:
+            if node.bl_idname in {'RSNodeTaskNode','RenderNodeTask'} and node != self:
                 node.is_active_task = False
                 node.set_active_color(node.is_active_task)
         # set active task
@@ -25,9 +25,9 @@ def correct_task_frame(self, context):
         compare(context.scene, 'frame_step', self.frame_step)
 
 
-class RSNodeTaskNode(RenderNodeBase):
+class RenderNodeTask(RenderNodeBase):
     """A simple Task node"""
-    bl_idname = "RSNodeTaskNode"
+    bl_idname = "RenderNodeTask"
     bl_label = 'Task'
 
     # get necessary props from some nodes
@@ -70,7 +70,7 @@ class RSNodeTaskNode(RenderNodeBase):
 
     def set_active_color(self, active):
         self.use_custom_color = active
-        self.color = (0, 0.6, 0.8)
+        self.color = get_pref().draw_nodes.task_color
 
     def process(self, context, id, path):
         # set necessary props
@@ -97,7 +97,7 @@ class RSN_OT_AddViewerNode(bpy.types.Operator):
         try:
             nt = context.space_data.edit_tree
             node = context.space_data.edit_tree.nodes.active
-            if node.bl_idname == 'RSNodeTaskNode':
+            if node.bl_idname in {'RSNodeTaskNode','RenderNodeTask'}:
                 node.is_active_task = True
         except:
             pass
@@ -109,13 +109,13 @@ class RSN_OT_AddViewerNode(bpy.types.Operator):
 
 
 def register():
-    bpy.utils.register_class(RSNodeTaskNode)
+    bpy.utils.register_class(RenderNodeTask)
     bpy.utils.register_class(RSN_OT_AddViewerNode)
     bpy.types.WindowManager.rsn_viewer_node = StringProperty(name='Viewer task name')
 
 
 def unregister():
-    bpy.utils.unregister_class(RSNodeTaskNode)
+    bpy.utils.unregister_class(RenderNodeTask)
     bpy.utils.unregister_class(RSN_OT_AddViewerNode)
 
     del bpy.types.WindowManager.rsn_viewer_node

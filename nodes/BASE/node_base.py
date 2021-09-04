@@ -25,7 +25,7 @@ class RenderNodeBase(bpy.types.Node):
     #########################################
 
     def copy(self, node):
-        if self.bl_idname == 'RSNodeTaskNode': self.label = self.name
+        if self.bl_idname in {'RenderNodeTask','RSNodeTaskNode'} : self.label = self.name
         if hasattr(self, 'is_active_task'): self.is_active_task = False
         print(f"RSN Copied {self.name} from {node.name}")
 

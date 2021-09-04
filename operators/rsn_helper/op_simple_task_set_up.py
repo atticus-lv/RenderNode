@@ -60,7 +60,7 @@ class RSN_OT_SimpleTask(bpy.types.Operator):
             x = 0
             y = 0
 
-            task = nt.nodes.new('RSNodeTaskNode')
+            task = nt.nodes.new('RenderNodeTask')
             engine = nt.nodes.new('RenderNodeSceneRenderEngine')
 
             tips = nt.nodes.new('NodeFrame')
@@ -89,8 +89,8 @@ class RSN_OT_SimpleTask(bpy.types.Operator):
             tips.select = 1
             node_group.select = 1
 
-            nt.links.new(engine.outputs[0], task.inputs[0])
-            nt.links.new(node_group.outputs[0], task.inputs[1])
+            nt.links.new(engine.outputs[0], task.inputs[2])
+            nt.links.new(node_group.outputs[0], task.inputs[3])
 
             bpy.ops.node.join()
             frame = nt.nodes.active

@@ -5,7 +5,7 @@ from ...ui.icon_utils import RSN_Preview
 
 from itertools import groupby
 
-rsn_icon = RSN_Preview(image='RSN.png', name='rsn_icon')
+rsn_icon = RSN_Preview(image='RSN.bip', name='rsn_icon')
 
 
 class ProcessorBarProperty(bpy.types.PropertyGroup):
@@ -146,7 +146,7 @@ class RSNodeRenderListNode(RenderNodeBase):
                     except IndexError:  # This error shows when the dragging the link off a node(Works well with knife tool)
                         pass  # this seems to be a blender error
             # nodes append from left to right, from top to bottom
-            if node.bl_idname == 'RSNodeTaskNode': append_node_to_list(node)
+            if node.bl_idname in {'RSNodeTaskNode','RSNodeTaskNode'} : append_node_to_list(node)
 
         get_sub_node(self, True)
 

@@ -61,8 +61,8 @@ class RSN_OT_SearchAndLink(bpy.types.Operator):
 
         for index, item in enumerate(nodeitems_utils.node_items_iter(context)):
             if isinstance(item, nodeitems_utils.NodeItem):
-                if item.nodetype.startswith('RSN') and item.nodetype not in {'RSNodeTaskNode', 'RSNodeRenderListNode',
-                                                                             'RSNodeMergeNode'}: continue
+                if item.nodetype.startswith('RSN') and item.nodetype not in {'RSNodeRenderListNode'}: continue
+
                 enum_items.append(
                     (item.nodetype, item.label, ''))
 

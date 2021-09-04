@@ -20,10 +20,10 @@ class RSN_OT_MergeSelectedNodes(bpy.types.Operator):
         nt = context.space_data.edit_tree
 
         tasks = [{'node': node, 'loc_y': int(node.location[1])} for node in context.selected_nodes if
-                 node.bl_idname in {'RSNodeTaskNode', 'RSNodeSettingsMergeNode','RenderNodeMerge'}]
+                 node.bl_idname in {'RSNodeTaskNode','RenderNodeTask', 'RSNodeSettingsMergeNode','RenderNodeMerge'}]
 
         nodes = [{'node': node, 'loc_y': int(node.location[1])} for node in context.selected_nodes if
-                 node.bl_idname not in {'RSNodeTaskNode', 'RSNodeProcessorNode', 'RSNodeRenderListNode',
+                 node.bl_idname not in {'RSNodeTaskNode','RenderNodeTask', 'RSNodeProcessorNode', 'RSNodeRenderListNode',
                                         'RSNodeTaskListNode', 'NodeReroute'}]
 
         tasks = [dict['node'] for dict in sorted(tasks, key=lambda k: k['loc_y'], reverse=True)]
