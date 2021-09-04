@@ -20,7 +20,7 @@ class RSN_OT_MergeSelectedNodes(bpy.types.Operator):
         nt = context.space_data.edit_tree
 
         tasks = [{'node': node, 'loc_y': int(node.location[1])} for node in context.selected_nodes if
-                 node.bl_idname in {'RSNodeTaskNode', 'RSNodeSettingsMergeNode'}]
+                 node.bl_idname in {'RSNodeTaskNode', 'RSNodeSettingsMergeNode','RenderNodeMerge'}]
 
         nodes = [{'node': node, 'loc_y': int(node.location[1])} for node in context.selected_nodes if
                  node.bl_idname not in {'RSNodeTaskNode', 'RSNodeProcessorNode', 'RSNodeRenderListNode',
@@ -43,9 +43,9 @@ class RSN_OT_MergeSelectedNodes(bpy.types.Operator):
         width = numpy.mean([node.width for node in need_to_sort])
 
         if not self.make_version:
-            list_node = nt.nodes.new('RSNodeSettingsMergeNode')
+            list_node = nt.nodes.new('RenderNodeMerge')
         else:
-            list_node = nt.nodes.new('RSNodeVariantsNode')
+            list_node = nt.nodes.new('RenderNodeVariants')
 
         list_node.location = loc_x + width * 1.5, loc_y
 

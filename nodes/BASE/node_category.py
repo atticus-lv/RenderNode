@@ -91,18 +91,10 @@ node_categories = [
         # nodeitems_utils.NodeItem("RSNodeClientNode"),
     ]),
     RSNCategory("LAYOUT", "Layout", items=[
-        nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Merge", settings={
-            "node_type": repr("MERGE"),
-        }),
+        nodeitems_utils.NodeItem('RenderNodeMerge'),
         nodeitems_utils.NodeItem('NodeFrame'),
-        # nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Switch", settings={
-        #     "node_type": repr("SWITCH"),
-        #     "label": repr("Switch"),
-        # }),
-        # nodeitems_utils.NodeItem("RSNodeSettingsMergeNode", label="Version", settings={
-        #     "node_type": repr("VERSION"),
-        #     "label"    : repr("Version"),
-        # }),
+        nodeitems_utils.NodeItem('NodeReroute'),
+
 
     ]),
     RSNCategory("OLD", "Old(Not fully support now)", items=[
