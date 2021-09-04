@@ -54,7 +54,7 @@ class RSNodeTaskNode(RenderNodeBase):
     def init(self, context):
         runtime_info['executing'] = True
         self.create_input('RenderNodeSocketString', 'label', 'Label')
-        self.create_input('RenderNodeSocketFilePath', 'path', 'Path', default_value='//')
+        self.create_input('RenderNodeSocketFilePath', 'path', 'Path', default_value='')
         self.create_output('RSNodeSocketRenderList', 'Task', 'Task')
         self.label = self.name
         runtime_info['executing'] = False

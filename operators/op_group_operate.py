@@ -2,6 +2,8 @@ import bpy
 from ..nodes.BASE._runtime import runtime_info
 from mathutils import Vector
 
+from bpy.props import *
+
 import math
 
 
@@ -142,14 +144,18 @@ class RSN_OP_EditGroup(bpy.types.Operator):
     bl_idname = "rsn.edit_group"
     bl_label = "Edit Group"
 
+    node_name: StringProperty()
+
     @classmethod
     def poll(cls, context):
-        return context.space_data.type == "NODE_EDITOR" and context.space_data.tree_type == 'RenderStackNodeTree'
+        return context.space_data.type == "NODE_EDITOR" and context.space_data.tree_type in {'RenderStackNodeTree',
+                                                                                             'RenderStackNodeGroup'}
 
     def execute(self, context):
         space = context.space_data
         path = space.path
         node = path[-1].node_tree.nodes.active
+        if self.node_name != '': node = path[-1].node_tree.nodes[self.node_name]
 
         if hasattr(node, "node_tree") and node.select:
             if (node.node_tree):
@@ -157,6 +163,8 @@ class RSN_OP_EditGroup(bpy.types.Operator):
                 return {"FINISHED"}
         elif len(path) > 1:
             path.pop()
+        # clear
+        self.node_name = ''
         return {"CANCELLED"}
 
 

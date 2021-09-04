@@ -72,6 +72,10 @@ node_categories = [
 
     ]),
 
+    RSNCategory("GROUP", "Group", items=[
+        nodeitems_utils.NodeItem("RenderNodeGroup"),
+    ]),
+
     RSNCategory("RENDER_SETTINGS", "Render Settings(Extra)", items=[
 
         nodeitems_utils.NodeItem("RenderNodeCyclesLightPath"),

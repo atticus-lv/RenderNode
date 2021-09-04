@@ -68,6 +68,7 @@ class RenderNodeGroup(bpy.types.NodeCustomGroup, RenderNodeBase):
         row = layout.row(align=True)
         row.prop(self, "node_tree_selection", text="")
         if self.node_tree:
+            row.operator('rsn.edit_group', text='', icon='NODETREE').node_name = self.name
             layout.prop(self.node_tree, 'name', text='Name')
         else:
             layout.operator('rsn.create_group', text='Creat Group', icon='ADD').node = self.name

@@ -33,7 +33,7 @@ def update_node(self, context):
         self.remove_input('count')
         self.create_input('RenderNodeSocketString', 'value2', 'Value')
 
-    if self.operate_type in {'SUB', 'JOIN', 'SPACE', 'DOT', 'UNDERSCORE'}:
+    if self.operate_type in {'SUB','JOIN', 'SPACE', 'DOT', 'UNDERSCORE'}:
         self.create_input('RenderNodeSocketString', 'value2', 'Value')
     else:
         self.remove_input('value2')
@@ -53,6 +53,9 @@ def update_node(self, context):
         self.remove_input('slice_from')
         self.remove_input('slice_to')
 
+    if self.operate_type in {'ABS', 'REL'}:
+        pass
+
     self.execute_tree()
 
 
@@ -65,7 +68,6 @@ class RenderNodeStringOperate(RenderNodeBase):
         items=[
             ('', 'Concat', ''),
             ('JOIN', 'Join', ''),
-            ('SUB', 'Sub Folder', ''),
             ('SPACE', 'Space', ''),
             ('DOT', 'Dot', ''),
             ('UNDERSCORE', 'Underscore', ''),
@@ -74,6 +76,11 @@ class RenderNodeStringOperate(RenderNodeBase):
             ('REPLACE', 'Replace', ''),
             ('MULTIPLY', 'Multiply', ''),
             ('SLICE', 'Slice', ''),
+
+            ('', 'Path', ''),
+            ('SUB', 'Join Path', ''),
+            ('ABS', 'Abs Path', ''),
+            ('REL', 'Rel Path', ''),
 
             ('', 'Conversion', ''),
             ('INT_2_STR', 'Int to String', ''),
@@ -106,6 +113,12 @@ class RenderNodeStringOperate(RenderNodeBase):
         elif self.operate_type == 'SUB':
             s2 = self.inputs['value2'].get_value()
             self.outputs[0].set_value(s1 + '/' + s2)
+
+        elif self.operate_type == 'REL':
+            self.outputs[0].set_value(bpy.path.relpath(s1))
+
+        elif self.operate_type == 'ABS':
+            self.outputs[0].set_value(bpy.path.abspath(s1))
 
         elif self.operate_type == 'SPACE':
             s2 = self.inputs['value2'].get_value()

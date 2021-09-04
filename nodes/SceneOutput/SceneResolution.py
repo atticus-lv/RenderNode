@@ -51,8 +51,11 @@ class RSN_OT_SetSceneResolutionNodePreset(bpy.types.Operator):
     res_scale: IntProperty()
 
     def execute(self, context):
-        node = bpy.context.space_data.edit_tree.nodes.active
-        if not node:
+        space = context.space_data
+        path = space.path
+        node = path[-1].node_tree.nodes.active
+        
+        if not node or node.bl_idname != 'RenderNodeSceneResolution':
             return {"FINISHED"}
 
         node.inputs['resolution_x'].value = self.res_x
@@ -85,7 +88,7 @@ class RenderNodeSceneResolution(RenderNodeBase):
         self.create_input('RenderNodeSocketInt', "resolution_y", 'Y', default_value=1080)
         self.create_input('RenderNodeSocketInt', "resolution_percentage", '%', default_value=100)
 
-        self.create_output('RSNodeSocketTaskSettings','Settings','Settings')
+        self.create_output('RSNodeSocketTaskSettings', 'Settings', 'Settings')
 
     def draw_buttons(self, context, layout):
         try:
@@ -96,7 +99,7 @@ class RenderNodeSceneResolution(RenderNodeBase):
         except Exception:
             pass
 
-    def process(self,context,id,path):
+    def process(self, context, id, path):
         # correct number
         if self.inputs['resolution_x'].get_value() < 4:
             self.inputs['resolution_x'].set_value(4)
