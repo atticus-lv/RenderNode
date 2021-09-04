@@ -9,13 +9,18 @@ def update_node(self, context):
     if self.engine == 'CYCLES':
         self.create_input('RenderNodeSocketInt', 'cycles_samples', 'Render', default_value=64)
         self.create_input('RenderNodeSocketInt', 'preview_samples', 'Viewport', default_value=64)
-        self.create_input('RenderNodeSocketFloat', 'time_limit', 'Time Limit-CyclesX', default_value=0)
-        self.create_input('RenderNodeSocketBool', 'use_adaptive_sampling', 'Adaptive Sampling', default_value=False)
+        self.create_input('RenderNodeSocketFloat', 'time_limit', 'Time Limit', default_value=0)
+        self.create_input('RenderNodeSocketBool', 'use_adaptive_sampling', 'Adaptive Sampling', default_value=True)
+        self.create_input('RenderNodeSocketFloat', 'adaptive_threshold', 'Noise Threshold',
+                          default_value=0.0000)
+        self.create_input('RenderNodeSocketInt', 'adaptive_min_samples', 'Min Samples', default_value=0)
     else:
         self.remove_input('cycles_samples')
         self.remove_input('preview_samples')
         self.remove_input('use_adaptive_sampling')
         self.remove_input('time_limit')
+        self.remove_input('adaptive_threshold')
+        self.remove_input('adaptive_min_samples')
 
     if self.engine == 'BLENDER_EEVEE':
         self.create_input('RenderNodeSocketInt', 'taa_render_samples', 'Render', default_value=64)
@@ -80,7 +85,7 @@ class RenderNodeSceneRenderEngine(RenderNodeBase):
         self.create_input('RenderNodeSocketInt', 'taa_render_samples', 'Render', default_value=64)
         self.create_input('RenderNodeSocketInt', 'taa_samples', 'Viewport', default_value=64)
 
-        self.create_output('RSNodeSocketTaskSettings','Settings','Settings')
+        self.create_output('RSNodeSocketTaskSettings', 'Settings', 'Settings')
 
     def draw_buttons(self, context, layout):
         col = layout.column(align=1)
@@ -100,12 +105,15 @@ class RenderNodeSceneRenderEngine(RenderNodeBase):
         if self.engine == 'CYCLES':
             self.compare(bpy.context.scene.cycles, 'samples', self.inputs['cycles_samples'].get_value())
             self.compare(bpy.context.scene.cycles, 'preview_samples', self.inputs['preview_samples'].get_value())
-            self.compare(bpy.context.scene.cycles, 'use_adaptive_sampling',
-                         self.inputs['use_adaptive_sampling'].get_value())
             self.compare(bpy.context.scene.cycles, 'device', self.cycles_device)
-
             self.compare(bpy.context.scene.cycles, 'time_limit', self.inputs['time_limit'].get_value())
 
+            self.compare(bpy.context.scene.cycles, 'use_adaptive_sampling',
+                         self.inputs['use_adaptive_sampling'].get_value())
+            self.compare(bpy.context.scene.cycles, 'adaptive_threshold',
+                         self.inputs['adaptive_threshold'].get_value())
+            self.compare(bpy.context.scene.cycles, 'adaptive_min_samples',
+                         self.inputs['adaptive_min_samples'].get_value())
 
         elif self.engine == 'BLENDER_EEVEE':
             self.compare(bpy.context.scene.eevee, 'taa_render_samples', self.inputs['taa_render_samples'].get_value())
@@ -142,12 +150,15 @@ class RenderNodeSceneRenderEngine(RenderNodeBase):
         # append viewport engine
         enum_items.append(('BLENDER_EEVEE', 'Eevee', ''))
         enum_items.append(('BLENDER_WORKBENCH', 'Workbench', ''))
+        enum_items.append(('CYCLES', 'Cycles', ''))
 
         addon = [engine.bl_idname for engine in bpy.types.RenderEngine.__subclasses__()]
 
+        if len(addon) > 1: enum_items.append(None)  # add separator
+
         # append to enum_items
         for name in addon:
-            enum_items.append((name, name.capitalize(), ''))
+            if name != 'CYCLES': enum_items.append((name, name.capitalize(), ''))
 
         return enum_items
 
