@@ -1,6 +1,6 @@
 import os
 import bpy
-import bpy.utils.previews
+from .t3dn_bip import previews
 
 icons_dir = os.path.join(os.path.dirname(__file__), "icons")
 
@@ -12,13 +12,13 @@ class RSN_Preview():
         self.name = name
 
     def register(self):
-        pcoll = bpy.utils.previews.new()
+        pcoll = previews.new()
         pcoll.load(self.name, self.image, 'IMAGE')
         self.preview_collections["rsn_icon"] = pcoll
 
     def unregister(self):
         for pcoll in self.preview_collections.values():
-            bpy.utils.previews.remove(pcoll)
+            previews.remove(pcoll)
         self.preview_collections.clear()
 
     def get_image(self):

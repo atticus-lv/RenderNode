@@ -6,10 +6,10 @@ from bpy.props import *
 
 from .icon_utils import RSN_Preview
 
-merge_icon = RSN_Preview(image='merge.png', name='merge_icon')
-simple_task_icon = RSN_Preview(image='flow.png', name='simple_task_icon')
-version_icon = RSN_Preview(image='version.png', name='version_icon')
-split_icon = RSN_Preview(image='split.png', name='split_icon')
+merge_icon = RSN_Preview(image='merge.bip', name='merge_icon')
+simple_task_icon = RSN_Preview(image='flow.bip', name='simple_task_icon')
+version_icon = RSN_Preview(image='version.bip', name='version_icon')
+split_icon = RSN_Preview(image='split.bip', name='split_icon')
 
 
 class RSN_OT_SwitchTree(bpy.types.Operator):

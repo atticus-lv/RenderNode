@@ -18,15 +18,6 @@ class RSN_PT_Panel(bpy.types.Panel):
         if context.scene.rsn_bind_tree:
             row.operator('rsn.switch_to_bind_tree', text='', icon='SCREEN_BACK')
 
-            # box = layout.box().column(align=0)
-            # box.template_ID(context.Scene, "rsn_bind_tree")
-            #
-            # row = box.row()
-            # row.operator('rsn.switch_to_bind_tree')
-            #
-            # pop = row.operator('rsn.pop_editor')
-            # pop.bind_tree = True
-            # pop.area_type = "NODE_EDITOR"
 
 
 def scene_draw(self, context):
