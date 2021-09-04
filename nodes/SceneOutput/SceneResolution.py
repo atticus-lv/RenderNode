@@ -54,13 +54,10 @@ class RSN_OT_SetSceneResolutionNodePreset(bpy.types.Operator):
         space = context.space_data
         path = space.path
         node = path[-1].node_tree.nodes.active
-        
-        if not node or node.bl_idname != 'RenderNodeSceneResolution':
-            return {"FINISHED"}
 
-        node.inputs['resolution_x'].value = self.res_x
-        node.inputs['resolution_y'].value = self.res_y
-        node.inputs['resolution_percentage'].value = self.res_scale
+        node.inputs['resolution_x'].default_value = self.res_x
+        node.inputs['resolution_y'].default_value = self.res_y
+        node.inputs['resolution_percentage'].default_value = self.res_scale
 
         return {"FINISHED"}
 
@@ -92,7 +89,11 @@ class RenderNodeSceneResolution(RenderNodeBase):
 
     def draw_buttons(self, context, layout):
         try:
-            if bpy.context.space_data.node_tree.nodes.active.name == self.name:
+            space = context.space_data
+            path = space.path
+            node = path[-1].node_tree.nodes.active
+
+            if node and node == self:
                 layout.menu('RSN_MT_NodeResolutionPresetsMenu')
             else:
                 layout.label(text='Active Presets', icon='RESTRICT_SELECT_OFF')
