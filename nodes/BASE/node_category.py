@@ -76,16 +76,11 @@ node_categories = [
         nodeitems_utils.NodeItem("RenderNodeGroup"),
     ]),
 
-    RSNCategory("RENDER_SETTINGS", "Render Settings(Extra)", items=[
-
-        nodeitems_utils.NodeItem("RenderNodeCyclesLightPath"),
-
-    ]),
-
     RSNCategory("EXTRA", "Extra", items=[
         nodeitems_utils.NodeItem("RenderNodeProperty"),
         nodeitems_utils.NodeItem('RSNodeCollectionDisplayNode'),
         nodeitems_utils.NodeItem('RenderNodeScripts'),
+        nodeitems_utils.NodeItem("RenderNodeCyclesLightPath"),
 
         # nodeitems_utils.NodeItem("RSNodeServerNode"),
         # nodeitems_utils.NodeItem("RSNodeClientNode"),
@@ -94,13 +89,16 @@ node_categories = [
         nodeitems_utils.NodeItem('RenderNodeMerge'),
         nodeitems_utils.NodeItem('NodeFrame'),
         nodeitems_utils.NodeItem('NodeReroute'),
-
-
     ]),
+
+    RSNCategory("EXP", "Experience", items=[
+        nodeitems_utils.NodeItem("RenderNodeImageSequence"),
+        nodeitems_utils.NodeItem("RenderNodeEmailNode"),
+    ]),
+
     RSNCategory("OLD", "Old(Not fully support now)", items=[
         nodeitems_utils.NodeItem("RSNodeCommonSettingsNode"),
         nodeitems_utils.NodeItem("RSNodeScriptsNode"),
-        nodeitems_utils.NodeItem("RenderNodeEmailNode"),
         nodeitems_utils.NodeItem("RSNodeSmtpEmailNode"),
         nodeitems_utils.NodeItem("RSNodeLightStudioNode"),
         nodeitems_utils.NodeItem("RSNodeWorkBenchRenderSettingsNode"),
