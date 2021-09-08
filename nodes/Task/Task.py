@@ -60,8 +60,9 @@ class RenderNodeTask(RenderNodeBase):
         runtime_info['executing'] = False
 
     def draw_buttons(self, context, layout):
-        row = layout.row()
-        row.prop(self, 'is_active_task', text='Set Active', icon="HIDE_OFF" if self.is_active_task else "HIDE_ON")
+        if bpy.types.WindowManager.rsn_viewer_node == '':
+            layout.label(text = 'There is no active task')
+        layout.prop(self, 'is_active_task', text='Set Active', icon="HIDE_OFF" if self.is_active_task else "HIDE_ON")
 
     def update(self):
         if runtime_info['executing'] is True: return
