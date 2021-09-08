@@ -10,12 +10,12 @@ class RenderNodeSceneViewLayer(RenderNodeBase):
 
     def init(self, context):
         self.create_input('RenderNodeSocketViewLayer', "view_layer", 'ViewLayer')
-        self.create_input('RenderNodeSocketBool', 'set_as_active_layer', 'Set as active Layer')
-        self.create_input('RenderNodeSocketBool', 'use_for_render', 'Use for Rendering')
-        self.create_input('RenderNodeSocketBool','output_composite_passes','Output Composite Passes')
-        self.create_output('RSNodeSocketTaskSettings','Settings','Settings')
+        self.create_input('RenderNodeSocketBool', 'set_as_active_layer', 'Set as active Layer', default_value=True)
+        self.create_input('RenderNodeSocketBool', 'use_for_render', 'Use for Rendering', default_value=True)
+        self.create_input('RenderNodeSocketBool', 'output_composite_passes', 'Output Composite Passes')
+        self.create_output('RSNodeSocketTaskSettings', 'Settings', 'Settings')
 
-    def process(self,context,id,path):
+    def process(self, context, id, path):
         view_layer_name = self.inputs['view_layer'].get_value()
         view_layer = bpy.context.scene.view_layers.get(view_layer_name)
 
@@ -32,11 +32,19 @@ class RenderNodeSceneViewLayer(RenderNodeBase):
             except Exception as e:
                 print(f'View Layer Passes {self.name} error:{e}')
 
+
 # [
 #     attr
 #     for attr in dir(C.view_layer)
 #     if attr.startswith("use_pass") and getattr(C.view_layer, attr) == True
 # ]
+
+# [
+#     attr
+#     for attr in dir(C.view_layer)
+#     if getattr(C.view_layer, attr) == True
+# ]
+
 
 def register():
     bpy.utils.register_class(RenderNodeSceneViewLayer)

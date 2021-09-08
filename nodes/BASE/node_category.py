@@ -12,10 +12,6 @@ node_categories = [
     RSNCategory("TASK", "Task", items=[
         nodeitems_utils.NodeItem("RenderNodeTask"),
         nodeitems_utils.NodeItem("RSNodeRenderListNode"),
-        # nodeitems_utils.NodeItem("RSNodeProcessorNode"),
-        # nodeitems_utils.NodeItem("RSNodeViewerNode"),
-        # nodeitems_utils.NodeItem("RSNodeTaskListNode"),
-
     ]),
 
     RSNCategory("INPUT", "Input", items=[
@@ -35,25 +31,34 @@ node_categories = [
         nodeitems_utils.NodeItem("RenderNodeBooleanMath"),
         nodeitems_utils.NodeItem("RenderNodeStringOperate"),
         nodeitems_utils.NodeItem("RenderNodeVectorConvert"),
+        nodeitems_utils.NodeItem("RenderNodeProperty"),
+        nodeitems_utils.NodeItem('RSNodeCollectionDisplayNode'),
+        nodeitems_utils.NodeItem('RenderNodeScripts'),
+    ]),
+
+    RSNCategory("SCENE", "Scene", items=[
+        nodeitems_utils.NodeItem("RenderNodeScene"),
+        nodeitems_utils.NodeItem("RenderNodeSceneCamera"),
+        nodeitems_utils.NodeItem("RenderNodeSceneWorld"),
+    ]),
+
+    RSNCategory("VIEWLAYER", "Scene ViewLayer", items=[
+        nodeitems_utils.NodeItem("RenderNodeSceneViewLayer"),
+    ]),
+
+    RSNCategory("RENDER", "Scene Render", items=[
+        nodeitems_utils.NodeItem("RenderNodeSceneRenderEngine"),
+        nodeitems_utils.NodeItem("RenderNodeSceneColorManagement"),
+        nodeitems_utils.NodeItem("RenderNodeCyclesLightPath"),
     ]),
 
     RSNCategory("OUTPUT", "Scene Output", items=[
-        nodeitems_utils.NodeItem("RenderNodeSceneViewLayer"),
         nodeitems_utils.NodeItem("RenderNodeSceneFilePath"),
         nodeitems_utils.NodeItem("RenderNodeSceneFrameRange"),
         nodeitems_utils.NodeItem("RenderNodeSceneImageFormat"),
         nodeitems_utils.NodeItem("RenderNodeSceneMovieFormat"),
         nodeitems_utils.NodeItem("RenderNodeSceneResolution"),  # performance is bad
-
         nodeitems_utils.NodeItem("RenderNodeSceneRenderSlot"),
-
-    ]),
-
-    RSNCategory("SCENE", "Scene", items=[
-        nodeitems_utils.NodeItem("RenderNodeSceneCamera"),
-        nodeitems_utils.NodeItem("RenderNodeSceneWorld"),
-        nodeitems_utils.NodeItem("RenderNodeSceneRenderEngine"),
-        nodeitems_utils.NodeItem("RenderNodeSceneColorManagement"),
     ]),
 
     RSNCategory("OBJECT", "Object", items=[
@@ -66,32 +71,19 @@ node_categories = [
     RSNCategory("VARIANTS", "Variants", items=[
         nodeitems_utils.NodeItem("RenderNodeSwitch"),
         nodeitems_utils.NodeItem("RenderNodeVariants"),
-        # nodeitems_utils.NodeItem("RSNodeVariantsNode"),
-        # nodeitems_utils.NodeItem("RSNodeSetVariantsNode"),
-        # nodeitems_utils.NodeItem("RSNodeNullNode"),
-
     ]),
 
-    RSNCategory("GROUP", "Group", items=[
-        nodeitems_utils.NodeItem("RenderNodeGroup"),
-    ]),
+    # RSNCategory("GROUP", "Group", items=[
+    #     nodeitems_utils.NodeItem("RenderNodeGroup"),
+    # ]),
 
-    RSNCategory("EXTRA", "Extra", items=[
-        nodeitems_utils.NodeItem("RenderNodeProperty"),
-        nodeitems_utils.NodeItem('RSNodeCollectionDisplayNode'),
-        nodeitems_utils.NodeItem('RenderNodeScripts'),
-        nodeitems_utils.NodeItem("RenderNodeCyclesLightPath"),
-
-        # nodeitems_utils.NodeItem("RSNodeServerNode"),
-        # nodeitems_utils.NodeItem("RSNodeClientNode"),
-    ]),
     RSNCategory("LAYOUT", "Layout", items=[
         nodeitems_utils.NodeItem('RenderNodeMerge'),
         nodeitems_utils.NodeItem('NodeFrame'),
         nodeitems_utils.NodeItem('NodeReroute'),
     ]),
 
-    RSNCategory("EXP", "Experience", items=[
+    RSNCategory("EXP", "Exp", items=[
         nodeitems_utils.NodeItem("RenderNodeImageSequence"),
         nodeitems_utils.NodeItem("RenderNodeEmailNode"),
     ]),
