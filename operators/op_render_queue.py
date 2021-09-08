@@ -134,10 +134,10 @@ class RSN_OT_RenderQueue(bpy.types.Operator):
         # open folder after render
         if self.render_list_node.open_dir:
             try:
-                output_dir = os.path.dirname(bpy.context.scene.render.filepath)
+                output_dir = os.path.dirname(bpy.path.abspath(bpy.context.scene.render.filepath))
                 os.startfile(output_dir)
             except:
-                logger.warning('RSN File path error, can not open dir after rendering')
+                logger.warning(f'RSN File path error, can not open dir after rendering:\n{bpy.context.scene.render.filepath}')
         if self.render_list_node.clean_path:
             bpy.context.scene.render.filepath = ""
         # return display type
