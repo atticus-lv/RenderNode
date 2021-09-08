@@ -29,7 +29,7 @@ def enum_frame_rate_preset():
 
 
 def update_node(self, context):
-    if self.use_frame_rate_preset:
+    if self.frame_rate_preset != 'Custom.py':
         self.remove_input('fps')
         self.remove_input('frame_base')
     else:
@@ -70,8 +70,7 @@ class RenderNodeSceneMovieFormat(RenderNodeBase):
                                 default='H264_in_MP4.py',
                                 update=update_node)
 
-    use_frame_rate_preset: BoolProperty(name='Use Frame Preset', default=True, update=update_node)
-    frame_rate_preset: EnumProperty(name='FFMPEG Preset', items=[
+    frame_rate_preset: EnumProperty(name='Frame Preset', items=[
         ('23.98.py', '23.98', ''),
         ('24.py', '24', ''),
         ('29.97.py', '29.97', ''),
@@ -80,7 +79,9 @@ class RenderNodeSceneMovieFormat(RenderNodeBase):
         ('59.94.py', '59.94', ''),
         ('60.py', '60', ''),
         ('120.py', '120', ''),
-        ('240.py', '240', ''), ],
+        ('240.py', '240', ''),
+        ('Custom.py', 'Custom', ''),
+    ],
                                     default='24.py', update=update_node)
 
     def init(self, context):
@@ -101,8 +102,7 @@ class RenderNodeSceneMovieFormat(RenderNodeBase):
             col.prop(self, 'use_ffmpeg_preset')
             if self.use_ffmpeg_preset: col.prop(self, 'ffmpeg_preset')
 
-        col.prop(self, 'use_frame_rate_preset')
-        if self.use_frame_rate_preset: col.prop(self, 'frame_rate_preset')
+        col.prop(self, 'frame_rate_preset')
 
     def process(self, context, id, path):
         attr_list = ['file_format','quality', ]
@@ -117,13 +117,16 @@ class RenderNodeSceneMovieFormat(RenderNodeBase):
             if self.use_ffmpeg_preset:
                 ffmpeg_preset_dir = os.path.join(get_preset_folder(), 'ffmpeg')
                 bpy.ops.script.python_file_run(filepath=os.path.join(ffmpeg_preset_dir, self.ffmpeg_preset))
-            if self.use_frame_rate_preset:
-                frame_rate_preset_dir = os.path.join(get_preset_folder(), 'framerate')
-                bpy.ops.script.python_file_run(filepath=os.path.join(frame_rate_preset_dir, self.frame_rate_preset))
-            else:
-                context.scene.render.fps = self.inputs['fps'].get_value()
-                context.scene.render.frame_base = self.inputs['frame_base'].get_value()
 
+            frame_rate_preset_dir = os.path.join(get_preset_folder(), 'framerate')
+            bpy.ops.script.python_file_run(filepath=os.path.join(frame_rate_preset_dir, self.frame_rate_preset))
+
+            if self.frame_rate_preset == 'Custom.py':
+                try:
+                    context.scene.render.fps = self.inputs['fps'].get_value()
+                    context.scene.render.frame_base = self.inputs['frame_base'].get_value()
+                except:
+                    pass
 
 def register():
     bpy.utils.register_class(RenderNodeSceneMovieFormat)
