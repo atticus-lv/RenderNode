@@ -73,6 +73,10 @@ node_categories = [
         nodeitems_utils.NodeItem("RenderNodeVariants"),
     ]),
 
+    RSNCategory("COMP", "Compose", items=[
+        nodeitems_utils.NodeItem("RenderNodeImageSequence"),
+    ]),
+
     # RSNCategory("GROUP", "Group", items=[
     #     nodeitems_utils.NodeItem("RenderNodeGroup"),
     # ]),
@@ -84,8 +88,8 @@ node_categories = [
     ]),
 
     RSNCategory("EXP", "Exp", items=[
-        nodeitems_utils.NodeItem("RenderNodeImageSequence"),
         nodeitems_utils.NodeItem("RenderNodeEmailNode"),
+
     ]),
 
     RSNCategory("OLD", "Old(Not fully support now)", items=[

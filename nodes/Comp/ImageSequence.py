@@ -3,6 +3,7 @@ from bpy.props import *
 
 import os
 from ...nodes.BASE.node_base import RenderNodeBase
+from ...nodes.BASE._runtime import runtime_info
 from ...preferences import get_pref
 
 
@@ -26,50 +27,37 @@ class RenderNodeImageSequence(RenderNodeBase):
     frame_start: IntProperty(name='Frame Start', update=update_node)
 
     def init(self, context):
-        self.create_input('RenderNodeSocketFilePath', 'path', 'Path')
         self.create_input('RenderNodeSocketInt', 'frame_duration', 'Frame Duration', default_value=1)
-        self.create_input('RenderNodeSocketInt', 'frame_start', 'Frame Start', default_value=0)
+        self.create_input('RenderNodeSocketInt', 'frame_start', 'Frame Start', default_value=1)
+        self.create_input('RenderNodeSocketInt', 'frame_offset', 'Frame Offset', default_value=0)
         self.create_input('RenderNodeSocketBool', 'use', 'Use', default_value=True)
         self.create_output('RSNodeSocketTaskSettings', 'Settings', 'Settings')
 
     def draw_buttons(self, context, layout):
         layout.prop(self, 'operate_type', text='')
-
-        if self.image:
-            img = self.image
-            layout.template_preview(img)
+        layout.template_ID(self, "image", new="image.new", open="image.open")
 
     def process(self, context, id, path):
-        p = self.inputs['path'].get_value()
-        if p and os.path.isfile(p):
-            dir, filename = os.path.split(p)
-            if filename not in bpy.data.images: bpy.data.images.load(p, check_existing=False)
-            img = bpy.data.images.get(filename)
-            self.compare(self, 'image', img)
+        if self.operate_type == 'IMG_2_MOV':
+            self.compare(self.image, 'source', 'SEQUENCE')
+        else:
+            self.compare(self.image, 'source', 'MOVIE')
 
-        if self.image:
-            if self.operate_type == 'IMG_2_MOV':
-                self.compare(self.image, 'source', 'SEQUENCE')
-            else:
-                self.compare(self.image, 'source', 'MOVIE')
-
-            self.create_comp(context, self.inputs['use'].get_value(), self.image.name)
-
-    def create_comp(self, context, use, img_name):
         scn = context.scene
         scn.use_nodes = True
 
         nt = context.scene.node_tree
         img_node = nt.nodes.get(self.name)
 
-        if use:
+        if self.inputs['use'].get_value():
             if img_node is None:
                 img_node = nt.nodes.new('CompositorNodeImage')
                 img_node.name = self.name
 
-            self.compare(img_node, 'image', bpy.data.images.get(img_name))
-            self.compare(img_node, 'frame_duration', self.inputs['frame_duration'].get_value())
-            self.compare(img_node, 'frame_start', self.inputs['frame_start'].get_value())
+            self.compare(img_node, 'image', self.image)
+            img_node.frame_duration = self.inputs['frame_duration'].get_value()
+            img_node.frame_start = self.inputs['frame_start'].get_value()
+            img_node.frame_offset = self.inputs['frame_offset'].get_value()
 
             try:
                 name = get_pref().node_view_layer_passes.comp_node_name
