@@ -27,6 +27,8 @@ class RSNodeSocketRenderList(bpy.types.NodeSocket, SocketBase):
     bl_idname = 'RSNodeSocketRenderList'
     bl_label = 'RSNodeSocketRenderList'
 
+    compatible_sockets = ['RenderNodeMerge','RSNodeSocketMergeSettings']
+
     shape = 'DIAMOND'
     default_value = None
 

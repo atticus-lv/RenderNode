@@ -24,6 +24,8 @@ class RSNodeSocketTaskSettings(bpy.types.NodeSocket, SocketBase):
     bl_idname = 'RSNodeSocketTaskSettings'
     bl_label = 'RSNodeSocketTaskSettings'
 
+    compatible_sockets = ['RenderNodeMerge','RSNodeSocketMergeSettings']
+
     shape = 'SQUARE'
     default_value = None
 

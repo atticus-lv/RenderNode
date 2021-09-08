@@ -1,6 +1,6 @@
 import bpy
 from bpy.props import *
-from mathutils import Vector,Euler
+from mathutils import Vector, Euler
 
 from ._runtime import cache_socket_links, cache_socket_variables
 
@@ -22,6 +22,8 @@ class SocketBase():
         '''
         self.update_shape()
 
+
+
         _nodetree_socket_connections = cache_socket_links.setdefault(self.id_data, {})
         _connected_socket = _nodetree_socket_connections.get(self, None)
 
@@ -40,40 +42,26 @@ class SocketBase():
             if socket.is_linked:
                 _connected_socket = socket.links[0].from_socket
 
+                # set link
+                if not socket.is_socket_compatible(_connected_socket):
+                    self.set_valid(socket, False)
+
         cache_socket_links[self.id_data][self] = _connected_socket
 
         return _connected_socket
 
-    # set and get method
-    #########################
-    def set_value(self, value):
-        '''Sets the value of an output socket'''
-        cache_socket_variables.setdefault(self.id_data, {})[self] = value
+    # UI display
+    ###################
+    @staticmethod
+    def set_valid(socket, is_valid=False):
+        if socket.links:
+            socket.links[0].is_valid = is_valid
 
-    def get_self_value(self):
-        '''returns the stored value of an output socket'''
-        val = cache_socket_variables.setdefault(self.id_data, {}).get(self, None)
-        return val
-
-    def get_value(self):
-        '''
-        if the socket is an output it returns the stored value of that socket
-        if the socket is an input:
-            if it's connected, it returns the value of the connected output socket
-            if it's not it returns the default value of the socket
-        '''
-        _value = ''
-        if not self.is_output:
-            connected_socket = self.connected_socket
-
-            if not connected_socket:
-                _value = self.default_value
-            else:
-                _value = connected_socket.get_self_value()
-        else:
-            _value = self.get_self_value()
-
-        return _value
+    # Link valid
+    def is_socket_compatible(self, other_socket):
+        if other_socket.bl_idname == 'NodeSocketVirtual':
+            return True
+        return other_socket.bl_idname == self.bl_idname or other_socket.bl_idname in self.compatible_sockets
 
     @property
     def ui_value(self):
@@ -116,6 +104,37 @@ class SocketBase():
         if self.links:
             print('remove:', self.links[0].from_node, self.links[0].to_node)
             self.id_data.links.remove(self.links[0])
+
+    # set and get method
+    #########################
+    def set_value(self, value):
+        '''Sets the value of an output socket'''
+        cache_socket_variables.setdefault(self.id_data, {})[self] = value
+
+    def get_self_value(self):
+        '''returns the stored value of an output socket'''
+        val = cache_socket_variables.setdefault(self.id_data, {}).get(self, None)
+        return val
+
+    def get_value(self):
+        '''
+        if the socket is an output it returns the stored value of that socket
+        if the socket is an input:
+            if it's connected, it returns the value of the connected output socket
+            if it's not it returns the default value of the socket
+        '''
+        _value = ''
+        if not self.is_output:
+            connected_socket = self.connected_socket
+
+            if not connected_socket:
+                _value = self.default_value
+            else:
+                _value = connected_socket.get_self_value()
+        else:
+            _value = self.get_self_value()
+
+        return _value
 
 
 def update_node(self, context):
@@ -163,6 +182,8 @@ class RenderNodeSocketInterface():
 class RenderNodeSocket(bpy.types.NodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocket'
     bl_label = 'RenderNodeSocket'
+
+    compatible_sockets = []
 
     shape = 'CIRCLE'
     color = 0.5, 0.5, 0.5, 1

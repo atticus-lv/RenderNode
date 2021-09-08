@@ -25,8 +25,11 @@ class RenderNodeSocketBool(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketBool'
     bl_label = 'Bool (RenderNode)'
 
+    compatible_sockets = ['RenderNodeSocketFloat','RenderNodeSocketInt']
+    
     default_value: BoolProperty(default=False, update=update_node)
-
+    
+    
     def draw_color(self, context, node):
         return (0.9, 0.7, 1.0, 1)
 

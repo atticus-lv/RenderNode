@@ -26,6 +26,7 @@ class RenderNodeSocketAction(RenderNodeSocket, SocketBase):
 
     default_value: PointerProperty(name='Default Value', type=bpy.types.Action, update=update_node)
 
+    
     def draw_color(self, context, node):
         return (0.78, 0.18, 0.38, 1)
 

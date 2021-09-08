@@ -23,6 +23,8 @@ class RenderNodeSocketInterfaceObject(RenderNodeSocketmixin, RenderNodeSocketInt
 class RenderNodeSocketObject(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketObject'
     bl_label = 'RenderNodeSocketObject'
+    
+    compatible_sockets = ['RenderNodeSocketCamera']
 
     default_value: PointerProperty(type=bpy.types.Object, update=update_node)
 
@@ -63,7 +65,8 @@ class RenderNodeSocketInterfaceCamera(RenderNodeSocketmixin, RenderNodeSocketInt
 class RenderNodeSocketCamera(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketCamera'
     bl_label = 'RenderNodeSocketCamera'
-
+    
+    compatible_sockets = ['RenderNodeSocketObject']
     default_value: PointerProperty(type=bpy.types.Object, update=update_node, poll=poll_camera)
 
     def draw(self, context, layout, node, text):

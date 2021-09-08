@@ -23,7 +23,8 @@ class RenderNodeSocketInterfaceInt(RenderNodeSocketmixin, RenderNodeSocketInterf
 class RenderNodeSocketInt(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketInt'
     bl_label = 'RenderNodeSocketInt'
-
+    
+    compatible_sockets = ['RenderNodeSocketFloat','RenderNodeSocketBool']
     default_value: IntProperty(default=0, update=update_node)
 
     def draw_color(self, context, node):

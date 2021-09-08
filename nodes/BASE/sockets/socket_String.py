@@ -24,6 +24,8 @@ class RenderNodeSocketString(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketString'
     bl_label = 'RenderNodeSocketString'
 
+    compatible_sockets = ['RenderNodeSocketString','RenderNodeSocketFilePath','RenderNodeSocketViewLayer']
+
     default_value: StringProperty(default='', update=update_node)
 
     def draw_color(self, context, node):
@@ -52,6 +54,8 @@ class RenderNodeSocketFilePath(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketFilePath'
     bl_label = 'RenderNodeSocketFilePath'
 
+    compatible_sockets = ['RenderNodeSocketString','RenderNodeSocketFilePath','RenderNodeSocketViewLayer']
+
     default_value: StringProperty(default='', update=update_node, subtype='FILE_PATH')
 
     def draw_color(self, context, node):
@@ -79,6 +83,8 @@ class RenderNodeSocketInterfaceViewLayer(RenderNodeSocketmixin, RenderNodeSocket
 class RenderNodeSocketViewLayer(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketViewLayer'
     bl_label = 'RenderNodeSocketViewLayer'
+
+    compatible_sockets = ['RenderNodeSocketString','RenderNodeSocketFilePath','RenderNodeSocketViewLayer']
 
     default_value: StringProperty(update=update_node)
 

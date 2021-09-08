@@ -25,6 +25,8 @@ class RenderNodeSocketFloat(RenderNodeSocket, SocketBase):
     bl_idname = 'RenderNodeSocketFloat'
     bl_label = 'RenderNodeSocketFloat'
 
+    compatible_sockets = ['RenderNodeSocketInt']
+    
     default_value: FloatProperty(default=0, update=update_node)
 
     def draw_color(self, context, node):
