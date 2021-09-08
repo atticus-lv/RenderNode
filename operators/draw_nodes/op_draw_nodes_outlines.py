@@ -166,7 +166,13 @@ class RSN_OT_DrawNodes(Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     def modal(self, context, event):
-        context.area.tag_redraw()
+        try:
+            context.area.tag_redraw()
+        except AttributeError:  # close windows
+            context.scene.RSNBusyDrawing = False
+            context.window_manager.event_timer_remove(self._timer)
+            bpy.types.SpaceNodeEditor.draw_handler_remove(self._handle, 'WINDOW')
+            return {'FINISHED'}
 
         if event.type == 'TIMER':
             # show draw
