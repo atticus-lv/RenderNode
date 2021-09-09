@@ -122,6 +122,10 @@ class RSNodeRenderListNode(RenderNodeBase):
     total_frames: IntProperty(default=0, min=0)
     done_frames: IntProperty(default=0, min=0)
 
+    @classmethod
+    def poll(cls, ntree):
+        return ntree.bl_idname in {'RenderStackNodeTree'}
+
     def init(self, context):
         self.width = 200
 

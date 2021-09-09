@@ -51,6 +51,10 @@ class RenderNodeTask(RenderNodeBase):
                                  update=set_active_task,
                                  description='Set as active Task')
 
+    @classmethod
+    def poll(cls, ntree):
+        return ntree.bl_idname in {'RenderStackNodeTree'}
+
     def init(self, context):
         runtime_info['executing'] = True
         self.create_input('RenderNodeSocketString', 'label', 'Label')
