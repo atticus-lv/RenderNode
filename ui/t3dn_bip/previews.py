@@ -29,13 +29,7 @@ class ImagePreviewCollection:
             else:
                 unsupported = unsupported_formats()
                 if unsupported:
-                    print('Pillow is installed, but:')
-
-                    for name in unsupported:
-                        print(
-                            f'- {name} images are not supported by Pillow',
-                            'and load slowly (Blender standard).',
-                        )
+                    pass
 
         self._collection = bpy.utils.previews.new()
         self._max_size = max_size

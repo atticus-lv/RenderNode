@@ -22,8 +22,6 @@ class SocketBase():
         '''
         self.update_shape()
 
-
-
         _nodetree_socket_connections = cache_socket_links.setdefault(self.id_data, {})
         _connected_socket = _nodetree_socket_connections.get(self, None)
 
