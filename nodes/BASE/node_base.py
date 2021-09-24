@@ -25,7 +25,7 @@ class RenderNodeBase(bpy.types.Node):
     #########################################
 
     def copy(self, node):
-        if self.bl_idname in {'RenderNodeTask','RSNodeTaskNode'} : self.label = self.name
+        if self.bl_idname in {'RenderNodeTask', 'RSNodeTaskNode'}: self.label = self.name
         if hasattr(self, 'is_active_task'): self.is_active_task = False
         print(f"RSN Copied {self.name} from {node.name}")
 
@@ -73,6 +73,8 @@ class RenderNodeBase(bpy.types.Node):
 
     def create_input(self, socket_type, socket_name, socket_label, default_value=None):
         if self.inputs.get(socket_name):
+            input = self.inputs[socket_name]
+            if hasattr(input, 'text') and input.text != socket_label: input.text = socket_label
             return None
 
         input = self.inputs.new(socket_type, socket_name)

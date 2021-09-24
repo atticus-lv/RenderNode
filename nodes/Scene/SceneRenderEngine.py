@@ -7,19 +7,25 @@ from collections import defaultdict
 
 def update_node(self, context):
     if self.engine == 'CYCLES':
-        self.create_input('RenderNodeSocketInt', 'cycles_samples', 'Render', default_value=64)
-        self.create_input('RenderNodeSocketInt', 'preview_samples', 'Viewport', default_value=64)
-        self.create_input('RenderNodeSocketFloat', 'time_limit', 'Time Limit', default_value=0)
-        self.create_input('RenderNodeSocketBool', 'use_adaptive_sampling', 'Adaptive Sampling', default_value=True)
-        self.create_input('RenderNodeSocketFloat', 'adaptive_threshold', 'Noise Threshold',
-                          default_value=0.0000)
-        self.create_input('RenderNodeSocketInt', 'adaptive_min_samples', 'Min Samples', default_value=0)
+        self.create_input('RenderNodeSocketFloat', 'preview_adaptive_threshold', 'Viewport Noise Threshold',
+                          default_value=0.01)
+        self.create_input('RenderNodeSocketInt', 'preview_samples', 'Viewport Samples', default_value=1024)
+        self.create_input('RenderNodeSocketInt', 'preview_adaptive_min_samples', 'Viewport Min Samples',
+                          default_value=0)
+
+        self.create_input('RenderNodeSocketFloat', 'adaptive_threshold', 'Render Noise Threshold',
+                          default_value=0.01)
+        self.create_input('RenderNodeSocketFloat', 'time_limit', 'Render Time Limit', default_value=0)
+        self.create_input('RenderNodeSocketInt', 'cycles_samples', 'Render Samples', default_value=1024)
+        self.create_input('RenderNodeSocketInt', 'adaptive_min_samples', 'Render Min Samples', default_value=0)
     else:
-        self.remove_input('cycles_samples')
+        self.remove_input('preview_adaptive_threshold')
         self.remove_input('preview_samples')
-        self.remove_input('use_adaptive_sampling')
-        self.remove_input('time_limit')
+        self.remove_input('preview_adaptive_min_samples')
+
         self.remove_input('adaptive_threshold')
+        self.remove_input('time_limit')
+        self.remove_input('cycles_samples')
         self.remove_input('adaptive_min_samples')
 
     if self.engine == 'BLENDER_EEVEE':
@@ -108,10 +114,12 @@ class RenderNodeSceneRenderEngine(RenderNodeBase):
             self.compare(bpy.context.scene.cycles, 'device', self.cycles_device)
             self.compare(bpy.context.scene.cycles, 'time_limit', self.inputs['time_limit'].get_value())
 
-            self.compare(bpy.context.scene.cycles, 'use_adaptive_sampling',
-                         self.inputs['use_adaptive_sampling'].get_value())
+            self.compare(bpy.context.scene.cycles, 'preview_adaptive_threshold',
+                         self.inputs['preview_adaptive_threshold'].get_value())
             self.compare(bpy.context.scene.cycles, 'adaptive_threshold',
                          self.inputs['adaptive_threshold'].get_value())
+            self.compare(bpy.context.scene.cycles, 'preview_adaptive_min_samples',
+                         self.inputs['preview_adaptive_min_samples'].get_value())
             self.compare(bpy.context.scene.cycles, 'adaptive_min_samples',
                          self.inputs['adaptive_min_samples'].get_value())
 
