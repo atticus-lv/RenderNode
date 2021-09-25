@@ -150,7 +150,7 @@ class RSNodeRenderListNode(RenderNodeBase):
                     except IndexError:  # This error shows when the dragging the link off a node(Works well with knife tool)
                         pass  # this seems to be a blender error
             # nodes append from left to right, from top to bottom
-            if node.bl_idname in {'RenderNodeTask','RSNodeTaskNode'} : append_node_to_list(node)
+            if node.bl_idname in {'RenderNodeTask', 'RSNodeTaskNode'}: append_node_to_list(node)
 
         get_sub_node(self, True)
 
@@ -195,6 +195,11 @@ class RSNodeRenderListNode(RenderNodeBase):
         render = row.operator("rsn.render_queue", text=f'Render!',
                               icon='SHADING_RENDERED')  # icon_value=rsn_icon.get_image_icon_id()
         render.render_list_node_name = self.name
+
+        save = row.operator("rsn.save_queue", text=f'Save',
+                            icon='EXPORT')  # icon_value=rsn_icon.get_image_icon_id()
+
+        save.render_list_node_name = self.name
 
         row.prop(self, 'show_processor_bar', icon='PREFERENCES', text='')
 

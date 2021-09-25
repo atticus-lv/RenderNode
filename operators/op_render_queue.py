@@ -16,7 +16,7 @@ logger = logging.getLogger('mylogger')
 
 
 class RSN_OT_RenderQueue(bpy.types.Operator):
-    """Render all input Tasks"""
+    """Render all marked Tasks"""
     bl_idname = "rsn.render_queue"
     bl_label = "Render Queue"
 
