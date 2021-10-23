@@ -20,7 +20,14 @@ class RSN_OT_SearchAndLink(bpy.types.Operator):
 
     def execute(self, context):
         new_node = context.space_data.edit_tree.nodes.new(type=self.node_item)
+        if hasattr(new_node, 'node_tree'):
+            easy_type = []
+            easy_name = []
+            for item in self.node_enum_items(context):
+                easy_type.append(item[0])
+                easy_name.append(item[1])
 
+            new_node.node_tree = bpy.data.node_groups[easy_name[easy_type.index(self.node_item)]]
         # get the socket type is input/output
         # define in node_socket.py, 666 is just a number that much larger than the number of inputs
         try:
@@ -66,15 +73,18 @@ class RSN_OT_SearchAndLink(bpy.types.Operator):
                 enum_items.append(
                     (item.nodetype, item.label, ''))
 
+
         return enum_items
 
-    populate = node_enum_items
+    populate= node_enum_items
 
     node_item: EnumProperty(
         name="Node Type",
         description="Node type",
         items=populate,
     )
+
+
 
 
 def register():
