@@ -71,6 +71,11 @@ def update_node(self, context):
     else:
         self.remove_input('data_path')
 
+    if self.operate_type == 'RenderListIndex':
+        self.create_output('RenderNodeSocketInt', 'render_list_index', 'Index')
+    else:
+        self.remove_output('render_list_index')
+
     self.execute_tree()
 
 
@@ -80,6 +85,7 @@ class RenderNodeInfoInput(RenderNodeBase):
 
     operate_type: EnumProperty(name='Type', items=[
         ('PathExp', 'Path Expression', ''),
+        ('RenderListIndex', 'Render List Index', ''),
         ('Object', 'Object', ''),
         ('Material', 'Material', ''),
         ('World', 'World', ''),
@@ -89,6 +95,7 @@ class RenderNodeInfoInput(RenderNodeBase):
     ], default='Object', update=update_node)
 
     path_exp: EnumProperty(name='Path Exp', items=enum_path_exp, update=update_node, default='$blend')
+    render_list_node: StringProperty(name='Render List Node')
 
     def init(self, context):
         self.create_input('RenderNodeSocketObject', 'object', 'Object')
@@ -102,10 +109,25 @@ class RenderNodeInfoInput(RenderNodeBase):
         if self.operate_type == 'PathExp':
             layout.prop(self, 'path_exp', text='Source')
 
+        elif self.operate_type == 'RenderListIndex':
+            layout.prop_search(self, 'render_list_node', context.space_data.node_tree, 'nodes')
+
     def process(self, context, id, path):
         if self.operate_type == 'PathExp':
             postfix = self.get_postfix(self.path_exp)
             self.outputs['name'].set_value(postfix)
+
+        if self.operate_type == 'RenderListIndex':
+            node = context.space_data.node_tree.nodes.get(self.render_list_node)
+            cur_task = context.space_data.node_tree.nodes.get(context.window_manager.rsn_viewer_node)
+
+            if node and cur_task:
+                if not hasattr(node,'task_list'): return
+                for i, task_item in enumerate(node.task_list):
+                    if task_item.name == context.window_manager.rsn_viewer_node:
+                        self.outputs['render_list_index'].set_value(i)
+                        break
+
 
         elif self.operate_type == 'Custom':
             dp = self.inputs['data_path'].get_value()
