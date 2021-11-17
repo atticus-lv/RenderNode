@@ -107,6 +107,14 @@ node_categories = [
         nodeitems_utils.NodeItem("RSNodeActiveRenderSlotNode"),
         nodeitems_utils.NodeItem("RSNodeViewLayerPassesNode"),
     ]),
+
+    RSNCategory("SET", "Set", items=[
+        nodeitems_utils.NodeItem("RenderNodeSetSceneCamera"),
+        nodeitems_utils.NodeItem("RenderNodeGetListIndex"),
+        nodeitems_utils.NodeItem("RenderNodeTaskInput"),
+        nodeitems_utils.NodeItem("RenderNodeTaskRenderListNode"),
+
+    ]),
 ]
 
 

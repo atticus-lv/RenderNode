@@ -17,7 +17,8 @@ class RenderNodeSocketInterfaceInt(RenderNodeSocketmixin, RenderNodeSocketInterf
         layout.prop(self, 'default_value')
 
     def draw_color(self, context):
-        return 0, 0.9, 0.1, 1
+        return (0.2, 0.65, 0.3, 1)
+
 
 
 class RenderNodeSocketInt(RenderNodeSocket, SocketBase):
@@ -28,7 +29,7 @@ class RenderNodeSocketInt(RenderNodeSocket, SocketBase):
     default_value: IntProperty(default=0, update=update_node)
 
     def draw_color(self, context, node):
-        return 0, 0.9, 0.1, 1
+        return (0.2, 0.65, 0.3, 1)
 
 
 classes = (

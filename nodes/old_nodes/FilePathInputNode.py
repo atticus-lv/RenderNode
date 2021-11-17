@@ -51,7 +51,7 @@ class RSNodeFilePathInputNode(RenderNodeBase):
             # format_name selector
             try:
                 if hasattr(bpy.context.space_data, 'edit_tree'):
-                    if bpy.context.space_data.edit_tree.nodes.active.name == self.name:
+                    if bpy.context.space_data.edit_tree.nodes.active_index.name == self.name:
                         row.menu(menu='RSN_MT_FormatNameMenu', text='', icon='EYEDROPPER')
             except Exception:
                 pass
@@ -85,7 +85,7 @@ class RSN_OT_AddFormatName(bpy.types.Operator):
 
     def execute(self, context):
         try:
-            node = context.space_data.edit_tree.nodes.active
+            node = context.space_data.edit_tree.nodes.active_index
             if hasattr(node, 'path_format'):
                 node.path_format += self.format_name
         except:
