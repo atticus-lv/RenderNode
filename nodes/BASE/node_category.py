@@ -110,6 +110,9 @@ node_categories = [
 
     RSNCategory("SET", "Set", items=[
         nodeitems_utils.NodeItem("RenderNodeSetSceneCamera"),
+        nodeitems_utils.NodeItem("RenderNodeSetObjectMaterial"),
+        nodeitems_utils.NodeItem("RenderNodeSetSceneResolution"),
+        nodeitems_utils.NodeItem("RenderNodeSetFilePath"),
         nodeitems_utils.NodeItem("RenderNodeGetListIndex"),
         nodeitems_utils.NodeItem("RenderNodeTaskInput"),
         nodeitems_utils.NodeItem("RenderNodeTaskRenderListNode"),

@@ -13,11 +13,13 @@ class RenderNodeSetSceneCamera(RenderNodeBase):
         self.create_input('RenderNodeSocketCamera', "camera", 'Camera')
         self.create_output('RenderNodeSocketTask', 'task', 'Task')
 
+
     def process(self, context, id, path):
-        task = self.inputs[0].get_value()
+        self.process_task()
         cam = self.inputs[1].get_value()
 
-        if cam and task: self.compare(bpy.context.scene, 'camera', cam)
+        if cam:
+            self.compare(bpy.context.scene, 'camera', cam)
 
 
 def register():

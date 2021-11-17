@@ -1,3 +1,5 @@
+import json
+
 import bpy
 
 from bpy.props import *
@@ -238,6 +240,29 @@ class RenderNodeBase(bpy.types.Node):
     def get_input_value(self, socket_name):
         ans = self.inputs.get(socket_name)
         if ans: return ans.get_value()
+
+    def process_task(self, index=None, set=True):
+        if index is not None and index < len(self.inputs):
+            task = self.inputs[index]
+        else:
+            task = self.inputs.get('task')
+        print(self.name, task.node)
+        value = None
+        if task:
+            value = task.get_value()
+            output = self.outputs.get('task')
+            if output and set: output.set_value(value)
+            return value
+
+    def task_dict_append(self, info: dict):
+        value_pre = self.process_task(set=False)
+        if value_pre is None: return
+
+        data = json.loads(value_pre)
+        data.update(info)
+        output = self.outputs.get('task')
+        value_post = json.dumps(data)
+        if output and set: output.set_value(value_post)
 
     def process(self, context, id, path):
         pass

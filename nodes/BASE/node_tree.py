@@ -82,7 +82,6 @@ class NodeTreeBase(bpy.types.NodeTree):
     def execute(self, context):
         task_node = self.nodes.get(bpy.context.window_manager.rsn_viewer_node)
         render_list_node = self.nodes.get(bpy.context.window_manager.rsn_active_list)
-        print('get Node!!!',render_list_node)
         runtime_info['executing'] = True
         cache_socket_variables.clear()
 
