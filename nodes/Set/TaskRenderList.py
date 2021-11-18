@@ -26,6 +26,7 @@ def update_mode(self, context):
     else:
         self.auto_update_inputs('RenderNodeSocketTask', "Task")
 
+
 class RenderNodeTaskRenderListNode(RenderNodeBase):
     """Render List Node"""
     bl_idname = 'RenderNodeTaskRenderListNode'
@@ -39,6 +40,7 @@ class RenderNodeTaskRenderListNode(RenderNodeBase):
     active_index: IntProperty(name="Active Index", min=0, update=update_active_task)
     is_active_list: BoolProperty(name="Active List")
 
+    show_task_info:BoolProperty(name = 'Task Info',default=False)
     task_info: StringProperty(name='Task Info')
 
     @classmethod
@@ -53,11 +55,14 @@ class RenderNodeTaskRenderListNode(RenderNodeBase):
         layout.prop(self, 'active_index')
 
         # draw task info
-        col = layout.box().column()
-        col.label(text='Task Info', icon='INFO')
-        if self.task_info != '':
-            for s in self.task_info.split('$$$'):
-                col.label(text=s)
+        col = layout.box().column(align=True)
+        col.prop(self,'show_task_info',text='Active Task', icon='TRIA_DOWN' if self.show_task_info else 'TRIA_RIGHT',emboss = False)
+
+        if self.show_task_info:
+            col = col.box().split().column()
+            if self.task_info != '':
+                for s in self.task_info.split('$$$'):
+                    col.label(text=s)
 
     def update(self):
         if self.mode == 'STATIC':
@@ -86,15 +91,19 @@ class RenderNodeTaskRenderListNode(RenderNodeBase):
         return nodes
 
     def process(self, context, id, path):
-        value = self.process_task(index = self.active_index if self.mode == 'STATIC' else 0)
+        value = self.process_task(index=self.active_index if self.mode == 'STATIC' else 0)
 
         if not value: return
+        data = json.loads(value)
 
-        try:
-            data = '$$$'.join([f"{key}: {value}" for key, value in json.loads(value).items])
-            self.task_info = data
-        except Exception as e:
-            print(e)
+        context.scene.frame_start = data.get('frame_start')
+        context.scene.frame_end = data.get('frame_end')
+        context.scene.frame_step = data.get('frame_step')
+
+        context.scene.render.filepath = data.get('filepath')
+
+        # set to ui
+        self.task_info = '$$$'.join([f"{key.title().replace('_',' ')}: {value}" for key, value in data.items()])
 
 
 def register():

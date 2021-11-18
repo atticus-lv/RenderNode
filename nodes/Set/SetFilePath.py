@@ -42,8 +42,8 @@ class RenderNodeSetFilePath(RenderNodeBase):
             postfix = self.get_postfix(path_exp, v)
             rel_path = os.path.join(bpy.path.relpath(directory_path), postfix) if postfix != '' else bpy.path.relpath(
                 directory_path) + '/'
-            abs_path = os.path.join(directory_path, postfix) if postfix != '' else directory_path + '/'
-            self.task_dict_append({'path':rel_path})
+            # abs_path = os.path.join(directory_path, postfix) if postfix != '' else directory_path + '/'
+            self.task_dict_append({'filepath':rel_path})
 
     def make_path(self):
         """only save files will work"""

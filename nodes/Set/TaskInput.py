@@ -16,7 +16,7 @@ class RenderNodeTaskInput(RenderNodeBase):
 
     def init(self, context):
         self.create_input('RenderNodeSocketString', 'label', 'Label')
-        self.create_input('RenderNodeSocketFilePath', 'path', 'Path', default_value='//')
+        self.create_input('RenderNodeSocketFilePath', 'filepath', 'Path', default_value='//')
         self.create_input('RenderNodeSocketInt', 'frame_start', 'Start')
         self.create_input('RenderNodeSocketInt', 'frame_end', 'End')
         self.create_input('RenderNodeSocketInt', 'frame_step', 'Step')
@@ -31,7 +31,7 @@ class RenderNodeTaskInput(RenderNodeBase):
 
     def process(self, context, id, path):
         label = self.inputs['label'].get_value()
-        p = self.inputs['path'].get_value()
+        p = self.inputs['filepath'].get_value()
 
         if label:
             self.label = label
@@ -53,7 +53,7 @@ class RenderNodeTaskInput(RenderNodeBase):
 
         self.outputs[0].set_value(json.dumps({'name': self.name,
                                               'label': label,
-                                              'path': self.path,
+                                              'filepath': self.path,
                                               'frame_start': frame_start,
                                               'frame_step': frame_step,
                                               'frame_end': frame_end,

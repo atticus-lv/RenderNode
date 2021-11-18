@@ -69,7 +69,7 @@ class RSN_NodeTree:
 
 
 class RenderQueue():
-    def __init__(self, nodetree, render_list_node):
+    def __init__(self, nodetree, render_list_node,field_style = False):
         """init a rsn queue
         :parm nodetree: a blender node tree(rsn node tree)
         :parm render_list_node: render_list_node
