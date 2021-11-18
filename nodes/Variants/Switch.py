@@ -11,7 +11,7 @@ def update_socket(self, context):
     inputs = list(reversed(inputs))
     if self.count > len(inputs):
         for i in range(self.count - len(inputs)):
-            self.inputs.new(socket_type, 'Value')
+            self.inputs.new(socket_type, self.operate_type)
     elif self.count < len(inputs):
         for i in range(len(inputs) - self.count):
             self.inputs.remove(inputs[i])
@@ -30,9 +30,11 @@ def update_node(self, context):
     if _connect:
         self.id_data.links.new(_connect, output)
 
-    update_socket(self,context)
+    update_socket(self, context)
 
     self.execute_tree()
+
+from ..BASE._runtime import cache_node_dependants
 
 
 class RenderNodeSwitch(RenderNodeBase):
@@ -43,6 +45,7 @@ class RenderNodeSwitch(RenderNodeBase):
         name='Type',
         items=[
             ('', 'Base Type', ''),
+            ('Task', 'Task', ''),
             ('Int', 'Int', ''),
             ('Float', 'Float', ''),
             ('Bool', 'Boolean', ''),
@@ -63,7 +66,7 @@ class RenderNodeSwitch(RenderNodeBase):
             ('Collection', 'Collection', ''),
             ('Text', 'Text', ''),
         ],
-        update=update_node, default='Float'
+        update=update_node, default='Task'
     )
 
     count: IntProperty(name='Count', default=2, update=update_socket, min=2)
@@ -77,16 +80,42 @@ class RenderNodeSwitch(RenderNodeBase):
         self.width = 175
 
     def draw_buttons(self, context, layout):
-        row = layout.split(factor=0.5, align=1)
-        row.prop(self, 'count')
-        row.prop(self, 'operate_type', text='')
+        layout.prop(self, 'operate_type', text='')
+        layout.prop(self, 'count')
+
+    def get_dependant_nodes(self):
+        '''returns the nodes connected to the inputs of this node'''
+        if self.operate_type != 'Task':
+            return super().get_dependant_nodes()
+
+        dep_tree = cache_node_dependants.setdefault(self.id_data, {})
+        nodes = []
+
+        active = self.inputs['active'].get_value()
+        if active is None: return nodes
+
+        for index, input in enumerate(self.inputs):
+            if index == 0 or index != active + 1: continue  # skip active input
+
+            connected_socket = input.connected_socket
+            if connected_socket and connected_socket not in nodes:
+                nodes.append(connected_socket.node)
+            break
+
+        dep_tree[self] = nodes
+
+        return nodes
 
     def process(self, context, id, path):
         active = self.inputs['active'].get_value()
-        if not active: return
+        if active is None: return
 
         for i, input in enumerate(self.inputs):
-            if i != active: continue
+            if i == 0 or i != active + 1: continue  # skip active input
+
+            if self.operate_type == 'Task':
+                self.process_task(index=active + 1)
+                return
             ans = input.get_value()
             self.outputs[0].set_value(ans)
 
