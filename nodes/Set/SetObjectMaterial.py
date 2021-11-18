@@ -17,7 +17,7 @@ class RenderNodeSetObjectMaterial(RenderNodeBase):
 
 
     def process(self,context,id,path):
-        self.process_task()
+        if not self.process_task():return
         ob = self.inputs['object'].get_value()
         index = self.inputs['slot_index'].get_value()
         mat = self.inputs['material'].get_value()

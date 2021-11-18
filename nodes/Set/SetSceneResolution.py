@@ -33,7 +33,7 @@ class RenderNodeSetSceneResolution(RenderNodeBase):
             pass
 
     def process(self, context, id, path):
-        self.process_task()
+        if not self.process_task():return
 
         # correct number
         if self.inputs['resolution_x'].get_value() < 4:

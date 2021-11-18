@@ -15,7 +15,7 @@ def update_node(self, context):
 
         self.create_input('RenderNodeSocketFloat', 'adaptive_threshold', 'Render Noise Threshold',
                           default_value=0.01)
-        self.create_input('RenderNodeSocketFloat', 'time_limit', 'Render Time Limit', default_value=0)
+        self.create_input('RenderNodeSocketFloat', 'time_limit', '      Render Time Limit', default_value=0)
         self.create_input('RenderNodeSocketInt', 'cycles_samples', 'Render Samples', default_value=1024)
         self.create_input('RenderNodeSocketInt', 'adaptive_min_samples', 'Render Min Samples', default_value=0)
     else:

@@ -9,6 +9,8 @@ class RenderNodeSetCyclesLightPath(RenderNodeBase):
     bl_label = 'Set Cycles Light Path'
 
     def init(self, context):
+        self.create_input('RenderNodeSocketTask', 'task', 'Task')
+
         self.create_input('RenderNodeSocketInt', 'max_bounces', 'Total', default_value=12)
         self.create_input('RenderNodeSocketInt', 'diffuse_bounces', 'Diffuse', default_value=4)
         self.create_input('RenderNodeSocketInt', 'glossy_bounces', 'Glossy', default_value=4)
@@ -16,8 +18,11 @@ class RenderNodeSetCyclesLightPath(RenderNodeBase):
         self.create_input('RenderNodeSocketInt', 'transmission_bounces', 'Transmission', default_value=12)
         self.create_input('RenderNodeSocketInt', 'volume_bounces', 'Volume', default_value=0)
 
+        self.create_output('RenderNodeSocketTask', 'task', 'Task')
+
+
     def process(self,context,id,path):
-        self.process_task()
+        if not self.process_task():return
 
         for input in self.inputs:
             key = input.name

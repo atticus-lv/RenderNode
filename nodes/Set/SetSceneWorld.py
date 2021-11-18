@@ -14,7 +14,7 @@ class RenderNodeSetSceneWorld(RenderNodeBase):
         self.create_output('RenderNodeSocketTask', 'task', 'Task')
 
     def process(self,context,id,path):
-        self.process_task()
+        if not self.process_task():return
         world = self.inputs['world'].get_value()
 
         if world:

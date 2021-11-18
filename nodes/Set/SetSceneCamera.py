@@ -15,7 +15,7 @@ class RenderNodeSetSceneCamera(RenderNodeBase):
 
 
     def process(self, context, id, path):
-        self.process_task()
+        if not self.process_task():return
         cam = self.inputs[1].get_value()
 
         if cam:

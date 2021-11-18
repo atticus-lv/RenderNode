@@ -46,6 +46,7 @@ class RenderNodeSwitch(RenderNodeBase):
         items=[
             ('', 'Base Type', ''),
             ('Task', 'Task', ''),
+            None,
             ('Int', 'Int', ''),
             ('Float', 'Float', ''),
             ('Bool', 'Boolean', ''),

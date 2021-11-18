@@ -17,7 +17,7 @@ class RenderNodeSetObjectVisibility(RenderNodeBase):
 
 
     def process(self,context,id,path):
-        self.process_task()
+        if not self.process_task():return
         coll = self.inputs['collection'].get_value()
         if coll:
             coll.hide_viewport = self.inputs['hide_viewport'].get_value()

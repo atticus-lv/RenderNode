@@ -32,7 +32,7 @@ class RenderNodeSetFrameRange(RenderNodeBase):
             layout.label(text='Save your file first', icon='ERROR')
 
     def process(self, context, id, path):
-        self.process_task()
+        if not self.process_task():return
 
         start = self.inputs['frame_start'].get_value()
         end = self.inputs['frame_end'].get_value()

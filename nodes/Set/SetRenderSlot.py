@@ -15,7 +15,7 @@ class RenderNodeSetRenderSlot(RenderNodeBase):
 
 
     def process(self,context,id,path):
-        self.process_task()
+        if not self.process_task():return
 
         render_result = bpy.data.images.get('Render Result')
         if not render_result: return None

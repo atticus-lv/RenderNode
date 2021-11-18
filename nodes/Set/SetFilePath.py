@@ -32,7 +32,7 @@ class RenderNodeSetFilePath(RenderNodeBase):
             layout.label(text='Save your file first', icon='ERROR')
 
     def process(self, context, id, path):
-        self.process_task()
+        if not self.process_task():return
 
         directory_path = self.make_path()
         if not directory_path: return None
