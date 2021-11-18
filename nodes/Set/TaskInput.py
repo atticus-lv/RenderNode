@@ -55,8 +55,8 @@ class RenderNodeTaskInput(RenderNodeBase):
                                               'label': label,
                                               'filepath': self.path,
                                               'frame_start': frame_start,
-                                              'frame_step': frame_step,
                                               'frame_end': frame_end,
+                                              'frame_step': frame_step,
                                               }))
 
 

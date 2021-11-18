@@ -93,7 +93,9 @@ class RenderNodeTaskRenderListNode(RenderNodeBase):
     def process(self, context, id, path):
         value = self.process_task(index=self.active_index if self.mode == 'STATIC' else 0)
 
-        if not value: return
+        if not value:
+            self.task_info = 'No Task is linked'
+            return
         data = json.loads(value)
 
         context.scene.frame_start = data.get('frame_start')
