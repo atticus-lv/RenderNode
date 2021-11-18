@@ -107,12 +107,13 @@ class RenderNodeTaskRenderListNode(RenderNodeBase):
                         nodes.append(connected_socket.node)
                     break
 
-            dep_tree[self] = nodes
 
         else:
             connected_socket = self.inputs[0].connected_socket
             if connected_socket and connected_socket not in nodes:
                 nodes.append(connected_socket.node)
+
+        dep_tree[self] = nodes
 
         return nodes
 

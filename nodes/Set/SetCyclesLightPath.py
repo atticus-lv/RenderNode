@@ -3,14 +3,10 @@ from bpy.props import *
 from ...nodes.BASE.node_base import RenderNodeBase
 
 
-def update_node(self, context):
-    self.execute_tree()
-
-
-class RenderNodeCyclesLightPath(RenderNodeBase):
+class RenderNodeSetCyclesLightPath(RenderNodeBase):
     """A simple input node"""
-    bl_idname = 'RenderNodeCyclesLightPath'
-    bl_label = 'Cycles Light Path'
+    bl_idname = 'RenderNodeSetCyclesLightPath'
+    bl_label = 'Set Cycles Light Path'
 
     def init(self, context):
         self.create_input('RenderNodeSocketInt', 'max_bounces', 'Total', default_value=12)
@@ -20,19 +16,18 @@ class RenderNodeCyclesLightPath(RenderNodeBase):
         self.create_input('RenderNodeSocketInt', 'transmission_bounces', 'Transmission', default_value=12)
         self.create_input('RenderNodeSocketInt', 'volume_bounces', 'Volume', default_value=0)
 
-        self.create_output('RSNodeSocketTaskSettings', 'Settings', 'Settings')
+    def process(self,context,id,path):
+        self.process_task()
 
-    def process(self, context, id, path):
         for input in self.inputs:
             key = input.name
             value = input.get_value()
             self.compare(bpy.context.scene.cycles, key, value)
 
 
-
 def register():
-    bpy.utils.register_class(RenderNodeCyclesLightPath)
+    bpy.utils.register_class(RenderNodeSetCyclesLightPath)
 
 
 def unregister():
-    bpy.utils.unregister_class(RenderNodeCyclesLightPath)
+    bpy.utils.unregister_class(RenderNodeSetCyclesLightPath)
