@@ -7,7 +7,6 @@ from bpy.props import *
 
 from ..utility import *
 from ..preferences import get_pref
-from ..ui.icon_utils import RSN_Preview
 
 # set logger
 LOG_FORMAT = "%(asctime)s - RSN-%(levelname)s - %(message)s"
@@ -17,14 +16,13 @@ logger = logging.getLogger('mylogger')
 
 class RSN_OT_RenderQueue(bpy.types.Operator):
     """Render all marked Tasks"""
-    bl_idname = "rsn.render_queue"
-    bl_label = "Render Queue"
+    bl_idname = "rsn.render_queue_v2"
+    bl_label = "Render All"
 
     # blender properties
     #####################
-    render_list_node_name: StringProperty()
+    list_node_name: StringProperty()
     render_list_node = None
-
     ori_render_display_type = None  # correct display_type after render
 
     # render state
@@ -85,13 +83,13 @@ class RSN_OT_RenderQueue(bpy.types.Operator):
         self.stop = False
         self.rendering = False
         # set and get tree
-        self.render_list_node = context.space_data.node_tree.nodes.get(self.render_list_node_name)
+        self.render_list_node = context.space_data.node_tree.nodes.get(self.list_node_name)
 
         rsn_tree = RSN_NodeTree()
         rsn_tree.set_context_tree_as_wm_tree()
         # init RenderQueue
-        self.queue = RenderQueue(nodetree=rsn_tree.get_wm_node_tree(),
-                                 render_list_node=self.render_list_node)
+        self.queue = RenderQueueV2(ntree=rsn_tree.get_wm_node_tree(),
+                                   render_list_node=self.render_list_node)
 
         if self.queue.is_empty():
             context.window_manager.rsn_running_modal = False
@@ -100,9 +98,6 @@ class RSN_OT_RenderQueue(bpy.types.Operator):
 
         # back to the first task
         self.queue.force_update()
-
-        # # set processor_bar
-        # self.render_list_node.processor_bar.task_list = context.window_manager.rsn_cur_task_list
 
         self.append_handles()
 
@@ -117,16 +112,11 @@ class RSN_OT_RenderQueue(bpy.types.Operator):
         if self.queue.is_empty(): return None
 
         self.queue.pop()
-        # update task
         self.queue.force_update()
-        # # set processor_bar
-        # self.render_list_node.processor_bar.cur_task = bpy.context.window_manager.rsn_viewer_node
 
     def switch2task(self):
         # update task again
         self.queue.force_update()
-        # # set processor_bar
-        # self.render_list_node.processor_bar.cur_task = bpy.context.window_manager.rsn_viewer_node
 
     # finish
     def finish(self):
@@ -137,7 +127,8 @@ class RSN_OT_RenderQueue(bpy.types.Operator):
                 output_dir = os.path.dirname(bpy.path.abspath(bpy.context.scene.render.filepath))
                 os.startfile(output_dir)
             except:
-                logger.warning(f'RSN File path error, can not open dir after rendering:\n{bpy.context.scene.render.filepath}')
+                logger.warning(
+                    f'RSN File path error, can not open dir after rendering:\n{bpy.context.scene.render.filepath}')
         if self.render_list_node.clean_path:
             bpy.context.scene.render.filepath = ""
         # return display type
@@ -166,49 +157,8 @@ class RSN_OT_RenderQueue(bpy.types.Operator):
         return {"PASS_THROUGH"}
 
 
-class RSN_OT_ClipBoard(bpy.types.Operator):
-    """Copy"""
-    bl_idname = 'rsn.clip_board'
-    bl_label = 'Copy'
-
-    data_to_copy: StringProperty(default='Nothing is copied')
-
-    def execute(self, context):
-        bpy.context.window_manager.clipboard = self.data_to_copy
-        return {'FINISHED'}
-
-
-class RSN_OT_ShowTaskDetails(bpy.types.Operator):
-    """Show Details"""
-    bl_idname = 'rsn.show_task_details'
-    bl_label = 'Show Details'
-
-    task_data: StringProperty(name='task data (json)')
-    width: IntProperty(name='Width', default=300)
-
-    def execute(self, context):
-        return {'FINISHED'}
-
-    def draw(self, context):
-        layout = self.layout
-        row = layout.split(factor=0.3, align=1)
-        row.operator('rsn.clip_board', text='Copy').data_to_copy = self.task_data
-        row.label(text='')
-
-        col = layout.box().column(align=1)
-        if self.task_data != '':
-            l = self.task_data.split('\n')
-            for s in l:
-                col.label(text=s)
-
-    def invoke(self, context, event):
-        return context.window_manager.invoke_popup(self, width=self.width)
-
-
 classes = (
     RSN_OT_RenderQueue,
-    RSN_OT_ShowTaskDetails,
-    RSN_OT_ClipBoard,
 )
 
 
@@ -216,15 +166,7 @@ def register():
     for cls in classes:
         bpy.utils.register_class(cls)
 
-    bpy.types.WindowManager.rsn_cur_task_list = StringProperty()
-    bpy.types.WindowManager.rsn_running_modal = BoolProperty(default=False, description='poll for the button')
-    bpy.types.WindowManager.rsn_cur_tree_name = StringProperty(name='current rendering tree', default='')
-
 
 def unregister():
     for cls in classes:
         bpy.utils.unregister_class(cls)
-
-    del bpy.types.WindowManager.rsn_cur_task_list
-    del bpy.types.WindowManager.rsn_running_modal
-    del bpy.types.WindowManager.rsn_cur_tree_name

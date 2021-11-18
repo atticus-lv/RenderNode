@@ -92,22 +92,6 @@ node_categories = [
 
     ]),
 
-    RSNCategory("OLD", "Old(Not fully support now)", items=[
-        nodeitems_utils.NodeItem("RSNodeCommonSettingsNode"),
-        nodeitems_utils.NodeItem("RSNodeScriptsNode"),
-        nodeitems_utils.NodeItem("RSNodeSmtpEmailNode"),
-        nodeitems_utils.NodeItem("RSNodeLightStudioNode"),
-        nodeitems_utils.NodeItem("RSNodeWorkBenchRenderSettingsNode"),
-        nodeitems_utils.NodeItem("RSNodeEeveeRenderSettingsNode"),
-        nodeitems_utils.NodeItem("RSNodeCyclesRenderSettingsNode"),
-        nodeitems_utils.NodeItem("RSNodeCyclesLightPathNode"),
-        nodeitems_utils.NodeItem("RSNodeOctaneRenderSettingsNode"),
-        nodeitems_utils.NodeItem("RSNodeLuxcoreRenderSettingsNode"),
-        nodeitems_utils.NodeItem("RSNodeResolutionInputNode"),
-        nodeitems_utils.NodeItem("RSNodeActiveRenderSlotNode"),
-        nodeitems_utils.NodeItem("RSNodeViewLayerPassesNode"),
-    ]),
-
     RSNCategory("SET", "Set", items=[
         nodeitems_utils.NodeItem("RenderNodeSetSceneCamera"),
         nodeitems_utils.NodeItem("RenderNodeSetObjectMaterial"),

@@ -246,7 +246,6 @@ class RenderNodeBase(bpy.types.Node):
             task = self.inputs[index]
         else:
             task = self.inputs.get('task')
-        print(self.name, task.node)
         value = None
         if task:
             value = task.get_value()

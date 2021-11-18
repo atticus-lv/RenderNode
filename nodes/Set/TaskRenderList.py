@@ -32,16 +32,30 @@ class RenderNodeTaskRenderListNode(RenderNodeBase):
     bl_idname = 'RenderNodeTaskRenderListNode'
     bl_label = 'Task Render List'
 
+    # task input mode
     mode: EnumProperty(name='Mode', items=[
         ('STATIC', 'Static', ''),
         ('DYNAMIC', 'Dynamic', ''),
     ], update=update_mode)
 
+    # active set
     active_index: IntProperty(name="Active Index", min=0, update=update_active_task)
     is_active_list: BoolProperty(name="Active List")
 
+    # active task ui
     show_task_info:BoolProperty(name = 'Task Info',default=False)
     task_info: StringProperty(name='Task Info')
+
+    # action after render
+    open_dir: BoolProperty(name='Open folder after render', default=True)
+    clean_path: BoolProperty(name='Clean filepath after render', default=True)
+    render_display_type: EnumProperty(items=[
+        ('NONE', 'Keep User Interface', ''),
+        ('SCREEN', 'Maximized Area', ''),
+        ('AREA', 'Image Editor', ''),
+        ('WINDOW', 'New Window', '')],
+        default='WINDOW',
+        name='Display')
 
     @classmethod
     def poll(cls, ntree):
@@ -63,6 +77,9 @@ class RenderNodeTaskRenderListNode(RenderNodeBase):
             if self.task_info != '':
                 for s in self.task_info.split('$$$'):
                     col.label(text=s)
+
+        render = layout.operator('rsn.render_queue_v2',icon = 'SHADING_RENDERED')
+        render.list_node_name = self.name
 
     def update(self):
         if self.mode == 'STATIC':
