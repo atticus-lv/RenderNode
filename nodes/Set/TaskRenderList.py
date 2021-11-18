@@ -38,12 +38,16 @@ class RenderNodeTaskRenderListNode(RenderNodeBase):
         ('DYNAMIC', 'Dynamic', ''),
     ], update=update_mode)
 
+    # Dynamic
+    index_start: IntProperty(name='Index Start')
+    index_end: IntProperty(name='Index End')
+
     # active set
     active_index: IntProperty(name="Active Index", min=0, update=update_active_task)
-    is_active_list: BoolProperty(name="Active List")
+    is_active_list: BoolProperty(name="Active List", update=update_active_task)
 
     # active task ui
-    show_task_info:BoolProperty(name = 'Task Info',default=False)
+    show_task_info: BoolProperty(name='Task Info', default=False)
     task_info: StringProperty(name='Task Info')
 
     # action after render
@@ -68,9 +72,14 @@ class RenderNodeTaskRenderListNode(RenderNodeBase):
         layout.prop(self, 'mode')
         layout.prop(self, 'active_index')
 
+        if self.mode == 'DYNAMIC':
+            layout.prop(self, 'index_start')
+            layout.prop(self, 'index_end')
+
         # draw task info
         col = layout.box().column(align=True)
-        col.prop(self,'show_task_info',text='Active Task', icon='TRIA_DOWN' if self.show_task_info else 'TRIA_RIGHT',emboss = False)
+        col.prop(self, 'show_task_info', text='Active Task', icon='TRIA_DOWN' if self.show_task_info else 'TRIA_RIGHT',
+                 emboss=False)
 
         if self.show_task_info:
             col = col.box().split().column()
@@ -78,7 +87,7 @@ class RenderNodeTaskRenderListNode(RenderNodeBase):
                 for s in self.task_info.split('$$$'):
                     col.label(text=s)
 
-        render = layout.operator('rsn.render_queue_v2',icon = 'SHADING_RENDERED')
+        render = layout.operator('rsn.render_queue_v2', icon='SHADING_RENDERED')
         render.list_node_name = self.name
 
     def update(self):
@@ -122,7 +131,7 @@ class RenderNodeTaskRenderListNode(RenderNodeBase):
         context.scene.render.filepath = data.get('filepath')
 
         # set to ui
-        self.task_info = '$$$'.join([f"{key.title().replace('_',' ')}: {value}" for key, value in data.items()])
+        self.task_info = '$$$'.join([f"{key.title().replace('_', ' ')}: {value}" for key, value in data.items()])
 
 
 def register():
