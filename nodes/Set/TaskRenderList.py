@@ -52,12 +52,12 @@ class RenderNodeTaskRenderListNode(RenderNodeBase):
         layout.prop(self, 'mode')
         layout.prop(self, 'active_index')
 
-        # # draw task info
-        # col = layout.box().column()
-        # col.label(text='Task Info', icon='INFO')
-        # if self.task_info != '':
-        #     for s in self.task_info.split('$$$'):
-        #         col.label(text=s)
+        # draw task info
+        col = layout.box().column()
+        col.label(text='Task Info', icon='INFO')
+        if self.task_info != '':
+            for s in self.task_info.split('$$$'):
+                col.label(text=s)
 
     def update(self):
         if self.mode == 'STATIC':
