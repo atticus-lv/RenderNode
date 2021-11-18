@@ -113,9 +113,6 @@ class RenderNodeSwitch(RenderNodeBase):
         for i, input in enumerate(self.inputs):
             if i == 0 or i != active + 1: continue  # skip active input
 
-            if self.operate_type == 'Task':
-                self.process_task(index=active + 1)
-                return
             ans = input.get_value()
             self.outputs[0].set_value(ans)
 
