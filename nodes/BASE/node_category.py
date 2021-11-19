@@ -33,9 +33,16 @@ node_categories = [
         nodeitems_utils.NodeItem("RenderNodeVectorMath"),
         nodeitems_utils.NodeItem("RenderNodeBooleanMath"),
         nodeitems_utils.NodeItem("RenderNodeStringOperate"),
-        nodeitems_utils.NodeItem("RenderNodeVectorConvert"),
         # nodeitems_utils.NodeItem("RenderNodeProperty"),
         nodeitems_utils.NodeItem('RenderNodeScripts'),
+    ]),
+    RSNCategory("CONVERT", "Convert", items=[
+        nodeitems_utils.NodeItem("RenderNodeInt2Str"),
+        nodeitems_utils.NodeItem("RenderNodeStr2Int"),
+        nodeitems_utils.NodeItem("RenderNodeText2Str"),
+        nodeitems_utils.NodeItem("RenderNodeVector2Float"),
+        nodeitems_utils.NodeItem("RenderNodeFloat2Vector"),
+
     ]),
 
     RSNCategory("SCENE", "Scene", items=[
