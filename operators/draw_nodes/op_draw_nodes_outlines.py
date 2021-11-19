@@ -102,8 +102,8 @@ def draw_callback_nodeoutline(self, context):
     green = (c2[0], c2[1], c2[2], self.alpha)
     red = (c3[0], c3[1], c3[2], self.alpha)
 
-    task_node = context.space_data.edit_tree.nodes.get(context.window_manager.rsn_viewer_node)
-    if not task_node: return
+    list_node = context.space_data.edit_tree.nodes.get(context.window_manager.rsn_active_list)
+    if not list_node: return
 
     node_list = [node for node in context.space_data.edit_tree.nodes if node in cache_executed_nodes]
     try:
@@ -129,16 +129,16 @@ def draw_callback_nodeoutline(self, context):
     ##################
     if self.show_text_info:
         # properties text
-        task_text = "No Active Task!" if context.window_manager.rsn_viewer_node == '' else context.window_manager.rsn_viewer_node
-        camera = context.scene.camera.name if context.scene.camera else "No Scene camera"
+        task_text = "No Active List!" if context.window_manager.rsn_active_list == '' else context.window_manager.rsn_active_list
+        camera = context.scene.camera.name if context.scene.camera else "None"
         is_save = True if bpy.data.filepath != '' else False
-        file_path_text = context.scene.render.filepath if is_save else "Save your file first!"
+        file_path_text = context.scene.render.filepath if is_save else "Need to Save First"
         engine = context.scene.render.engine if context.scene.render.engine not in easy_name else easy_name[
             context.scene.render.engine]
         frame_count = context.scene.frame_end - context.scene.frame_start + 1
 
         texts = [
-            f"Task: {task_text}",
+            f"List: {task_text}",
             f"Frame: {context.scene.frame_start} - {context.scene.frame_end} ({frame_count})",
             f"Camera: {camera}",
             f"Engine: {engine}",
