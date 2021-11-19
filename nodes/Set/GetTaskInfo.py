@@ -9,7 +9,7 @@ class RenderNodeGetTaskInfo(RenderNodeBase):
     bl_idname = 'RenderNodeGetTaskInfo'
     bl_label = 'Get Task Info'
 
-    task_info: StringProperty(name='Task Info')
+    task_info: StringProperty(name='Task Info',default = 'Waiting for task input')
 
     def init(self, context):
         self.create_input('RenderNodeSocketTask', 'task', 'Task')

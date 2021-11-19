@@ -39,6 +39,10 @@ node_categories = [
     ]),
 
     RSNCategory("SCENE", "Scene", items=[
+        nodeitems_utils.NodeItem("RenderNodeGetSceneCamera"),
+        nodeitems_utils.NodeItem("RenderNodeGetSceneWorld"),
+        nodeitems_utils.NodeItem("RenderNodeGetSceneRenderEngine"),
+
         nodeitems_utils.NodeItem("RenderNodeSetSceneCamera"),
         nodeitems_utils.NodeItem("RenderNodeSetSceneWorld"),
         nodeitems_utils.NodeItem("RenderNodeSetSceneRenderEngine"),
@@ -52,6 +56,8 @@ node_categories = [
     ]),
 
     RSNCategory("OUTPUT", "Output", items=[
+        nodeitems_utils.NodeItem("RenderNodeGetSceneResolution"),
+
         nodeitems_utils.NodeItem("RenderNodeSetRenderSlot"),
         nodeitems_utils.NodeItem("RenderNodeSetSceneResolution"),
         nodeitems_utils.NodeItem("RenderNodeSetFilePath"),
@@ -62,10 +68,14 @@ node_categories = [
 
     RSNCategory("OBJECT", "Object", items=[
         nodeitems_utils.NodeItem("RenderNodeGetMaterial"),
+        nodeitems_utils.NodeItem("RenderNodeGetObjectInfo"),
         nodeitems_utils.NodeItem("RenderNodeGetObjectVisibility"),
         nodeitems_utils.NodeItem("RenderNodeGetAction"),
         nodeitems_utils.NodeItem("RenderNodeGetActionFrameRange"),
 
+        nodeitems_utils.NodeItem("RenderNodeSetObjectLocation"),
+        nodeitems_utils.NodeItem("RenderNodeSetObjectRotation"),
+        nodeitems_utils.NodeItem("RenderNodeSetObjectScale"),
         nodeitems_utils.NodeItem("RenderNodeSetObjectMaterial"),
         nodeitems_utils.NodeItem("RenderNodeSetObjectVisibility"),
         nodeitems_utils.NodeItem("RenderNodeSetObjectAction"),

@@ -19,11 +19,7 @@ class RenderNodeActionInput(RenderNodeBase):
         self.create_output('RenderNodeSocketAction', 'output', "Output")
 
     def draw_buttons(self, context, layout):
-        layout.scale_y = 0.75
-        layout.scale_x = 0.75
-        layout.template_ID_preview(
-            self, "default_value",
-            rows=3, cols=4, hide_buttons=False)
+        layout.prop(self, 'default_value', text='')
 
     def process(self, context, id, path):
         self.outputs[0].set_value(self.default_value)
