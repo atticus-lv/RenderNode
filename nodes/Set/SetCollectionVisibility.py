@@ -3,9 +3,9 @@ from bpy.props import *
 from ...nodes.BASE.node_base import RenderNodeBase
 
 
-class RenderNodeSetObjectVisibility(RenderNodeBase):
-    bl_idname = 'RenderNodeSetObjectVisibility'
-    bl_label = 'Set Object Visibility'
+class RenderNodeSetCollectionVisibility(RenderNodeBase):
+    bl_idname = 'RenderNodeSetCollectionVisibility'
+    bl_label = 'Set Collection Visibility'
 
     def init(self, context):
         self.create_input('RenderNodeSocketTask', 'task', 'Task')
@@ -25,8 +25,8 @@ class RenderNodeSetObjectVisibility(RenderNodeBase):
 
 
 def register():
-    bpy.utils.register_class(RenderNodeSetObjectVisibility)
+    bpy.utils.register_class(RenderNodeSetCollectionVisibility)
 
 
 def unregister():
-    bpy.utils.unregister_class(RenderNodeSetObjectVisibility)
+    bpy.utils.unregister_class(RenderNodeSetCollectionVisibility)

@@ -63,6 +63,12 @@ node_categories = [
         nodeitems_utils.NodeItem("RenderNodeSetObjectVisibility"),
     ]),
 
+    RSNCategory("COLLECTION", "Collection", items=[
+        nodeitems_utils.NodeItem("RenderNodeSetCollectionVisibility"),
+    ]),
+
+
+
     RSNCategory("LAYOUT", "Layout", items=[
         # nodeitems_utils.NodeItem('RenderNodeMerge'),
         nodeitems_utils.NodeItem('NodeFrame'),
