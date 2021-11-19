@@ -10,7 +10,7 @@ def update_node(self, context):
 
 class RenderNodeSetFileFormatImage(RenderNodeBase):
     bl_idname = "RenderNodeSetFileFormatImage"
-    bl_label = "Set Output Format Image"
+    bl_label = "Set File Format Image"
 
     file_format: EnumProperty(name='File Format',
                               items=[('BMP', 'BMP', ''), ('IRIS', 'IRIS', ''), ('PNG', 'PNG', ''), ('JPEG', 'JPEG', ''),
@@ -69,7 +69,7 @@ class RenderNodeSetFileFormatImage(RenderNodeBase):
         self.create_input('RenderNodeSocketTask', 'task', 'Task')
         self.create_output('RenderNodeSocketTask', 'task', 'Task')
 
-        self.width = 200
+        self.width = 220
 
     def draw_buttons(self, context, layout):
         col = layout.column(align=1)
@@ -77,39 +77,39 @@ class RenderNodeSetFileFormatImage(RenderNodeBase):
         col.use_property_decorate = 0
 
         col.prop(self, 'file_format', icon='FILE_IMAGE')
-        row = col.row(align=1)
-        row.prop(self, 'color_mode', expand=1)
+        row = col.row(align=True)
+        row.prop(self, 'color_mode', expand=True)
 
         if self.file_format in ['PNG', 'TIFF',
                                 'JPEG2000',
                                 'DPX', 'OPEN_EXR_MULTILAYER', 'OPEN_EXR']:
-            row = col.row(align=1)
-            row.prop(self, 'color_depth', expand=1)
+            row = col.row(align=True)
+            row.prop(self, 'color_depth', expand=True)
 
         # extra
         if self.file_format == 'PNG':
-            col.prop(self, 'compression', slider=1)
+            col.prop(self, 'compression', slider=True)
 
         elif self.file_format in ['JPEG', 'JPEG2000']:
-            col.prop(self, 'quality', slider=1)
+            col.prop(self, 'quality', slider=True)
             if self.file_format == 'JPEG2000':
                 col.prop(self, 'use_jpeg2k_cinema_preset')
-                col.prop(self, 'use_jpeg2k_cinema_48')
                 col.prop(self, 'use_jpeg2k_cinema_48')
 
         elif self.file_format == 'CINEON':
             col.prop(self, 'use_cineon_log')
+
         elif self.file_format in ['OPEN_EXR_MULTILAYER', 'OPEN_EXR']:
             col.prop(self, 'exr_codec')
             col.prop(self, 'use_preview')
             if self.file_format == 'OPEN_EXR_MULTILAYER':
                 col.prop(self, 'use_zbuffer')
+
         elif self.file_format == 'TIFF':
             col.prop(self, 'tiff_codec')
 
     def process(self,context,id,path):
         self.process_task()
-        print('process task')
 
         attr_list = ['file_format',
                      'compression',
@@ -117,7 +117,9 @@ class RenderNodeSetFileFormatImage(RenderNodeBase):
                      'jpeg2k_tiff_codec', 'use_jpeg2k_cinema_preset', 'use_jpeg2k_cinema_48',
                      'use_jpeg2k_ycc',
                      'use_cineon_log',
-                     'exr_codec', 'use_preview', 'use_zbuffer', 'tiff_codec']
+                     'exr_codec', 'use_preview', 'use_zbuffer', 'tiff_codec',
+                     'color_mode','color_depth'
+                     ]
 
         for attr in attr_list:
             try:

@@ -125,9 +125,8 @@ class RenderStackNodeTreeGroup(NodeTreeBase):
 def clean_draw(self,context):
     pass
 
-
 def register():
-    bpy.types.WindowManager.rsn_active_list = StringProperty(name='Active List',update= clean_draw)
+    bpy.types.WindowManager.rsn_active_list = StringProperty(name='Active List')
 
     bpy.utils.register_class(RenderStackNodeTree)
     bpy.utils.register_class(RenderStackNodeTreeGroup)

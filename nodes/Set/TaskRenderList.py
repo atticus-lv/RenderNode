@@ -35,18 +35,33 @@ def update_list(self, context):
             item.index = i
 
 
+class RSN_OT_set_active_list(bpy.types.Operator):
+    bl_label = 'Set Active List'
+    bl_idname = 'rsn.set_active_list'
+
+    node_name: StringProperty()
+
+    def execute(self, context):
+        old_node = context.space_data.node_tree.nodes.get(context.window_manager.rsn_active_list)
+        if old_node:
+            old_node.is_active_list = False
+            context.scene.RSNBusyDrawing = False
+
+        context.window_manager.rsn_active_list = self.node_name
+        node = context.space_data.node_tree.nodes.get(self.node_name)
+        node.is_active_list = True
+        return {'FINISHED'}
+
+
 def update_active_task(self, context):
-    if not self.is_active_list: return
-    # turn off others
-    for node in self.id_data.nodes:
-        if node.bl_idname == 'RenderNodeTaskRenderListNode' and node != self:
-            node.is_active_list = False
+    if not self.is_active_list:
+        if self.name == context.window_manager.rsn_active_list:
+            context.scene.RSNBusyDrawing = False
+        return
 
     if context.scene.RSNBusyDrawing is False:
         bpy.ops.rsn.draw_nodes('INVOKE_DEFAULT')
-        context.area.tag_redraw()
     # execute
-    context.window_manager.rsn_active_list = self.name
     context.scene.rsn_bind_tree = self.id_data  # bind tree
     self.execute_tree()
 
@@ -87,7 +102,6 @@ class RSN_UL_SelectList(bpy.types.UIList):
             s = layout.operator('rsn.select_active_index', text=str(item.index))
             s.node_name = item.name
             s.index = item.index
-
 
 
 class RenderNodeTaskRenderListNode(RenderNodeBase):
@@ -136,8 +150,11 @@ class RenderNodeTaskRenderListNode(RenderNodeBase):
 
     def draw_buttons(self, context, layout):
         box = layout.box()
+        if not self.is_active_list or context.window_manager.rsn_active_list == '':
+            box.operator('rsn.set_active_list').node_name = self.name
+            return
+
         box.prop(self, 'is_active_list')
-        if not self.is_active_list: return
 
         render = box.operator('rsn.render_queue_v2', icon='SHADING_RENDERED')
         render.list_node_name = self.name
@@ -155,7 +172,7 @@ class RenderNodeTaskRenderListNode(RenderNodeBase):
             self, "select_list",
             self, "active_index", type='GRID', columns=6, rows=5)
 
-        s = layout.operator('rsn.select_active_index', text='Refresh',icon = 'FILE_REFRESH')
+        s = layout.operator('rsn.select_active_index', text='Refresh', icon='FILE_REFRESH')
         s.node_name = self.name
         s.index = self.active_index
 
@@ -202,12 +219,11 @@ class RenderNodeTaskRenderListNode(RenderNodeBase):
         context.scene.render.filepath = data.get('filepath')
 
 
-
-
 def register():
     bpy.utils.register_class(RSN_OT_select_active_index)
     bpy.utils.register_class(SelectorProperty)
     bpy.utils.register_class(RSN_UL_SelectList)
+    bpy.utils.register_class(RSN_OT_set_active_list)
     bpy.utils.register_class(RenderNodeTaskRenderListNode)
 
 
@@ -215,4 +231,5 @@ def unregister():
     bpy.utils.unregister_class(RSN_OT_select_active_index)
     bpy.utils.unregister_class(SelectorProperty)
     bpy.utils.unregister_class(RSN_UL_SelectList)
+    bpy.utils.unregister_class(RSN_OT_set_active_list)
     bpy.utils.unregister_class(RenderNodeTaskRenderListNode)

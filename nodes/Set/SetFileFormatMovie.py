@@ -46,7 +46,7 @@ def update_node(self, context):
 
 class RenderNodeSetFileFormatMovie(RenderNodeBase):
     bl_idname = "RenderNodeSetFileFormatMovie"
-    bl_label = "Set Output Format Movie"
+    bl_label = "Set File Format Movie"
 
     file_format: EnumProperty(name='File Format',
                               items=[('AVI_JPEG', 'AVI JPEG', 'Output video in AVI JPEG format'),
