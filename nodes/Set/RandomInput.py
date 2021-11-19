@@ -55,14 +55,16 @@ class RenderNodeRandomInput(RenderNodeBase):
             a = self.inputs['a'].get_value()
             b = self.inputs['b'].get_value()
             if a is not None and b is not None:
-                self.output[0].set_value(random.randint(a, b))
+                self.outputs[0].set_value(random.randint(a, b))
         elif self.operator_type == 'random':
             self.outputs[0].set_value(random.random())
         elif self.operator_type == 'choice':
             s = self.inputs['str'].get_value()
             if s is not None and len(s) > 0:
-                self.outputs[0].set_value(random.choice(s))
-
+                try:
+                    self.outputs[0].set_value(random.choice(s))
+                except IndexError:
+                    pass
 
 def register():
     bpy.utils.register_class(RenderNodeRandomInput)

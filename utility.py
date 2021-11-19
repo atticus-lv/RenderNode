@@ -142,7 +142,7 @@ class RenderQueueV2():
     def init_queue(self):
         if self.mode == 'RANGE':
             input = self.root_node.inputs[0]
-            if not input.is_linked:return
+            if not input.is_linked: return
 
             for i in range(self.root_node.range_start, self.root_node.range_end + 1):
                 self.index_list.append(i)
@@ -152,16 +152,9 @@ class RenderQueueV2():
             for i, input in enumerate(self.root_node.inputs):
                 if not input.is_linked: continue
 
-                data = None
-                if input.get_value() is not None:
-                    data = json.loads(input.get_value())
+                self.index_list.append(i)
 
-                if data:
-                    if len(self.index_list) == 0:
-                        bpy.ops.screen.frame_jump(end=False)
-                    # collect
-                    self.index_list.append(i)
-                    self.task_dict_list.append(data)
+            bpy.ops.screen.frame_jump(end=False)
 
     @property
     def index(self):
@@ -180,7 +173,6 @@ class RenderQueueV2():
 
     def pop(self):
         if not self.is_empty():
-            if self.mode == 'STATIC': self.task_dict_list.popleft()
             return self.index_list.popleft()
 
     def clear_queue(self):

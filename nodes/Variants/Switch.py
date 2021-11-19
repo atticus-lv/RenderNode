@@ -80,9 +80,7 @@ class RenderNodeSwitch(RenderNodeBase):
 
     def init(self, context):
         self.create_input('RenderNodeSocketInt', 'active', "Active Input")
-        self.create_input('RenderNodeSocketTask', 'Task', "Task")
-        self.create_input('RenderNodeSocketTask', 'Task', "Task")
-        self.create_output('RenderNodeSocketTask', 'Task', "Task")
+        self.operate_type = 'Task'
 
         self.width = 175
 
