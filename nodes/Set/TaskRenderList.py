@@ -42,8 +42,8 @@ def update_active_task(self, context):
         if node.bl_idname == 'RenderNodeTaskRenderListNode' and node != self:
             node.is_active_list = False
     # execute
-    bpy.context.window_manager.rsn_active_list = self.name
-    bpy.context.scene.rsn_bind_tree = self.id_data  # bind tree
+    context.window_manager.rsn_active_list = self.name
+    context.scene.rsn_bind_tree = self.id_data  # bind tree
     self.execute_tree()
 
 

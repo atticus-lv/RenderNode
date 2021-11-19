@@ -18,21 +18,27 @@ def update_socket(self, context):
 
 
 def update_node(self, context):
+    # remove
     socket_type = 'RenderNodeSocket' + self.operate_type
     for i, input in enumerate(self.inputs):
         if i == 0: continue
         self.inputs.remove(input)
 
-    _connect = self.outputs['output'].connected_socket
-
     self.remove_output('output')
     output = self.create_output(socket_type, 'output', 'Output')
-    if _connect:
-        self.id_data.links.new(_connect, output)
-
+    # add socket
     update_socket(self, context)
 
+    try:
+        _connect = self.outputs['output'].connected_socket
+
+        if _connect:
+            self.id_data.links.new(_connect, output)
+    except:
+        pass
+
     self.execute_tree()
+
 
 from ..BASE._runtime import cache_node_dependants
 
@@ -74,9 +80,9 @@ class RenderNodeSwitch(RenderNodeBase):
 
     def init(self, context):
         self.create_input('RenderNodeSocketInt', 'active', "Active Input")
-        self.create_input('RenderNodeSocketFloat', 'value1', "Value")
-        self.create_input('RenderNodeSocketFloat', 'value2', "Value")
-        self.create_output('RenderNodeSocketFloat', 'output', "Output")
+        self.create_input('RenderNodeSocketTask', 'Task', "Task")
+        self.create_input('RenderNodeSocketTask', 'Task', "Task")
+        self.create_output('RenderNodeSocketTask', 'Task', "Task")
 
         self.width = 175
 

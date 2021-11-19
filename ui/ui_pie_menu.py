@@ -51,10 +51,6 @@ class RSN_MT_PieMenu(Menu):
 
         col = col1.box().column()
         # merge_icon = preview_collections["rsn_icon"]["merge_icon"]
-        col.operator("rsn.merge_selected_nodes", icon_value=merge_icon.get_image_icon_id()).make_version = 0
-
-        col.operator("rsn.merge_selected_nodes", icon_value=version_icon.get_image_icon_id(),
-                     text='Make Variants').make_version = 1
 
         col.operator("rsn.split_to_selected", text="Split active to selected",
                      icon_value=split_icon.get_image_icon_id())
@@ -72,7 +68,7 @@ class RSN_MT_PieMenu(Menu):
                     sub.label(icon='HIDE_OFF', text=g.name)
                 sub.prop(bpy.data.node_groups[g.name], 'use_fake_user', icon_only=1)
         ##
-        pie.separator()
+        pie.operator('rsn.switch_setting')
         ##
 
         ##
@@ -88,8 +84,7 @@ class RSN_MT_PieMenu(Menu):
         ##
 
         # right bottom
-        pie.operator("rsn.move_node", text='Simple Task', icon_value=simple_task_icon.get_image_icon_id())
-
+        pie.separator()
         ##
         pie.separator()
         ##

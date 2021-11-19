@@ -18,7 +18,7 @@ class RenderNodeSocketInterfaceMaterial(RenderNodeSocketmixin, RenderNodeSocketI
         layout.prop(self, 'default_value')
 
     def draw_color(self, context):
-        return 0, 0.9, 0.1, 1
+        return 1, 0.4, 0.4, 1
 
 
 class RenderNodeSocketMaterial(RenderNodeSocket, SocketBase):
