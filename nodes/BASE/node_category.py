@@ -11,6 +11,7 @@ class RSNCategory(nodeitems_utils.NodeCategory):
 node_categories = [
     RSNCategory("INPUT", "Input", items=[
         nodeitems_utils.NodeItem("RenderNodeTaskInput"),
+        nodeitems_utils.NodeItem("RenderNodeRandomInput"),
         nodeitems_utils.NodeItem('RenderNodeFloatInput'),
         nodeitems_utils.NodeItem('RenderNodeBoolInput'),
         nodeitems_utils.NodeItem('RenderNodeIntInput'),
