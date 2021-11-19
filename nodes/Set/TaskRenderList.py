@@ -45,7 +45,6 @@ class RSN_OT_set_active_list(bpy.types.Operator):
         old_node = context.space_data.node_tree.nodes.get(context.window_manager.rsn_active_list)
         if old_node:
             old_node.is_active_list = False
-            context.scene.RSNBusyDrawing = False
 
         context.window_manager.rsn_active_list = self.node_name
         node = context.space_data.node_tree.nodes.get(self.node_name)
@@ -54,13 +53,7 @@ class RSN_OT_set_active_list(bpy.types.Operator):
 
 
 def update_active_task(self, context):
-    if not self.is_active_list:
-        if self.name == context.window_manager.rsn_active_list:
-            context.scene.RSNBusyDrawing = False
-        return
-
-    if context.scene.RSNBusyDrawing is False:
-        bpy.ops.rsn.draw_nodes('INVOKE_DEFAULT')
+    if not self.is_active_list: return
     # execute
     context.scene.rsn_bind_tree = self.id_data  # bind tree
     self.execute_tree()
