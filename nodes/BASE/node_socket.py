@@ -1,6 +1,6 @@
 import bpy
 from bpy.props import *
-from mathutils import Vector, Euler
+from mathutils import Vector, Euler ,Color
 
 from ._runtime import cache_socket_links, cache_socket_variables
 
@@ -73,13 +73,13 @@ class SocketBase():
             return f'{val}'
         elif isinstance(val, float):
             return f'{round(val, 2)}'
-        elif len(val) > 1:
+        elif isinstance(val, Vector) or isinstance(val,Color) and  len(val) > 1:
             d_val = [round(num, 2) for num in list(val)]
             return f'{d_val}'
         elif isinstance(val, bool):
             return 'True' if val else 'False'
         else:
-            return f'{val}'
+            return f'{val.name}' if hasattr(val,'name') else str(val)
 
     def update_shape(self):
         if hasattr(self, 'shape'):
