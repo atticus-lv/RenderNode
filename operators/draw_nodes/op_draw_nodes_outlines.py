@@ -125,34 +125,7 @@ def draw_callback_nodeoutline(self, context):
     except:
         pass
 
-    # draw text
-    ##################
-    if self.show_text_info:
-        # properties text
-        task_text = "No Active List!" if context.window_manager.rsn_active_list == '' else context.window_manager.rsn_active_list
-        camera = context.scene.camera.name if context.scene.camera else "None"
-        is_save = True if bpy.data.filepath != '' else False
-        file_path_text = context.scene.render.filepath if is_save else "Need to Save First"
-        engine = context.scene.render.engine if context.scene.render.engine not in easy_name else easy_name[
-            context.scene.render.engine]
-        frame_count = context.scene.frame_end - context.scene.frame_start + 1
 
-        texts = [
-            f"List: {task_text}",
-            f"Frame: {context.scene.frame_start} - {context.scene.frame_end} ({frame_count})",
-            f"Camera: {camera}",
-            f"Engine: {engine}",
-            f"Path: {file_path_text}",
-        ]
-
-        # draw texts
-        r, g, b = c1
-        size = 20
-        top = 125
-        step = 20
-
-        for i, text in enumerate(texts):
-            draw_text_2d((r, g, b, self.alpha * 1.5, size), text, 20, top - step * i)
     # restore
     #####################
     bgl.glDisable(bgl.GL_BLEND)
@@ -203,8 +176,6 @@ class RSN_OT_DrawNodes(Operator):
         #####################
         pref = get_pref()
         self.alpha = 0
-        # self.radius = pref.draw_nodes.border_radius
-        self.show_text_info = pref.draw_nodes.show_text_info
         # text color        # set statue
         ##################
         context.scene.RSNBusyDrawing = True

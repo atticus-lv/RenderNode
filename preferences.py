@@ -10,7 +10,6 @@ def get_pref():
 
 
 class PropsDrawNodes(bpy.types.PropertyGroup):
-    show_text_info: BoolProperty(name='Show Text Info', default=True)
 
     task_color: FloatVectorProperty(name='Task Color', subtype='COLOR',
                                     default=(0, 0.6, 0.7))
