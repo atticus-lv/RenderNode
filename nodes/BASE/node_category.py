@@ -34,7 +34,7 @@ node_categories = [
         nodeitems_utils.NodeItem("RenderNodeBooleanMath"),
         nodeitems_utils.NodeItem("RenderNodeStringOperate"),
         nodeitems_utils.NodeItem("RenderNodeVectorConvert"),
-        nodeitems_utils.NodeItem("RenderNodeProperty"),
+        # nodeitems_utils.NodeItem("RenderNodeProperty"),
         nodeitems_utils.NodeItem('RenderNodeScripts'),
     ]),
 

@@ -45,8 +45,8 @@ class RenderNodeSetSceneRenderEngine(RenderNodeBase):
         self.compare(context.scene.render, 'engine', self.engine)
 
         if self.engine == 'CYCLES':
-            self.compare(context.scene.render.cycles, 'device', self.cycles_device)
-            self.compare(context.scene.render.cycles, 'feature_set', self.cycles_feature_set)
+            self.compare(context.scene.cycles, 'device', self.cycles_device)
+            self.compare(context.scene.cycles, 'feature_set', self.cycles_feature_set)
 
     def engine_enum_items(self, context):
         enum_items = RenderNodeSetSceneRenderEngine._enum_item_hack
