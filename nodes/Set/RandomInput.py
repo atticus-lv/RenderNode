@@ -60,7 +60,7 @@ class RenderNodeRandomInput(RenderNodeBase):
             self.outputs[0].set_value(random.random())
         elif self.operator_type == 'choice':
             s = self.inputs['str'].get_value()
-            if s is not None:
+            if s is not None and len(s) > 0:
                 self.outputs[0].set_value(random.choice(s))
 
 
