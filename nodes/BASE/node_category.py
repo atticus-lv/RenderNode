@@ -19,7 +19,7 @@ node_categories = [
         nodeitems_utils.NodeItem('RenderNodeStringInput'),
         nodeitems_utils.NodeItem('RenderNodeObjectInput'),
         nodeitems_utils.NodeItem('RenderNodeMaterialInput'),
-        nodeitems_utils.NodeItem('RenderNodeInfoInput'),
+        nodeitems_utils.NodeItem('RenderNodeActionInput'),
     ]),
 
     RSNCategory("LIST", "List", items=[
@@ -56,23 +56,24 @@ node_categories = [
         nodeitems_utils.NodeItem("RenderNodeSetSceneResolution"),
         nodeitems_utils.NodeItem("RenderNodeSetFilePath"),
         nodeitems_utils.NodeItem("RenderNodeSetFrameRange"),
+        nodeitems_utils.NodeItem("RenderNodeSetFileFormatImage"),
+        nodeitems_utils.NodeItem("RenderNodeSetFileFormatMovie"),
     ]),
 
     RSNCategory("OBJECT", "Object", items=[
         nodeitems_utils.NodeItem("RenderNodeGetMaterial"),
         nodeitems_utils.NodeItem("RenderNodeGetObjectVisibility"),
-        nodeitems_utils.NodeItem("RenderNodeGetObjectAction"),
+        nodeitems_utils.NodeItem("RenderNodeGetAction"),
         nodeitems_utils.NodeItem("RenderNodeGetActionFrameRange"),
 
         nodeitems_utils.NodeItem("RenderNodeSetObjectMaterial"),
         nodeitems_utils.NodeItem("RenderNodeSetObjectVisibility"),
+        nodeitems_utils.NodeItem("RenderNodeSetObjectAction"),
     ]),
 
     RSNCategory("COLLECTION", "Collection", items=[
         nodeitems_utils.NodeItem("RenderNodeSetCollectionVisibility"),
     ]),
-
-
 
     RSNCategory("LAYOUT", "Layout", items=[
         # nodeitems_utils.NodeItem('RenderNodeMerge'),

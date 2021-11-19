@@ -69,6 +69,7 @@ class RenderNodeSwitch(RenderNodeBase):
             ('', 'Pointer', ''),
             ('Object', 'Object', ''),
             ('Material', 'Material', ''),
+            ('Action', 'Action', ''),
             ('World', 'World', ''),
             ('Collection', 'Collection', ''),
             ('Text', 'Text', ''),
