@@ -73,6 +73,7 @@ node_categories = [
         # nodeitems_utils.NodeItem('RenderNodeMerge'),
         nodeitems_utils.NodeItem('NodeFrame'),
         nodeitems_utils.NodeItem('NodeReroute'),
+        nodeitems_utils.NodeItem('RenderNodeGetTaskInfo'),
     ]),
 
 ]

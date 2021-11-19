@@ -84,6 +84,7 @@ class RSN_UL_SelectList(bpy.types.UIList):
             s.index = item.index
 
 
+
 class RenderNodeTaskRenderListNode(RenderNodeBase):
     """Render List Node"""
     bl_idname = 'RenderNodeTaskRenderListNode'
@@ -106,8 +107,6 @@ class RenderNodeTaskRenderListNode(RenderNodeBase):
     select_list: CollectionProperty(type=SelectorProperty)
 
     # active task ui
-    show_task_info: BoolProperty(name='Task Info', default=False)
-    task_info: StringProperty(name='Task Info')
 
     # action after render
     open_dir: BoolProperty(name='Open folder after render', default=True)
@@ -143,27 +142,17 @@ class RenderNodeTaskRenderListNode(RenderNodeBase):
             col.prop(self, 'range_start')
             col.prop(self, 'range_end')
 
-        # draw task info
-        col = box.box().column(align=True)
-        col.prop(self, 'show_task_info', text='Active Task', icon='TRIA_DOWN' if self.show_task_info else 'TRIA_RIGHT',
-                 emboss=False)
-
-        if self.show_task_info:
-            col = col.box().split().column()
-            if self.task_info != '':
-                for s in self.task_info.split('$$$'):
-                    col.label(text=s)
-
         layout.template_list(
             "RSN_UL_SelectList", "",
             self, "select_list",
             self, "active_index", type='GRID', columns=6, rows=5)
 
+
     def update(self):
         if self.mode == 'STATIC':
             self.auto_update_inputs('RenderNodeSocketTask', "task")
 
-        update_list(self,bpy.context)
+        update_list(self, bpy.context)
 
     def get_dependant_nodes(self):
         '''returns the nodes connected to the inputs of this node'''
@@ -192,7 +181,6 @@ class RenderNodeTaskRenderListNode(RenderNodeBase):
         value = self.process_task(index=self.active_index if self.mode == 'STATIC' else 0)
 
         if not value:
-            self.task_info = 'No Task is linked'
             return
         data = json.loads(value)
 
@@ -202,8 +190,7 @@ class RenderNodeTaskRenderListNode(RenderNodeBase):
 
         context.scene.render.filepath = data.get('filepath')
 
-        # set to ui
-        self.task_info = '$$$'.join([f"{key.title().replace('_', ' ')}: {value}" for key, value in data.items()])
+
 
 
 def register():
