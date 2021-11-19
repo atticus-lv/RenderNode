@@ -155,6 +155,9 @@ class RenderNodeTaskRenderListNode(RenderNodeBase):
             self, "select_list",
             self, "active_index", type='GRID', columns=6, rows=5)
 
+        s = layout.operator('rsn.select_active_index', text='Refresh',icon = 'FILE_REFRESH')
+        s.node_name = self.name
+        s.index = self.active_index
 
     def update(self):
         if self.mode == 'STATIC':
