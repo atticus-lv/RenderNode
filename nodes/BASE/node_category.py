@@ -44,6 +44,8 @@ node_categories = [
     ]),
 
     RSNCategory("EEVEE_CYCLES", "Eevee / Cycles", items=[
+        nodeitems_utils.NodeItem("RenderNodeSetEeveeSamples"),
+        nodeitems_utils.NodeItem("RenderNodeSetEeveeAmbientOcclusion"),
         nodeitems_utils.NodeItem("RenderNodeSetCyclesLightPath"),
         nodeitems_utils.NodeItem("RenderNodeSetCyclesSamples"),
     ]),

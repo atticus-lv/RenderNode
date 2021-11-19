@@ -109,7 +109,7 @@ class NodeTreeBase(bpy.types.NodeTree):
 
 class RenderStackNodeTree(NodeTreeBase):
     bl_idname = 'RenderStackNodeTree'
-    bl_label = 'Render Editor'
+    bl_label = 'Render Node Editor'
     bl_icon = 'CAMERA_DATA'
 
 

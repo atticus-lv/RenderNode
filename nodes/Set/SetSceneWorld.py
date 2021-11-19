@@ -10,7 +10,7 @@ class RenderNodeSetSceneWorld(RenderNodeBase):
 
     def init(self, context):
         self.create_input('RenderNodeSocketTask', 'task', 'Task')
-        self.create_input('RenderNodeSocketWorld', "world", 'World')
+        self.create_input('RenderNodeSocketWorld', "world", 'World',show_text=False)
         self.create_output('RenderNodeSocketTask', 'task', 'Task')
 
     def process(self,context,id,path):

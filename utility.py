@@ -132,6 +132,7 @@ class RenderQueueV2():
         """
         self.nt = ntree
         self.root_node = render_list_node
+        self.mode = render_list_node.mode
 
         self.index_list = deque()
         self.task_dict_list = deque()
@@ -139,22 +140,28 @@ class RenderQueueV2():
         self.init_queue()
 
     def init_queue(self):
-        for i, input in enumerate(self.root_node.inputs):
-            if not input.is_linked: continue
+        if self.mode == 'RANGE':
+            input = self.root_node.inputs[0]
+            if not input.is_linked:return
 
-            data = None
-            print(input.get_value())
-            if input.get_value():
-                data = json.loads(input.get_value())
-
-            print(data)
-
-            if data:
-                if len(self.index_list) == 1:
-                    bpy.context.scene.frame_current = data['frame_start']
-                # collect
+            for i in range(self.root_node.range_start, self.root_node.range_end + 1):
                 self.index_list.append(i)
-                self.task_dict_list.append(data)
+            bpy.ops.screen.frame_jump(end=False)
+
+        elif self.mode == 'STATIC':
+            for i, input in enumerate(self.root_node.inputs):
+                if not input.is_linked: continue
+
+                data = None
+                if input.get_value() is not None:
+                    data = json.loads(input.get_value())
+
+                if data:
+                    if len(self.index_list) == 0:
+                        bpy.ops.screen.frame_jump(end=False)
+                    # collect
+                    self.index_list.append(i)
+                    self.task_dict_list.append(data)
 
     @property
     def index(self):
@@ -169,11 +176,11 @@ class RenderQueueV2():
             self.root_node.active_index = self.index_list[0]
 
     def is_empty(self):
-        return len(self.task_dict_list) == 0
+        return len(self.index_list) == 0
 
     def pop(self):
         if not self.is_empty():
-            self.task_dict_list.popleft()
+            if self.mode == 'STATIC': self.task_dict_list.popleft()
             return self.index_list.popleft()
 
     def clear_queue(self):

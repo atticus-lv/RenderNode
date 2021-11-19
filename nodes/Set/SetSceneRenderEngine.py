@@ -21,19 +21,32 @@ class RenderNodeSetSceneRenderEngine(RenderNodeBase):
                                 default='GPU',
                                 update=update_node)
 
+    cycles_feature_set: EnumProperty(name='Feature Set',
+                                     items=[('SUPPORTED', 'Supported', ''),
+                                            ('EXPERIMENTAL', 'Experimental', ''), ],
+                                     default='SUPPORTED',
+                                     update=update_node)
+
     def init(self, context):
         self.create_input('RenderNodeSocketTask', 'task', 'Task')
 
         self.create_output('RenderNodeSocketTask', 'task', 'Task')
 
+        self.width = 200
+
     def draw_buttons(self, context, layout):
         layout.prop(self, "engine")
         if self.engine == 'CYCLES':
+            layout.prop(self, 'cycles_feature_set')
             layout.prop(self, 'cycles_device')
 
     def process(self, context, id, path):
-        if not self.process_task():return
-        self.compare(bpy.context.scene.render, 'engine', self.engine)
+        if not self.process_task(): return
+        self.compare(context.scene.render, 'engine', self.engine)
+
+        if self.engine == 'CYCLES':
+            self.compare(context.scene.render.cycles, 'device', self.cycles_device)
+            self.compare(context.scene.render.cycles, 'feature_set', self.cycles_feature_set)
 
     def engine_enum_items(self, context):
         enum_items = RenderNodeSetSceneRenderEngine._enum_item_hack

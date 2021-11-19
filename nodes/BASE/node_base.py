@@ -73,10 +73,12 @@ class RenderNodeBase(bpy.types.Node):
     #         else:
     #             self.remove_output(name)
 
-    def create_input(self, socket_type, socket_name, socket_label, default_value=None):
+    def create_input(self, socket_type, socket_name, socket_label, default_value=None, show_text=True):
         if self.inputs.get(socket_name):
             input = self.inputs[socket_name]
-            if hasattr(input, 'text') and input.text != socket_label: input.text = socket_label
+            if hasattr(input, 'text') and input.text != socket_label:
+                input.text = socket_label
+                input.show_text = show_text
             return None
 
         input = self.inputs.new(socket_type, socket_name)
@@ -92,12 +94,14 @@ class RenderNodeBase(bpy.types.Node):
         if input:
             self.inputs.remove(input)
 
-    def create_output(self, socket_type, socket_name, socket_label, default_value=None):
+    def create_output(self, socket_type, socket_name, socket_label, default_value=None, show_text=True):
         if self.outputs.get(socket_name):
             return None
 
         output = self.outputs.new(socket_type, socket_name)
-        if hasattr(output, 'text'): output.text = socket_label
+        if hasattr(output, 'text'):
+            output.text = socket_label
+            output.show_text = show_text
 
         if default_value: output.default_value = default_value
         if hasattr(output, 'shape'): output.change_shape()

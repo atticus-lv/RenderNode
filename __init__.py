@@ -1,12 +1,12 @@
 bl_info = {
     "name"       : "Render Node",
     "author"     : "Atticus",
-    "version"    : (2, 1, 6),
-    "blender"    : (2, 93, 0),
-    "location"   : "Node Editor > Render Editor",
+    "version"    : (3, 0, 0),
+    "blender"    : (3, 0, 0),
+    "location"   : "Node Editor > Render Node Editor",
     "description": "Node based render queue workflow",
-    'warning'    : "Beta version",
-    "doc_url"    : "https://atticus-lv.github.io/RenderStackNode/#/",
+    'warning'    : "Alpha version",
+    # "doc_url"    : "https://atticus-lv.github.io/RenderStackNode/#/",
     "category"   : "Render",
 }
 

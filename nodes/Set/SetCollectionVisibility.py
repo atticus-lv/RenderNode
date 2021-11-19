@@ -9,7 +9,7 @@ class RenderNodeSetObjectVisibility(RenderNodeBase):
 
     def init(self, context):
         self.create_input('RenderNodeSocketTask', 'task', 'Task')
-        self.create_input('RenderNodeSocketCollection', 'collection', '')
+        self.create_input('RenderNodeSocketCollection', 'collection', '',show_text=False)
         self.create_input('RenderNodeSocketBool', 'hide_viewport', 'Show In Viewports',default_value = True) # invert bool
         self.create_input('RenderNodeSocketBool', 'hide_render', 'Show In Render',default_value = True) # invert bool
 

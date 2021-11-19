@@ -8,6 +8,17 @@ from ...ui.icon_utils import RSN_Preview
 from ..BASE._runtime import cache_node_dependants
 
 
+def update_mode(self, context):
+    if self.mode == 'RANGE':
+        for i, input in enumerate(self.inputs):
+            if i != 0:
+                self.inputs.remove(input)
+    else:
+        self.auto_update_inputs('RenderNodeSocketTask', "Task")
+
+    generate_ops(self, context)
+
+
 def update_active_task(self, context):
     if self.is_active_list:
         for node in self.id_data.nodes:
@@ -18,13 +29,55 @@ def update_active_task(self, context):
     self.execute_tree()
 
 
-def update_mode(self, context):
-    if self.mode == 'DYNAMIC':
+def updata_active_list(self, context):
+    update_active_task(self, context)
+    generate_ops(self, context)
+
+
+def generate_ops(self, context):
+    # clear
+    for cls in self.dep_class:
+        bpy.utils.unregister_class(cls)
+    self.dep_class.clear()
+
+    list_node = self
+
+    if self.mode == 'STATIC':
         for i, input in enumerate(self.inputs):
-            if i != 0:
-                self.inputs.remove(input)
-    else:
-        self.auto_update_inputs('RenderNodeSocketTask', "Task")
+            def execute(self, context):
+                list_node.active_index = self.index
+                return {'FINISHED'}
+
+            op_cls = type("DynOp",
+                          (bpy.types.Operator,),
+                          {"bl_idname": f'wm.rsn_render_list_{i}',
+                           "bl_label": i,
+                           "bl_description": f'Set index as {i}',
+                           "execute": execute,
+                           # custom
+                           "index": i, }
+                          )
+            self.dep_class.append(op_cls)
+
+    elif self.mode == 'RANGE':
+        for i in range(self.range_start, self.range_end + 1):
+            def execute(self, context):
+                list_node.active_index = self.index
+                return {'FINISHED'}
+
+            op_cls = type("DynOp",
+                          (bpy.types.Operator,),
+                          {"bl_idname": f'wm.rsn_render_list_{i}',
+                           "bl_label": i,
+                           "bl_description": f'Set index as {i}',
+                           "execute": execute,
+                           # custom
+                           "index": i, }
+                          )
+            self.dep_class.append(op_cls)
+
+    for cls in self.dep_class:
+        bpy.utils.register_class(cls)
 
 
 class RenderNodeTaskRenderListNode(RenderNodeBase):
@@ -35,16 +88,19 @@ class RenderNodeTaskRenderListNode(RenderNodeBase):
     # task input mode
     mode: EnumProperty(name='Mode', items=[
         ('STATIC', 'Static', ''),
-        ('DYNAMIC', 'Dynamic', ''),
+        ('RANGE', 'Range', ''),
     ], update=update_mode)
 
-    # Dynamic
-    index_start: IntProperty(name='Index Start')
-    index_end: IntProperty(name='Index End')
+    # Range
+    range_start: IntProperty(name='Range Start', update=generate_ops)
+    range_end: IntProperty(name='Range End', update=generate_ops)
 
     # active set
     active_index: IntProperty(name="Active Index", min=0, update=update_active_task)
     is_active_list: BoolProperty(name="Active List", update=update_active_task)
+
+    # TODO turn in to built-in attr, use grid selector for better selection
+    dep_class = []
 
     # active task ui
     show_task_info: BoolProperty(name='Task Info', default=False)
@@ -66,18 +122,29 @@ class RenderNodeTaskRenderListNode(RenderNodeBase):
         return ntree.bl_idname in {'RenderStackNodeTree'}
 
     def draw_buttons(self, context, layout):
-        layout.box().prop(self, 'is_active_list')
+        box = layout.box()
+        box.prop(self, 'is_active_list')
         if not self.is_active_list: return
 
-        layout.prop(self, 'mode')
-        layout.prop(self, 'active_index')
+        render = box.operator('rsn.render_queue_v2', icon='SHADING_RENDERED')
+        render.list_node_name = self.name
 
-        if self.mode == 'DYNAMIC':
-            layout.prop(self, 'index_start')
-            layout.prop(self, 'index_end')
+        box = layout.box()
+        box.prop(self, 'mode')
+
+        if self.mode == 'RANGE':
+            col = box.column(align=True)
+            col.prop(self, 'range_start')
+            col.prop(self, 'range_end')
+
+        # draw selector
+        # for cls in self.dep_class:
+        #     col = layout.column(align=True)
+        #     col.operator(cls.bl_idname)
+        layout.prop(self,'active_index')
 
         # draw task info
-        col = layout.box().column(align=True)
+        col = box.box().column(align=True)
         col.prop(self, 'show_task_info', text='Active Task', icon='TRIA_DOWN' if self.show_task_info else 'TRIA_RIGHT',
                  emboss=False)
 
@@ -86,9 +153,6 @@ class RenderNodeTaskRenderListNode(RenderNodeBase):
             if self.task_info != '':
                 for s in self.task_info.split('$$$'):
                     col.label(text=s)
-
-        render = layout.operator('rsn.render_queue_v2', icon='SHADING_RENDERED')
-        render.list_node_name = self.name
 
     def update(self):
         if self.mode == 'STATIC':

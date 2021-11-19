@@ -10,7 +10,7 @@ class RenderNodeSetSceneCamera(RenderNodeBase):
 
     def init(self, context):
         self.create_input('RenderNodeSocketTask', 'task', 'Task')
-        self.create_input('RenderNodeSocketCamera', "camera", '')
+        self.create_input('RenderNodeSocketCamera', "camera", 'Camera',show_text=False)
         self.create_output('RenderNodeSocketTask', 'task', 'Task')
 
 

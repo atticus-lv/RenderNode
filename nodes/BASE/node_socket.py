@@ -186,6 +186,7 @@ class RenderNodeSocket(bpy.types.NodeSocket, SocketBase):
     shape = 'CIRCLE'
     color = 0.5, 0.5, 0.5, 1
 
+    show_text:BoolProperty(default=True)
     text: StringProperty(default='')
     default_value: IntProperty(default=0, update=update_node)
 
@@ -202,7 +203,8 @@ class RenderNodeSocket(bpy.types.NodeSocket, SocketBase):
         if self.is_linked or self.is_output:
             layout.label(text=self.display_name)
         else:
-            layout.prop(self, 'default_value', text=self.display_name)
+            layout.prop(self, 'default_value', text=self.display_name if self.show_text else '')
+
 
     def draw_color(self, context, node):
         return self.color

@@ -16,7 +16,6 @@ class RenderNodeSetEeveeSamples(RenderNodeBase):
 
         self.create_output('RenderNodeSocketTask', 'task', 'Task')
 
-        self.width = 220
 
     def process(self, context, id, path):
         if not self.process_task():return
