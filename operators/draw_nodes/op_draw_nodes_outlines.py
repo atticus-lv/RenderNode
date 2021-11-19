@@ -120,7 +120,7 @@ def draw_callback_nodeoutline(self, context):
                         col = green
                     else:
                         col = red
-                    draw_text_on_node(white, node.name, node, size=17, corner_index=0, offset=(0, 3))
+                    draw_text_on_node(white, node.bl_label, node, size=17, corner_index=0, offset=(0, 3))
                     draw_text_on_node(col, f"{t:.2f}ms", node, size=12, corner_index=0, offset=(0, 20))
     except:
         pass

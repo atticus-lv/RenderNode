@@ -41,8 +41,10 @@ def update_active_task(self, context):
     for node in self.id_data.nodes:
         if node.bl_idname == 'RenderNodeTaskRenderListNode' and node != self:
             node.is_active_list = False
-    bpy.ops.rsn.draw_nodes('INVOKE_DEFAULT')
-    context.area.tag_redraw()
+
+    if context.scene.RSNBusyDrawing is False:
+        bpy.ops.rsn.draw_nodes('INVOKE_DEFAULT')
+        context.area.tag_redraw()
     # execute
     context.window_manager.rsn_active_list = self.name
     context.scene.rsn_bind_tree = self.id_data  # bind tree
