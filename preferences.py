@@ -10,13 +10,13 @@ def get_pref():
 
 
 class PropsDrawNodes(bpy.types.PropertyGroup):
-    text_color1: FloatVectorProperty(name='Time Color 1', subtype='COLOR',
+    text_color1: FloatVectorProperty(name='Time < 0.1ms Color', subtype='COLOR',
                                      default=(1, 1, 1))
 
-    text_color2: FloatVectorProperty(name='Time Color 1', subtype='COLOR',
+    text_color2: FloatVectorProperty(name='Time > 0.1ms Color', subtype='COLOR',
                                      default=(0, 1, 0))
 
-    text_color3: FloatVectorProperty(name='Time Color 1', subtype='COLOR',
+    text_color3: FloatVectorProperty(name='Time >1ms Color', subtype='COLOR',
                                      default=(1, 0, 0))
 
 
@@ -72,8 +72,8 @@ class RSN_Preference(bpy.types.AddonPreferences):
                               description="When using the quick search to add nodes,quick place without moveing it",
                               default=False)
     limited_area: BoolProperty(name='Limited Area',
-                                 description='Limited RenderNode Helper only in Render Editor',
-                                 default=True)
+                               description='Limited RenderNode Helper only in Render Editor',
+                               default=True)
 
     log_level: EnumProperty(name='Log Level',
                             items=[
@@ -108,13 +108,13 @@ class RSN_Preference(bpy.types.AddonPreferences):
         box = col.box().split().column(align=1)
         self.filepath_node(box)
 
-        col.separator(factor=0.2)
-        box = col.box().split().column(align=1)
-        self.view_layer_passes_node(box)
-
-        col.separator(factor=0.2)
-        box = col.box().split().column(align=1)
-        self.smtp_node(box)
+        # col.separator(factor=0.2)
+        # box = col.box().split().column(align=1)
+        # self.view_layer_passes_node(box)
+        #
+        # col.separator(factor=0.2)
+        # box = col.box().split().column(align=1)
+        # self.smtp_node(box)
 
     def draw_properties(self):
         layout = self.layout
