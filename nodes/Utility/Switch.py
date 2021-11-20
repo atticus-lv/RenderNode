@@ -104,14 +104,16 @@ class RenderNodeSwitch(RenderNodeBase):
 
     def process(self, context, id, path):
         active = self.inputs['active'].get_value()
+        print(active)
         if active is None: return
 
         for i, input in enumerate(self.inputs):
-            if i == 0 or i != active + 1: continue  # skip active input
+            if i != 0 and i == active:
+                ans = input.get_value()
+                print(ans)
 
-            ans = input.get_value()
-            self.outputs[0].set_value(ans)
-
+                self.outputs[0].set_value(ans)
+                break
 
 def register():
     bpy.utils.register_class(RenderNodeSwitch)

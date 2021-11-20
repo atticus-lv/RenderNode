@@ -68,6 +68,8 @@ class NodeTreeBase(bpy.types.NodeTree):
                     node.inputs.remove(node.inputs[0])
                     node.outputs.remove(node.outputs[0])
 
+        self.execute(bpy.context)
+
     def relink_socket(self, old_socket, new_socket):
         '''Utility function to relink sockets'''
         if not old_socket.is_output and not new_socket.is_output and old_socket.links:
@@ -80,7 +82,6 @@ class NodeTreeBase(bpy.types.NodeTree):
                 # self.links.remove(link)
 
     def execute(self, context):
-        task_node = self.nodes.get(bpy.context.window_manager.rsn_viewer_node)
         render_list_node = self.nodes.get(bpy.context.window_manager.rsn_active_list)
         runtime_info['executing'] = True
         cache_socket_variables.clear()
@@ -96,7 +97,6 @@ class NodeTreeBase(bpy.types.NodeTree):
                 node.execute_dependants(bpy.context, id, path)
                 path.append(node.name)
 
-            if task_node: task_node.execute(bpy.context, id, path)
             if render_list_node:
                 render_list_node.execute(bpy.context, id, path)
 

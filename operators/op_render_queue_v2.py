@@ -83,12 +83,11 @@ class RSN_OT_RenderQueue(bpy.types.Operator):
         self.stop = False
         self.rendering = False
         # set and get tree
-        self.render_list_node = context.space_data.node_tree.nodes.get(self.list_node_name)
+        context.scene.rsn_bind_tree = context.space_data.node_tree
+        self.render_list_node = context.scene.rsn_bind_tree.nodes.get(self.list_node_name)
 
-        rsn_tree = RSN_NodeTree()
-        rsn_tree.set_context_tree_as_wm_tree()
         # init RenderQueue
-        self.queue = RenderQueueV2(ntree=rsn_tree.get_wm_node_tree(),
+        self.queue = RenderQueueV2(ntree=context.scene.rsn_bind_tree,
                                    render_list_node=self.render_list_node)
 
         if self.queue.is_empty():
@@ -163,6 +162,7 @@ classes = (
 
 
 def register():
+    bpy.types.WindowManager.rsn_running_modal = BoolProperty()
     for cls in classes:
         bpy.utils.register_class(cls)
 

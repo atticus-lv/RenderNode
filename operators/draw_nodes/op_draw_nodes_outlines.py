@@ -171,7 +171,8 @@ class RSN_OT_DrawNodes(Operator):
     def invoke(self, context, event):
         if True in {context.area.type != 'NODE_EDITOR',
                     context.space_data.edit_tree is None,
-                    context.space_data.edit_tree.bl_idname not in {'RenderStackNodeTree', 'RenderStackNodeTreeGroup'}}:
+                    context.space_data.edit_tree.bl_idname not in {'RenderStackNodeTree', 'RenderStackNodeTreeGroup'},
+                    context.window_manager.rsn_running_modal}:
             self.report({'WARNING'}, "NodeEditor not found, cannot run operator")
             return {'CANCELLED'}
         # reset draw handle
