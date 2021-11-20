@@ -124,12 +124,12 @@ class RSN_Preference(bpy.types.AddonPreferences):
         col = layout.column()
 
         box = col.box().split().column(align=1)
-        box.label(text="RenderNode Helper")
+        box.label(text="RenderNode Helper", icon='HELP')
         box.prop(self, 'quick_place')
         box.prop(self, 'limited_area')
 
         box = col.box().split().column(align=1)
-        box.label(text="Draw Nodes")
+        box.label(text="Time Debug", icon='TIME')
         box.prop(self.draw_nodes, 'task_color')
         box.separator(factor=1)
 
@@ -138,8 +138,8 @@ class RSN_Preference(bpy.types.AddonPreferences):
         box.prop(self.draw_nodes, 'text_color3')
 
         layout.separator(factor=0.5)
-
-        layout.prop(self, 'log_level', text='Debug')
+        # TODO fix log level
+        # layout.prop(self, 'log_level', text='Debug')
 
     def view_layer_passes_node(self, box):
         box.prop(self.node_view_layer_passes, 'show', text="View Layer Passes Node", emboss=False,
@@ -243,7 +243,7 @@ def add_keybind():
         kmi = km.keymap_items.new('rsn.set_active_list', 'V', 'PRESS')
         addon_keymaps.append((km, kmi))
         # copy
-        kmi = km.keymap_items.new('rsn.copy_and_link', 'D', 'PRESS', shift=True)
+        kmi = km.keymap_items.new('rsn.copy_and_link', 'D', 'PRESS', alt=True)
         addon_keymaps.append((km, kmi))
         # tab search
         kmi = km.keymap_items.new('rsn.search_and_link', 'TAB', 'PRESS')

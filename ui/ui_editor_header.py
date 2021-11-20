@@ -9,9 +9,9 @@ def draw_item(self, context):
         row = layout.row(align=True)
 
         if context.scene.RSNBusyDrawing is True:
-            row.prop(context.scene, 'RSNBusyDrawing', text='Drawing...', toggle=1, icon='GREASEPENCIL')
+            row.prop(context.scene, 'RSNBusyDrawing', text='Drawing...', toggle=1, icon='SORTTIME')
         else:
-            row.operator("rsn.draw_nodes", icon='GREASEPENCIL')
+            row.operator("rsn.draw_nodes", icon='TIME')
 
 
 def register():
