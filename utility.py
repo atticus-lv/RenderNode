@@ -129,10 +129,6 @@ class RenderQueueV2():
             count = 0
             for i, input in enumerate(self.root_node.inputs):
                 if not input.is_linked: continue
-                if count == 0:
-                    task_info = input.get_value()
-                    if not task_info: return
-
                 self.index_list.append(i)
 
 
