@@ -21,7 +21,7 @@ class RenderNodeSetFilm(RenderNodeBase):
         i.hide = True
 
         # cylces
-        i = self.create_input('RenderNodeSocketFloat', 'film_exposure', 'Exposure')
+        i = self.create_input('RenderNodeSocketFloat', 'film_exposure', 'Exposure', default_value=1)
         i.hide = True
         i = self.create_input('RenderNodeSocketFloat', 'filter_width', 'Filter Width', default_value=1.5)
         i.hide = True
@@ -36,39 +36,40 @@ class RenderNodeSetFilm(RenderNodeBase):
     def process(self, context, id, path):
         if not self.process_task(): return
 
-        engine = self.inputs['engine']
+        engine = self.inputs['engine'].get_value()
         if engine is None or engine == '': return
 
         film_transparent = self.inputs['film_transparent'].get_value()
 
-        self.show_input('filter_size', engine == 'BLENDER_EEVEE')
-        self.show_input('use_overscan', engine == 'BLENDER_EEVEE')
-        self.show_input('overscan_size', engine == 'BLENDER_EEVEE' and self.inputs['use_overscan'].get_value() is True)
-
-        self.show_input('film_exposure', engine == 'CYCLES')
-        self.show_input('filter_width', engine == 'CYCLES')
-        self.show_input('film_transparent_glass', engine == 'CYCLES')
-        self.show_input('film_transparent_roughness', engine == 'CYCLES')
-
         if film_transparent is not None:
             self.compare(context.scene.render, 'film_transparent', film_transparent)
 
+        self.inputs['filter_size'].hide = False if engine == 'BLENDER_EEVEE' else True
+        self.inputs['use_overscan'].hide = False if engine == 'BLENDER_EEVEE' else True
+        self.inputs['overscan_size'].hide = False if engine == 'BLENDER_EEVEE' else True
+
+        self.inputs['film_exposure'].hide = False if engine == 'CYCLES' else True
+        self.inputs['filter_width'].hide = False if engine == 'CYCLES' else True
+        self.inputs['film_transparent_glass'].hide = False if engine == 'CYCLES' else True
+        self.inputs['film_transparent_roughness'].hide = False if engine == 'CYCLES' else True
+
         if engine == 'BLENDER_EEVEE':
             value = self.inputs['filter_size'].get_value()
-            if value: self.compare(context.scene.render.eevee, 'filter_size', value)
+            if value: self.compare(context.scene.render, 'filter_size', value)
             value = self.inputs['use_overscan'].get_value()
-            if value: self.compare(context.scene.render.eevee, 'use_overscan', value)
+            if value: self.compare(context.scene.eevee, 'use_overscan', value)
             value = self.inputs['overscan_size'].get_value()
-            if value: self.compare(context.scene.render.eevee, 'overscan_size', value)
+            if value: self.compare(context.scene.eevee, 'overscan_size', value)
+
         elif engine == 'CYCLES':
             value = self.inputs['film_exposure'].get_value()
-            if value: self.compare(context.scene.render.cycles, 'film_exposure', value)
+            if value: self.compare(context.scene.cycles, 'film_exposure', value)
             value = self.inputs['filter_width'].get_value()
-            if value: self.compare(context.scene.render.cycles, 'filter_width', value)
+            if value: self.compare(context.scene.cycles, 'filter_width', value)
             value = self.inputs['film_transparent_glass'].get_value()
-            if value: self.compare(context.scene.render.cycles, 'film_transparent_glass', value)
+            if value: self.compare(context.scene.cycles, 'film_transparent_glass', value)
             value = self.inputs['film_transparent_roughness'].get_value()
-            if value: self.compare(context.scene.render.cycles, 'film_transparent_roughness', value)
+            if value: self.compare(context.scene.cycles, 'film_transparent_roughness', value)
 
 
 def register():

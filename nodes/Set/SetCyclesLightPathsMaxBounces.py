@@ -3,10 +3,10 @@ from bpy.props import *
 from ...nodes.BASE.node_base import RenderNodeBase
 
 
-class RenderNodeSetCyclesLightPath(RenderNodeBase):
+class RenderNodeSetCyclesLightPathsMaxBounces(RenderNodeBase):
     """A simple input node"""
-    bl_idname = 'RenderNodeSetCyclesLightPath'
-    bl_label = 'Set Cycles Light Path'
+    bl_idname = 'RenderNodeSetCyclesLightPathsMaxBounces'
+    bl_label = 'Set Cycles Light Paths Max Bounces'
 
     def init(self, context):
         self.create_input('RenderNodeSocketTask', 'task', 'Task')
@@ -32,8 +32,8 @@ class RenderNodeSetCyclesLightPath(RenderNodeBase):
 
 
 def register():
-    bpy.utils.register_class(RenderNodeSetCyclesLightPath)
+    bpy.utils.register_class(RenderNodeSetCyclesLightPathsMaxBounces)
 
 
 def unregister():
-    bpy.utils.unregister_class(RenderNodeSetCyclesLightPath)
+    bpy.utils.unregister_class(RenderNodeSetCyclesLightPathsMaxBounces)

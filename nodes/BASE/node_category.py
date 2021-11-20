@@ -58,17 +58,22 @@ node_categories = [
     RSNCategory("EEVEE_CYCLES", "Eevee / Cycles", items=[
         nodeitems_utils.NodeItem("RenderNodeSetWorkBenchSamples"),
         nodeitems_utils.NodeItem("RenderNodeSetWorkBenchOptions"),
+
         nodeitems_utils.NodeItem("RenderNodeSetEeveeSamples"),
         nodeitems_utils.NodeItem("RenderNodeSetEeveeAmbientOcclusion"),
         nodeitems_utils.NodeItem("RenderNodeSetEeveeScreenSpaceReflections"),
-        nodeitems_utils.NodeItem("RenderNodeSetCyclesLightPath"),
+
         nodeitems_utils.NodeItem("RenderNodeSetCyclesSamples"),
+        nodeitems_utils.NodeItem("RenderNodeSetCyclesLightPathsMaxBounces"),
+        nodeitems_utils.NodeItem("RenderNodeSetCyclesLightPathsClamping"),
+        nodeitems_utils.NodeItem("RenderNodeSetCyclesLightPathsCaustics"),
+        # nodeitems_utils.NodeItem("RenderNodeSetCyclesLightPathsFastGI"),
     ]),
 
     RSNCategory("OUTPUT", "Output", items=[
         nodeitems_utils.NodeItem("RenderNodeGetSceneResolution"),
 
-        # nodeitems_utils.NodeItem("RenderNodeSetFilm"),
+        nodeitems_utils.NodeItem("RenderNodeSetFilm"),
         nodeitems_utils.NodeItem("RenderNodeSetRenderSlot"),
         nodeitems_utils.NodeItem("RenderNodeSetSceneResolution"),
         nodeitems_utils.NodeItem("RenderNodeSetFilePath"),
