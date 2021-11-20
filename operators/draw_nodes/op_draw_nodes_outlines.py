@@ -11,7 +11,7 @@ from gpu_extras.batch import batch_for_shader
 
 from .utils import dpifac, draw_tri_fan
 from ...preferences import get_pref
-from ...nodes.BASE._runtime import cache_node_times, cache_node_dependants
+from ...nodes.BASE._runtime import cache_node_times, cache_node_dependants, curr_draw_handle, curr_draw_timer
 from ...nodes.BASE.node_base import cache_executed_nodes
 
 easy_name = {
@@ -125,7 +125,6 @@ def draw_callback_nodeoutline(self, context):
     except:
         pass
 
-
     # restore
     #####################
     bgl.glDisable(bgl.GL_BLEND)
@@ -161,6 +160,10 @@ class RSN_OT_DrawNodes(Operator):
                 # remove timer / handles
                 context.window_manager.event_timer_remove(self._timer)
                 bpy.types.SpaceNodeEditor.draw_handler_remove(self._handle, 'WINDOW')
+
+                global curr_draw_timer, curr_draw_handle
+                curr_draw_timer = None
+                curr_draw_handle = None
                 return {'FINISHED'}
 
         return {'PASS_THROUGH'}
@@ -171,6 +174,14 @@ class RSN_OT_DrawNodes(Operator):
                     context.space_data.edit_tree.bl_idname not in {'RenderStackNodeTree', 'RenderStackNodeTreeGroup'}}:
             self.report({'WARNING'}, "NodeEditor not found, cannot run operator")
             return {'CANCELLED'}
+        # reset draw handle
+        global curr_draw_timer, curr_draw_handle
+        if curr_draw_timer is not None:
+            context.window_manager.event_timer_remove(curr_draw_timer)
+            context.scene.RSNBusyDrawing = False
+        if curr_draw_handle is not None:
+            bpy.types.SpaceNodeEditor.draw_handler_remove(curr_draw_handle, 'WINDOW')
+            context.scene.RSNBusyDrawing = False
 
         # init draw values
         #####################
@@ -183,6 +194,9 @@ class RSN_OT_DrawNodes(Operator):
         self._timer = context.window_manager.event_timer_add(0.01, window=context.window)
         self._handle = bpy.types.SpaceNodeEditor.draw_handler_add(draw_callback_nodeoutline, (self, context),
                                                                   'WINDOW', 'POST_PIXEL')
+        curr_draw_timer = self._timer
+        curr_draw_handle = self._handle
+
         context.window_manager.modal_handler_add(self)
         return {'RUNNING_MODAL'}
 
