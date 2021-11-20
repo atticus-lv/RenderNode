@@ -243,7 +243,7 @@ def add_keybind():
         kmi = km.keymap_items.new('rsn.set_active_list', 'V', 'PRESS')
         addon_keymaps.append((km, kmi))
         # copy
-        kmi = km.keymap_items.new('rsn.copy_and_link', 'D', 'PRESS', shift=True)
+        kmi = km.keymap_items.new('rsn.copy_and_link', 'D', 'PRESS', alt=True)
         addon_keymaps.append((km, kmi))
         # tab search
         kmi = km.keymap_items.new('rsn.search_and_link', 'TAB', 'PRESS')
