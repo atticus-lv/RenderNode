@@ -186,6 +186,7 @@ class RenderNodeTaskRenderListNode(RenderNodeBase):
         '''returns the nodes connected to the inputs of this node'''
         dep_tree = cache_node_dependants.setdefault(self.id_data, {})
         nodes = []
+        nodes_connect_index = []
 
         if self.mode == 'STATIC':
             for index, input in enumerate(self.inputs):
@@ -193,17 +194,18 @@ class RenderNodeTaskRenderListNode(RenderNodeBase):
                     connected_socket = input.connected_socket
                     if connected_socket and connected_socket not in nodes:
                         nodes.append(connected_socket.node)
+                        nodes_connect_index.append(index)
                     break
-
 
         else:
             connected_socket = self.inputs[0].connected_socket
             if connected_socket and connected_socket not in nodes:
                 nodes.append(connected_socket.node)
+                nodes_connect_index.append(0)
 
-        dep_tree[self] = nodes
+        dep_tree[self] = nodes, nodes_connect_index
 
-        return nodes
+        return nodes, nodes_connect_index
 
     def process(self, context, id, path):
         value = self.process_task(index=self.active_index if self.mode == 'STATIC' else 0)

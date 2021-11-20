@@ -137,7 +137,6 @@ class RSN_Preference(bpy.types.AddonPreferences):
         box.prop(self.draw_nodes, 'task_color')
         box.separator(factor=1)
 
-        box.prop(self.draw_nodes, 'background_color')
         box.prop(self.draw_nodes, 'text_color1')
         box.prop(self.draw_nodes, 'text_color2')
         box.prop(self.draw_nodes, 'text_color3')

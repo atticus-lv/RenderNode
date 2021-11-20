@@ -53,6 +53,7 @@ node_categories = [
         nodeitems_utils.NodeItem("RenderNodeSetSceneCamera"),
         nodeitems_utils.NodeItem("RenderNodeSetSceneWorld"),
         nodeitems_utils.NodeItem("RenderNodeSetSceneRenderEngine"),
+        nodeitems_utils.NodeItem("RenderNodeSetSceneColorManagement"),
     ]),
 
     RSNCategory("EEVEE_CYCLES", "Eevee / Cycles", items=[

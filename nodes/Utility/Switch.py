@@ -89,28 +89,18 @@ class RenderNodeSwitch(RenderNodeBase):
         layout.prop(self, 'operate_type', text='')
         layout.prop(self, 'count')
 
-    def get_dependant_nodes(self):
-        '''returns the nodes connected to the inputs of this node'''
-        if self.operate_type != 'Task':
-            return super().get_dependant_nodes()
+    def execute_dependants(self, context, id, path):
+        # first execute the not set task type
+        nodes, indexs = self.get_dependant_nodes()
 
-        dep_tree = cache_node_dependants.setdefault(self.id_data, {})
-        nodes = []
-
+        if 0 in indexs:
+            self.execute_other(context, id, path, nodes[0])
         active = self.inputs['active'].get_value()
-        if active is None: return nodes
 
-        for index, input in enumerate(self.inputs):
-            if index == 0 or index != active + 1: continue  # skip active input
-
-            connected_socket = input.connected_socket
-            if connected_socket and connected_socket not in nodes:
-                nodes.append(connected_socket.node)
-            break
-
-        dep_tree[self] = nodes
-
-        return nodes
+        for i, node in enumerate(nodes):
+            index = indexs[i]
+            if active is not None and index == active:
+                self.execute_other(context, id, path, node)
 
     def process(self, context, id, path):
         active = self.inputs['active'].get_value()

@@ -147,22 +147,25 @@ class RenderNodeBase(bpy.types.Node):
         '''returns the nodes connected to the inputs of this node'''
         dep_tree = cache_node_dependants.setdefault(self.id_data, {})
 
-        # if self.bl_idname != 'RSNodeSetVariantsNode':
-
         if self in dep_tree:
             return dep_tree[self]
         nodes = []
-        for input in self.inputs:
+        nodes_connect_index = []
+        for i, input in enumerate(self.inputs):
             connected_socket = input.connected_socket
             if connected_socket and connected_socket not in nodes:
                 nodes.append(connected_socket.node)
-        dep_tree[self] = nodes
+                nodes_connect_index.append(i)
 
-        return nodes
+        dep_tree[self] = nodes, nodes_connect_index
+
+        return nodes, nodes_connect_index
 
     def execute_dependants(self, context, id, path):
         '''Responsible of executing the required nodes for the current node to work'''
-        for x in self.get_dependant_nodes():
+        nodes, indexs = self.get_dependant_nodes()
+
+        for x in nodes:
             self.execute_other(context, id, path, x)
 
     def execute(self, context, id, path):
