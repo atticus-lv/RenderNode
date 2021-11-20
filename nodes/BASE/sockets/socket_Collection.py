@@ -27,6 +27,13 @@ class RenderNodeSocketCollection(RenderNodeSocket, SocketBase):
 
     default_value: PointerProperty(type=bpy.types.Collection, update=update_node)
 
+    def draw(self, context, layout, node, text):
+        row = layout.row(align=True)
+        if self.is_linked or self.is_output:
+            layout.label(text=self.display_name)
+        else:
+            row.prop(self, 'default_value', text='')
+
     def draw_color(self, context, node):
         return (1, 1, 1, 0.5)
 

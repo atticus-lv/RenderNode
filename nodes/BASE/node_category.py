@@ -89,6 +89,7 @@ node_categories = [
     ]),
 
     RSNCategory("COLLECTION", "Collection", items=[
+        nodeitems_utils.NodeItem("RenderNodeGetCollectionVisibility"),
         nodeitems_utils.NodeItem("RenderNodeSetCollectionVisibility"),
     ]),
 
