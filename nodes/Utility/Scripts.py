@@ -17,11 +17,13 @@ class RenderNodeScripts(RenderNodeBase):
     code: StringProperty(name='Code to execute', default='', update=update_node)
 
     def init(self, context):
-        self.create_input('RenderNodeSocketString','code','Code')
-        self.create_output('RSNodeSocketTaskSettings', 'Settings', 'Settings')
+        self.create_input('RenderNodeSocketTask', 'task', 'Task')
+        self.create_input('RenderNodeSocketString', 'code', 'Code')
+        self.create_output('RenderNodeSocketTask', 'task', 'Task')
         self.width = 200
 
     def process(self, context, id, path):
+        if not self.process_task():return
         value = self.inputs['code'].get_value()
         try:
             exec(value)

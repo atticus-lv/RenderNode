@@ -109,7 +109,7 @@ class RenderNodeSetFileFormatImage(RenderNodeBase):
             col.prop(self, 'tiff_codec')
 
     def process(self,context,id,path):
-        self.process_task()
+        if not self.process_task():return
 
         attr_list = ['file_format',
                      'compression',

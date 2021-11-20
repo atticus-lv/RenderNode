@@ -113,6 +113,16 @@ class RenderNodeBase(bpy.types.Node):
         if output:
             self.outputs.remove(output)
 
+    def show_input(self, name, show=True):
+        input = self.inputs.get(name)
+        if input is None: return
+        input.hide = False if not show else True
+
+    def show_output(self, name, show=True):
+        output = self.outputs.get(name)
+        if output is None: return
+        output.hide = False if not show else True
+
     ## STATE METHOD
     #########################################
 

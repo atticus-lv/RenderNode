@@ -16,7 +16,7 @@ class RenderNodeSetObjectScale(RenderNodeBase):
         self.create_output('RenderNodeSocketTask', 'task', 'Task')
 
     def process(self, context, id, path):
-        self.process_task()
+        if not self.process_task():return
         ob = self.inputs['object'].get_value()
         scale = self.inputs['scale'].get_value()
         if ob and scale:

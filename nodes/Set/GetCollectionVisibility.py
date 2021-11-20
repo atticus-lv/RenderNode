@@ -15,7 +15,6 @@ class RenderNodeGetCollectionVisibility(RenderNodeBase):
 
 
     def process(self,context,id,path):
-        if not self.process_task():return
         coll = self.inputs['collection'].get_value()
         if coll:
             self.outputs['hide_viewport'].set_value(not coll.hide_viewport)

@@ -17,12 +17,13 @@ class RenderNodeSetCyclesLightPath(RenderNodeBase):
         self.create_input('RenderNodeSocketInt', 'transparent_max_bounces', 'Transparency', default_value=8)
         self.create_input('RenderNodeSocketInt', 'transmission_bounces', 'Transmission', default_value=12)
         self.create_input('RenderNodeSocketInt', 'volume_bounces', 'Volume', default_value=0)
+        self.create_input('RenderNodeSocketFloat', 'sample_clamp_direct', 'Direct Light', default_value=0)
+        self.create_input('RenderNodeSocketFloat', 'sample_clamp_indirect', 'Indirect Light', default_value=0)
 
         self.create_output('RenderNodeSocketTask', 'task', 'Task')
 
-
-    def process(self,context,id,path):
-        if not self.process_task():return
+    def process(self, context, id, path):
+        if not self.process_task(): return
 
         for input in self.inputs:
             key = input.name
