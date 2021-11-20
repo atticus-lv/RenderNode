@@ -19,7 +19,7 @@ class RenderNodeBoolInput(RenderNodeBase):
         self.create_output('RenderNodeSocketBool', 'output', "Output")
 
     def draw_buttons(self, context, layout):
-        layout.prop(self, 'default_value', text='')
+        layout.prop(self, 'default_value', text='Boolean')
 
     def process(self,context,id,path):
         self.outputs[0].set_value(self.default_value)

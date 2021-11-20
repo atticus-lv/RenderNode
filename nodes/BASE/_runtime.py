@@ -23,6 +23,10 @@ cache_node_group_outputs = dict()
 cache_node_times = dict()
 cache_nodetree_times = dict()
 
+# draw handle
+curr_draw_handle = None
+curr_draw_timer = None
+
 # runtime, for heavy execute when updating
 runtime_info = {
     'updating': False,

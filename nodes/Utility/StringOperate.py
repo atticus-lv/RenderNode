@@ -6,34 +6,13 @@ from mathutils import Color, Vector
 
 
 def update_node(self, context):
-    if self.operate_type == 'TEXT_2_STR':
-        self.remove_input('value1')
-        self.create_input('RenderNodeSocketText', 'text', 'Text')
-    else:
-        self.remove_input('text')
-        self.create_input('RenderNodeSocketString', 'value1', 'Value')
-
-    if self.operate_type == 'INT_2_STR':
-        self.remove_input('value1')
-        self.create_input('RenderNodeSocketInt', 'int', 'Int')
-    else:
-        self.remove_input('int')
-        self.create_input('RenderNodeSocketString', 'value1', 'Value')
-
-    if self.operate_type == 'STR_2_INT':
-        self.remove_output('output')
-        self.create_output('RenderNodeSocketInt', 'int', 'Int')
-    else:
-        self.remove_output('int')
-        self.create_output('RenderNodeSocketString', 'output', 'Output')
-
     if self.operate_type == 'MULTIPLY':
         self.create_input('RenderNodeSocketInt', 'count', 'Count')
     else:
         self.remove_input('count')
         self.create_input('RenderNodeSocketString', 'value2', 'Value')
 
-    if self.operate_type in {'SUB','JOIN', 'SPACE', 'DOT', 'UNDERSCORE'}:
+    if self.operate_type in {'SUB', 'JOIN', 'SPACE', 'DOT', 'UNDERSCORE'}:
         self.create_input('RenderNodeSocketString', 'value2', 'Value')
     else:
         self.remove_input('value2')
@@ -81,11 +60,6 @@ class RenderNodeStringOperate(RenderNodeBase):
             ('SUB', 'Join Path', ''),
             ('ABS', 'Abs Path', ''),
             ('REL', 'Rel Path', ''),
-
-            ('', 'Conversion', ''),
-            ('INT_2_STR', 'Int to String', ''),
-            ('STR_2_INT', 'String to Int', ''),
-            ('TEXT_2_STR', 'Text to String', ''),
         ],
         update=update_node,
         default='SUB'
@@ -152,28 +126,6 @@ class RenderNodeStringOperate(RenderNodeBase):
                 res = None
 
             self.outputs[0].set_value(res)
-
-        elif self.operate_type == 'TEXT_2_STR':
-            res = None
-            text = self.inputs['text'].get_value()
-            if text:
-                res = text.as_string()
-            self.outputs[0].set_value(res)
-
-        elif self.operate_type == 'INT_2_STR':
-            res = None
-            i = self.inputs['int'].get_value()
-            if i is not None:
-                res = str(i)
-            self.outputs[0].set_value(res)
-
-        elif self.operate_type == 'STR_2_INT':
-            s = self.inputs['value1'].get_value()
-            try:
-                ans = int(s)
-            except:
-                ans = 0
-            self.outputs[0].set_value(ans)
 
 
 def register():

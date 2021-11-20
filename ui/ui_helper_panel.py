@@ -4,7 +4,7 @@ from bpy.props import *
 
 class HELPER_PT_Panel(bpy.types.Panel):
     bl_idname = 'HELPER_PT_Panel'
-    bl_label = 'RSN Helper'
+    bl_label = 'RenderNode Helper'
     bl_category = 'Item'
     bl_space_type = 'NODE_EDITOR'
     bl_region_type = 'UI'

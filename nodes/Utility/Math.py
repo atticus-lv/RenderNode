@@ -9,8 +9,8 @@ from math import sin, cos, tan, asin, acos, atan
 
 def update_node(self, context):
     if self.operate_type in {'=', '>', '<'}:
-        if self.operate_type == '=': self.create_input('SimpleNodeSocketFloat', 'epsilon', 'Epsilon')
-        self.create_output('SimpleNodeSocketBool', 'bool_output', 'OutBool')
+        if self.operate_type == '=': self.create_input('RenderNodeSocketFloat', 'epsilon', 'Epsilon')
+        self.create_output('RenderNodeSocketBool', 'bool_output', 'OutBool')
     else:
         self.remove_input('epsilon')
         self.remove_output('bool_output')

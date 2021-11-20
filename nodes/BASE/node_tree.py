@@ -68,6 +68,8 @@ class NodeTreeBase(bpy.types.NodeTree):
                     node.inputs.remove(node.inputs[0])
                     node.outputs.remove(node.outputs[0])
 
+        self.execute(bpy.context)
+
     def relink_socket(self, old_socket, new_socket):
         '''Utility function to relink sockets'''
         if not old_socket.is_output and not new_socket.is_output and old_socket.links:
@@ -80,9 +82,7 @@ class NodeTreeBase(bpy.types.NodeTree):
                 # self.links.remove(link)
 
     def execute(self, context):
-        task_node = self.nodes.get(bpy.context.window_manager.rsn_viewer_node)
-        if not task_node: return
-
+        render_list_node = self.nodes.get(bpy.context.window_manager.rsn_active_list)
         runtime_info['executing'] = True
         cache_socket_variables.clear()
 
@@ -93,11 +93,13 @@ class NodeTreeBase(bpy.types.NodeTree):
             path.append(bpy.context.space_data.node_tree.name)
             # Execute all the parent trees first up to their active node
             for i in range(0, len(bpy.context.space_data.path) - 1):
-                node = bpy.context.space_data.path[i].node_tree.nodes.active
+                node = bpy.context.space_data.path[i].node_tree.nodes.active_index
                 node.execute_dependants(bpy.context, id, path)
                 path.append(node.name)
 
-            task_node.execute(bpy.context, id, path)
+            if render_list_node:
+                render_list_node.execute(bpy.context, id, path)
+
         except Exception as e:
             print(e)
 
@@ -107,7 +109,7 @@ class NodeTreeBase(bpy.types.NodeTree):
 
 class RenderStackNodeTree(NodeTreeBase):
     bl_idname = 'RenderStackNodeTree'
-    bl_label = 'Render Editor'
+    bl_label = 'Render Node Editor'
     bl_icon = 'CAMERA_DATA'
 
 
@@ -120,8 +122,12 @@ class RenderStackNodeTreeGroup(NodeTreeBase):
     def poll(cls, context):
         return False
 
+def clean_draw(self,context):
+    pass
 
 def register():
+    bpy.types.WindowManager.rsn_active_list = StringProperty(name='Active List')
+
     bpy.utils.register_class(RenderStackNodeTree)
     bpy.utils.register_class(RenderStackNodeTreeGroup)
 
@@ -129,3 +135,5 @@ def register():
 def unregister():
     bpy.utils.unregister_class(RenderStackNodeTree)
     bpy.utils.unregister_class(RenderStackNodeTreeGroup)
+
+    del bpy.types.WindowManager.rsn_active_list

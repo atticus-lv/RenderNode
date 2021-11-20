@@ -13,9 +13,6 @@ def draw_item(self, context):
         else:
             row.operator("rsn.draw_nodes", icon='GREASEPENCIL')
 
-        pref = get_pref()
-        row.prop(pref.draw_nodes, 'show_text_info', text='', icon="INFO")
-
 
 def register():
     bpy.types.NODE_MT_editor_menus.append(draw_item)

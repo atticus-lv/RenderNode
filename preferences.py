@@ -10,18 +10,13 @@ def get_pref():
 
 
 class PropsDrawNodes(bpy.types.PropertyGroup):
-    show_text_info: BoolProperty(name='Show Text Info', default=True)
-
-    task_color: FloatVectorProperty(name='Task Color', subtype='COLOR',
-                                    default=(0, 0.6, 0.7))
-
-    text_color1: FloatVectorProperty(name='Text Color 1', subtype='COLOR',
+    text_color1: FloatVectorProperty(name='Time < 0.1ms Color', subtype='COLOR',
                                      default=(1, 1, 1))
 
-    text_color2: FloatVectorProperty(name='Text Color 2', subtype='COLOR',
+    text_color2: FloatVectorProperty(name='Time > 0.1ms Color', subtype='COLOR',
                                      default=(0, 1, 0))
 
-    text_color3: FloatVectorProperty(name='Text Color 3', subtype='COLOR',
+    text_color3: FloatVectorProperty(name='Time >1ms Color', subtype='COLOR',
                                      default=(1, 0, 0))
 
 
@@ -76,9 +71,9 @@ class RSN_Preference(bpy.types.AddonPreferences):
     quick_place: BoolProperty(name="Quick Place",
                               description="When using the quick search to add nodes,quick place without moveing it",
                               default=False)
-    limited_search: BoolProperty(name='Limited Search Area',
-                                 description='Tab Search only in Render Editor',
-                                 default=False)
+    limited_area: BoolProperty(name='Limited Area',
+                               description='Limited RenderNode Helper only in Render Editor',
+                               default=True)
 
     log_level: EnumProperty(name='Log Level',
                             items=[
@@ -113,13 +108,13 @@ class RSN_Preference(bpy.types.AddonPreferences):
         box = col.box().split().column(align=1)
         self.filepath_node(box)
 
-        col.separator(factor=0.2)
-        box = col.box().split().column(align=1)
-        self.view_layer_passes_node(box)
-
-        col.separator(factor=0.2)
-        box = col.box().split().column(align=1)
-        self.smtp_node(box)
+        # col.separator(factor=0.2)
+        # box = col.box().split().column(align=1)
+        # self.view_layer_passes_node(box)
+        #
+        # col.separator(factor=0.2)
+        # box = col.box().split().column(align=1)
+        # self.smtp_node(box)
 
     def draw_properties(self):
         layout = self.layout
@@ -129,16 +124,15 @@ class RSN_Preference(bpy.types.AddonPreferences):
         col = layout.column()
 
         box = col.box().split().column(align=1)
-        box.label(text="Tab Search")
+        box.label(text="RenderNode Helper")
         box.prop(self, 'quick_place')
-        box.prop(self, 'limited_search')
+        box.prop(self, 'limited_area')
 
         box = col.box().split().column(align=1)
         box.label(text="Draw Nodes")
         box.prop(self.draw_nodes, 'task_color')
         box.separator(factor=1)
 
-        box.prop(self.draw_nodes, 'background_color')
         box.prop(self.draw_nodes, 'text_color1')
         box.prop(self.draw_nodes, 'text_color2')
         box.prop(self.draw_nodes, 'text_color3')
@@ -155,11 +149,38 @@ class RSN_Preference(bpy.types.AddonPreferences):
             box.prop(self.node_view_layer_passes, "comp_node_name")
 
     def filepath_node(self, box):
-        box.prop(self.node_file_path, 'show', text="File Path Node", emboss=False,
+        box.prop(self.node_file_path, 'show', text="Set File Path Node", emboss=False,
                  icon='TRIA_DOWN' if self.node_file_path.show else 'TRIA_RIGHT')
-        if self.node_file_path.show:
-            box.use_property_split = True
-            box.prop(self.node_file_path, "path_format")
+        if not self.node_file_path.show: return
+
+        box.use_property_split = True
+        box.prop(self.node_file_path, "path_format")
+
+        enum_path_exp = [
+            ('', 'File', ''),
+            ('$path', 'File Path', ''),
+            ('$blend', 'File Name', ''),
+            ('', 'Context', ''),
+            ('$label', 'Task Label', ''),
+            ('$engine', 'Render Engine', ''),
+            ('$camera', 'Scene Camera', ''),
+            ('$res_x', 'Resolution X', ''),
+            ('$res_y', 'Resolution Y', ''),
+            ('$ev', 'Exposure Value(Color Management)', ''),
+            ('$vl', 'View Layer', ''),
+            ('', 'Time', ''),
+            ('$T{%m}', 'Date: month', ''),
+            ('$T{%d}', 'Date: day', ''),
+            ('$T{%H}', 'Time: hour', ''),
+            ('$T{%M}', 'Time: minute', ''),
+        ]
+        box.label(text=f'Tips', icon="INFO")
+        for path in enum_path_exp:
+            if path[0] == '': continue
+            row = box.row()
+            row.alignment = "CENTER"
+            row.separator()
+            row.label(text=f'{path[0]}: {path[1]}')
 
     def smtp_node(self, box):
         box.prop(self.node_smtp, 'show', text="SMTP Email Node", emboss=False,
@@ -219,7 +240,10 @@ def add_keybind():
     if wm.keyconfigs.addon:
         km = wm.keyconfigs.addon.keymaps.new(name='Node Editor', space_type='NODE_EDITOR')
         # viewer node
-        kmi = km.keymap_items.new('rsn.add_viewer_node', 'V', 'PRESS')
+        kmi = km.keymap_items.new('rsn.set_active_list', 'V', 'PRESS')
+        addon_keymaps.append((km, kmi))
+        # copy
+        kmi = km.keymap_items.new('rsn.copy_and_link', 'D', 'PRESS', shift=True)
         addon_keymaps.append((km, kmi))
         # tab search
         kmi = km.keymap_items.new('rsn.search_and_link', 'TAB', 'PRESS')

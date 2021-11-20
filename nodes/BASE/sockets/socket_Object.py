@@ -32,8 +32,8 @@ class RenderNodeSocketObject(RenderNodeSocket, SocketBase):
         if self.is_linked or self.is_output:
             layout.label(text=self.display_name)
         else:
-            row = layout.row(align=1)
-            row.prop(self, 'default_value', text=self.display_name)
+            row = layout.row(align=True)
+            row.prop(self, 'default_value', text='')
             if self.default_value:
                 row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.default_value.name
 
@@ -70,11 +70,11 @@ class RenderNodeSocketCamera(RenderNodeSocket, SocketBase):
     default_value: PointerProperty(type=bpy.types.Object, update=update_node, poll=poll_camera)
 
     def draw(self, context, layout, node, text):
-        row = layout.row(align=1)
+        row = layout.row(align=True)
         if self.is_linked or self.is_output:
             layout.label(text=self.display_name)
         else:
-            row.prop(self, 'default_value', text=self.display_name)
+            row.prop(self, 'default_value', text='')
             if self.default_value:
                 row.operator('rsn.select_object', icon='RESTRICT_SELECT_OFF', text='').name = self.default_value.name
 

@@ -18,7 +18,7 @@ class RenderNodeSocketInterfaceMaterial(RenderNodeSocketmixin, RenderNodeSocketI
         layout.prop(self, 'default_value')
 
     def draw_color(self, context):
-        return 0, 0.9, 0.1, 1
+        return 1, 0.4, 0.4, 1
 
 
 class RenderNodeSocketMaterial(RenderNodeSocket, SocketBase):
@@ -26,6 +26,13 @@ class RenderNodeSocketMaterial(RenderNodeSocket, SocketBase):
     bl_label = 'RenderNodeSocketMaterial'
 
     default_value: PointerProperty(type=bpy.types.Material, update=update_node)
+
+    def draw(self, context, layout, node, text):
+        row = layout.row(align=True)
+        if self.is_linked or self.is_output:
+            layout.label(text=self.display_name)
+        else:
+            row.prop(self, 'default_value', text='')
 
     def draw_color(self, context, node):
         return 1, 0.4, 0.4, 1

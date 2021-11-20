@@ -1,3 +1,5 @@
+import json
+
 import bpy
 
 from bpy.props import *
@@ -71,10 +73,12 @@ class RenderNodeBase(bpy.types.Node):
     #         else:
     #             self.remove_output(name)
 
-    def create_input(self, socket_type, socket_name, socket_label, default_value=None):
+    def create_input(self, socket_type, socket_name, socket_label, default_value=None, show_text=True):
         if self.inputs.get(socket_name):
             input = self.inputs[socket_name]
-            if hasattr(input, 'text') and input.text != socket_label: input.text = socket_label
+            if hasattr(input, 'text') and input.text != socket_label:
+                input.text = socket_label
+                input.show_text = show_text
             return None
 
         input = self.inputs.new(socket_type, socket_name)
@@ -90,12 +94,14 @@ class RenderNodeBase(bpy.types.Node):
         if input:
             self.inputs.remove(input)
 
-    def create_output(self, socket_type, socket_name, socket_label, default_value=None):
+    def create_output(self, socket_type, socket_name, socket_label, default_value=None, show_text=True):
         if self.outputs.get(socket_name):
             return None
 
         output = self.outputs.new(socket_type, socket_name)
-        if hasattr(output, 'text'): output.text = socket_label
+        if hasattr(output, 'text'):
+            output.text = socket_label
+            output.show_text = show_text
 
         if default_value: output.default_value = default_value
         if hasattr(output, 'shape'): output.change_shape()
@@ -106,6 +112,16 @@ class RenderNodeBase(bpy.types.Node):
         output = self.outputs.get(socket_name)
         if output:
             self.outputs.remove(output)
+
+    def show_input(self, name, show=True):
+        input = self.inputs.get(name)
+        if input is None: return
+        input.hide = False if not show else True
+
+    def show_output(self, name, show=True):
+        output = self.outputs.get(name)
+        if output is None: return
+        output.hide = False if not show else True
 
     ## STATE METHOD
     #########################################
@@ -131,22 +147,25 @@ class RenderNodeBase(bpy.types.Node):
         '''returns the nodes connected to the inputs of this node'''
         dep_tree = cache_node_dependants.setdefault(self.id_data, {})
 
-        # if self.bl_idname != 'RSNodeSetVariantsNode':
-
         if self in dep_tree:
             return dep_tree[self]
         nodes = []
-        for input in self.inputs:
+        nodes_connect_index = []
+        for i, input in enumerate(self.inputs):
             connected_socket = input.connected_socket
             if connected_socket and connected_socket not in nodes:
                 nodes.append(connected_socket.node)
-        dep_tree[self] = nodes
+                nodes_connect_index.append(i)
 
-        return nodes
+        dep_tree[self] = nodes, nodes_connect_index
+
+        return nodes, nodes_connect_index
 
     def execute_dependants(self, context, id, path):
         '''Responsible of executing the required nodes for the current node to work'''
-        for x in self.get_dependant_nodes():
+        nodes, indexs = self.get_dependant_nodes()
+
+        for x in nodes:
             self.execute_other(context, id, path, x)
 
     def execute(self, context, id, path):
@@ -238,6 +257,28 @@ class RenderNodeBase(bpy.types.Node):
     def get_input_value(self, socket_name):
         ans = self.inputs.get(socket_name)
         if ans: return ans.get_value()
+
+    def process_task(self, index=None, set=True):
+        if index is not None and index < len(self.inputs):
+            task = self.inputs[index]
+        else:
+            task = self.inputs.get('task')
+        value = None
+        if task:
+            value = task.get_value()
+            output = self.outputs.get('task')
+            if output and set: output.set_value(value)
+            return value
+
+    def task_dict_append(self, info: dict):
+        value_pre = self.process_task(set=False)
+        if value_pre is None: return
+
+        data = json.loads(value_pre)
+        data.update(info)
+        output = self.outputs.get('task')
+        value_post = json.dumps(data)
+        if output and set: output.set_value(value_post)
 
     def process(self, context, id, path):
         pass

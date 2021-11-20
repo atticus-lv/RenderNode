@@ -47,34 +47,31 @@
 
 [https://github.com/atticus-lv/RenderStackNode/archive/develop.zip](https://github.com/atticus-lv/RenderStackNode/archive/develop.zip)
 
++ Workflow
+  + Geometry Nodes field style workflow , much easier and cleaner
+
 
 + Nodes
   
     + group nodes
 
-    + new variant node(no'Set Variants Node'any more, use a direct input socket)
+    + new swith node(no 'Variants Node'any more, use a direct input socket)
 
     + input nodes (object/material/float/vector/int/bool/string)
 
     + utility nodes (math/vector,boolean math/string operate)
++ Performance (Evaluate system)
 
-+ Performance
-
-    + use part of update system from rigging_nodes, provide faster speed
-
+    + develop based on rigging_nodes' , provide faster speed
 + UI
-    
+  
     + remove old draw outline, draw process time and node name instead instead
-    
-    + auto create enums(scene render engine node, color manage node),update and remove sockets
-    
-    + remove render sheet, provide a cleaner list with auto update inputs tasks
-    
+    + dynamic enums/sockets for user' preference (render engine, color manage,etc)
 + Know Limited
   
     + When edit inside a render node group, it won't update the whole tree, you should always set the active task on the base root
     
-    + old node are not fully support yet
+    + old node remove
     
 ### Support me
 

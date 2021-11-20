@@ -1,6 +1,6 @@
 import bpy
 from bpy.props import *
-from mathutils import Vector, Euler
+from mathutils import Vector, Euler ,Color
 
 from ._runtime import cache_socket_links, cache_socket_variables
 
@@ -73,13 +73,13 @@ class SocketBase():
             return f'{val}'
         elif isinstance(val, float):
             return f'{round(val, 2)}'
-        elif len(val) > 1:
+        elif isinstance(val, Vector) or isinstance(val,Color) and  len(val) > 1:
             d_val = [round(num, 2) for num in list(val)]
             return f'{d_val}'
         elif isinstance(val, bool):
             return 'True' if val else 'False'
         else:
-            return f'{val}'
+            return f'{val.name}' if hasattr(val,'name') else str(val)
 
     def update_shape(self):
         if hasattr(self, 'shape'):
@@ -186,6 +186,7 @@ class RenderNodeSocket(bpy.types.NodeSocket, SocketBase):
     shape = 'CIRCLE'
     color = 0.5, 0.5, 0.5, 1
 
+    show_text:BoolProperty(default=True)
     text: StringProperty(default='')
     default_value: IntProperty(default=0, update=update_node)
 
@@ -202,7 +203,8 @@ class RenderNodeSocket(bpy.types.NodeSocket, SocketBase):
         if self.is_linked or self.is_output:
             layout.label(text=self.display_name)
         else:
-            layout.prop(self, 'default_value', text=self.display_name)
+            layout.prop(self, 'default_value', text=self.display_name if self.show_text else '')
+
 
     def draw_color(self, context, node):
         return self.color

@@ -11,7 +11,7 @@ from gpu_extras.batch import batch_for_shader
 
 from .utils import dpifac, draw_tri_fan
 from ...preferences import get_pref
-from ...nodes.BASE._runtime import cache_node_times, cache_node_dependants
+from ...nodes.BASE._runtime import cache_node_times, cache_node_dependants, curr_draw_handle, curr_draw_timer
 from ...nodes.BASE.node_base import cache_executed_nodes
 
 easy_name = {
@@ -102,8 +102,8 @@ def draw_callback_nodeoutline(self, context):
     green = (c2[0], c2[1], c2[2], self.alpha)
     red = (c3[0], c3[1], c3[2], self.alpha)
 
-    task_node = context.space_data.edit_tree.nodes.get(context.window_manager.rsn_viewer_node)
-    if not task_node: return
+    list_node = context.space_data.edit_tree.nodes.get(context.window_manager.rsn_active_list)
+    if not list_node: return
 
     node_list = [node for node in context.space_data.edit_tree.nodes if node in cache_executed_nodes]
     try:
@@ -120,39 +120,11 @@ def draw_callback_nodeoutline(self, context):
                         col = green
                     else:
                         col = red
-                    draw_text_on_node(white, node.name, node, size=17, corner_index=0, offset=(0, 3))
+                    draw_text_on_node(white, node.bl_label, node, size=17, corner_index=0, offset=(0, 3))
                     draw_text_on_node(col, f"{t:.2f}ms", node, size=12, corner_index=0, offset=(0, 20))
     except:
         pass
 
-    # draw text
-    ##################
-    if self.show_text_info:
-        # properties text
-        task_text = "No Active Task!" if context.window_manager.rsn_viewer_node == '' else context.window_manager.rsn_viewer_node
-        camera = context.scene.camera.name if context.scene.camera else "No Scene camera"
-        is_save = True if bpy.data.filepath != '' else False
-        file_path_text = context.scene.render.filepath if is_save else "Save your file first!"
-        engine = context.scene.render.engine if context.scene.render.engine not in easy_name else easy_name[
-            context.scene.render.engine]
-        frame_count = context.scene.frame_end - context.scene.frame_start + 1
-
-        texts = [
-            f"Task: {task_text}",
-            f"Frame: {context.scene.frame_start} - {context.scene.frame_end} ({frame_count})",
-            f"Camera: {camera}",
-            f"Engine: {engine}",
-            f"Path: {file_path_text}",
-        ]
-
-        # draw texts
-        r, g, b = c1
-        size = 20
-        top = 125
-        step = 20
-
-        for i, text in enumerate(texts):
-            draw_text_2d((r, g, b, self.alpha * 1.5, size), text, 20, top - step * i)
     # restore
     #####################
     bgl.glDisable(bgl.GL_BLEND)
@@ -188,6 +160,10 @@ class RSN_OT_DrawNodes(Operator):
                 # remove timer / handles
                 context.window_manager.event_timer_remove(self._timer)
                 bpy.types.SpaceNodeEditor.draw_handler_remove(self._handle, 'WINDOW')
+
+                global curr_draw_timer, curr_draw_handle
+                curr_draw_timer = None
+                curr_draw_handle = None
                 return {'FINISHED'}
 
         return {'PASS_THROUGH'}
@@ -195,16 +171,23 @@ class RSN_OT_DrawNodes(Operator):
     def invoke(self, context, event):
         if True in {context.area.type != 'NODE_EDITOR',
                     context.space_data.edit_tree is None,
-                    context.space_data.edit_tree.bl_idname not in {'RenderStackNodeTree', 'RenderStackNodeTreeGroup'}}:
+                    context.space_data.edit_tree.bl_idname not in {'RenderStackNodeTree', 'RenderStackNodeTreeGroup'},
+                    context.window_manager.rsn_running_modal}:
             self.report({'WARNING'}, "NodeEditor not found, cannot run operator")
             return {'CANCELLED'}
+        # reset draw handle
+        global curr_draw_timer, curr_draw_handle
+        if curr_draw_timer is not None:
+            context.window_manager.event_timer_remove(curr_draw_timer)
+            context.scene.RSNBusyDrawing = False
+        if curr_draw_handle is not None:
+            bpy.types.SpaceNodeEditor.draw_handler_remove(curr_draw_handle, 'WINDOW')
+            context.scene.RSNBusyDrawing = False
 
         # init draw values
         #####################
         pref = get_pref()
         self.alpha = 0
-        # self.radius = pref.draw_nodes.border_radius
-        self.show_text_info = pref.draw_nodes.show_text_info
         # text color        # set statue
         ##################
         context.scene.RSNBusyDrawing = True
@@ -212,6 +195,9 @@ class RSN_OT_DrawNodes(Operator):
         self._timer = context.window_manager.event_timer_add(0.01, window=context.window)
         self._handle = bpy.types.SpaceNodeEditor.draw_handler_add(draw_callback_nodeoutline, (self, context),
                                                                   'WINDOW', 'POST_PIXEL')
+        curr_draw_timer = self._timer
+        curr_draw_handle = self._handle
+
         context.window_manager.modal_handler_add(self)
         return {'RUNNING_MODAL'}
 
