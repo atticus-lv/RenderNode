@@ -121,8 +121,6 @@ class RenderQueueV2():
             task_info = input.get_value()
             print(task_info)
             if not task_info:return
-            data = json.loads(task_info)
-            bpy.context.scene.frame_current = data.get('frame_start')
 
             for i in range(self.root_node.range_start, self.root_node.range_end + 1):
                 self.index_list.append(i)
@@ -134,8 +132,6 @@ class RenderQueueV2():
                 if count == 0:
                     task_info = input.get_value()
                     if not task_info: return
-                    data = json.dumps(task_info)
-                    bpy.context.scene.frame_current = data['frame_start']
 
                 self.index_list.append(i)
 
