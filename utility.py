@@ -43,32 +43,6 @@ def compare(obj: object, attr: str, val):
         logger.info(e)
 
 
-class RSN_NodeTree:
-    """To store context node tree for getting data in RenderQueue"""
-
-    def get_context_tree(self, return_name=False):
-        try:
-            name = bpy.context.space_data.edit_tree.name
-            return bpy.context.space_data.edit_tree.name if return_name else bpy.data.node_groups[name]
-        except:
-            return None
-
-    def set_wm_node_tree(self, node_tree_name):
-        bpy.context.window_manager.rsn_cur_tree_name = node_tree_name
-
-    def get_wm_node_tree(self, get_name=False):
-        name = bpy.context.window_manager.rsn_cur_tree_name
-        if get_name:
-            return name
-        else:
-            return bpy.data.node_groups[name]
-
-    def set_context_tree_as_wm_tree(self):
-        tree_name = self.get_context_tree(return_name=1)
-        if tree_name:
-            self.set_wm_node_tree(tree_name)
-
-
 class RenderQueue():
     def __init__(self, nodetree, render_list_node, field_style=False):
         """init a rsn queue
@@ -142,19 +116,29 @@ class RenderQueueV2():
     def init_queue(self):
         if self.mode == 'RANGE':
             input = self.root_node.inputs[0]
-            if not input.is_linked: return
+            if not input.is_linked:return
+
+            task_info = input.get_value()
+            print(task_info)
+            if not task_info:return
+            data = json.loads(task_info)
+            bpy.context.scene.frame_current = data.get('frame_start')
 
             for i in range(self.root_node.range_start, self.root_node.range_end + 1):
                 self.index_list.append(i)
-            bpy.ops.screen.frame_jump(end=False)
 
         elif self.mode == 'STATIC':
+            count = 0
             for i, input in enumerate(self.root_node.inputs):
                 if not input.is_linked: continue
+                if count == 0:
+                    task_info = input.get_value()
+                    if not task_info: return
+                    data = json.dumps(task_info)
+                    bpy.context.scene.frame_current = data['frame_start']
 
                 self.index_list.append(i)
 
-            bpy.ops.screen.frame_jump(end=False)
 
     @property
     def index(self):
