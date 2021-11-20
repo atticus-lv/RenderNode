@@ -1,4 +1,3 @@
-
 import bpy
 from bpy.props import *
 from ...nodes.BASE.node_base import RenderNodeBase
@@ -8,6 +7,7 @@ from ...preferences import get_pref
 import os
 import time
 import re
+
 
 class RenderNodeSetFilePath(RenderNodeBase):
     """A simple input node"""
@@ -32,7 +32,7 @@ class RenderNodeSetFilePath(RenderNodeBase):
             layout.label(text='Save your file first', icon='ERROR')
 
     def process(self, context, id, path):
-        if not self.process_task():return
+        if not self.process_task(): return
 
         directory_path = self.make_path()
         if not directory_path: return None
@@ -43,7 +43,7 @@ class RenderNodeSetFilePath(RenderNodeBase):
             rel_path = os.path.join(bpy.path.relpath(directory_path), postfix) if postfix != '' else bpy.path.relpath(
                 directory_path) + '/'
             # abs_path = os.path.join(directory_path, postfix) if postfix != '' else directory_path + '/'
-            self.task_dict_append({'filepath':rel_path})
+            self.task_dict_append({'filepath': rel_path})
 
     def make_path(self):
         """only save files will work"""
@@ -59,10 +59,10 @@ class RenderNodeSetFilePath(RenderNodeBase):
 
     def get_postfix(self, path_exp, version):
         """path expression"""
+        if path_exp == '': return ''
+
         scn = bpy.context.scene
         cam = scn.camera
-        active_task = self.id_data.nodes.get(bpy.context.window_manager.rsn_viewer_node)
-        if active_task == '' or path_exp == '': return ''
         blend_name = ''
 
         postfix = path_exp
