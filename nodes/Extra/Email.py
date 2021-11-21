@@ -17,22 +17,22 @@ class RenderNodeEmailNode(RenderNodeBase):
     bl_label = 'Email'
 
     def init(self, context):
+        self.create_input('RenderNodeSocketTask', 'task', 'Task')
+
         self.create_input('RenderNodeSocketBool', 'only_render', 'Send only in render mode')
         self.create_input('RenderNodeSocketString', 'subject', 'Subject')
         self.create_input('RenderNodeSocketString', 'content', 'Content')
         self.create_input('RenderNodeSocketString', 'sender_name', 'Sender Name')
         self.create_input('RenderNodeSocketString', 'email', 'Email')
-        self.create_output('RSNodeSocketTaskSettings', 'Settings', 'Settings')
+
+        self.create_output('RenderNodeSocketTask', 'task', 'Task')
 
         self.width = 200
 
-    def draw_buttons(self, context, layout):
-        # layout.prop(self, 'test_send', toggle=True)
-        pass
-
-    def process(self,context,id,path):
+    def process(self, context, id, path):
+        if not self.process_task(): return
         use = self.inputs['only_render'].get_value()
-        if not use or (use and bpy.context.window_manager.rsn_running_modal):
+        if not use or (use and context.window_manager.rsn_running_modal):
             bpy.ops.rsn.send_email(subject=self.inputs['subject'].get_value(),
                                    content=self.inputs['content'].get_value(),
                                    sender_name=self.inputs['sender_name'].get_value(),
