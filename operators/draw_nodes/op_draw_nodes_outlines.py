@@ -98,6 +98,7 @@ def draw_callback_nodeoutline(self, context):
     c1 = get_pref().draw_nodes.text_color1
     c2 = get_pref().draw_nodes.text_color2
     c3 = get_pref().draw_nodes.text_color3
+    size = get_pref().draw_nodes.size
     white = (c1[0], c1[1], c1[2], self.alpha)
     green = (c2[0], c2[1], c2[2], self.alpha)
     red = (c3[0], c3[1], c3[2], self.alpha)
@@ -120,8 +121,8 @@ def draw_callback_nodeoutline(self, context):
                         col = green
                     else:
                         col = red
-                    draw_text_on_node(white, node.bl_label, node, size=17, corner_index=0, offset=(0, 3))
-                    draw_text_on_node(col, f"{t:.2f}ms", node, size=12, corner_index=0, offset=(0, 20))
+                    draw_text_on_node(white, node.bl_label, node, size=size, corner_index=0, offset=(0, 3))
+                    draw_text_on_node(col, f"{t:.2f}ms", node, size=size - 5, corner_index=0, offset=(0, size + 3))
     except:
         pass
 
@@ -186,7 +187,6 @@ class RSN_OT_DrawNodes(Operator):
 
         # init draw values
         #####################
-        pref = get_pref()
         self.alpha = 0
         # text color        # set statue
         ##################

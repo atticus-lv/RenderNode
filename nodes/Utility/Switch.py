@@ -110,7 +110,6 @@ class RenderNodeSwitch(RenderNodeBase):
         for i, input in enumerate(self.inputs):
             if i != 0 and i == active:
                 ans = input.get_value()
-                print(ans)
 
                 self.outputs[0].set_value(ans)
                 break
