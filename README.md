@@ -7,7 +7,7 @@
     Node based design and render workflow in blender<br>
 </h4>
 <p align="center">
-    Documentation ➡️
+    Documentation (OLD) ➡️
     <a href="https://atticus-lv.github.io/RenderStackNode/#/">
 	[Github] 
     </a>
