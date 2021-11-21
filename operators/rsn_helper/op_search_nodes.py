@@ -15,7 +15,7 @@ class RSN_OT_SearchNodes(bpy.types.Operator):
     def poll(self, context):
         if context.space_data and hasattr(context.space_data, 'node_tree'):
             if get_pref().limited_area:
-                return context.area.ui_type == 'RenderStackNodeTree'
+                return context.area.ui_type == 'RenderNodeTree'
             return True
 
     def execute(self, context):

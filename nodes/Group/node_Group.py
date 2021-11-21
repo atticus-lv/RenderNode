@@ -15,13 +15,13 @@ class RSN_OP_CreateGroup(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return context.space_data.type == "NODE_EDITOR" and context.space_data.tree_type == 'RenderStackNodeTree'
+        return context.space_data.type == "NODE_EDITOR" and context.space_data.tree_type == 'RenderNodeTree'
 
     def execute(self, context):
         tree = context.space_data.edit_tree
         orig_node = tree.nodes[self.node]
 
-        new_node_tree = bpy.data.node_groups.new("Render Group", "RenderStackNodeTreeGroup")
+        new_node_tree = bpy.data.node_groups.new("Render Group", "RenderNodeTreeGroup")
 
         orig_node.node_tree_selection = new_node_tree
         loop_input = new_node_tree.nodes.new("NodeGroupInput")
@@ -37,7 +37,7 @@ class RenderNodeGroup(bpy.types.NodeCustomGroup, RenderNodeBase):
 
     def nested_tree_filter(self, context):
         """Define which tree we would like to use as nested trees."""
-        if context.bl_idname != 'RenderStackNodeTreeGroup':  # It should be our dedicated to this class
+        if context.bl_idname != 'RenderNodeTreeGroup':  # It should be our dedicated to this class
             return False
         else:
             # to avoid circular dependencies

@@ -14,7 +14,7 @@ class RSN_OT_switch_merge(bpy.types.Operator):
 
     @classmethod
     def poll(self, context):
-        return context.space_data.edit_tree and bpy.context.space_data.edit_tree.bl_idname == 'RenderStackNodeTree'
+        return context.space_data.edit_tree and bpy.context.space_data.edit_tree.bl_idname == 'RenderNodeTree'
 
     def execute(self, context):
         nt = context.space_data.edit_tree

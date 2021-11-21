@@ -25,7 +25,7 @@ def scene_draw(self, context):
 
 
 def poll_bind_tree(self, object):
-    return object.bl_idname == 'RenderStackNodeTree'
+    return object.bl_idname == 'RenderNodeTree'
 
 
 def register():

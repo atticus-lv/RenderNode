@@ -13,7 +13,7 @@ class RSN_OT_SelectObject(bpy.types.Operator):
     @classmethod
     def poll(self, context):
         if hasattr(context.space_data,'edit_tree'):
-            return context.space_data.edit_tree and bpy.context.space_data.edit_tree.bl_idname == 'RenderStackNodeTree'
+            return context.space_data.edit_tree and bpy.context.space_data.edit_tree.bl_idname == 'RenderNodeTree'
 
     def execute(self, context):
         if self.name:

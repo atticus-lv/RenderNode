@@ -20,7 +20,7 @@
 
 **Down** *New features, change any time before stable*:
 
-[https://github.com/atticus-lv/RenderNode/archive/develop.zip](https://github.com/atticus-lv/RenderSNode/archive/develop.zip)
+[https://github.com/atticus-lv/RenderNode/archive/refs/heads/develop.zip](https://github.com/atticus-lv/RenderNode/archive/refs/heads/develop.zip)
 
 #### Geometry Nodes field style workflow 
 

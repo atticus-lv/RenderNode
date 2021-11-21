@@ -10,7 +10,7 @@ class RSN_OT_MuteNodes(bpy.types.Operator):
 
     @classmethod
     def poll(self, context):
-        return context.space_data.edit_tree and context.space_data.edit_tree.bl_idname == 'RenderStackNodeTree'
+        return context.space_data.edit_tree and context.space_data.edit_tree.bl_idname == 'RenderNodeTree'
 
     def execute(self, context):
         if self.node_name == '':

@@ -33,7 +33,7 @@ class RSN_MT_PieMenu(Menu):
 
     @classmethod
     def poll(cls, context):
-        return context.area.ui_type == 'RenderStackNodeTree'
+        return context.area.ui_type == 'RenderNodeTree'
 
     def draw(self, context):
         layout = self.layout
@@ -53,7 +53,7 @@ class RSN_MT_PieMenu(Menu):
         col = pie.column(align=1)
 
         for g in bpy.data.node_groups:
-            if g.bl_idname == 'RenderStackNodeTree':
+            if g.bl_idname == 'RenderNodeTree':
                 sub = col.row(align=1)
                 if context.space_data.edit_tree != bpy.data.node_groups[g.name]:
                     sub.operator('rsn.switch_tree', icon='SCREEN_BACK', text=g.name).tree_name = g.name

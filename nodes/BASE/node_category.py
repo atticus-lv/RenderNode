@@ -5,7 +5,7 @@ import nodeitems_utils
 class RSNCategory(nodeitems_utils.NodeCategory):
     @classmethod
     def poll(cls, context):
-        return context.space_data.tree_type == 'RenderStackNodeTree'
+        return context.space_data.tree_type == 'RenderNodeTree'
 
 
 node_categories = [

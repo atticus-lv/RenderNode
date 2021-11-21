@@ -13,7 +13,7 @@ class RSN_OP_GroupNodes(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return context.space_data.type == "NODE_EDITOR" and context.space_data.tree_type == 'RenderStackNodeTree'
+        return context.space_data.type == "NODE_EDITOR" and context.space_data.tree_type == 'RenderNodeTree'
 
     def execute(self, context):
         runtime_info['updating'] = True
@@ -22,7 +22,7 @@ class RSN_OP_GroupNodes(bpy.types.Operator):
             space = context.space_data
             path = space.path
             node_tree = space.path[-1].node_tree
-            node_group = bpy.data.node_groups.new("Render Group", "RenderStackNodeTreeGroup")
+            node_group = bpy.data.node_groups.new("Render Group", "RenderNodeTreeGroup")
             selected_nodes = [i for i in node_tree.nodes if i.select]
             nodes_len = len(selected_nodes)
 
@@ -148,7 +148,7 @@ class RSN_OP_EditGroup(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return context.space_data.type == "NODE_EDITOR" and context.space_data.tree_type in {'RenderStackNodeTree',
+        return context.space_data.type == "NODE_EDITOR" and context.space_data.tree_type in {'RenderNodeTree',
                                                                                              'RenderStackNodeGroup'}
 
     def execute(self, context):

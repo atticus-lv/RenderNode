@@ -107,14 +107,14 @@ class NodeTreeBase(bpy.types.NodeTree):
             runtime_info['executing'] = False
 
 
-class RenderStackNodeTree(NodeTreeBase):
-    bl_idname = 'RenderStackNodeTree'
+class RenderNodeTree(NodeTreeBase):
+    bl_idname = 'RenderNodeTree'
     bl_label = 'Render Node Editor'
     bl_icon = 'CAMERA_DATA'
 
 
-class RenderStackNodeTreeGroup(NodeTreeBase):
-    bl_idname = 'RenderStackNodeTreeGroup'
+class RenderNodeTreeGroup(NodeTreeBase):
+    bl_idname = 'RenderNodeTreeGroup'
     bl_label = "Render Node (groups)"
     bl_icon = 'NODETREE'
 
@@ -128,12 +128,12 @@ def clean_draw(self,context):
 def register():
     bpy.types.WindowManager.rsn_active_list = StringProperty(name='Active List')
 
-    bpy.utils.register_class(RenderStackNodeTree)
-    bpy.utils.register_class(RenderStackNodeTreeGroup)
+    bpy.utils.register_class(RenderNodeTree)
+    bpy.utils.register_class(RenderNodeTreeGroup)
 
 
 def unregister():
-    bpy.utils.unregister_class(RenderStackNodeTree)
-    bpy.utils.unregister_class(RenderStackNodeTreeGroup)
+    bpy.utils.unregister_class(RenderNodeTree)
+    bpy.utils.unregister_class(RenderNodeTreeGroup)
 
     del bpy.types.WindowManager.rsn_active_list

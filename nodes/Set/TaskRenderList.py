@@ -140,7 +140,7 @@ class RenderNodeTaskRenderListNode(RenderNodeBase):
 
     @classmethod
     def poll(cls, ntree):
-        return ntree.bl_idname in {'RenderStackNodeTree'}
+        return ntree.bl_idname in {'RenderNodeTree'}
 
     def init(self, context):
         self.width = 200

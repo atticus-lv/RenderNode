@@ -21,7 +21,7 @@ class RenderNodeBase(bpy.types.Node):
 
     @classmethod
     def poll(cls, ntree):
-        return ntree.bl_idname in {'RenderStackNodeTree', 'RenderStackNodeTreeGroup'}
+        return ntree.bl_idname in {'RenderNodeTree', 'RenderNodeTreeGroup'}
 
     ## BASE METHOD
     #########################################
@@ -205,7 +205,7 @@ class RenderNodeBase(bpy.types.Node):
                 assert node, f'{path} cannot be resolved to a node'
                 for i, output in enumerate(other.outputs):
                     if output.bl_rna.identifier != 'NodeSocketVirtual':
-                        if self.id_data.bl_idname == 'RenderStackNodeTreeGroup':
+                        if self.id_data.bl_idname == 'RenderNodeTreeGroup':
                             other_socket = node.inputs[i]
                             output.set_value(other_socket.get_value())
 
