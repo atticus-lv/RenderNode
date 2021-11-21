@@ -54,7 +54,7 @@ class RenderNodeGetAction(RenderNodeBase):
             object = self.inputs['object'].get_value()
 
             if object:
-                act = ob.animation_data.action
+                act = object.animation_data.action
 
         if act is not None:
             self.outputs['action'].set_value(act)
