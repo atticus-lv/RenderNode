@@ -53,7 +53,7 @@ node_categories = [
         nodeitems_utils.NodeItem("RenderNodeSetSceneCamera"),
         nodeitems_utils.NodeItem("RenderNodeSetSceneWorld"),
         nodeitems_utils.NodeItem("RenderNodeSetSceneRenderEngine"),
-        nodeitems_utils.NodeItem("RenderNodeSetSceneColorManagement"),
+        # nodeitems_utils.NodeItem("RenderNodeSetSceneColorManagement"),
     ]),
 
     RSNCategory("EEVEE_CYCLES", "Eevee / Cycles", items=[
@@ -107,6 +107,10 @@ node_categories = [
         # nodeitems_utils.NodeItem('RenderNodeMerge'),
         nodeitems_utils.NodeItem('NodeFrame'),
         nodeitems_utils.NodeItem('NodeReroute'),
+    ]),
+
+    RSNCategory("EXTRA", "Extra", items=[
+        nodeitems_utils.NodeItem('RenderNodeEmailNode'),
         nodeitems_utils.NodeItem('RenderNodeGetTaskInfo'),
     ]),
 
