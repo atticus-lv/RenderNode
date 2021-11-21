@@ -43,60 +43,6 @@ def compare(obj: object, attr: str, val):
         logger.info(e)
 
 
-class RenderQueue():
-    def __init__(self, nodetree, render_list_node, field_style=False):
-        """init a rsn queue
-        :parm nodetree: a blender node tree(rsn node tree)
-        :parm render_list_node: render_list_node
-
-        """
-        self.nt = nodetree
-        self.root_node = render_list_node
-        self.task_queue = deque()
-        self.frame_range_queue = deque()
-
-        self.task_list = []
-
-        self.init_queue()
-
-    def init_queue(self):
-        for item in self.root_node.task_list:
-            if item.render:
-                self.task_queue.append(item.name)
-                self.task_list.append(item.name)
-                node = self.nt.nodes[item.name]
-                self.frame_range_queue.append([node.frame_start, node.frame_end, node.frame_step])
-
-        # for processing visualization
-        bpy.context.window_manager.rsn_cur_task_list = ','.join(self.task_list)
-        try:
-            bpy.context.scene.frame_current = self.frame_range_queue[0][0]
-        except IndexError:
-            pass
-
-    def is_empty(self):
-        return len(self.task_queue) == 0
-
-    def get_frame_range(self):
-        self.force_update()
-        return self.frame_range_queue[0]
-
-    def force_update(self):
-        if not self.is_empty():
-            self.nt.nodes[self.task_queue[0]].is_active_task = True
-
-    def pop(self):
-        if not self.is_empty():
-            self.frame_range_queue.popleft()
-            return self.task_queue.popleft()
-
-    def clear_queue(self):
-        self.task_queue.clear()
-        self.frame_range_queue.clear()
-
-        bpy.context.window_manager.rsn_cur_task_list = ''
-
-
 class RenderQueueV2():
     def __init__(self, ntree, render_list_node):
         """init a rsn queue
@@ -116,11 +62,11 @@ class RenderQueueV2():
     def init_queue(self):
         if self.mode == 'RANGE':
             input = self.root_node.inputs[0]
-            if not input.is_linked:return
+            if not input.is_linked: return
 
             task_info = input.get_value()
             print(task_info)
-            if not task_info:return
+            if not task_info: return
 
             for i in range(self.root_node.range_start, self.root_node.range_end + 1):
                 self.index_list.append(i)
@@ -130,7 +76,6 @@ class RenderQueueV2():
             for i, input in enumerate(self.root_node.inputs):
                 if not input.is_linked: continue
                 self.index_list.append(i)
-
 
     @property
     def index(self):
