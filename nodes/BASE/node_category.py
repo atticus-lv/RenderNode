@@ -62,6 +62,8 @@ node_categories = [
         nodeitems_utils.NodeItem("RenderNodeSetWorkBenchOptions"),
 
         nodeitems_utils.NodeItem("RenderNodeSetEeveeSamples"),
+        nodeitems_utils.NodeItem("RenderNodeSetCyclesSamplesViewport"),
+        nodeitems_utils.NodeItem("RenderNodeSetCyclesSamplesRender"),
         nodeitems_utils.NodeItem("RenderNodeSetEeveeAmbientOcclusion"),
         nodeitems_utils.NodeItem("RenderNodeSetEeveeBloom"),
         nodeitems_utils.NodeItem("RenderNodeSetEeveeDepthOfField"),
