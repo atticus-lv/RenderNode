@@ -42,6 +42,14 @@ class RenderNodeSetSceneSimplify(RenderNodeBase):
         self.create_input('RenderNodeSocketFloat', 'simplify_child_particles_render', 'Render Max Child Particles',
                           default_value=1)
 
+        self.create_input('RenderNodeSocketBool', 'use_camera_cull', 'Camera Culling', default_value=False)
+        i = self.create_input('RenderNodeSocketFloat', 'camera_cull_margin', 'Camera Cull Margin', default_value=0.2)
+        i.hide = True
+
+        self.create_input('RenderNodeSocketBool', 'use_distance_cull', 'Distance Culling', default_value=False)
+        i = self.create_input('RenderNodeSocketFloat', 'distance_cull_margin', 'Distance Cull Margin', default_value=50)
+        i.hide = True
+
         self.create_output('RenderNodeSocketTask', 'task', 'Task')
 
         self.width = 200
@@ -60,6 +68,21 @@ class RenderNodeSetSceneSimplify(RenderNodeBase):
             self.use_cycles = True
             self.compare(context.scene.cycels, 'texture_limit', self.texture_limit)
             self.compare(context.scene.cycels, 'texture_limit_render', self.texture_limit_render)
+
+            c = [
+                'use_camera_cull',
+                'camera_cull_margin',
+                'use_distance_cull',
+                'distance_cull_margin',
+            ]
+
+            for name in c:
+                input = self.inputs.get(name)
+                input.hide = False
+                key = input.name
+                value = input.get_value()
+                if value is not None:
+                    self.compare(context.scene.cycles, key, value)
 
         for input in self.inputs:
             key = input.name
