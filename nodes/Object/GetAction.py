@@ -29,7 +29,7 @@ class RenderNodeGetAction(RenderNodeBase):
     operator_type: EnumProperty(items=[
         ('NAME', 'Name', ''),
         ('INDEX', 'Library Index', ''),
-        ('OBJECT', 'Object Slot', ''),
+        ('OBJECT', 'Object', ''),
     ], default='NAME', update=update_node)
 
     def init(self, context):

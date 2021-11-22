@@ -10,7 +10,6 @@ def get_pref():
 
 
 class PropsDrawNodes(bpy.types.PropertyGroup):
-
     text_color1: FloatVectorProperty(name='Time < 0.1ms Color', subtype='COLOR',
                                      default=(1, 1, 1))
 
@@ -20,7 +19,7 @@ class PropsDrawNodes(bpy.types.PropertyGroup):
     text_color3: FloatVectorProperty(name='Time >1ms Color', subtype='COLOR',
                                      default=(1, 0, 0))
 
-    size: IntProperty(name='Size', min=6 ,default=17)
+    size: IntProperty(name='Size', min=6, default=17)
 
 
 class NodeViewLayerPassedProps(bpy.types.PropertyGroup):
@@ -136,7 +135,7 @@ class RSN_Preference(bpy.types.AddonPreferences):
         box.prop(self.draw_nodes, 'task_color')
         box.separator(factor=1)
 
-        box.prop(self.draw_nodes, 'size',slider=True)
+        box.prop(self.draw_nodes, 'size', slider=True)
         box.prop(self.draw_nodes, 'text_color1')
         box.prop(self.draw_nodes, 'text_color2')
         box.prop(self.draw_nodes, 'text_color3')
@@ -248,6 +247,9 @@ def add_keybind():
         addon_keymaps.append((km, kmi))
         # copy
         kmi = km.keymap_items.new('rsn.copy_and_link', 'D', 'PRESS', alt=True)
+        addon_keymaps.append((km, kmi))
+        # delete reconnect
+        kmi = km.keymap_items.new('rsn.delete_reconnect', 'X', 'PRESS', ctrl=True)
         addon_keymaps.append((km, kmi))
         # tab search
         kmi = km.keymap_items.new('rsn.search_and_link', 'TAB', 'PRESS')
