@@ -35,6 +35,8 @@ class RenderNodeSetSceneRenderEngine(RenderNodeBase):
         self.width = 200
 
     def draw_buttons(self, context, layout):
+        layout.use_property_split = True
+        layout.use_property_decorate = False
         layout.prop(self, "engine")
         if self.engine == 'CYCLES':
             layout.prop(self, 'cycles_feature_set')

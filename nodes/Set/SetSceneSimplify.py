@@ -42,11 +42,13 @@ class RenderNodeSetSceneSimplify(RenderNodeBase):
         self.create_input('RenderNodeSocketFloat', 'simplify_child_particles_render', 'Render Max Child Particles',
                           default_value=1)
 
-        self.create_input('RenderNodeSocketBool', 'use_camera_cull', 'Camera Culling', default_value=False)
+        i = self.create_input('RenderNodeSocketBool', 'use_camera_cull', 'Camera Culling', default_value=False)
+        i.hide = True
         i = self.create_input('RenderNodeSocketFloat', 'camera_cull_margin', 'Camera Cull Margin', default_value=0.2)
         i.hide = True
 
-        self.create_input('RenderNodeSocketBool', 'use_distance_cull', 'Distance Culling', default_value=False)
+        i = self.create_input('RenderNodeSocketBool', 'use_distance_cull', 'Distance Culling', default_value=False)
+        i.hide = True
         i = self.create_input('RenderNodeSocketFloat', 'distance_cull_margin', 'Distance Cull Margin', default_value=50)
         i.hide = True
 
@@ -55,6 +57,9 @@ class RenderNodeSetSceneSimplify(RenderNodeBase):
         self.width = 200
 
     def draw_buttons(self, context, layout):
+        layout.use_property_split = True
+        layout.use_property_decorate = False
+
         if self.use_cycles:
             layout.prop(self, 'texture_limit')
             layout.prop(self, 'texture_limit_render')
@@ -62,27 +67,32 @@ class RenderNodeSetSceneSimplify(RenderNodeBase):
     def process(self, context, id, path):
         if not self.process_task(): return
 
+        c = [
+            'use_camera_cull',
+            'camera_cull_margin',
+            'use_distance_cull',
+            'distance_cull_margin',
+        ]
+
         engine = self.inputs['engine'].get_value()
 
         if engine == 'CYCLES':
             self.use_cycles = True
-            self.compare(context.scene.cycels, 'texture_limit', self.texture_limit)
-            self.compare(context.scene.cycels, 'texture_limit_render', self.texture_limit_render)
-
-            c = [
-                'use_camera_cull',
-                'camera_cull_margin',
-                'use_distance_cull',
-                'distance_cull_margin',
-            ]
+            self.compare(context.scene.cycles, 'texture_limit', self.texture_limit)
+            self.compare(context.scene.cycles, 'texture_limit_render', self.texture_limit_render)
 
             for name in c:
                 input = self.inputs.get(name)
                 input.hide = False
-                key = input.name
+                key = name
                 value = input.get_value()
                 if value is not None:
                     self.compare(context.scene.cycles, key, value)
+        else:
+            self.use_cycles = False
+            for name in c:
+                input = self.inputs.get(name)
+                input.hide = True
 
         for input in self.inputs:
             key = input.name
