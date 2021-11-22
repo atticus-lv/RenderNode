@@ -40,7 +40,8 @@ class RenderNodeSetCyclesSamplesViewport(RenderNodeBase):
 
     def draw_buttons(self, context, layout):
         layout.use_property_split = True
-        layout.use_property_decorate = True
+        layout.use_property_decorate = False
+
         if self.use_preview_denoising is True:
             layout.prop(self, 'preview_denoiser')
             layout.prop(self, 'preview_denoising_input_passes')
