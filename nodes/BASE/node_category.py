@@ -62,6 +62,7 @@ node_categories = [
 
         nodeitems_utils.NodeItem("RenderNodeSetEeveeSamples"),
         nodeitems_utils.NodeItem("RenderNodeSetEeveeAmbientOcclusion"),
+        nodeitems_utils.NodeItem("RenderNodeSetEeveeBloom"),
         nodeitems_utils.NodeItem("RenderNodeSetEeveeScreenSpaceReflections"),
 
         nodeitems_utils.NodeItem("RenderNodeSetCyclesSamples"),

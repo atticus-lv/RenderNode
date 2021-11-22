@@ -23,7 +23,7 @@ class RenderNodeSetEeveeSamples(RenderNodeBase):
         for input in self.inputs:
             key = input.name
             value = input.get_value()
-            self.compare(bpy.context.scene.eevee, key, value)
+            self.compare(context.scene.eevee, key, value)
 
 
 def register():
