@@ -132,6 +132,7 @@ class RenderNodeTaskRenderListNode(RenderNodeBase):
     # active set
     active_index: IntProperty(name="Active Index", min=0, update=update_active_task)
     is_active_list: BoolProperty(name="Active List", update=update_active_task)
+    color: FloatVectorProperty(name='Active Color', subtype='COLOR', default=(0, 5, 0), min=1, max=1)
 
     select_list: CollectionProperty(type=SelectorProperty)
 
@@ -181,6 +182,26 @@ class RenderNodeTaskRenderListNode(RenderNodeBase):
             "RSN_UL_SelectList", "",
             self, "select_list",
             self, "active_index", type='GRID', columns=6, rows=5)
+
+        # TODO use draw operator instead of list
+
+        # grid = layout.grid_flow(columns=6, align=False)
+        #
+        # if self.mode == 'STATIC':
+        #     for i, input in enumerate(self.inputs):
+        #         if i != self.active_index:
+        #             op = grid.operator('rsn.select_active_index', text=str(i)),
+        #             op.node_name = self.name
+        #         else:
+        #             grid.prop(self, 'color', text='')
+        #
+        # elif self.mode == 'RANGE':
+        #     for i in range(self.range_start, self.range_end + 1):
+        #         if i != self.active_index:
+        #             op = grid.operator('rsn.select_active_index', text=str(i)),
+        #             op.node_name = self.name
+        #         else:
+        #             grid.prop(self, 'color', text='')
 
         s = layout.operator('rsn.select_active_index', text='Refresh', icon='FILE_REFRESH')
         s.node_name = self.name
