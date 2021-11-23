@@ -59,6 +59,7 @@ node_categories = [
 
     RSNCategory("EEVEE_CYCLES", "Eevee / Cycles", items=[
         nodeitems_utils.NodeItem("RenderNodeSetWorkBenchSamples"),
+        nodeitems_utils.NodeItem("RenderNodeSetWorkBenchColor"),
         nodeitems_utils.NodeItem("RenderNodeSetWorkBenchOptions"),
 
         nodeitems_utils.NodeItem("RenderNodeSetEeveeSamples"),
