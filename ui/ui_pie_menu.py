@@ -80,7 +80,7 @@ class RSN_MT_PieMenu(Menu):
         ##
         pie.separator()
         # right bottom
-        pie.operator('rsn.switch_setting')
+        pie.operator('rsn.switch_setting',icon_value = merge_icon.get_image_icon_id())
 
 
 def register_icon():
