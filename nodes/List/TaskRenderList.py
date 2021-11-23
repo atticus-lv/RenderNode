@@ -41,6 +41,11 @@ class RSN_OT_set_active_list(bpy.types.Operator):
 
     node_name: StringProperty()
 
+    @classmethod
+    def poll(self, context):
+        if context.space_data and hasattr(context.space_data, 'node_tree'):
+            return context.area.ui_type == 'RenderNodeTree'
+
     def execute(self, context):
         old_node = context.space_data.node_tree.nodes.get(context.window_manager.rsn_active_list)
         if old_node:
@@ -73,6 +78,11 @@ class RSN_OT_select_active_index(bpy.types.Operator):
 
     node_name: StringProperty()
     index: IntProperty()
+
+    @classmethod
+    def poll(self, context):
+        if context.space_data and hasattr(context.space_data, 'node_tree'):
+            return context.area.ui_type == 'RenderNodeTree'
 
     def execute(self, context):
         node = context.space_data.node_tree.nodes[self.node_name]
