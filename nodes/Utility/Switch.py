@@ -104,7 +104,6 @@ class RenderNodeSwitch(RenderNodeBase):
 
     def process(self, context, id, path):
         active = self.inputs['active'].get_value()
-        print(active)
         if active is None: return
 
         for i, input in enumerate(self.inputs):
