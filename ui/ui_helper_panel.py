@@ -45,4 +45,5 @@ def register():
 
 
 def unregister():
+    del bpy.types.WindowManager.rsn_tree_time
     bpy.utils.unregister_class(HELPER_PT_Panel)

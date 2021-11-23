@@ -19,7 +19,7 @@ class PropsDrawNodes(bpy.types.PropertyGroup):
     text_color3: FloatVectorProperty(name='Time >1ms Color', subtype='COLOR',
                                      default=(1, 0, 0))
 
-    size: IntProperty(name='Size', min=6, default=17)
+    size: IntProperty(name='Font Size', min=6, default=17, soft_max=30)
 
 
 class NodeViewLayerPassedProps(bpy.types.PropertyGroup):
