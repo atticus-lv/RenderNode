@@ -6,9 +6,11 @@ rsn_icon = RSN_Preview(image='rsn.bip', name='rsn_icon')
 
 
 def draw_swith_tree(self, context):
-    layout = self.layout
-    layout.separator()
-    layout.operator('rsn.switch_to_bind_tree', icon_value=rsn_icon.get_image_icon_id())
+    if context.area.ui_type == 'RenderNodeTree' and context.space_data.node_tree is not None:
+
+        layout = self.layout
+        layout.separator()
+        layout.operator('rsn.switch_to_bind_tree', icon_value=rsn_icon.get_image_icon_id())
 
 
 def draw_overlay(self, context):
