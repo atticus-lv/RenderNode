@@ -95,9 +95,9 @@ class RenderNodeSetSceneColorManagement(RenderNodeBase):
         self.compare(vs, 'look', self.look)
 
 
-# def register():
-#     bpy.utils.register_class(RenderNodeSetSceneColorManagement)
-#
-#
-# def unregister():
-#     bpy.utils.unregister_class(RenderNodeSetSceneColorManagement)
+def register():
+    bpy.utils.register_class(RenderNodeSetSceneColorManagement)
+
+
+def unregister():
+    bpy.utils.unregister_class(RenderNodeSetSceneColorManagement)
