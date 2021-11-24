@@ -40,7 +40,7 @@ def register():
     rsn_icon.register()
 
     bpy.types.NODE_MT_editor_menus.append(draw_swith_tree)
-    if bpy.app.version > (2, 9, 3):
+    if bpy.app.version > (2, 94, 0):
         bpy.types.NODE_PT_overlay.append(draw_overlay)
 
 
@@ -48,5 +48,5 @@ def unregister():
     rsn_icon.unregister()
 
     bpy.types.NODE_MT_editor_menus.remove(draw_swith_tree)
-    if bpy.app.version > (2, 9, 3):
+    if bpy.app.version > (2, 94, 0):
         bpy.types.NODE_PT_overlay.remove(draw_overlay)
