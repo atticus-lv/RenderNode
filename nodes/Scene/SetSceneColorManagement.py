@@ -8,9 +8,8 @@ import re
 
 def get_ocio_path():
     """get current blender version cm"""
-    bl_path = os.getcwd()
-    version = f'{bpy.app.version[0]}' + '.' + f'{bpy.app.version[1]}'
-    cs_folder = os.path.join(bl_path, version, 'datafiles', 'colormanagement')
+    bl_data_path = bpy.utils.system_resource("DATAFILES")
+    cs_folder = os.path.join(bl_data_path, 'colormanagement')
 
     return os.path.join(cs_folder, 'config.ocio')
 
