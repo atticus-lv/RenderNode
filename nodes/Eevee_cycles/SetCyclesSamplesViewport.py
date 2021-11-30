@@ -2,6 +2,8 @@ import bpy
 from bpy.props import *
 from ...nodes.BASE.node_base import RenderNodeBase
 
+def update_node(self, context):
+    self.execute_tree()
 
 class RenderNodeSetCyclesSamplesViewport(RenderNodeBase):
     """A simple input node"""
@@ -13,13 +15,13 @@ class RenderNodeSetCyclesSamplesViewport(RenderNodeBase):
     preview_denoiser: EnumProperty(items=[
         ('OPTIX', 'Optix', ''),
         ('OPENIMAGEDENOISE', 'OpenImageDenoise', ''),
-    ], default='OPTIX',name = "Denoiser")
+    ], default='OPTIX',name = "Denoiser",update = update_node)
 
     preview_denoising_input_passes: EnumProperty(items=[
         ('RGB', 'Color', ''),
         ('RGB_ALBEDO', 'Color + Albedo', ''),
         ('RGB_ALBEDO_NORMAL', 'Color + Albedo + Normal', ''),
-    ], default='RGB',name = 'Passes')
+    ], default='RGB',name = 'Passes',update = update_node)
 
     def init(self, context):
         self.create_input('RenderNodeSocketTask', 'task', 'Task')
