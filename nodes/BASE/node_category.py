@@ -75,7 +75,7 @@ node_categories = [
         nodeitems_utils.NodeItem("RenderNodeSetCyclesLightPathsMaxBounces"),
         nodeitems_utils.NodeItem("RenderNodeSetCyclesLightPathsClamping"),
         nodeitems_utils.NodeItem("RenderNodeSetCyclesLightPathsCaustics"),
-        # nodeitems_utils.NodeItem("RenderNodeSetCyclesLightPathsFastGI"),
+        nodeitems_utils.NodeItem("RenderNodeSetCyclesLightPathsFastGI"),
     ]),
 
     RSNCategory("OUTPUT", "Output", items=[
