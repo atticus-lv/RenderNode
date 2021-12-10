@@ -3,25 +3,27 @@ from bpy.props import *
 from ...nodes.BASE.node_base import RenderNodeBase
 
 
-class RenderNodeSceneViewLayer(RenderNodeBase):
+class RenderNodeSetSceneViewLayer(RenderNodeBase):
     """A simple input node"""
-    bl_idname = 'RenderNodeSceneViewLayer'
-    bl_label = 'Scene View Layer'
+    bl_idname = 'RenderNodeSetSceneViewLayer'
+    bl_label = 'Set Scene View Layer'
 
     def init(self, context):
+        self.create_input('RenderNodeSocketTask', 'task', 'Task')
+        self.create_output('RenderNodeSocketTask', 'task', 'Task')
+
         self.create_input('RenderNodeSocketViewLayer', "view_layer", 'ViewLayer')
-        self.create_input('RenderNodeSocketBool', 'set_as_active_layer', 'Set as active Layer', default_value=True)
         self.create_input('RenderNodeSocketBool', 'use_for_render', 'Use for Rendering', default_value=True)
         self.create_input('RenderNodeSocketBool', 'output_composite_passes', 'Output Composite Passes')
-        self.create_output('RSNodeSocketTaskSettings', 'Settings', 'Settings')
 
     def process(self, context, id, path):
+        if not self.process_task(): return
+
         view_layer_name = self.inputs['view_layer'].get_value()
-        view_layer = bpy.context.scene.view_layers.get(view_layer_name)
+        view_layer = context.scene.view_layers.get(view_layer_name)
 
         if view_layer:
-            if self.inputs['set_as_active_layer'].get_value():
-                self.compare(bpy.context.window, 'view_layer', view_layer)
+            self.compare(context.window, 'view_layer', view_layer)
             self.compare(view_layer, 'use', self.inputs['use_for_render'].get_value())
 
             # create comp node tree
@@ -47,8 +49,8 @@ class RenderNodeSceneViewLayer(RenderNodeBase):
 
 
 def register():
-    bpy.utils.register_class(RenderNodeSceneViewLayer)
+    bpy.utils.register_class(RenderNodeSetSceneViewLayer)
 
 
 def unregister():
-    bpy.utils.unregister_class(RenderNodeSceneViewLayer)
+    bpy.utils.unregister_class(RenderNodeSetSceneViewLayer)

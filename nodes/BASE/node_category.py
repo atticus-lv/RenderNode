@@ -49,12 +49,15 @@ node_categories = [
         nodeitems_utils.NodeItem("RenderNodeGetSceneCamera"),
         nodeitems_utils.NodeItem("RenderNodeGetSceneWorld"),
         nodeitems_utils.NodeItem("RenderNodeGetSceneRenderEngine"),
+        nodeitems_utils.NodeItem("RenderNodeSetSceneViewLayer"),
 
         nodeitems_utils.NodeItem("RenderNodeSetSceneCamera"),
         nodeitems_utils.NodeItem("RenderNodeSetSceneWorld"),
         nodeitems_utils.NodeItem("RenderNodeSetSceneRenderEngine"),
         nodeitems_utils.NodeItem("RenderNodeSetSceneSimplify"),
         nodeitems_utils.NodeItem("RenderNodeSetSceneColorManagement"),
+
+        nodeitems_utils.NodeItem("RenderNodeSetSceneViewLayer"),
     ]),
 
     RSNCategory("EEVEE_CYCLES", "Eevee / Cycles", items=[
