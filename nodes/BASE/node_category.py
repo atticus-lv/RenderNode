@@ -49,14 +49,13 @@ node_categories = [
         nodeitems_utils.NodeItem("RenderNodeGetSceneCamera"),
         nodeitems_utils.NodeItem("RenderNodeGetSceneWorld"),
         nodeitems_utils.NodeItem("RenderNodeGetSceneRenderEngine"),
-        nodeitems_utils.NodeItem("RenderNodeSetSceneViewLayer"),
+        nodeitems_utils.NodeItem("RenderNodeGetSceneViewLayer"),
 
         nodeitems_utils.NodeItem("RenderNodeSetSceneCamera"),
         nodeitems_utils.NodeItem("RenderNodeSetSceneWorld"),
         nodeitems_utils.NodeItem("RenderNodeSetSceneRenderEngine"),
         nodeitems_utils.NodeItem("RenderNodeSetSceneSimplify"),
         nodeitems_utils.NodeItem("RenderNodeSetSceneColorManagement"),
-
         nodeitems_utils.NodeItem("RenderNodeSetSceneViewLayer"),
     ]),
 
@@ -68,6 +67,7 @@ node_categories = [
         nodeitems_utils.NodeItem("RenderNodeSetEeveeSamples"),
         nodeitems_utils.NodeItem("RenderNodeSetCyclesSamplesViewport"),
         nodeitems_utils.NodeItem("RenderNodeSetCyclesSamplesRender"),
+        nodeitems_utils.NodeItem("RenderNodeSetCyclesPerformance"),
         nodeitems_utils.NodeItem("RenderNodeSetEeveeAmbientOcclusion"),
         nodeitems_utils.NodeItem("RenderNodeSetEeveeBloom"),
         nodeitems_utils.NodeItem("RenderNodeSetEeveeDepthOfField"),
