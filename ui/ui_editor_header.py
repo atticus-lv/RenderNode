@@ -6,7 +6,7 @@ rsn_icon = RSN_Preview(image='rsn.bip', name='rsn_icon')
 
 
 def draw_swith_tree(self, context):
-    if context.area.ui_type == 'RenderNodeTree' and context.space_data.node_tree is not None:
+    if context.area.ui_type == 'RenderNodeTree':
 
         layout = self.layout
         layout.separator()
