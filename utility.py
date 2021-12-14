@@ -88,6 +88,7 @@ class RenderQueueV2():
     def force_update(self):
         if not self.is_empty():
             self.root_node.active_index = self.index_list[0]
+            self.root_node.execute_tree()
 
     def is_empty(self):
         return len(self.index_list) == 0
