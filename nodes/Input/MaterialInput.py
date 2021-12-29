@@ -9,7 +9,7 @@ def update_node(self, context):
     self.execute_tree()
 
 
-class RenderNodeObjectInput(RenderNodeBase):
+class RenderNodeMaterialInput(RenderNodeBase):
     bl_idname = 'RenderNodeMaterialInput'
     bl_label = 'Material Input'
 
@@ -30,8 +30,8 @@ class RenderNodeObjectInput(RenderNodeBase):
 
 
 def register():
-    bpy.utils.register_class(RenderNodeObjectInput)
+    bpy.utils.register_class(RenderNodeMaterialInput)
 
 
 def unregister():
-    bpy.utils.unregister_class(RenderNodeObjectInput)
+    bpy.utils.unregister_class(RenderNodeMaterialInput)

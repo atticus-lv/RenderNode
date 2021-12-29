@@ -10,16 +10,16 @@ def update_node(self, context):
     else:
         self.remove_input('name')
 
-    if self.operator_type == 'INDEX':
-        self.create_input('RenderNodeSocketInt', 'index', 'Index', default_value=0)
-    else:
-        self.remove_input('index')
-
     if self.operator_type == 'OBJECT':
         self.create_input('RenderNodeSocketObject', 'object', 'Object')
         self.create_input('RenderNodeSocketInt', 'index', 'Index', default_value=0)
     else:
         self.remove_input('object')
+        self.remove_input('index')
+
+    if self.operator_type == 'INDEX':
+        self.create_input('RenderNodeSocketInt', 'index', 'Index', default_value=0)
+    else:
         self.remove_input('index')
 
     self.execute_tree()
