@@ -107,7 +107,8 @@ class SocketBase():
     #########################
     def set_value(self, value):
         '''Sets the value of an output socket'''
-        cache_socket_variables.setdefault(self.id_data, {})[self] = value
+        if self.is_linked:
+            cache_socket_variables.setdefault(self.id_data, {})[self] = value
 
     def get_self_value(self):
         '''returns the stored value of an output socket'''

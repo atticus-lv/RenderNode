@@ -18,6 +18,7 @@ node_categories = [
         nodeitems_utils.NodeItem('RenderNodeVectorInput'),
         nodeitems_utils.NodeItem('RenderNodeStringInput'),
         nodeitems_utils.NodeItem('RenderNodeObjectInput'),
+        nodeitems_utils.NodeItem('RenderNodeGetCameraInfo'),
         nodeitems_utils.NodeItem('RenderNodeMaterialInput'),
         nodeitems_utils.NodeItem('RenderNodeActionInput'),
     ]),
