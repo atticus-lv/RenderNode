@@ -248,9 +248,9 @@ def add_keybind():
         # copy
         kmi = km.keymap_items.new('rsn.copy_and_link', 'D', 'PRESS', alt=True)
         addon_keymaps.append((km, kmi))
-        # delete reconnect
-        kmi = km.keymap_items.new('rsn.delete_reconnect', 'X', 'PRESS', ctrl=True)
-        addon_keymaps.append((km, kmi))
+        # # delete reconnect
+        # kmi = km.keymap_items.new('rsn.delete_reconnect', 'X', 'PRESS', ctrl=True)
+        # addon_keymaps.append((km, kmi))
         # tab search
         kmi = km.keymap_items.new('rsn.search_and_link', 'TAB', 'PRESS')
         addon_keymaps.append((km, kmi))
