@@ -151,11 +151,19 @@ class RenderNodeBase(bpy.types.Node):
             return dep_tree[self]
         nodes = []
         nodes_connect_index = []
-        for i, input in enumerate(self.inputs):
-            connected_socket = input.connected_socket
-            if connected_socket and connected_socket not in nodes:
-                nodes.append(connected_socket.node)
-                nodes_connect_index.append(i)
+
+        if self.mute:
+            if len(self.internal_links) != 0:
+                connected_socket = self.internal_links[0].from_socket.connected_socket
+                if connected_socket and connected_socket not in nodes:
+                    nodes.append(connected_socket.node)
+                    nodes_connect_index.append(0)
+        else:
+            for i, input in enumerate(self.inputs):
+                connected_socket = input.connected_socket
+                if connected_socket and connected_socket not in nodes:
+                    nodes.append(connected_socket.node)
+                    nodes_connect_index.append(i)
 
         dep_tree[self] = nodes, nodes_connect_index
 
@@ -169,17 +177,17 @@ class RenderNodeBase(bpy.types.Node):
             self.execute_other(context, id, path, x)
 
     def execute(self, context, id, path):
-        if self.last_ex_id == id or self.mute: return
+        if self.last_ex_id == id: return
 
         self.last_ex_id = id
 
         with MeasureTime(self, 'Dependants'):
             self.execute_dependants(context, id, path)
         with MeasureTime(self, 'Group'):
-            self.process_group(context, id, path)
+            if not self.mute: self.process_group(context, id, path)
             if self not in cache_executed_nodes: cache_executed_nodes.append(self)
         with MeasureTime(self, 'Execution'):
-            self.process(context, id, path)
+            if not self.mute: self.process(context, id, path)
             if self not in cache_executed_nodes: cache_executed_nodes.append(self)
 
         # if self.bl_idname == 'RSNodeVariantsNode':
