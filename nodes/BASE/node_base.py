@@ -153,11 +153,19 @@ class RenderNodeBase(bpy.types.Node):
         nodes_connect_index = []
 
         if self.mute:
-            if len(self.internal_links) != 0:
+            if len(self.internal_links) != 0: # version 3.1, support custom node socket
                 connected_socket = self.internal_links[0].from_socket.connected_socket
                 if connected_socket and connected_socket not in nodes:
                     nodes.append(connected_socket.node)
                     nodes_connect_index.append(0)
+            else:  # version lower than 3.1
+                for i, input in enumerate(self.inputs):
+                    if input.bl_idname == self.outputs[0].bl_idname:
+                        connected_socket = input.connected_socket
+                        if connected_socket and connected_socket not in nodes:
+                            nodes.append(connected_socket.node)
+                            nodes_connect_index.append(i)
+                        break
         else:
             for i, input in enumerate(self.inputs):
                 connected_socket = input.connected_socket
