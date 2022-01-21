@@ -72,7 +72,7 @@ class RenderNodeSetFilePath(RenderNodeBase):
         else:
             postfix = postfix
         # replace engine
-        postfix = postfix.replace('$engine', bpy.context.scene.render.engine)
+        postfix = postfix.replace('$engine', bpy.context.scene.render.engine.replace('_',' ').title())
         # replace res
         postfix = postfix.replace('$res', f"{scn.render.resolution_x}x{scn.render.resolution_y}")
         # replace view_layer
