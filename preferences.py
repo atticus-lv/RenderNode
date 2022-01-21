@@ -48,7 +48,7 @@ class NodeFilePathProps(bpy.types.PropertyGroup):
     show: BoolProperty(name="Dropdown")
 
     path_format: StringProperty(name='Default Path Format',
-                                default='$blend_render/$V/$label.$camera.$F4')
+                                default='render/$blend_$V/$camera/$blend_$camera_$F4')
 
     time_behaviour: EnumProperty(
         name='Time behaviour($T)',
