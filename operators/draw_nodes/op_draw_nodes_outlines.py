@@ -182,7 +182,10 @@ class RSN_OT_DrawNodes(Operator):
             context.window_manager.event_timer_remove(curr_draw_timer)
             context.scene.RSNBusyDrawing = False
         if curr_draw_handle is not None:
-            bpy.types.SpaceNodeEditor.draw_handler_remove(curr_draw_handle, 'WINDOW')
+            try:
+                bpy.types.SpaceNodeEditor.draw_handler_remove(curr_draw_handle, 'WINDOW')
+            except ValueError:
+                pass # when loading layout or full screen
             context.scene.RSNBusyDrawing = False
 
         # init draw values
