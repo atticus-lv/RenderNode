@@ -14,7 +14,7 @@ class RenderNodeInt2Str(RenderNodeBase):
 
     def process(self, context, id, path):
         i = self.inputs[0].get_value()
-        if i is not None: self.outputs[0].set_value(str(i))
+        if i is not None: self.outputs[0].set_value(str(int(i)))
 
 
 def register():
