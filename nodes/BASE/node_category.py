@@ -47,6 +47,7 @@ node_categories = [
     ]),
 
     RSNCategory("SCENE", "Scene", items=[
+        nodeitems_utils.NodeItem("RenderNodeGetSceneFrame"),
         nodeitems_utils.NodeItem("RenderNodeGetSceneCamera"),
         nodeitems_utils.NodeItem("RenderNodeGetSceneWorld"),
         nodeitems_utils.NodeItem("RenderNodeGetSceneRenderEngine"),
@@ -124,6 +125,7 @@ node_categories = [
     RSNCategory("EXTRA", "Extra", items=[
         nodeitems_utils.NodeItem('RenderNodeEmailNode'),
         nodeitems_utils.NodeItem('RenderNodeGetTaskInfo'),
+        nodeitems_utils.NodeItem('RenderNodeSetProperty'),
     ]),
 
 ]
