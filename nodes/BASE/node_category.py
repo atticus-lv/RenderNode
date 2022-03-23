@@ -96,6 +96,7 @@ node_categories = [
 
     RSNCategory("OBJECT", "Object", items=[
         nodeitems_utils.NodeItem("RenderNodeGetMaterial"),
+        nodeitems_utils.NodeItem("RenderNodeGetObject"),
         nodeitems_utils.NodeItem("RenderNodeGetObjectInfo"),
         nodeitems_utils.NodeItem("RenderNodeGetObjectVisibility"),
         nodeitems_utils.NodeItem("RenderNodeGetAction"),
