@@ -26,6 +26,7 @@ node_categories = [
     RSNCategory("LIST", "List", items=[
         nodeitems_utils.NodeItem("RenderNodeGetListIndex"),
         nodeitems_utils.NodeItem("RenderNodeTaskRenderListNode"),
+        nodeitems_utils.NodeItem('RenderNodeGetTaskInfo'),
     ]),
 
     RSNCategory("UTILITY", "Utility", items=[
@@ -35,7 +36,6 @@ node_categories = [
         nodeitems_utils.NodeItem("RenderNodeBooleanMath"),
         nodeitems_utils.NodeItem("RenderNodeStringOperate"),
         # nodeitems_utils.NodeItem("RenderNodeProperty"),
-        nodeitems_utils.NodeItem('RenderNodeScripts'),
     ]),
     RSNCategory("CONVERT", "Convert", items=[
         nodeitems_utils.NodeItem("RenderNodeInt2Str"),
@@ -67,14 +67,15 @@ node_categories = [
         nodeitems_utils.NodeItem("RenderNodeSetWorkBenchOptions"),
 
         nodeitems_utils.NodeItem("RenderNodeSetEeveeSamples"),
-        nodeitems_utils.NodeItem("RenderNodeSetCyclesSamplesViewport"),
-        nodeitems_utils.NodeItem("RenderNodeSetCyclesSamplesRender"),
-        nodeitems_utils.NodeItem("RenderNodeSetCyclesPerformance"),
         nodeitems_utils.NodeItem("RenderNodeSetEeveeAmbientOcclusion"),
         nodeitems_utils.NodeItem("RenderNodeSetEeveeBloom"),
         nodeitems_utils.NodeItem("RenderNodeSetEeveeDepthOfField"),
         nodeitems_utils.NodeItem("RenderNodeSetEeveeScreenSpaceReflections"),
         nodeitems_utils.NodeItem("RenderNodeSetEeveeMotionBlur"),
+
+        nodeitems_utils.NodeItem("RenderNodeSetCyclesSamplesViewport"),
+        nodeitems_utils.NodeItem("RenderNodeSetCyclesSamplesRender"),
+        nodeitems_utils.NodeItem("RenderNodeSetCyclesPerformance"),
 
         nodeitems_utils.NodeItem("RenderNodeSetCyclesSamples"),
         nodeitems_utils.NodeItem("RenderNodeSetCyclesLightPathsMaxBounces"),
@@ -124,8 +125,11 @@ node_categories = [
 
     RSNCategory("EXTRA", "Extra", items=[
         nodeitems_utils.NodeItem('RenderNodeEmailNode'),
-        nodeitems_utils.NodeItem('RenderNodeGetTaskInfo'),
+        nodeitems_utils.NodeItem('RenderNodeGetProperty'),
         nodeitems_utils.NodeItem('RenderNodeSetProperty'),
+        nodeitems_utils.NodeItem('RenderNodeStoreValue'),
+        nodeitems_utils.NodeItem('RenderNodeScripts'),
+
     ]),
 
 ]

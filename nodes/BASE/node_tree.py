@@ -83,6 +83,7 @@ class NodeTreeBase(bpy.types.NodeTree):
 
     def execute(self, context):
         render_list_node = self.nodes.get(bpy.context.window_manager.rsn_active_list)
+        if render_list_node and not render_list_node.is_active_list: return
         runtime_info['executing'] = True
         cache_socket_variables.clear()
 
@@ -122,8 +123,10 @@ class RenderNodeTreeGroup(NodeTreeBase):
     def poll(cls, context):
         return False
 
-def clean_draw(self,context):
+
+def clean_draw(self, context):
     pass
+
 
 def register():
     bpy.types.WindowManager.rsn_active_list = StringProperty(name='Active List')

@@ -25,6 +25,12 @@ def update_node(self, context):
         elif self.d_type == Vector:
             self.create_input('RenderNodeSocketXYZ', 'value', "Vector")
 
+        # try:  # assign current value after initial
+        #     if not len(self.inputs) == 2: pass
+        #     self.inputs['value'].default_value = eval(self.full_data_path)
+        # except Exception as e:
+        #     print(e)
+
         self.execute_tree()
 
     except Exception as e:
