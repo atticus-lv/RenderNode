@@ -31,9 +31,9 @@
 #### Nodes
 
 + group nodes
-+ new switch node for all types sockets (no 'Variants Node'any more, use a direct input socket)
++ new switch node for all types sockets (no 'Variants Node' any more, use a direct input socket)
 + input nodes (object/material/float/vector/int/bool/string)
-+ utility nodes (math/vector,boolean math/string operate)
++ utility nodes (math/vector, boolean math/string operate)
 + get / set nodes
 + new render list node and get render list index node
 
@@ -42,13 +42,13 @@
 
 + Performance (Evaluate system)
 
-    + develop based on rigging_nodes , provide faster speed
+    + develop based on rigging_nodes, provide faster speed
 
 + UI
 
-    + remove old draw outline, draw process time and node name instead instead
+    + remove old draw outline, draw process time and node name instead
 
-    + dynamic enums/sockets for user' preference (render engine, color manage,etc)
+    + dynamic enums/sockets for user' preference (render engine, color manage, etc)
 
     + power selector for switch active task in render list node
 
