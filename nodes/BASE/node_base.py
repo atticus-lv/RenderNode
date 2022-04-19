@@ -128,7 +128,7 @@ class RenderNodeBase(bpy.types.Node):
 
     def draw_buttons(self, context, layout):
         if self.warning is True:
-            msg = layout.operator('rsn.show_task_details', icon='ERROR', text='Show Waring Message')
+            msg = layout.operator('rsn.show_task_details', icon='ERROR', text='Show Warning Message')
             msg.task_data = self.warning_msg
 
     def set_warning(self, msg=''):
