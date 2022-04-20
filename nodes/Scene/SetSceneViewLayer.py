@@ -8,26 +8,13 @@ class RenderNodeSetSceneViewLayer(RenderNodeBase):
     bl_idname = 'RenderNodeSetSceneViewLayer'
     bl_label = 'Set Scene View Layer'
 
-    view_layer_name: StringProperty(name="View Layer Name", default="")
-
     def init(self, context):
         self.create_input('RenderNodeSocketTask', 'task', 'Task')
         self.create_output('RenderNodeSocketTask', 'task', 'Task')
 
         self.create_input('RenderNodeSocketViewLayer', "view_layer", 'ViewLayer')
         self.create_input('RenderNodeSocketBool', 'use_for_render', 'Use for Rendering', default_value=True)
-
-    def draw_buttons(self, context, layout):
-        if self.view_layer_name != '':
-            create = layout.operator('rsn.create_compositor_node', text='Comp Passes Output', icon='ADD')
-            create.view_layer = self.view_layer_name
-            create.use_passes = True
-
-            remove = layout.operator('rsn.create_compositor_node', text='Remove Passes Output', icon='REMOVE')
-            remove.view_layer = self.view_layer_name
-            remove.use_passes = False
-        else:
-            layout.label(text="No View Layer Selected")
+        self.create_input('RenderNodeSocketBool', 'output_composite_passes', 'Output Composite Passes')
 
     def process(self, context, id, path):
         if not self.process_task(): return
@@ -36,12 +23,17 @@ class RenderNodeSetSceneViewLayer(RenderNodeBase):
         view_layer = context.scene.view_layers.get(view_layer_name)
 
         if view_layer:
-            self.view_layer_name = view_layer_name  # store view layer name for later use
-            # set context view layer
             self.compare(context.window, 'view_layer', view_layer)
             self.compare(view_layer, 'use', self.inputs['use_for_render'].get_value())
-        else:
-            self.view_layer_name = ""
+
+            # create comp node tree
+            try:
+                bpy.ops.rsn.create_compositor_node(
+                    view_layer=view_layer_name,
+                    use_passes=self.inputs['output_composite_passes'].get_value())
+            except Exception as e:
+                print(f'View Layer Passes {self.name} error:{e}')
+
 
 # [
 #     attr

@@ -25,20 +25,20 @@ class RSN_OT_CreatCompositorNode(bpy.types.Operator):
             context_layer = nt.nodes.new(type="CompositorNodeRLayers")
             context_layer.name = f'RSN {bpy.context.window.view_layer.name} Render Layers'
 
-        # try:
-        #     name = get_pref().node_view_layer_passes.comp_node_name
-        #
-        #     com = bpy.context.scene.node_tree.nodes[name]
-        #     nt.links.new(context_layer.outputs[0], com.inputs[0])
-        # except Exception as e:
-        #     for node in bpy.context.scene.node_tree.nodes:
-        #         if node.bl_idname == 'CompositorNodeComposite':
-        #             bpy.context.scene.node_tree.nodes.remove(node)
-        #
-        #     com = nt.nodes.new(type="CompositorNodeComposite")
-        #     com.name = 'Composite'
-        #     com.location = 430, 430
-        #     nt.links.new(context_layer.outputs[0], com.inputs[0])
+        try:
+            name = get_pref().node_view_layer_passes.comp_node_name
+
+            com = bpy.context.scene.node_tree.nodes[name]
+            nt.links.new(context_layer.outputs[0], com.inputs[0])
+        except Exception as e:
+            for node in bpy.context.scene.node_tree.nodes:
+                if node.bl_idname == 'CompositorNodeComposite':
+                    bpy.context.scene.node_tree.nodes.remove(node)
+
+            com = nt.nodes.new(type="CompositorNodeComposite")
+            com.name = 'Composite'
+            com.location = 430, 430
+            nt.links.new(context_layer.outputs[0], com.inputs[0])
 
     def execute(self, context):
         runtime_info['updating'] = True
