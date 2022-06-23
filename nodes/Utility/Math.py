@@ -35,7 +35,7 @@ class RenderNodeMath(RenderNodeBase):
 
             ('+', 'Add', ''),
             ('-', 'Subtract', ''),
-            ('*', 'Muitiply', ''),
+            ('*', 'Multiply', ''),
             ('/', 'Divide', ''),
 
             ('', 'Comparison', ''),
