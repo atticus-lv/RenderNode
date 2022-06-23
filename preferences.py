@@ -71,7 +71,7 @@ class RSN_Preference(bpy.types.AddonPreferences):
 
     # Tab Search
     quick_place: BoolProperty(name="Quick Place",
-                              description="When using the quick search to add nodes,quick place without moveing it",
+                              description="When using the quick search to add nodes, quick place without moving it",
                               default=False)
     limited_area: BoolProperty(name='Limited Area',
                                description='Limited RenderNode Helper only in Render Editor',
